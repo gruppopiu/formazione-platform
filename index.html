@@ -38,7 +38,7 @@
   --shadow2:0 4px 16px rgba(0,0,0,.5);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .25s,color .25s}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .25s,color .25s;overflow-x:hidden}
 /* ── LAYOUT ── */
 .shell{display:grid;grid-template-columns:228px 1fr;min-height:100vh}
 .sidebar{background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;box-shadow:var(--shadow)}
@@ -189,11 +189,11 @@ textarea.finp{min-height:72px;resize:vertical}
 .empty{text-align:center;padding:50px 20px;color:var(--text3)}
 .ei{font-size:30px;margin-bottom:10px}.et{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:5px}
 /* ── AUTH ── */
-.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px;position:relative;overflow:hidden}
+.auth-wrap{min-height:100vh;width:100%;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px;position:relative;overflow:hidden}
 .auth-shape{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
 .auth-shape1{width:500px;height:500px;background:radial-gradient(circle,rgba(18,183,106,.12),transparent);top:-200px;right:-100px}
 .auth-shape2{width:400px;height:400px;background:radial-gradient(circle,rgba(37,99,235,.08),transparent);bottom:-100px;left:-100px}
-.auth-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r3);padding:36px 32px;width:100%;max-width:420px;position:relative;z-index:1;box-shadow:var(--shadow2)}
+.auth-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r3);padding:40px 36px;width:100%;max-width:460px;position:relative;z-index:1;box-shadow:var(--shadow2)}
 .auth-logo-t{font-size:20px;font-weight:800;color:var(--text);text-align:center;margin-bottom:4px}
 .auth-logo-s{font-size:11px;color:var(--text3);font-family:'SF Mono',monospace;text-align:center;margin-bottom:28px}
 .auth-tabs{display:flex;gap:0;margin-bottom:22px;border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
@@ -301,8 +301,8 @@ textarea.finp{min-height:72px;resize:vertical}
 <body>
 
 <!-- AUTH -->
-<div id="auth-screen" style="display:none">
-  <div class="auth-wrap">
+<div id="auth-screen" style="display:none;min-height:100vh;width:100%;position:fixed;inset:0;z-index:1000">
+  <div class="auth-wrap" style="min-height:100vh;width:100%">
     <div class="auth-shape auth-shape1"></div>
     <div class="auth-shape auth-shape2"></div>
     <div class="auth-box">
@@ -1012,17 +1012,9 @@ async function uploadProfilePic(input){
 async function loadAll(){
   setConn('loading','Caricamento...');
   try{
-    const[ev,fm,notif]=await Promise.all([
-      sb.from('eventi').select('*').order('data',{ascending:true}),
-      sb.from('formatori_data').select('*').catch(()=>({data:[]})),
-      sb.from('notifiche').select('*').order('created_at',{ascending:false}).limit(200).catch(()=>({data:[]}))
-    ]);
-    if(ev.error)throw ev.error;
-    DB=ev.data||[];
-    (fm.data||[]).forEach(f=>{FM_DATA[f.nome]=f;});
-    NOTIFICHE=notif.data||[];
-    unreadCount=NOTIFICHE.filter(n=>!n.read).length;
-    updateNotifBadge();
+    const evRes=await sb.from('eventi').select('*').order('data',{ascending:true});
+    if(evRes.error)throw evRes.error;
+    DB=evRes.data||[];
     setConn('ok','Connesso');
     document.getElementById('db-status').textContent='Connesso';
     document.getElementById('db-status').style.background='var(--green-bg)';
@@ -1032,6 +1024,14 @@ async function loadAll(){
     showToast('Errore connessione: '+e.message,'err');
     DB=[];
   }
+  try{
+    const fmRes=await sb.from('formatori_data').select('*');
+    if(!fmRes.error)(fmRes.data||[]).forEach(f=>{FM_DATA[f.nome]=f;});
+  }catch(e){}
+  try{
+    const nRes=await sb.from('notifiche').select('*').order('created_at',{ascending:false}).limit(200);
+    if(!nRes.error){NOTIFICHE=nRes.data||[];unreadCount=NOTIFICHE.filter(n=>!n.read).length;updateNotifBadge();}
+  }catch(e){}
   renderAll();
 }
 
