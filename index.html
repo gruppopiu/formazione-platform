@@ -802,7 +802,7 @@ async function loadAll(){
     const[ev,fm,notif]=await Promise.all([
       sb.from('eventi').select('*').order('data',{ascending:true}),
       sb.from('formatori_data').select('*'),
-      sb.from('notifiche').select('*').order('created_at',{ascending:false}).limit(50)
+      sb.from('notifiche').select('*').order('created_at',{ascending:false}).limit(200)
     ]);
     DB=ev.data||[];
     (fm.data||[]).forEach(f=>{FM_DATA[f.nome]=f;});
@@ -830,18 +830,37 @@ function subscribeRealtime(){
   notifChannel=sb.channel('eventi-changes')
     .on('postgres_changes',{event:'*',schema:'public',table:'eventi'},async(payload)=>{
       await loadAll();
-      const actor=payload.new?.modified_by||'Qualcuno';
-      const action=payload.eventType==='INSERT'?'ha aggiunto':'ha modificato';
-      const title=payload.new?.titolo||payload.old?.titolo||'un evento';
+      const ev=payload.new||payload.old||{};
+      const actor=ev.modified_by||'Qualcuno';
+      const actionMap={INSERT:'ha aggiunto',UPDATE:'ha modificato',DELETE:'ha eliminato'};
+      const action=actionMap[payload.eventType]||'ha aggiornato';
+      const title=ev.titolo||'un evento';
+      const data=ev.data?fmtDate(ev.data):'';
+      const tipo=ev.tipologia?{seminario:'Seminario',corso_4h:'Corso 4h',corso_6h:'Corso 6h',corso_deontologico:'Deontologico'}[ev.tipologia]||ev.tipologia:'';
+      const tema=ev.tema||'';
+      const docente=ev.docente||'';
+      const stato=ev.stato||'';
       const msg=`${actor} ${action} "${title}"`;
-      addNotifica(msg,payload.eventType);
-      sendBrowserNotif(msg);
+      const detail=[data,tipo,tema,docente?'Docente: '+docente:'',stato].filter(Boolean).join(' · ');
+      const notifPayload={
+        text:msg,
+        detail,
+        type:payload.eventType,
+        evento_id:ev.id||null,
+        evento_titolo:title,
+        actor,
+        read:false
+      };
+      // Save to Supabase for persistence
+      try{await sb.from('notifiche').insert({text:msg,type:payload.eventType,read:false});}catch(e){}
+      addNotifica(notifPayload);
+      sendBrowserNotif(msg+' — '+detail);
     })
     .subscribe();
 }
 
-function addNotifica(msg,type){
-  const n={text:msg,type,time:new Date().toISOString(),read:false};
+function addNotifica(payload){
+  const n=typeof payload==='string'?{text:payload,type:'UPDATE',time:new Date().toISOString(),read:false}:{...payload,time:new Date().toISOString()};
   NOTIFICHE.unshift(n);
   unreadCount++;
   updateNotifBadge();
@@ -1212,13 +1231,46 @@ function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalend
 function renderNotifiche(){
   const el=document.getElementById('notif-list');
   if(!NOTIFICHE.length){el.innerHTML='<div class="empty"><div class="ei">🔔</div><div class="et">Nessuna notifica</div></div>';return;}
-  el.innerHTML=NOTIFICHE.map(n=>`<div class="notif-item">
-    <div class="notif-dot ${n.read?'read':'new'}"></div>
-    <div class="notif-body">
-      <div class="notif-text">${n.text||n.message||'Aggiornamento'}</div>
-      <div class="notif-time">${n.time||n.created_at?new Date(n.time||n.created_at).toLocaleString('it'):''}</div>
-    </div>
-  </div>`).join('');
+  el.innerHTML=NOTIFICHE.map(n=>{
+    const timeStr=(n.time||n.created_at)?new Date(n.time||n.created_at).toLocaleString('it',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'';
+    const typeIcon={INSERT:'➕',UPDATE:'✏️',DELETE:'🗑️'}[n.type]||'🔔';
+    const typeLabel={INSERT:'Aggiunto',UPDATE:'Modificato',DELETE:'Eliminato'}[n.type]||'Aggiornato';
+    const hasEvent=n.evento_id||n.evento_titolo;
+    const detail=n.detail||'';
+    return`<div class="notif-item" style="cursor:${hasEvent?'pointer':'default'}" onclick="${hasEvent?`goToEvento('${n.evento_id||''}','${(n.evento_titolo||'').replace(/'/g,"\'")}')`:''}" title="${hasEvent?'Clicca per vedere l\'evento':''}">
+      <div class="notif-dot ${n.read?'read':'new'}" style="margin-top:6px"></div>
+      <div class="notif-body" style="flex:1">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+          <span style="font-size:11px">${typeIcon}</span>
+          <span class="badge" style="background:${n.type==='INSERT'?'var(--green-bg)':n.type==='DELETE'?'var(--red-bg)':'var(--blue-bg)'};color:${n.type==='INSERT'?'var(--green)':n.type==='DELETE'?'var(--red)':'var(--blue)'};font-size:9px">${typeLabel}</span>
+          ${n.actor?`<span style="font-size:11px;font-weight:600;color:var(--text)">${n.actor}</span>`:''}
+        </div>
+        <div class="notif-text" style="margin-bottom:3px">${n.text||n.message||'Aggiornamento'}</div>
+        ${detail?`<div style="font-size:10px;color:var(--text3);font-family:'SF Mono',monospace;background:var(--bg3);padding:3px 7px;border-radius:4px;margin-bottom:3px">${detail}</div>`:''}
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div class="notif-time">${timeStr}</div>
+          ${hasEvent?`<span style="font-size:10px;color:var(--blue)">Vai all'evento →</span>`:''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function goToEvento(id,titolo){
+  // Navigate to eventi page and highlight/open the event
+  showPage('eventi',document.getElementById('nav-eventi'));
+  if(id){
+    setTimeout(()=>{
+      const row=document.querySelector(`[onclick*="${id}"]`);
+      if(row){row.scrollIntoView({behavior:'smooth',block:'center'});row.style.background='var(--green-bg)';setTimeout(()=>row.style.background='',2000);}
+      // Also open edit modal
+      openEventoModal(id);
+    },300);
+  } else if(titolo){
+    // Search by title
+    const s=document.getElementById('fe-search');
+    if(s){s.value=titolo;renderEventi();}
+  }
 }
 
 // ── PROFILO ATTIVITÀ ──
