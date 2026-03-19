@@ -71,11 +71,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:
 .av img{width:100%;height:100%;object-fit:cover}
 .sb-uname{font-size:12px;font-weight:500;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sb-urole{font-size:10px;color:var(--text3)}
-.conn-row{display:flex;align-items:center;gap:6px;padding:5px 10px;font-size:10px;color:var(--text3);margin-bottom:2px}
-.cdot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0;transition:all .3s}
-.cdot.ok{background:var(--green);box-shadow:0 0 6px var(--green)}
-.cdot.err{background:var(--red)}
-.cdot.loading{background:var(--yellow);animation:pulse 1s infinite}
+.conn-row{display:flex;align-items:center;gap:6px;padding:5px 10px;font-size:10px;color:var(--text);margin-bottom:2px;font-weight:500}
+.cdot{width:8px;height:8px;border-radius:50%;background:var(--text3);flex-shrink:0;transition:all .3s}
+.cdot.ok{background:#22c55e;box-shadow:0 0 8px #22c55e}
+.cdot.err{background:#ef4444;box-shadow:0 0 8px #ef4444}
+.cdot.loading{background:#f59e0b;box-shadow:0 0 8px #f59e0b;animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 /* ── PAGES ── */
 .page{display:none}.page.active{display:block}
@@ -703,7 +703,7 @@ textarea.finp{min-height:72px;resize:vertical}
           <div class="card">
             <div class="ctitle">Aspetto</div>
             <div class="setting-row">
-              <div><div class="setting-label">Modalità scura</div><div class="setting-sub">Attiva il tema dark della piattaforma</div></div>
+              <div><div class="setting-label">Modalità scura</div><div class="setting-sub">Alterna tra versione chiara e scura del tema selezionato</div></div>
               <label class="toggle"><input type="checkbox" id="set-dark" onchange="setDarkMode(this.checked)"><span class="toggle-slider"></span></label>
             </div>
             <div class="setting-row">
@@ -711,7 +711,7 @@ textarea.finp{min-height:72px;resize:vertical}
               <label class="toggle"><input type="checkbox" id="set-save-theme" checked onchange="saveSetting('saveTheme',this.checked)"><span class="toggle-slider"></span></label>
             </div>
             <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:10px">
-              <div><div class="setting-label">Colore accento</div><div class="setting-sub">Personalizza il colore principale dell'interfaccia</div></div>
+              <div><div class="setting-label">Tema visivo</div><div class="setting-sub">Scegli la palette colori dell'interfaccia — disponibile in versione chiara e scura</div></div>
               <div class="accent-grid" id="accent-grid"></div>
             </div>
           </div>
@@ -1002,15 +1002,15 @@ async function init(){
 }
 
 function applyStoredTheme(){
-  const saved=localStorage.getItem('fp_theme');
-  if(saved==='dark'){document.body.classList.add('dark');}
-  // default is light
-  // Apply saved accent immediately to avoid flash
+  const savedMode=localStorage.getItem('fp_theme');
+  currentMode=savedMode==='dark'?'dark':'light';
+  if(currentMode==='dark')document.body.classList.add('dark');
+  // Apply saved theme immediately to avoid flash
   const savedSettings=localStorage.getItem('fp_settings_guest');
   if(savedSettings){
     try{
       const s=JSON.parse(savedSettings);
-      if(s.accent)applyAccent(s.accent);
+      if(s.theme){currentTheme=s.theme;applyTheme(s.theme,currentMode);}
     }catch(e){}
   }
 }
@@ -1062,116 +1062,300 @@ function closeTutorial(){
 }
 
 // ── SETTINGS ──
-const ACCENT_COLORS=[
-  {hex:'#0570FE',name:'Blu (default)',rgb:'5,112,254',light:'#3d90fe',dark:'#0450c0'},
-  {hex:'#12b76a',name:'Verde',rgb:'18,183,106',light:'#3ecf8e',dark:'#05603a'},
-  {hex:'#141414',name:'Nero (solo light)',rgb:'20,20,20',light:'#444',dark:'#000',lightOnly:true},
-  {hex:'#FFF8DC',name:'Crema',rgb:'255,248,220',light:'#fff',dark:'#d4c98a',textDark:true},
-  {hex:'#FCD0C3',name:'Rosa cipria',rgb:'252,208,195',light:'#fde8e0',dark:'#c87a5e',textDark:true},
-  {hex:'#C3D9E7',name:'Azzurro polvere',rgb:'195,217,231',light:'#ddeef7',dark:'#6899b5',textDark:true},
-  {hex:'#00AB99',name:'Verde acqua',rgb:'0,171,153',light:'#33c4b5',dark:'#007a6e'},
-  {hex:'#C74357',name:'Rosso scarlatto',rgb:'199,67,87',light:'#d96070',dark:'#a0303f'},
-  {hex:'#FFDC69',name:'Giallo ambra',rgb:'255,220,105',light:'#ffe999',dark:'#c8a800',textDark:true},
-  {hex:'#4B2E83',name:'Viola reale',rgb:'75,46,131',light:'#7c5ec0',dark:'#2e1a55'}
-];
-
-function hexToRgb(hex){
-  const h=hex.replace('#','');
-  return{r:parseInt(h.slice(0,2),16),g:parseInt(h.slice(2,4),16),b:parseInt(h.slice(4,6),16)};
-}
-
-function mixColor(hex,isDark){
-  // Mix accent with black (dark) or white (light) to create tinted backgrounds
-  const{r,g,b}=hexToRgb(hex);
-  if(isDark){
-    // Dark mode: mix accent with near-black → very subtle tint
-    const factor=0.06; // how much accent bleeds into bg
-    const bgR=Math.round(r*factor);
-    const bgG=Math.round(g*factor);
-    const bgB=Math.round(b*factor);
-    const bg2R=Math.round(r*factor*1.5);
-    const bg2G=Math.round(g*factor*1.5);
-    const bg2B=Math.round(b*factor*1.5);
-    return{
-      bg:`rgb(${Math.min(bgR,18)},${Math.min(bgG,18)},${Math.min(bgB,18)})`,
-      bg2:`rgb(${Math.min(bg2R,26)},${Math.min(bg2G,26)},${Math.min(bg2B,26)})`,
-      bg3:`rgb(${Math.min(bgR+10,30)},${Math.min(bgG+10,30)},${Math.min(bgB+10,30)})`,
-      border:`rgb(${Math.min(bgR+20,40)},${Math.min(bgG+20,40)},${Math.min(bgB+20,40)})`
-    };
-  } else {
-    // Light mode: mix accent with white → very light tint
-    const factor=0.04;
-    const bgR=Math.round(255-(255-r)*factor*0.3);
-    const bgG=Math.round(255-(255-g)*factor*0.3);
-    const bgB=Math.round(255-(255-b)*factor*0.3);
-    const bg2R=Math.round(255-(255-r)*factor*0.1);
-    const bg2G=Math.round(255-(255-g)*factor*0.1);
-    const bg2B=Math.round(255-(255-b)*factor*0.1);
-    return{
-      bg:`rgb(${bgR},${bgG},${bgB})`,
-      bg2:`rgb(${bg2R},${bg2G},${bg2B})`,
-      bg3:`rgb(${Math.round(bgR*0.97)},${Math.round(bgG*0.97)},${Math.round(bgB*0.97)})`,
-      border:`rgb(${Math.round(bgR*0.93)},${Math.round(bgG*0.93)},${Math.round(bgB*0.93)})`
-    };
+const THEMES={
+  galaxy:{
+    name:'Galaxy',icon:'🌌',
+    dark:{
+      bg:'#0d0a1a',bg2:'#130f24',bg3:'#1a152e',bg4:'#221c38',
+      border:'#2d2148',border2:'#3d2f65',
+      text:'#f0ecff',text2:'#a89fd0',text3:'#6b5f9a',
+      accent:'#8b5cf6',accentRgb:'139,92,246',accentLight:'#a78bfa',accentDark:'#6d28d9',
+      green:'#34d399',red:'#f87171',yellow:'#fbbf24',blue:'#60a5fa',
+      chartColors:['#8b5cf6','#60a5fa','#34d399','#f472b6','#fbbf24','#06b6d4']
+    },
+    light:{
+      bg:'#f5f3ff',bg2:'#ffffff',bg3:'#ede9fe',bg4:'#ddd6fe',
+      border:'#ddd6fe',border2:'#c4b5fd',
+      text:'#1e1b4b',text2:'#4c1d95',text3:'#7c3aed',
+      accent:'#7c3aed',accentRgb:'124,58,237',accentLight:'#8b5cf6',accentDark:'#5b21b6',
+      green:'#059669',red:'#dc2626',yellow:'#d97706',blue:'#2563eb',
+      chartColors:['#7c3aed','#2563eb','#059669','#db2777','#d97706','#0891b2']
+    }
+  },
+  forest:{
+    name:'Forest',icon:'🌲',
+    dark:{
+      bg:'#0a120a',bg2:'#0f1a0f',bg3:'#152415',bg4:'#1a2e1a',
+      border:'#1a3a1a',border2:'#254025',
+      text:'#e8f5e8',text2:'#86b886',text3:'#4a7a4a',
+      accent:'#22c55e',accentRgb:'34,197,94',accentLight:'#4ade80',accentDark:'#15803d',
+      green:'#4ade80',red:'#f87171',yellow:'#fbbf24',blue:'#60a5fa',
+      chartColors:['#22c55e','#84cc16','#06b6d4','#f59e0b','#a78bfa','#fb923c']
+    },
+    light:{
+      bg:'#f0faf0',bg2:'#ffffff',bg3:'#dcfce7',bg4:'#bbf7d0',
+      border:'#bbf7d0',border2:'#86efac',
+      text:'#052e16',text2:'#166534',text3:'#4ade80',
+      accent:'#16a34a',accentRgb:'22,163,74',accentLight:'#22c55e',accentDark:'#14532d',
+      green:'#15803d',red:'#dc2626',yellow:'#ca8a04',blue:'#1d4ed8',
+      chartColors:['#16a34a','#65a30d','#0369a1','#b45309','#7c3aed','#c2410c']
+    }
+  },
+  atlantis:{
+    name:'Atlantis',icon:'🌊',
+    dark:{
+      bg:'#020e1a',bg2:'#051525',bg3:'#081e30',bg4:'#0c2840',
+      border:'#0c2d40',border2:'#0e3d55',
+      text:'#e0f7ff',text2:'#7ecbdf',text3:'#3a8fa3',
+      accent:'#06b6d4',accentRgb:'6,182,212',accentLight:'#22d3ee',accentDark:'#0e7490',
+      green:'#34d399',red:'#f87171',yellow:'#fbbf24',blue:'#38bdf8',
+      chartColors:['#06b6d4','#0ea5e9','#34d399','#818cf8','#fb923c','#a78bfa']
+    },
+    light:{
+      bg:'#f0f9ff',bg2:'#ffffff',bg3:'#e0f2fe',bg4:'#bae6fd',
+      border:'#bae6fd',border2:'#7dd3fc',
+      text:'#0c2d3f',text2:'#075985',text3:'#0284c7',
+      accent:'#0284c7',accentRgb:'2,132,199',accentLight:'#0ea5e9',accentDark:'#0369a1',
+      green:'#059669',red:'#dc2626',yellow:'#d97706',blue:'#0369a1',
+      chartColors:['#0284c7','#0891b2','#059669','#7c3aed','#d97706','#dc2626']
+    }
+  },
+  tron:{
+    name:'Tron',icon:'⚡',
+    dark:{
+      bg:'#000000',bg2:'#050a0a',bg3:'#0a1414',bg4:'#0f1e1e',
+      border:'#0a2a2a',border2:'#0f3a3a',
+      text:'#e0ffff',text2:'#80c8c8',text3:'#3a7878',
+      accent:'#00f5ff',accentRgb:'0,245,255',accentLight:'#67e8f9',accentDark:'#0891b2',
+      green:'#00ff88',red:'#ff3366',yellow:'#ffe600',blue:'#00aaff',
+      chartColors:['#00f5ff','#00aaff','#00ff88','#ff3366','#ffe600','#aa00ff']
+    },
+    light:{
+      bg:'#f8feff',bg2:'#ffffff',bg3:'#e8fdff',bg4:'#cffafe',
+      border:'#a5f3fc',border2:'#67e8f9',
+      text:'#001a1a',text2:'#004444',text3:'#006666',
+      accent:'#0891b2',accentRgb:'8,145,178',accentLight:'#06b6d4',accentDark:'#0e7490',
+      green:'#059669',red:'#dc2626',yellow:'#ca8a04',blue:'#0369a1',
+      chartColors:['#0891b2','#0369a1','#059669','#dc2626','#ca8a04','#7c3aed']
+    }
+  },
+  summer:{
+    name:'Summer',icon:'☀️',
+    dark:{
+      bg:'#1a0f00',bg2:'#241500',bg3:'#2e1c00',bg4:'#382400',
+      border:'#3a2200',border2:'#4a2e00',
+      text:'#fff8e8',text2:'#d4a060',text3:'#8a6030',
+      accent:'#f97316',accentRgb:'249,115,22',accentLight:'#fb923c',accentDark:'#c2410c',
+      green:'#4ade80',red:'#f87171',yellow:'#fbbf24',blue:'#60a5fa',
+      chartColors:['#f97316','#fbbf24','#f472b6','#34d399','#60a5fa','#a78bfa']
+    },
+    light:{
+      bg:'#fffbf0',bg2:'#ffffff',bg3:'#fff7e0',bg4:'#fef3c7',
+      border:'#fed7aa',border2:'#fdba74',
+      text:'#431407',text2:'#9a3412',text3:'#c2410c',
+      accent:'#ea580c',accentRgb:'234,88,12',accentLight:'#f97316',accentDark:'#c2410c',
+      green:'#15803d',red:'#b91c1c',yellow:'#b45309',blue:'#1d4ed8',
+      chartColors:['#ea580c','#d97706','#db2777','#16a34a','#2563eb','#7c3aed']
+    }
+  },
+  matrix:{
+    name:'Matrix',icon:'💻',
+    dark:{
+      bg:'#000000',bg2:'#030a03',bg3:'#061206',bg4:'#091a09',
+      border:'#003300',border2:'#004400',
+      text:'#00ff41',text2:'#00bb30',text3:'#007720',
+      accent:'#00ff41',accentRgb:'0,255,65',accentLight:'#00ff88',accentDark:'#00cc33',
+      green:'#00ff41',red:'#ff3333',yellow:'#ffff00',blue:'#00aaff',
+      chartColors:['#00ff41','#00cc33','#00ff88','#00ffcc','#88ff00','#00aaff']
+    },
+    light:{
+      bg:'#f0fff4',bg2:'#ffffff',bg3:'#dcfce7',bg4:'#bbf7d0',
+      border:'#86efac',border2:'#4ade80',
+      text:'#022c0a',text2:'#14532d',text3:'#15803d',
+      accent:'#15803d',accentRgb:'21,128,61',accentLight:'#16a34a',accentDark:'#14532d',
+      green:'#15803d',red:'#b91c1c',yellow:'#854d0e',blue:'#1d4ed8',
+      chartColors:['#15803d','#166534','#0f766e','#1d4ed8','#854d0e','#7e22ce']
+    }
+  },
+  sakura:{
+    name:'Sakura',icon:'🌸',
+    dark:{
+      bg:'#120a0f',bg2:'#1e0f18',bg3:'#281422',bg4:'#32182c',
+      border:'#3a1a28',border2:'#4a2035',
+      text:'#ffe8f4',text2:'#d4859f',text3:'#8a4060',
+      accent:'#f472b6',accentRgb:'244,114,182',accentLight:'#f9a8d4',accentDark:'#db2777',
+      green:'#34d399',red:'#f87171',yellow:'#fbbf24',blue:'#a78bfa',
+      chartColors:['#f472b6','#e879f9','#a78bfa','#34d399','#fbbf24','#60a5fa']
+    },
+    light:{
+      bg:'#fff5f9',bg2:'#ffffff',bg3:'#fce7f3',bg4:'#fbcfe8',
+      border:'#fbcfe8',border2:'#f9a8d4',
+      text:'#500724',text2:'#9d174d',text3:'#be185d',
+      accent:'#db2777',accentRgb:'219,39,119',accentLight:'#ec4899',accentDark:'#9d174d',
+      green:'#059669',red:'#dc2626',yellow:'#d97706',blue:'#7c3aed',
+      chartColors:['#db2777','#9333ea','#7c3aed','#059669','#d97706','#0284c7']
+    }
+  },
+  arctic:{
+    name:'Arctic',icon:'🧊',
+    dark:{
+      bg:'#050d1a',bg2:'#081525',bg3:'#0c1e33',bg4:'#102840',
+      border:'#0f2a40',border2:'#143550',
+      text:'#e0f0ff',text2:'#7aa8cc',text3:'#3a6888',
+      accent:'#7dd3fc',accentRgb:'125,211,252',accentLight:'#bae6fd',accentDark:'#38bdf8',
+      green:'#34d399',red:'#f87171',yellow:'#fbbf24',blue:'#38bdf8',
+      chartColors:['#7dd3fc','#93c5fd','#a5b4fc','#34d399','#fbbf24','#e2e8f0']
+    },
+    light:{
+      bg:'#f0f9ff',bg2:'#ffffff',bg3:'#e8f4fd',bg4:'#dbeafe',
+      border:'#bae6fd',border2:'#93c5fd',
+      text:'#082030',text2:'#1e3a50',text3:'#334e68',
+      accent:'#0369a1',accentRgb:'3,105,161',accentLight:'#0284c7',accentDark:'#075985',
+      green:'#059669',red:'#dc2626',yellow:'#d97706',blue:'#0369a1',
+      chartColors:['#0369a1','#0284c7','#4f46e5','#059669','#d97706','#64748b']
+    }
+  },
+  ember:{
+    name:'Ember',icon:'🔥',
+    dark:{
+      bg:'#120800',bg2:'#1e0e00',bg3:'#2a1400',bg4:'#361a00',
+      border:'#3a1400',border2:'#4a1e00',
+      text:'#fff0e8',text2:'#d4906a',text3:'#8a5030',
+      accent:'#ef4444',accentRgb:'239,68,68',accentLight:'#f87171',accentDark:'#b91c1c',
+      green:'#4ade80',red:'#ef4444',yellow:'#fbbf24',blue:'#60a5fa',
+      chartColors:['#ef4444','#f97316','#fbbf24','#fb923c','#f472b6','#a78bfa']
+    },
+    light:{
+      bg:'#fff8f0',bg2:'#ffffff',bg3:'#fff1e6',bg4:'#fde8d0',
+      border:'#fecaca',border2:'#fca5a5',
+      text:'#3b0a00',text2:'#7f1d1d',text3:'#991b1b',
+      accent:'#dc2626',accentRgb:'220,38,38',accentLight:'#ef4444',accentDark:'#b91c1c',
+      green:'#15803d',red:'#dc2626',yellow:'#b45309',blue:'#1d4ed8',
+      chartColors:['#dc2626','#ea580c','#d97706','#b45309','#7c3aed','#0369a1']
+    }
+  },
+  lotr:{
+    name:'LOTR',icon:'💍',
+    dark:{
+      bg:'#0e0c08',bg2:'#181410',bg3:'#221c14',bg4:'#2c2418',
+      border:'#2e2210',border2:'#3e2e14',
+      text:'#f5edd6',text2:'#b89a60',text3:'#7a6030',
+      accent:'#c9a227',accentRgb:'201,162,39',accentLight:'#d4af37',accentDark:'#92400e',
+      green:'#4ade80',red:'#f87171',yellow:'#c9a227',blue:'#60a5fa',
+      chartColors:['#c9a227','#b45309','#92400e','#78350f','#a16207','#854d0e']
+    },
+    light:{
+      bg:'#fdf8ee',bg2:'#ffffff',bg3:'#faf0d8',bg4:'#f5e5ba',
+      border:'#e8d5a0',border2:'#d4b870',
+      text:'#1c1404',text2:'#44320a',text3:'#6b4c0a',
+      accent:'#b8860b',accentRgb:'184,134,11',accentLight:'#c9a227',accentDark:'#92400e',
+      green:'#15803d',red:'#b91c1c',yellow:'#b8860b',blue:'#1d4ed8',
+      chartColors:['#b8860b','#92400e','#78350f','#166534','#1d4ed8','#6b21a8']
+    }
   }
-}
+};
 
-function applyAccent(hex){
-  const ac=ACCENT_COLORS.find(c=>c.hex===hex)||ACCENT_COLORS[0];
+let currentTheme='galaxy';
+let currentMode='light';
+
+function applyTheme(themeKey, mode){
+  const theme=THEMES[themeKey];
+  if(!theme)return;
+  currentTheme=themeKey;
+  currentMode=mode||currentMode;
+  const t=theme[currentMode];
   const root=document.documentElement;
-  const isDark=document.body.classList.contains('dark');
-
-  root.style.setProperty('--accent',ac.hex);
-  root.style.setProperty('--accent-rgb',ac.rgb);
-  root.style.setProperty('--accent-bg',`rgba(${ac.rgb},.08)`);
-  root.style.setProperty('--accent-light',ac.light);
-  root.style.setProperty('--accent-dark',ac.dark);
-  root.style.setProperty('--grad1',`linear-gradient(135deg,${ac.hex},${ac.light})`);
-  root.style.setProperty('--grad2',`linear-gradient(135deg,${ac.dark},${ac.hex})`);
-
-  // Apply tinted backgrounds based on accent color
-  const tinted=mixColor(ac.hex,isDark);
-  root.style.setProperty('--bg',tinted.bg);
-  root.style.setProperty('--bg2',tinted.bg2);
-  root.style.setProperty('--bg3',tinted.bg3);
-  root.style.setProperty('--border',tinted.border);
-
-  // Re-render charts to pick up new colors
+  root.style.setProperty('--bg',t.bg);
+  root.style.setProperty('--bg2',t.bg2);
+  root.style.setProperty('--bg3',t.bg3);
+  root.style.setProperty('--bg4',t.bg4);
+  root.style.setProperty('--border',t.border);
+  root.style.setProperty('--border2',t.border2);
+  root.style.setProperty('--text',t.text);
+  root.style.setProperty('--text2',t.text2);
+  root.style.setProperty('--text3',t.text3);
+  root.style.setProperty('--accent',t.accent);
+  root.style.setProperty('--accent-rgb',t.accentRgb);
+  root.style.setProperty('--accent-bg',`rgba(${t.accentRgb},.1)`);
+  root.style.setProperty('--accent-light',t.accentLight);
+  root.style.setProperty('--accent-dark',t.accentDark);
+  root.style.setProperty('--green',t.green);
+  root.style.setProperty('--green-bg',`rgba(${hexToRgb2(t.green)},.1)`);
+  root.style.setProperty('--red',t.red);
+  root.style.setProperty('--red-bg',`rgba(${hexToRgb2(t.red)},.1)`);
+  root.style.setProperty('--yellow',t.yellow);
+  root.style.setProperty('--yellow-bg',`rgba(${hexToRgb2(t.yellow)},.1)`);
+  root.style.setProperty('--blue',t.blue||t.accent);
+  root.style.setProperty('--blue-bg',`rgba(${hexToRgb2(t.blue||t.accent)},.1)`);
+  root.style.setProperty('--grad1',`linear-gradient(135deg,${t.accent},${t.accentLight})`);
+  root.style.setProperty('--grad2',`linear-gradient(135deg,${t.accentDark},${t.accent})`);
+  root.style.setProperty('--grad3',`linear-gradient(135deg,${t.yellow},${t.red})`);
+  root.style.setProperty('--grad4',`linear-gradient(135deg,${t.blue||t.accent},${t.accentLight})`);
+  // dark/light body class
+  document.body.classList.toggle('dark', currentMode==='dark');
+  // destroy and re-render charts
   Object.keys(charts).forEach(k=>{if(charts[k])charts[k].destroy();delete charts[k];});
   renderAll();
-  // Update swatch active state
-  document.querySelectorAll('.accent-swatch').forEach(s=>{
-    s.classList.toggle('active',s.dataset.hex===hex);
-  });
+  buildThemeGrid();
 }
 
-function buildAccentGrid(){
+function hexToRgb2(hex){
+  const h=(hex||'#000000').replace('#','');
+  const r=parseInt(h.slice(0,2),16)||0;
+  const g=parseInt(h.slice(2,4),16)||0;
+  const b=parseInt(h.slice(4,6),16)||0;
+  return`${r},${g},${b}`;
+}
+
+
+function applyAccent(hex){
+  // Legacy shim - find theme by accent color or use current theme
+  applyTheme(currentTheme, currentMode);
+}
+
+
+function buildThemeGrid(){
   const grid=document.getElementById('accent-grid');
   if(!grid)return;
-  const isDark=document.body.classList.contains('dark');
-  const current=userSettings.accent||'#0570FE';
-  grid.innerHTML=ACCENT_COLORS.map(ac=>{
-    const isLightOnly=ac.lightOnly&&isDark;
-    return`<div class="accent-swatch${current===ac.hex?' active':''}${isLightOnly?' light-only':''}" 
-      data-hex="${ac.hex}" 
-      style="background:${ac.hex};${isLightOnly?'opacity:.3;cursor:not-allowed':''}" 
-      title="${ac.name}${isLightOnly?' (solo modalità chiara)':''}"
-      onclick="${isLightOnly?'':'selectAccent(\'' + ac.hex + '\')'}"></div>`;
+  grid.innerHTML=Object.entries(THEMES).map(([key,theme])=>{
+    const isActive=key===currentTheme;
+    const t=theme[currentMode];
+    return`<div onclick="selectTheme('${key}')" title="${theme.name}" style="
+      display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;
+      padding:8px;border-radius:10px;border:2px solid ${isActive?t.accent:'transparent'};
+      background:${isActive?`rgba(${t.accentRgb},.08)`:'transparent'};
+      transition:all .2s;min-width:56px
+    " onmouseover="this.style.background='rgba(128,128,128,.1)'" onmouseout="this.style.background='${isActive?`rgba(${t.accentRgb},.08)`:'transparent'}'">
+      <div style="display:flex;gap:3px">
+        <div style="width:14px;height:14px;border-radius:50%;background:${t.bg};border:1px solid ${t.border}"></div>
+        <div style="width:14px;height:14px;border-radius:50%;background:${t.accent}"></div>
+        <div style="width:14px;height:14px;border-radius:50%;background:${t.bg2};border:1px solid ${t.border}"></div>
+      </div>
+      <div style="font-size:10px;color:var(--text2);font-weight:${isActive?700:400}">${theme.icon} ${theme.name}</div>
+      ${isActive?`<div style="font-size:9px;color:${t.accent}">✓ attivo</div>`:''}
+    </div>`;
   }).join('');
 }
 
-function selectAccent(hex){
-  userSettings.accent=hex;
-  saveSetting('accent',hex);
-  applyAccent(hex);
-  buildAccentGrid();
+function buildAccentGrid(){buildThemeGrid();}
+
+
+function selectTheme(key){
+  currentTheme=key;
+  userSettings.theme=key;
+  saveSetting('theme',key);
+  applyTheme(key, currentMode);
 }
+
+function selectAccent(hex){selectTheme(currentTheme);} // legacy shim
+
 
 function loadSettings(){
   const saved=localStorage.getItem('fp_settings_'+(currentUser?.id||'guest'));
-  userSettings=saved?JSON.parse(saved):{darkMode:false,saveTheme:true,notif:true,sound:false,accent:'#0570FE',widgets:{kpi:true,charts:true,cfp:true,prossimi:true}};
-  // Apply accent (which also tints bg)
-  applyAccent(userSettings.accent||'#0570FE');
+  userSettings=saved?JSON.parse(saved):{darkMode:false,saveTheme:true,notif:true,sound:false,theme:'galaxy',widgets:{kpi:true,charts:true,cfp:true,prossimi:true}};
+  currentTheme=userSettings.theme||'galaxy';
+  currentMode=document.body.classList.contains('dark')?'dark':'light';
+  applyTheme(currentTheme,currentMode);
   applySettings();
 }
 
@@ -1180,7 +1364,7 @@ function applySettings(){
   document.getElementById('set-save-theme').checked=userSettings.saveTheme!==false;
   document.getElementById('set-notif').checked=userSettings.notif!==false;
   document.getElementById('set-sound').checked=userSettings.sound||false;
-  buildAccentGrid();
+  buildThemeGrid();
   // Apply widgets
   const w=userSettings.widgets||{};
   ['kpi','charts','cfp','prossimi'].forEach(id=>{
@@ -1198,21 +1382,11 @@ function saveSetting(key,val){
 }
 
 function setDarkMode(on){
-  document.body.classList.toggle('dark',on);
+  currentMode=on?'dark':'light';
   if(userSettings.saveTheme!==false)localStorage.setItem('fp_theme',on?'dark':'light');
   saveSetting('darkMode',on);
-  // If current accent is light-only and switching to dark, reset to default
-  const cur=userSettings.accent||'#0570FE';
-  const ac=ACCENT_COLORS.find(c=>c.hex===cur);
-  if(on&&ac?.lightOnly){
-    selectAccent('#0570FE');
-  } else {
-    // Re-apply tinted bg for current accent in new mode
-    applyAccent(cur);
-  }
-  Object.keys(charts).forEach(k=>{if(charts[k])charts[k].destroy();delete charts[k];});
-  renderAll();
-  buildAccentGrid();
+  applyTheme(currentTheme,currentMode);
+  buildThemeGrid();
 }
 
 function setNotifPref(on){
@@ -1395,8 +1569,19 @@ async function loadAll(){
 }
 
 function setConn(state,label){
-  document.getElementById('cdot').className='cdot '+state;
-  document.getElementById('clabel').textContent=label;
+  const dot=document.getElementById('cdot');
+  const lbl=document.getElementById('clabel');
+  if(dot)dot.className='cdot '+state;
+  if(lbl){
+    lbl.textContent=label;
+    lbl.style.color=state==='ok'?'var(--text)':state==='err'?'var(--red)':'var(--yellow)';
+  }
+  const dbStatus=document.getElementById('db-status');
+  if(dbStatus){
+    dbStatus.textContent=state==='ok'?'Connesso':state==='err'?'Errore':'Connessione...';
+    dbStatus.style.background=state==='ok'?'var(--green-bg)':state==='err'?'var(--red-bg)':'var(--yellow-bg)';
+    dbStatus.style.color=state==='ok'?'var(--green)':state==='err'?'var(--red)':'var(--yellow)';
+  }
 }
 
 // ── REALTIME ──
@@ -1743,9 +1928,8 @@ function renderChartTipo(type){
   const kpi=getKPI();
   const tc={seminario:0,corso_4h:0,corso_6h:0,corso_deontologico:0};
   kpi.forEach(e=>{if(tc[e.tipologia]!==undefined)tc[e.tipologia]++;});
-  const isDark=document.body.classList.contains('dark');
-  const colors=[isDark?'#5b8dee':'#2563eb',isDark?'#3ecf8e':'#12b76a',isDark?'#9b72f0':'#7c3aed',isDark?'#f0b429':'#f0b429'];
-  renderChartGrad('ch-tipo',type,['Seminario','Corso 4h','Corso 6h','Deontologico'],[{data:Object.values(tc),backgroundColor:colors.map(c=>c+'cc'),borderColor:colors,borderWidth:1}]);
+  const themeColors=getThemeChartColors();
+  renderChartGrad('ch-tipo',type,['Seminario','Corso 4h','Corso 6h','Deontologico'],[{data:Object.values(tc),backgroundColor:themeColors.slice(0,4).map(c=>c+'cc'),borderColor:themeColors.slice(0,4),borderWidth:1}]);
 }
 
 // ── FORMATORI ──
@@ -1967,9 +2151,9 @@ function renderChartTemi(type){
   }
   if(wrap)wrap.style.display='block';
   if(tview)tview.style.display='none';
-  const colors=tl.map((_,i)=>{const hue=180+i*(180/tl.length);return`hsla(${hue},65%,${isDark?62:48}%,0.75)`;});
+  const themeC=getThemeChartColors();
   renderChartGrad('ch-temi',type,tl,[
-    {label:'% effettivo',data:tl.map(t=>+(((tC[t]||0)/tot*100).toFixed(1))),backgroundColor:type==='bar'?ac+'88':colors,borderColor:ac,borderWidth:2,borderRadius:type==='bar'?3:0},
+    {label:'% effettivo',data:tl.map(t=>+(((tC[t]||0)/tot*100).toFixed(1))),backgroundColor:type==='bar'?themeC[0]+'88':tl.map((_,i)=>themeC[i%themeC.length]+'cc'),borderColor:themeC[0],borderWidth:2,borderRadius:type==='bar'?3:0},
     ...(type!=='doughnut'&&type!=='pie'?[{label:'% target',data:Object.values(TEMI_PESI),backgroundColor:'rgba(100,100,200,.15)',borderColor:'rgba(100,100,200,.4)',borderWidth:1,borderRadius:3}]:[])
   ],{indexAxis:type==='bar'?'y':undefined});
 }
@@ -2021,8 +2205,8 @@ function renderChartMix(type){
   const mP=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0),0);
   const mI=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
   const mG=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_gratuiti)||0),0);
-  const isDark=document.body.classList.contains('dark');
-  renderChartGrad('ch-mix',type,['Paganti','Illimitati','Gratuiti'],[{data:[mP,mI,mG],backgroundColor:[isDark?'rgba(62,207,142,.8)':'rgba(18,183,106,.8)',isDark?'rgba(91,141,238,.8)':'rgba(37,99,235,.8)',isDark?'rgba(240,180,41,.8)':'rgba(240,180,41,.8)'],borderColor:[isDark?'#3ecf8e':'#12b76a',isDark?'#5b8dee':'#2563eb','#f0b429'],borderWidth:2}]);
+  const mc=getThemeChartColors();
+  renderChartGrad('ch-mix',type,['Paganti','Illimitati','Gratuiti'],[{data:[mP,mI,mG],backgroundColor:[mc[0]+'cc',mc[1]+'cc',mc[2]+'cc'],borderColor:[mc[0],mc[1],mc[2]],borderWidth:2}]);
 }
 
 function renderChartRicavi(id,range,offset){
@@ -2225,12 +2409,18 @@ async function confirmImport(rows){
 }
 
 // ── CHARTS (GRADIENT) ──
+function getThemeChartColors(){
+  const t=THEMES[currentTheme]?.[currentMode];
+  return t?.chartColors||['#8b5cf6','#60a5fa','#34d399','#f472b6','#fbbf24','#06b6d4'];
+}
+
 function renderChartGrad(id,type,labels,datasets,extra={}){
   if(charts[id]){charts[id].destroy();delete charts[id];}
   const ctx=document.getElementById(id);if(!ctx)return;
-  const isDark=document.body.classList.contains('dark');
+  const isDark=currentMode==='dark';
+  const t=THEMES[currentTheme]?.[currentMode];
   const gc=isDark?'rgba(255,255,255,.04)':'rgba(0,0,0,.05)';
-  const tc=isDark?'#5a6a84':'#9ca3af';
+  const tc=t?.text3||( isDark?'#5a6a84':'#9ca3af');
   // Apply gradient fill for line charts - always fade to transparent (never dark)
   if(type==='line'){
     datasets=datasets.map(ds=>{
@@ -2266,7 +2456,7 @@ function showPage(id,el){
   const pg=document.getElementById('page-'+id);if(pg)pg.classList.add('active');
   if(el)el.classList.add('active');
   // Re-render page-specific
-  const map={'home':renderDashboard,'kpi':renderKPI,'commerciale':renderCommerciale,'formatori':()=>renderFormatori(),'calendario':renderCalendario,'notifiche':()=>{notifPage=0;markAllRead();},'impostazioni':()=>{document.getElementById('set-dark').checked=document.body.classList.contains('dark');buildAccentGrid();},'profilo':()=>showPage('impostazioni',document.getElementById('nav-impostazioni'))};
+  const map={'home':renderDashboard,'kpi':renderKPI,'commerciale':renderCommerciale,'formatori':()=>renderFormatori(),'calendario':renderCalendario,'notifiche':()=>{notifPage=0;markAllRead();},'impostazioni':()=>{document.getElementById('set-dark').checked=currentMode==='dark';buildThemeGrid();},'profilo':()=>showPage('impostazioni',document.getElementById('nav-impostazioni'))};
   if(map[id])map[id]();
 }
 
