@@ -88,8 +88,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:
 .greeting-sub{font-size:13px;color:var(--text3)}
 /* ── BUTTONS ── */
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);font-size:12px;font-weight:500;cursor:pointer;border:none;transition:all .15s;font-family:inherit}
-.btn-p{background:var(--green);color:#fff;box-shadow:0 2px 8px rgba(18,183,106,.3)}.btn-p:hover{filter:brightness(1.1);transform:translateY(-1px)}
-.dark .btn-p{background:var(--green);color:#0a1f15;box-shadow:0 2px 8px rgba(62,207,142,.2)}
+.btn-p{background:var(--accent);color:var(--btn-text,#fff);box-shadow:0 2px 8px rgba(var(--accent-rgb),.3)}.btn-p:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.dark .btn-p{background:var(--accent);color:var(--btn-text,#fff);box-shadow:0 2px 8px rgba(var(--accent-rgb),.2)}
 .btn-s{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}.btn-s:hover{border-color:var(--border2);color:var(--text)}
 .btn-d{background:var(--red-bg);color:var(--red);border:1px solid rgba(224,82,82,.2)}
 .btn-sm{padding:5px 10px;font-size:10px}
@@ -1551,6 +1551,7 @@ async function doLogout(){
 function showApp(){
   document.getElementById('auth-screen').style.display='none';
   document.getElementById('app-shell').style.display='grid';
+  if(currentUser?.id)localStorage.setItem('fp_last_user',currentUser.id);
   updateSbUser();
 }
 
@@ -2464,29 +2465,43 @@ function renderNotifiche(){
     const ts=(n.time||n.created_at)?new Date(n.time||n.created_at).toLocaleString('it',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}):'';
     const typeIcon={INSERT:'➕',UPDATE:'✏️',DELETE:'🗑️'}[n.type]||'🔔';
     const typeLabel={INSERT:'Aggiunto',UPDATE:'Modificato',DELETE:'Eliminato'}[n.type]||'Aggiornato';
-    const hasEv=n.evento_id||n.evento_titolo;
+    const hasEv=!!(n.evento_id||n.evento_titolo);
     const isNew=!n.read;
     const actor=n.actor||n.modified_by||'';
-    const evId=(n.evento_id||'').replace(/'/g,"\\'");
-    const evTit=(n.evento_titolo||'').replace(/'/g,"\\'");
-    const actorAv=actor?getUserAvatar(actor,32):'';
-    return`<div class="notif-item" style="
-        background:${isNew?'rgba(var(--accent-rgb),.06)':'transparent'};
-        border-radius:var(--r);margin-bottom:4px;padding:10px 10px;
-        border-left:${isNew?'3px solid var(--accent)':'3px solid transparent'};
-        opacity:${isNew?1:.75};
-        transition:all .15s;cursor:pointer
+    const evId=String(n.evento_id||'').replace(/'/g,"\'");
+    const evTit=String(n.evento_titolo||'').replace(/'/g,"\'");
+    // Build actor avatar inline (can't call fn in template easily, use direct HTML)
+    const grad=typeof getAvatarGradient==='function'?getAvatarGradient():'linear-gradient(135deg,#8b5cf6,#f472b6)';
+    const ini=getInit(actor||'?');
+    const avSize=32;
+    let actorAvHtml='';
+    if(actor){
+      const fmD2=FM_DATA[actor]||{};
+      const uAv=(userProfile&&actor===userProfile.name&&userProfile.avatar)?userProfile.avatar:null;
+      const avUrl=uAv||fmD2.avatar_url||null;
+      actorAvHtml=avUrl
+        ?`<div style="width:${avSize}px;height:${avSize}px;border-radius:50%;background:${grad};padding:2px;flex-shrink:0"><img src="${avUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"></div>`
+        :`<div style="width:${avSize}px;height:${avSize}px;border-radius:50%;background:${grad};padding:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center"><div style="width:100%;height:100%;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent)">${ini}</div></div>`;
+    }
+    return`<div style="
+        display:flex;align-items:flex-start;gap:10px;
+        background:${isNew?'rgba(var(--accent-rgb),.07)':'var(--bg3)'};
+        border-radius:var(--r);margin-bottom:6px;padding:12px;
+        border-left:4px solid ${isNew?'var(--accent)':'var(--border2)'};
+        cursor:pointer;transition:all .15s;
       " onclick="handleNotifClick(${start+i},'${evId}','${evTit}')">
-      <div style="display:flex;align-items:flex-start;gap:10px">
-        <!-- Dot indicator -->
-        <div style="margin-top:8px;flex-shrink:0">
-          <div style="width:9px;height:9px;border-radius:50%;background:${isNew?'var(--accent)':'var(--border2)'};${isNew?'box-shadow:0 0 6px var(--accent)':''}"></div>
-        </div>
-        <!-- User avatar -->
-        ${actorAv?`<div style="margin-top:2px;flex-shrink:0">${actorAv}</div>`:''}
-        <!-- Content -->
-        <div style="flex:1;min-width:0">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap">
+      <!-- DOT -->
+      <div style="margin-top:6px;flex-shrink:0">
+        <div style="width:10px;height:10px;border-radius:50%;
+          background:${isNew?'var(--accent)':'var(--border2)'};
+          ${isNew?'box-shadow:0 0 8px var(--accent);':''}
+          transition:all .3s"></div>
+      </div>
+      <!-- AVATAR -->
+      ${actor?`<div style="flex-shrink:0;margin-top:2px">${actorAvHtml}</div>`:''}
+      <!-- BODY -->
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap">
             <span>${typeIcon}</span>
             <span class="badge" style="background:${n.type==='INSERT'?'var(--green-bg)':n.type==='DELETE'?'var(--red-bg)':'var(--blue-bg)'};color:${n.type==='INSERT'?'var(--green)':n.type==='DELETE'?'var(--red)':'var(--blue)'}">${typeLabel}</span>
             ${actor?`<span style="font-size:11px;font-weight:700;color:var(--text)">${actor}</span>`:''}
@@ -2675,20 +2690,22 @@ function showToast(msg,type='ok'){
 
 
 // ── LOCAL READ STATUS for notifications ──
+function notifStorageKey(){
+  return 'fp_notif_read_'+(currentUser?.id||localStorage.getItem('fp_last_user')||'guest');
+}
 function getLocalReadIds(){
   try{
-    const saved=localStorage.getItem('fp_notif_read_'+(currentUser?.id||'guest'));
+    const saved=localStorage.getItem(notifStorageKey());
     return new Set(saved?JSON.parse(saved):[]);
   }catch(e){return new Set();}
 }
-
 function saveLocalReadId(id){
   try{
-    const ids=getLocalReadIds();
-    ids.add(id);
-    // Keep max 500 read IDs
-    const arr=[...ids].slice(-500);
-    localStorage.setItem('fp_notif_read_'+(currentUser?.id||'guest'),JSON.stringify(arr));
+    const key=notifStorageKey();
+    const existing=localStorage.getItem(key);
+    const ids=new Set(existing?JSON.parse(existing):[]);
+    ids.add(String(id));
+    localStorage.setItem(key,JSON.stringify([...ids].slice(-500)));
   }catch(e){}
 }
 
