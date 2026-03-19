@@ -1660,7 +1660,15 @@ async function loadAll(){
   }catch(e){}
   try{
     const nRes=await sb.from('notifiche').select('*').order('created_at',{ascending:false}).limit(200);
-    if(!nRes.error){NOTIFICHE=nRes.data||[];unreadCount=NOTIFICHE.filter(n=>!n.read).length;updateNotifBadge();}
+    if(!nRes.error){
+      const readIds=getLocalReadIds();
+      NOTIFICHE=(nRes.data||[]).map(n=>{
+        const nid=n.id||(n.text+(n.created_at||''));
+        return{...n,read:n.read||readIds.has(nid)};
+      });
+      unreadCount=NOTIFICHE.filter(n=>!n.read).length;
+      updateNotifBadge();
+    }
   }catch(e){}
   renderAll();
 }
