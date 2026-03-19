@@ -1005,6 +1005,14 @@ function applyStoredTheme(){
   const saved=localStorage.getItem('fp_theme');
   if(saved==='dark'){document.body.classList.add('dark');}
   // default is light
+  // Apply saved accent immediately to avoid flash
+  const savedSettings=localStorage.getItem('fp_settings_guest');
+  if(savedSettings){
+    try{
+      const s=JSON.parse(savedSettings);
+      if(s.accent)applyAccent(s.accent);
+    }catch(e){}
+  }
 }
 
 // ── GREETING ──
@@ -1065,9 +1073,52 @@ const ACCENT_COLORS=[
   {hex:'#4B2E83',name:'Viola reale',rgb:'75,46,131',light:'#7c5ec0',dark:'#2e1a55'}
 ];
 
+function hexToRgb(hex){
+  const h=hex.replace('#','');
+  return{r:parseInt(h.slice(0,2),16),g:parseInt(h.slice(2,4),16),b:parseInt(h.slice(4,6),16)};
+}
+
+function mixColor(hex,isDark){
+  // Mix accent with black (dark) or white (light) to create tinted backgrounds
+  const{r,g,b}=hexToRgb(hex);
+  if(isDark){
+    // Dark mode: mix accent with near-black → very subtle tint
+    const factor=0.06; // how much accent bleeds into bg
+    const bgR=Math.round(r*factor);
+    const bgG=Math.round(g*factor);
+    const bgB=Math.round(b*factor);
+    const bg2R=Math.round(r*factor*1.5);
+    const bg2G=Math.round(g*factor*1.5);
+    const bg2B=Math.round(b*factor*1.5);
+    return{
+      bg:`rgb(${Math.min(bgR,18)},${Math.min(bgG,18)},${Math.min(bgB,18)})`,
+      bg2:`rgb(${Math.min(bg2R,26)},${Math.min(bg2G,26)},${Math.min(bg2B,26)})`,
+      bg3:`rgb(${Math.min(bgR+10,30)},${Math.min(bgG+10,30)},${Math.min(bgB+10,30)})`,
+      border:`rgb(${Math.min(bgR+20,40)},${Math.min(bgG+20,40)},${Math.min(bgB+20,40)})`
+    };
+  } else {
+    // Light mode: mix accent with white → very light tint
+    const factor=0.04;
+    const bgR=Math.round(255-(255-r)*factor*0.3);
+    const bgG=Math.round(255-(255-g)*factor*0.3);
+    const bgB=Math.round(255-(255-b)*factor*0.3);
+    const bg2R=Math.round(255-(255-r)*factor*0.1);
+    const bg2G=Math.round(255-(255-g)*factor*0.1);
+    const bg2B=Math.round(255-(255-b)*factor*0.1);
+    return{
+      bg:`rgb(${bgR},${bgG},${bgB})`,
+      bg2:`rgb(${bg2R},${bg2G},${bg2B})`,
+      bg3:`rgb(${Math.round(bgR*0.97)},${Math.round(bgG*0.97)},${Math.round(bgB*0.97)})`,
+      border:`rgb(${Math.round(bgR*0.93)},${Math.round(bgG*0.93)},${Math.round(bgB*0.93)})`
+    };
+  }
+}
+
 function applyAccent(hex){
   const ac=ACCENT_COLORS.find(c=>c.hex===hex)||ACCENT_COLORS[0];
   const root=document.documentElement;
+  const isDark=document.body.classList.contains('dark');
+
   root.style.setProperty('--accent',ac.hex);
   root.style.setProperty('--accent-rgb',ac.rgb);
   root.style.setProperty('--accent-bg',`rgba(${ac.rgb},.08)`);
@@ -1075,6 +1126,14 @@ function applyAccent(hex){
   root.style.setProperty('--accent-dark',ac.dark);
   root.style.setProperty('--grad1',`linear-gradient(135deg,${ac.hex},${ac.light})`);
   root.style.setProperty('--grad2',`linear-gradient(135deg,${ac.dark},${ac.hex})`);
+
+  // Apply tinted backgrounds based on accent color
+  const tinted=mixColor(ac.hex,isDark);
+  root.style.setProperty('--bg',tinted.bg);
+  root.style.setProperty('--bg2',tinted.bg2);
+  root.style.setProperty('--bg3',tinted.bg3);
+  root.style.setProperty('--border',tinted.border);
+
   // Re-render charts to pick up new colors
   Object.keys(charts).forEach(k=>{if(charts[k])charts[k].destroy();delete charts[k];});
   renderAll();
@@ -1109,7 +1168,8 @@ function selectAccent(hex){
 function loadSettings(){
   const saved=localStorage.getItem('fp_settings_'+(currentUser?.id||'guest'));
   userSettings=saved?JSON.parse(saved):{darkMode:false,saveTheme:true,notif:true,sound:false,accent:'#0570FE',widgets:{kpi:true,charts:true,cfp:true,prossimi:true}};
-  if(userSettings.accent)applyAccent(userSettings.accent);
+  // Apply accent (which also tints bg)
+  applyAccent(userSettings.accent||'#0570FE');
   applySettings();
 }
 
@@ -1142,7 +1202,12 @@ function setDarkMode(on){
   // If current accent is light-only and switching to dark, reset to default
   const cur=userSettings.accent||'#0570FE';
   const ac=ACCENT_COLORS.find(c=>c.hex===cur);
-  if(on&&ac?.lightOnly){selectAccent('#0570FE');}
+  if(on&&ac?.lightOnly){
+    selectAccent('#0570FE');
+  } else {
+    // Re-apply tinted bg for current accent in new mode
+    applyAccent(cur);
+  }
   Object.keys(charts).forEach(k=>{if(charts[k])charts[k].destroy();delete charts[k];});
   renderAll();
   buildAccentGrid();
