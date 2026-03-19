@@ -378,7 +378,30 @@ textarea.finp{min-height:72px;resize:vertical}
         <div class="fg" style="margin-bottom:12px"><label class="flbl">Nome completo</label><input class="finp" id="r-name" type="text" placeholder="Mario Rossi"></div>
         <div class="fg" style="margin-bottom:12px"><label class="flbl">Email (solo @gruppo-piu.it)</label><input class="finp" id="r-email" type="email" placeholder="nome@gruppo-piu.it"></div>
         <div class="fg" style="margin-bottom:12px"><label class="flbl">Ruolo</label><select class="finp" id="r-role"><option value="coordinatore">Coordinatore</option><option value="segreteria">Segreteria</option><option value="docente">Docente</option><option value="admin">Admin</option></select></div>
-        <div class="fg" style="margin-bottom:16px"><label class="flbl">Password</label><input class="finp" id="r-pass" type="password" placeholder="Minimo 6 caratteri"></div>
+        <div class="fg" style="margin-bottom:12px"><label class="flbl">Password</label><input class="finp" id="r-pass" type="password" placeholder="Minimo 6 caratteri"></div>
+        <!-- TEMA E MODE -->
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:14px">
+          <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px">Aspetto iniziale</div>
+          <div class="fg" style="margin-bottom:10px">
+            <label class="flbl">Tema</label>
+            <select class="finp" id="r-theme">
+              <option value="galaxy">🌌 Galaxy</option>
+              <option value="forest">🌲 Forest</option>
+              <option value="atlantis">🌊 Atlantis</option>
+              <option value="tron">⚡ Tron</option>
+              <option value="summer">☀️ Summer</option>
+              <option value="matrix">💻 Matrix</option>
+              <option value="sakura">🌸 Sakura</option>
+              <option value="arctic">🧊 Arctic</option>
+              <option value="ember">🔥 Ember</option>
+              <option value="lotr">💍 LOTR</option>
+            </select>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:11px;color:var(--text2)">Modalità scura</span>
+            <label class="toggle"><input type="checkbox" id="r-dark"><span class="toggle-slider"></span></label>
+          </div>
+        </div>
         <button class="btn btn-p" style="width:100%;justify-content:center" onclick="doRegister()">Crea account</button>
         <div class="auth-note" id="reg-err"></div>
       </div>
@@ -1000,7 +1023,6 @@ async function init(){
     loadSettings();
     updateGreeting();
     checkTutorial();
-    requestNotifPermission();
   }else{
     document.getElementById('auth-screen').style.display='flex';
   }
@@ -1439,14 +1461,24 @@ function selectAccent(hex){selectTheme(currentTheme);} // legacy shim
 
 
 function loadSettings(){
-  const saved=localStorage.getItem('fp_settings_'+(currentUser?.id||'guest'));
-  userSettings=saved?JSON.parse(saved):{darkMode:false,saveTheme:true,notif:true,sound:false,theme:'galaxy',widgets:{kpi:true,charts:true,cfp:true,prossimi:true}};
+  const settingsKey='fp_settings_'+(currentUser?.id||'guest');
+  let saved=localStorage.getItem(settingsKey);
+  // Check if there are first-login prefs saved by email during registration
+  if(!saved&&currentUser?.email){
+    const newUserPrefs=localStorage.getItem('fp_settings_new_'+currentUser.email);
+    if(newUserPrefs){
+      saved=newUserPrefs;
+      // Migrate to ID-keyed storage and clean up
+      localStorage.setItem(settingsKey,newUserPrefs);
+      localStorage.removeItem('fp_settings_new_'+currentUser.email);
+    }
+  }
+  userSettings=saved?JSON.parse(saved):{darkMode:false,saveTheme:true,notif:false,sound:false,theme:'galaxy',widgets:{kpi:true,charts:true,cfp:true,prossimi:true}};
   currentTheme=userSettings.theme||'galaxy';
-  currentMode=document.body.classList.contains('dark')?'dark':'light';
+  currentMode=userSettings.darkMode?'dark':'light';
   // Force apply theme - overwrites any CSS defaults
   applyTheme(currentTheme, currentMode);
   applySettings();
-  // Re-apply after short delay to ensure DOM is ready
   setTimeout(()=>applyTheme(currentTheme, currentMode), 100);
 }
 
@@ -1482,7 +1514,23 @@ function setDarkMode(on){
 
 function setNotifPref(on){
   saveSetting('notif',on);
-  if(on)requestNotifPermission();
+  if(on&&'Notification' in window){
+    if(Notification.permission==='default'){
+      Notification.requestPermission().then(perm=>{
+        if(perm!=='granted'){
+          saveSetting('notif',false);
+          const el=document.getElementById('set-notif');
+          if(el)el.checked=false;
+          showToast('Permesso notifiche negato dal browser','info');
+        }
+      });
+    } else if(Notification.permission==='denied'){
+      showToast('Abilita le notifiche nelle impostazioni del browser','info');
+      saveSetting('notif',false);
+      const el=document.getElementById('set-notif');
+      if(el)el.checked=false;
+    }
+  }
 }
 
 function toggleWidget(btn){
@@ -1522,7 +1570,7 @@ async function doLogin(){
   loadSettings();
   updateGreeting();
   checkTutorial();
-  requestNotifPermission();
+  // Only check permission status, don't auto-request
 }
 
 async function doRegister(){
@@ -1530,12 +1578,20 @@ async function doRegister(){
   const email=document.getElementById('r-email').value.trim();
   const pass=document.getElementById('r-pass').value;
   const role=document.getElementById('r-role').value;
+  const theme=document.getElementById('r-theme')?.value||'galaxy';
+  const darkMode=document.getElementById('r-dark')?.checked||false;
   const err=document.getElementById('reg-err');
   err.textContent='';err.className='auth-note';
   if(!email.endsWith('@gruppo-piu.it')){err.textContent='Solo email @gruppo-piu.it ammesse';err.className='auth-note err';return;}
   if(!name||pass.length<6){err.textContent='Compila tutti i campi (password min 6 caratteri)';err.className='auth-note err';return;}
-  const{error}=await sb.auth.signUp({email,password:pass,options:{data:{full_name:name,role}}});
+  const{data,error}=await sb.auth.signUp({email,password:pass,options:{data:{full_name:name,role}}});
   if(error){err.textContent=error.message;err.className='auth-note err';return;}
+  // Save theme preference immediately to localStorage keyed by email (before user has ID)
+  const prefKey='fp_settings_new_'+email;
+  localStorage.setItem(prefKey,JSON.stringify({
+    theme,darkMode,saveTheme:true,notif:false,
+    widgets:{kpi:true,charts:true,cfp:true,prossimi:true}
+  }));
   err.textContent='✓ Account creato! Ora accedi con le tue credenziali.';err.className='auth-note';
   switchAuthTab('login',document.querySelector('.auth-tab'));
   document.getElementById('a-email').value=email;
@@ -1747,7 +1803,21 @@ function sendBrowserNotif(title,body){
 }
 
 function requestNotifPermission(){
-  if('Notification' in window&&Notification.permission==='default'){Notification.requestPermission();}
+  if(!('Notification' in window))return;
+  if(Notification.permission==='granted'){
+    // Already granted - update setting silently
+    if(userSettings)userSettings.notif=true;
+    return;
+  }
+  if(Notification.permission==='denied'){
+    // User already denied - don't ask again, just disable in settings
+    if(userSettings)userSettings.notif=false;
+    const el=document.getElementById('set-notif');
+    if(el)el.checked=false;
+    return;
+  }
+  // Only ask if 'default' AND user explicitly toggled on in settings
+  // Don't ask automatically on every page load
 }
 
 function updateNotifBadge(){
