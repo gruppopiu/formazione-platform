@@ -1827,12 +1827,12 @@ function setChartType(chartId,type,btn){
     const kpiD=getKPI();
     const mPag2=Array(12).fill(0),mFI2=Array(12).fill(0);
     kpiD.forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mPag2[m]+=parseInt(e.presenti_paganti)||0;mFI2[m]+=parseInt(e.presenti_illimitati)||0;}});
-    const isDark2=document.body.classList.contains('dark');
-    const ac2=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#0570FE';
+    const cPF=getThemeChartColors();
     const pagfiType2=chartTypes['ch-pag-fi']||'bar';
+    const mkPF=(col)=>({backgroundColor:pagfiType2==='line'?col+'22':col+'88',borderColor:col,borderWidth:2,borderRadius:pagfiType2==='line'?0:3,fill:pagfiType2==='line',tension:.4,pointRadius:pagfiType2==='line'?3:0,pointBackgroundColor:col});
     renderChartGrad('ch-pag-fi',pagfiType2,MESI,[
-      {label:'Presenti paganti',data:mPag2,backgroundColor:pagfiType2==='line'?ac2+'22':ac2+'88',borderColor:ac2,borderWidth:2,borderRadius:pagfiType2==='line'?0:3,fill:pagfiType2==='line',tension:.4,pointRadius:pagfiType2==='line'?3:0,pointBackgroundColor:ac2},
-      {label:'Presenti FI',data:mFI2,backgroundColor:pagfiType2==='line'?(isDark2?'#5b8dee':'#2563eb')+'22':(isDark2?'#5b8dee':'#2563eb')+'88',borderColor:isDark2?'#5b8dee':'#2563eb',borderWidth:2,borderRadius:pagfiType2==='line'?0:3,fill:pagfiType2==='line',tension:.4,pointRadius:pagfiType2==='line'?3:0,pointBackgroundColor:isDark2?'#5b8dee':'#2563eb'}
+      {label:'Presenti paganti',data:mPag2,...mkPF(cPF[0])},
+      {label:'Presenti FI',data:mFI2,...mkPF(cPF[1])}
     ]);
   }
 }
@@ -1913,9 +1913,9 @@ function renderChartMese(id,range,offset){
   const mD=Array(12).fill(0);
   svolti.forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mD[m]+=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);}});
   const type=chartTypes[id]||'bar';
-  const isDark=document.body.classList.contains('dark');
-  const grad=isDark?['rgba(62,207,142,.7)','rgba(62,207,142,.1)']:['rgba(18,183,106,.7)','rgba(18,183,106,.05)'];
-  renderChartGrad(id,type,MESI,[{label:'Presenze',data:mD,backgroundColor:type==='line'?grad[1]:'rgba(18,183,106,.55)',borderColor:isDark?'#3ecf8e':'#12b76a',borderWidth:2,borderRadius:type==='line'?0:4,fill:type==='line',tension:.4,pointRadius:type==='line'?3:0,pointBackgroundColor:isDark?'#3ecf8e':'#12b76a'}]);
+  const c=getThemeChartColors();
+  const col=c[0];
+  renderChartGrad(id,type,MESI,[{label:'Presenze',data:mD,backgroundColor:type==='line'?col+'22':col+'88',borderColor:col,borderWidth:2,borderRadius:type==='line'?0:4,fill:type==='line',tension:.4,pointRadius:type==='line'?3:0,pointBackgroundColor:col}]);
 }
 
 function renderChartTrend(id,range,offset){
@@ -1924,11 +1924,12 @@ function renderChartTrend(id,range,offset){
   const tipiMesi={seminario:Array(12).fill(0),corso_4h:Array(12).fill(0),corso_6h:Array(12).fill(0),corso_deontologico:Array(12).fill(0)};
   kpi.forEach(e=>{if(e.data&&tipiMesi[e.tipologia]){const m=parseInt(e.data.split('-')[1])-1;tipiMesi[e.tipologia][m]++;}});
   const type=chartTypes[id]||'bar';
-  const isDark=document.body.classList.contains('dark');
+  const c=getThemeChartColors();
+  const mk=(col,fill)=>({backgroundColor:type==='line'?col+'22':col+'88',borderColor:col,borderWidth:2,fill:type==='line'&&fill,tension:.4,borderRadius:type==='line'?0:3,pointRadius:type==='line'?3:0,pointBackgroundColor:col});
   const ds=[
-    {label:'Seminari',data:tipiMesi.seminario,backgroundColor:'rgba(37,99,235,.5)',borderColor:isDark?'#5b8dee':'#2563eb',borderWidth:2,fill:type==='line',tension:.4,borderRadius:type==='line'?0:3,pointRadius:type==='line'?3:0},
-    {label:'Corsi',data:tipiMesi.corso_4h.map((v,i)=>v+tipiMesi.corso_6h[i]),backgroundColor:'rgba(18,183,106,.5)',borderColor:isDark?'#3ecf8e':'#12b76a',borderWidth:2,fill:type==='line',tension:.4,borderRadius:type==='line'?0:3,pointRadius:type==='line'?3:0},
-    {label:'Deonto.',data:tipiMesi.corso_deontologico,backgroundColor:'rgba(240,180,41,.5)',borderColor:'#f0b429',borderWidth:2,fill:type==='line',tension:.4,borderRadius:type==='line'?0:3,pointRadius:type==='line'?3:0}
+    {label:'Seminari',data:tipiMesi.seminario,...mk(c[0],true)},
+    {label:'Corsi',data:tipiMesi.corso_4h.map((v,i)=>v+tipiMesi.corso_6h[i]),...mk(c[1],true)},
+    {label:'Deontologici',data:tipiMesi.corso_deontologico,...mk(c[2],true)}
   ];
   renderChartGrad(id,type,MESI,ds,{stacked:type==='bar'});
 }
@@ -1966,7 +1967,7 @@ function renderFormatori(range='all'){
   if(rankEl)rankEl.innerHTML=`<thead><tr><th>#</th><th>Docente</th><th>Eventi</th><th>Paganti medi</th><th>Tasso pres.</th><th>FI medi</th><th>Tasso pres. FI</th><th>Ricavi</th></tr></thead><tbody>${stats.map((f,i)=>{
     const rc=i===0?'p1':i===1?'p2':i===2?'p3':'pn';
     const tc=f.s.tassoPag>=80?'var(--green)':f.s.tassoPag>=60?'var(--yellow)':'var(--red)';
-    return`<tr><td><div class="rank-pos ${rc}">${i+1}</div></td><td style="color:var(--text);font-weight:600">${f.nome}</td><td class="mono">${f.s.tot}</td><td><div class="rank-bar"><div class="rank-bg"><div class="rank-fill" style="width:${maxPag>0?Math.round(f.s.avgPag/maxPag*100):0}%;background:${isDark?'#3ecf8e':'#12b76a'}"></div></div><span class="mono" style="font-size:11px">${f.s.avgPag.toFixed(1)}</span></div></td><td class="mono" style="color:${tc}">${f.s.tassoPag}%</td><td class="mono">${f.s.avgFI.toFixed(1)}</td><td class="mono">${f.s.tassoFI}%</td><td class="mono">€${Math.round(f.s.ric).toLocaleString('it')}</td></tr>`;
+    return`<tr><td><div class="rank-pos ${rc}">${i+1}</div></td><td style="color:var(--text);font-weight:600">${f.nome}</td><td class="mono">${f.s.tot}</td><td><div class="rank-bar"><div class="rank-bg"><div class="rank-fill" style="width:${maxPag>0?Math.round(f.s.avgPag/maxPag*100):0}%;background:var(--accent)"></div></div><span class="mono" style="font-size:11px">${f.s.avgPag.toFixed(1)}</span></div></td><td class="mono" style="color:${tc}">${f.s.tassoPag}%</td><td class="mono">${f.s.avgFI.toFixed(1)}</td><td class="mono">${f.s.tassoFI}%</td><td class="mono">€${Math.round(f.s.ric).toLocaleString('it')}</td></tr>`;
   }).join('')}</tbody>`;
   renderFormatoriChart(stats);
   // Cards
@@ -1985,10 +1986,11 @@ function renderFormatori(range='all'){
 function renderFormatoriChart(stats){
   if(!stats)stats=FORMATORI_DEF.map(f=>({...f,s:calcStats(f.nome)})).sort((a,b)=>b.s.avgPag-a.s.avgPag);
   const type=chartTypes['ch-rank']||'bar';
+  const cFmt=getThemeChartColors();
   const isDark=document.body.classList.contains('dark');
   renderChartGrad('ch-rank',type,stats.map(f=>f.nome),[
-    {label:'Paganti medi',data:stats.map(f=>+f.s.avgPag.toFixed(1)),backgroundColor:'rgba(18,183,106,.55)',borderColor:isDark?'#3ecf8e':'#12b76a',borderWidth:2,borderRadius:4,fill:type==='line',tension:.4,pointRadius:type==='line'?4:0,pointBackgroundColor:isDark?'#3ecf8e':'#12b76a'},
-    {label:'FI medi',data:stats.map(f=>+f.s.avgFI.toFixed(1)),backgroundColor:'rgba(37,99,235,.45)',borderColor:isDark?'#5b8dee':'#2563eb',borderWidth:2,borderRadius:4,fill:type==='line',tension:.4,pointRadius:type==='line'?4:0,pointBackgroundColor:isDark?'#5b8dee':'#2563eb'}
+    {label:'Paganti medi',data:stats.map(f=>+f.s.avgPag.toFixed(1)),backgroundColor:type==='line'?cFmt[0]+'22':cFmt[0]+'88',borderColor:cFmt[0],borderWidth:2,borderRadius:4,fill:type==='line',tension:.4,pointRadius:type==='line'?4:0,pointBackgroundColor:cFmt[0]},
+    {label:'FI medi',data:stats.map(f=>+f.s.avgFI.toFixed(1)),backgroundColor:type==='line'?cFmt[1]+'22':cFmt[1]+'88',borderColor:cFmt[1],borderWidth:2,borderRadius:4,fill:type==='line',tension:.4,pointRadius:type==='line'?4:0,pointBackgroundColor:cFmt[1]}
   ]);
 }
 
@@ -2143,7 +2145,7 @@ function renderChartTemi(type){
   const tot=kpi.length||1;
   const tl=Object.keys(TEMI_PESI);
   const isDark=document.body.classList.contains('dark');
-  const ac=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#0570FE';
+  const ac=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||getThemeChartColors()[0];
   const wrap=document.getElementById('ch-temi-wrap');
   const tview=document.getElementById('temi-table-view');
   if(type==='table'){
@@ -2161,9 +2163,12 @@ function renderChartTemi(type){
   if(wrap)wrap.style.display='block';
   if(tview)tview.style.display='none';
   const themeC=getThemeChartColors();
+  // For bar: use rotating theme colors per bar for max distinctiveness
+  const temiBarColors=tl.map((_,i)=>themeC[i%themeC.length]);
+  const temiBarBorder=tl.map((_,i)=>themeC[i%themeC.length]);
   renderChartGrad('ch-temi',type,tl,[
-    {label:'% effettivo',data:tl.map(t=>+(((tC[t]||0)/tot*100).toFixed(1))),backgroundColor:type==='bar'?themeC[0]+'88':tl.map((_,i)=>themeC[i%themeC.length]+'cc'),borderColor:themeC[0],borderWidth:2,borderRadius:type==='bar'?3:0},
-    ...(type!=='doughnut'&&type!=='pie'?[{label:'% target',data:Object.values(TEMI_PESI),backgroundColor:'rgba(100,100,200,.15)',borderColor:'rgba(100,100,200,.4)',borderWidth:1,borderRadius:3}]:[])
+    {label:'% effettivo',data:tl.map(t=>+(((tC[t]||0)/tot*100).toFixed(1))),backgroundColor:type==='bar'?temiBarColors.map(c=>c+'99'):tl.map((_,i)=>themeC[i%themeC.length]+'cc'),borderColor:type==='bar'?temiBarBorder:themeC[0],borderWidth:type==='bar'?1.5:2,borderRadius:type==='bar'?3:0},
+    ...(type!=='doughnut'&&type!=='pie'?[{label:'% target',data:Object.values(TEMI_PESI),backgroundColor:'rgba(128,128,128,.12)',borderColor:'rgba(128,128,128,.35)',borderWidth:1,borderRadius:3}]:[])
   ],{indexAxis:type==='bar'?'y':undefined});
 }
 
@@ -2192,12 +2197,12 @@ function renderCommerciale(){
   // Paganti vs FI per mese
   const mPag=Array(12).fill(0),mFI=Array(12).fill(0);
   kpi.forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mPag[m]+=parseInt(e.presenti_paganti)||0;mFI[m]+=parseInt(e.presenti_illimitati)||0;}});
-  const isDark=document.body.classList.contains('dark');
-  const ac=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#0570FE';
+  const c2=getThemeChartColors();
   const pagfiType=chartTypes['ch-pag-fi']||'bar';
+  const mk2=(col)=>({backgroundColor:pagfiType==='line'?col+'22':col+'88',borderColor:col,borderWidth:2,borderRadius:pagfiType==='line'?0:3,fill:pagfiType==='line',tension:.4,pointRadius:pagfiType==='line'?3:0,pointBackgroundColor:col});
   renderChartGrad('ch-pag-fi',pagfiType,MESI,[
-    {label:'Presenti paganti',data:mPag,backgroundColor:pagfiType==='line'?ac+'22':ac+'88',borderColor:ac,borderWidth:2,borderRadius:pagfiType==='line'?0:3,fill:pagfiType==='line',tension:.4,pointRadius:pagfiType==='line'?3:0,pointBackgroundColor:ac},
-    {label:'Presenti FI',data:mFI,backgroundColor:pagfiType==='line'?(isDark?'#5b8dee':'#2563eb')+'22':(isDark?'#5b8dee':'#2563eb')+'88',borderColor:isDark?'#5b8dee':'#2563eb',borderWidth:2,borderRadius:pagfiType==='line'?0:3,fill:pagfiType==='line',tension:.4,pointRadius:pagfiType==='line'?3:0,pointBackgroundColor:isDark?'#5b8dee':'#2563eb'}
+    {label:'Presenti paganti',data:mPag,...mk2(c2[0])},
+    {label:'Presenti FI',data:mFI,...mk2(c2[1])}
   ]);
   const byT={};
   kpi.forEach(e=>{if(!byT[e.tema])byT[e.tema]={p:0,fi:0,c:0};byT[e.tema].p+=parseInt(e.presenti_paganti)||0;byT[e.tema].fi+=parseInt(e.presenti_illimitati)||0;byT[e.tema].c++;});
@@ -2224,8 +2229,9 @@ function renderChartRicavi(id,range,offset){
   const mR=Array(12).fill(0);
   kpi.forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mR[m]+=(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0);}});
   const type=chartTypes[id]||'bar';
-  const isDark=document.body.classList.contains('dark');
-  renderChartGrad(id,type,MESI,[{label:'Ricavi €',data:mR,backgroundColor:type==='line'?'rgba(124,58,237,.1)':'rgba(124,58,237,.55)',borderColor:isDark?'#9b72f0':'#7c3aed',borderWidth:2,fill:type==='line',tension:.4,borderRadius:type==='line'?0:4,pointRadius:type==='line'?3:0,pointBackgroundColor:isDark?'#9b72f0':'#7c3aed'}]);
+  const cRic=getThemeChartColors();
+  const colRic=cRic[2];
+  renderChartGrad(id,type,MESI,[{label:'Ricavi €',data:mR,backgroundColor:type==='line'?colRic+'22':colRic+'88',borderColor:colRic,borderWidth:2,fill:type==='line',tension:.4,borderRadius:type==='line'?0:4,pointRadius:type==='line'?3:0,pointBackgroundColor:colRic}]);
 }
 
 // ── CALENDARIO ──
@@ -2435,7 +2441,7 @@ function renderChartGrad(id,type,labels,datasets,extra={}){
     datasets=datasets.map(ds=>{
       if(ds.fill){
         const g=ctx.getContext('2d').createLinearGradient(0,0,0,210);
-        const bc=ds.borderColor||'#0570FE';
+        const bc=ds.borderColor||getThemeChartColors()[0];
         // Parse color to get RGB components for proper fade
         let r=5,gv=112,b=254;
         const hex=bc.replace('#','');
@@ -2550,14 +2556,14 @@ function openEvDetail(id){
   if(evDetailChart){evDetailChart.destroy();evDetailChart=null;}
   const ctx=document.getElementById('evd-chart');
   if(ctx){
-    const ac=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#0570FE';
+    const evC=getThemeChartColors();
     evDetailChart=new Chart(ctx,{
       type:'bar',
       data:{
         labels:['Paganti','Form. Illimitata','Gratuiti'],
         datasets:[
-          {label:'Iscritti',data:[ip,ii,ig],backgroundColor:ac+'55',borderColor:ac,borderWidth:1.5,borderRadius:4},
-          {label:'Presenti',data:[pp,pi,pg],backgroundColor:ac+'99',borderColor:ac,borderWidth:1.5,borderRadius:4}
+          {label:'Iscritti',data:[ip,ii,ig],backgroundColor:[evC[0]+'88',evC[1]+'88',evC[2]+'88'],borderColor:[evC[0],evC[1],evC[2]],borderWidth:1.5,borderRadius:4},
+          {label:'Presenti',data:[pp,pi,pg],backgroundColor:[evC[0]+'cc',evC[1]+'cc',evC[2]+'cc'],borderColor:[evC[0],evC[1],evC[2]],borderWidth:1.5,borderRadius:4}
         ]
       },
       options:{responsive:true,maintainAspectRatio:false,
