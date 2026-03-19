@@ -17,8 +17,10 @@
   --yellow:#f0b429;--yellow-bg:rgba(240,180,41,.08);
   --blue:#2563eb;--blue-bg:rgba(37,99,235,.08);
   --purple:#7c3aed;--purple-bg:rgba(124,58,237,.08);
-  --grad1:linear-gradient(135deg,#12b76a,#06aed4);
-  --grad2:linear-gradient(135deg,#2563eb,#7c3aed);
+  --accent:#0570FE;--accent-rgb:5,112,254;--accent-bg:rgba(5,112,254,.08);
+  --accent-light:#3d90fe;--accent-dark:#0450c0;
+  --grad1:linear-gradient(135deg,var(--accent),var(--accent-light));
+  --grad2:linear-gradient(135deg,#7c3aed,var(--accent));
   --grad3:linear-gradient(135deg,#f0b429,#e05252);
   --grad4:linear-gradient(135deg,#7c3aed,#ec4899);
   --r:8px;--r2:14px;--r3:20px;
@@ -269,6 +271,31 @@ textarea.finp{min-height:72px;resize:vertical}
 .widget-toggle.on{background:var(--green-bg);color:var(--green);border-color:var(--green)}
 .widget-wrap{transition:all .2s}
 .widget-wrap.hidden{display:none}
+
+/* ── ACCENT PICKER ── */
+.accent-grid{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.accent-swatch{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .2s;position:relative;flex-shrink:0}
+.accent-swatch.active{border-color:var(--text);transform:scale(1.15)}
+.accent-swatch.light-only{opacity:.4;pointer-events:none}
+.accent-swatch.light-only-active{opacity:1;pointer-events:auto}
+.accent-swatch::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;opacity:0;font-weight:700}
+.accent-swatch.active::after{opacity:1}
+/* Apply accent to key elements */
+.sbi.active{background:rgba(var(--accent-rgb),.1);color:var(--accent)}
+.btn-p{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(var(--accent-rgb),.3)}
+.dark .btn-p{background:var(--accent);color:#fff}
+.kval{background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cdot.ok{background:var(--accent);box-shadow:0 0 6px var(--accent)}
+.finp:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.1)}
+.toggle input:checked+.toggle-slider{background:var(--accent)}
+.tb.on{background:var(--accent);border-color:var(--accent)}
+.ct-btn.on{background:rgba(var(--accent-rgb),.12);color:var(--accent);border-color:var(--accent)}
+.widget-toggle.on{background:rgba(var(--accent-rgb),.12);color:var(--accent);border-color:var(--accent)}
+.auth-tab.active{background:var(--accent)}
+.notif-dot.new{background:var(--accent);box-shadow:0 0 6px var(--accent)}
+.sb-logo-dot{background:var(--accent)}
+.cal-day.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+
 /* ── IMPORT ── */
 .imp-zone{border:2px dashed var(--border);border-radius:var(--r2);padding:30px;text-align:center;cursor:pointer;transition:all .2s}
 .imp-zone:hover{border-color:var(--green);background:var(--green-bg)}
@@ -517,34 +544,73 @@ textarea.finp{min-height:72px;resize:vertical}
 
     <!-- KPI -->
     <div class="page" id="page-kpi">
-      <div class="ph"><div><div class="pt">KPI Formativi</div><div class="ps">Avanzamento target SINF</div></div></div>
-      <div class="grid3" id="cfp-cards" style="margin-bottom:16px"></div>
-      <div class="grid2">
-        <div class="card"><div class="ctitle">CFP per categoria</div><div id="cfp-bars"></div></div>
-        <div class="card"><div class="ctitle">Tipologie vs obiettivo</div><div id="tipo-bars"></div></div>
+      <div class="ph"><div><div class="pt">KPI Formativi</div><div class="ps">Monitoraggio obiettivi SINF — CFP, ore, struttura, temi</div></div></div>
+
+      <!-- SECTION 1: CFP COUNTER -->
+      <div style="margin-bottom:8px;font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Crediti Formativi Professionali (CFP)</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px" id="cfp-cards"></div>
+
+      <!-- SECTION 2: CFP PROGRESS RINGS + BARS -->
+      <div class="grid2" style="margin-bottom:16px">
+        <div class="card">
+          <div class="ctitle">Avanzamento CFP per categoria <span class="ctitle-sub">vs target annuale</span></div>
+          <div id="cfp-bars"></div>
+        </div>
+        <div class="card">
+          <div class="ctitle">Avanzamento operativo <span class="ctitle-sub">eventi e ore</span></div>
+          <div id="ops-bars"></div>
+        </div>
       </div>
-      <div class="card"><div class="ctitle">Equilibrio temi <span class="ctitle-sub">% effettivo vs peso target</span></div><div id="temi-bars"></div></div>
-      <div class="card">
+
+      <!-- SECTION 3: STRUTTURA EVENTI -->
+      <div style="margin-bottom:8px;font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Struttura eventi vs obiettivo annuale</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px" id="tipo-cards"></div>
+
+      <!-- SECTION 4: EQUILIBRIO TEMI -->
+      <div class="card" style="margin-bottom:16px">
         <div class="chart-toolbar">
-          <div class="ctitle" style="margin:0">Distribuzione temi</div>
+          <div>
+            <div class="ctitle" style="margin:0">Equilibrio temi</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px">Distribuzione % effettiva vs peso target — barra verde = in target, rossa = sotto</div>
+          </div>
           <div class="chart-type-btns" id="ctype-temi">
-            <button class="ct-btn on" onclick="setChartType('ch-temi','bar',this)">Bar</button>
-            <button class="ct-btn" onclick="setChartType('ch-temi','doughnut',this)">Donut</button>
+            <button class="ct-btn on" onclick="setChartType('ch-temi','bar',this)">Grafico</button>
+            <button class="ct-btn" onclick="setChartType('ch-temi','table',this)">Tabella</button>
           </div>
         </div>
-        <div class="chw-lg"><canvas id="ch-temi"></canvas></div>
+        <div class="chw-lg" id="ch-temi-wrap"><canvas id="ch-temi"></canvas></div>
+        <div id="temi-table-view" style="display:none"></div>
+      </div>
+
+      <!-- SECTION 5: TEMI PROGRESS -->
+      <div class="card">
+        <div class="ctitle">Dettaglio temi <span class="ctitle-sub">effettivo vs peso target</span></div>
+        <div id="temi-bars" style="column-count:2;column-gap:24px"></div>
       </div>
     </div>
 
     <!-- COMMERCIALE -->
     <div class="page" id="page-commerciale">
       <div class="ph"><div><div class="pt">Commerciale</div><div class="ps">Partecipazione e ricavi — esclusi gratuiti/CAF</div></div></div>
-      <div class="kgrid">
-        <div class="kcard c1"><div class="kcard-grad"></div><div class="klbl">Iscritti paganti</div><div class="kval" id="c-pag">—</div></div>
+
+      <!-- PAGANTI -->
+      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Iscritti paganti</div>
+      <div class="kgrid" style="margin-bottom:20px">
+        <div class="kcard c1"><div class="kcard-grad"></div><div class="klbl">Iscritti paganti</div><div class="kval" id="c-pag">—</div><div class="ksub">totale periodo</div></div>
         <div class="kcard c2"><div class="kcard-grad"></div><div class="klbl">Presenti paganti</div><div class="kval" id="c-pres">—</div></div>
         <div class="kcard c3"><div class="kcard-grad"></div><div class="klbl">Tasso presenza</div><div class="kval" id="c-tasso">—</div></div>
-        <div class="kcard c4"><div class="kcard-grad"></div><div class="klbl">Ricavi stimati</div><div class="kval" id="c-ric">—</div></div>
+        <div class="kcard c4"><div class="kcard-grad"></div><div class="klbl">Ricavi</div><div class="kval" id="c-ric">—</div></div>
       </div>
+
+      <!-- FORMAZIONE ILLIMITATA -->
+      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Formazione Illimitata (abbonati)</div>
+      <div class="kgrid" style="margin-bottom:20px">
+        <div class="kcard c2"><div class="kcard-grad"></div><div class="klbl">Iscritti FI</div><div class="kval" id="fi-isc">—</div><div class="ksub">totale periodo</div></div>
+        <div class="kcard c3"><div class="kcard-grad"></div><div class="klbl">Presenti FI</div><div class="kval" id="fi-pres">—</div></div>
+        <div class="kcard c1"><div class="kcard-grad"></div><div class="klbl">Tasso presenza FI</div><div class="kval" id="fi-tasso">—</div></div>
+        <div class="kcard c4"><div class="kcard-grad"></div><div class="klbl">Media FI / evento</div><div class="kval" id="fi-media">—</div></div>
+      </div>
+
       <div class="grid2">
         <div class="card">
           <div class="chart-toolbar">
@@ -568,13 +634,21 @@ textarea.finp{min-height:72px;resize:vertical}
           <div class="chw"><canvas id="ch-ric"></canvas></div>
         </div>
       </div>
-      <div class="card"><div class="ctitle">Presenze medie per tema <span class="ctitle-sub">paganti</span></div><div id="pres-tema"></div></div>
+      <div class="grid2">
+        <div class="card"><div class="ctitle">Presenze medie per tema <span class="ctitle-sub">paganti vs FI</span></div><div id="pres-tema"></div></div>
+        <div class="card">
+          <div class="chart-toolbar">
+            <div class="ctitle" style="margin:0">Confronto paganti vs FI per mese</div>
+          </div>
+          <div class="chw"><canvas id="ch-pag-fi"></canvas></div>
+        </div>
+      </div>
     </div>
 
     <!-- IMPORTA -->
     <div class="page" id="page-importa">
       <div class="ph"><div><div class="pt">Importa CSV</div><div class="ps">Carica dati storici</div></div></div>
-      <div class="card"><div class="ctitle">Formato atteso</div><div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px;font-family:'SF Mono',monospace;font-size:10px;color:var(--green);overflow-x:auto;white-space:nowrap;margin-bottom:8px">data, titolo, tema, tipologia, docente, ore, prezzo, iscritti_paganti, presenti_paganti, iscritti_illimitati, presenti_illimitati, iscritti_gratuiti, presenti_gratuiti, stato, note, escludi_kpi</div><p style="font-size:10px;color:var(--text3)">tipologia: seminario | corso_4h | corso_6h | corso_deontologico &nbsp;·&nbsp; stato: pianificato | pubblicato | svolto | consuntivato | annullato | spostato</p></div>
+      <div class="card"><div class="ctitle">Formato atteso</div><div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px;font-family:'SF Mono',monospace;font-size:10px;color:var(--green);overflow-x:auto;white-space:nowrap;margin-bottom:8px">data, titolo, tema, tipologia, docente, ore, prezzo, prezzo_early_bird, iscritti_paganti, presenti_paganti, iscritti_early_bird, presenti_early_bird, iscritti_illimitati, presenti_illimitati, iscritti_gratuiti, presenti_gratuiti, stato, note, escludi_kpi</div><p style="font-size:10px;color:var(--text3)">tipologia: seminario | corso_4h | corso_6h | corso_deontologico &nbsp;·&nbsp; stato: pianificato | pubblicato | svolto | consuntivato | annullato | spostato</p></div>
       <div class="card"><div class="ctitle">Carica file</div><label class="imp-zone"><input type="file" accept=".csv" onchange="handleCSV(this)"><div style="font-size:24px;margin-bottom:8px">📂</div><div style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:3px">Trascina il file CSV qui</div><div style="font-size:11px;color:var(--text3)">oppure clicca per selezionare</div></label><div id="imp-preview" style="margin-top:14px"></div></div>
     </div>
 
@@ -598,6 +672,10 @@ textarea.finp{min-height:72px;resize:vertical}
             <div class="setting-row">
               <div><div class="setting-label">Salva preferenza tema</div><div class="setting-sub">Ricorda la tua scelta al prossimo accesso</div></div>
               <label class="toggle"><input type="checkbox" id="set-save-theme" checked onchange="saveSetting('saveTheme',this.checked)"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:10px">
+              <div><div class="setting-label">Colore accento</div><div class="setting-sub">Personalizza il colore principale dell'interfaccia</div></div>
+              <div class="accent-grid" id="accent-grid"></div>
             </div>
           </div>
           <div class="card">
@@ -679,9 +757,12 @@ textarea.finp{min-height:72px;resize:vertical}
         <div class="fg full"><label class="flbl">Titolo *</label><input type="text" class="finp" id="ef-titolo"></div>
         <div class="fg"><label class="flbl">Tema *</label><select class="finp" id="ef-tema"><option value="">Seleziona tema</option><option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Successioni</option><option>Bonus Casa</option><option>Locazioni</option><option>Fisco Professionisti</option><option>Professione</option><option>Comunità Energetiche</option><option>CTU</option><option>Agricoltura</option><option>Inglese</option></select></div>
         <div class="fg"><label class="flbl">Tipologia *</label><select class="finp" id="ef-tipo"><option value="">Seleziona tipologia</option><option value="seminario">Seminario (2h)</option><option value="corso_4h">Corso tecnico (4h)</option><option value="corso_6h">Corso tecnico (6h)</option><option value="corso_deontologico">Corso deontologico (2h)</option></select></div>
-        <div class="fg"><label class="flbl">Docente</label><select class="finp" id="ef-docente"><option value="">Seleziona docente</option><option>Mion</option><option>Basso</option><option>De Castro</option><option>Di Leo</option><option>Masi</option><option value="Dell'Oste">Dell'Oste</option><option>Rivetti</option><option>Forte</option><option>Frediani</option><option>Caputo</option><option>Groppo</option></select></div>
+        <div class="fg"><label class="flbl">Docente</label><select class="finp" id="ef-docente"><option value="">Seleziona docente</option><option>Mion</option><option>Basso</option><option>De Castro</option><option>Di Leo</option><option>Masi</option><option value="Dell'Oste">Dell'Oste</option><option>Rivetti</option><option>Forte</option><option>Frediani</option><option>Caputo</option><option>Groppo</option><option>Cocozza</option></select></div>
         <div class="fg"><label class="flbl">Ore *</label><input type="number" class="finp" id="ef-ore" placeholder="2" min="1" max="8"></div>
-        <div class="fg"><label class="flbl">Prezzo (€)</label><input type="number" class="finp" id="ef-prezzo" placeholder="0" min="0"></div>
+        <div class="fg"><label class="flbl">Prezzo pieno (€)</label><input type="number" class="finp" id="ef-prezzo" placeholder="0" min="0"></div>
+        <div class="fg"><label class="flbl">Early bird (€) <span style="font-size:9px;color:var(--text3);text-transform:none;letter-spacing:0">opzionale</span></label><input type="number" class="finp" id="ef-eb" placeholder="es. 59" min="0"></div>
+        <div class="fg"><label class="flbl">Iscritti early bird</label><input type="number" class="finp" id="ef-ieb" placeholder="0" min="0"></div>
+        <div class="fg"><label class="flbl">Presenti early bird</label><input type="number" class="finp" id="ef-peb" placeholder="0" min="0"></div>
         <div class="fg"><label class="flbl">Stato</label><select class="finp" id="ef-stato"><option value="pianificato">Pianificato</option><option value="pubblicato">Pubblicato</option><option value="svolto">Svolto</option><option value="consuntivato">Consuntivato</option><option value="annullato">Annullato</option><option value="spostato">Spostato</option></select></div>
         <div class="fg"><label class="flbl">Modulo n°</label><input type="number" class="finp" id="ef-modulo" placeholder="1" min="1"></div>
         <div class="fg"><label class="flbl">Iscritti paganti</label><input type="number" class="finp" id="ef-ip" placeholder="0" min="0"></div>
@@ -754,7 +835,8 @@ let FORMATORI_DEF=[
   {nome:'Forte',temi:['Fisco Immobiliare','Successioni','Catasto']},
   {nome:'Frediani',temi:['CTU','Professione']},
   {nome:'Caputo',temi:['Intelligenza Artificiale','Deontologia']},
-  {nome:'Groppo',temi:['Inglese']}
+  {nome:'Groppo',temi:['Inglese']},
+  {nome:'Cocozza',temi:['Deontologia','Professione','Intelligenza Artificiale']}
 ];
 
 // ── STATE ──
@@ -845,9 +927,64 @@ function closeTutorial(){
 }
 
 // ── SETTINGS ──
+const ACCENT_COLORS=[
+  {hex:'#0570FE',name:'Blu (default)',rgb:'5,112,254',light:'#3d90fe',dark:'#0450c0'},
+  {hex:'#12b76a',name:'Verde',rgb:'18,183,106',light:'#3ecf8e',dark:'#05603a'},
+  {hex:'#141414',name:'Nero (solo light)',rgb:'20,20,20',light:'#444',dark:'#000',lightOnly:true},
+  {hex:'#FFF8DC',name:'Crema',rgb:'255,248,220',light:'#fff',dark:'#d4c98a',textDark:true},
+  {hex:'#FCD0C3',name:'Rosa cipria',rgb:'252,208,195',light:'#fde8e0',dark:'#c87a5e',textDark:true},
+  {hex:'#C3D9E7',name:'Azzurro polvere',rgb:'195,217,231',light:'#ddeef7',dark:'#6899b5',textDark:true},
+  {hex:'#00AB99',name:'Verde acqua',rgb:'0,171,153',light:'#33c4b5',dark:'#007a6e'},
+  {hex:'#C74357',name:'Rosso scarlatto',rgb:'199,67,87',light:'#d96070',dark:'#a0303f'},
+  {hex:'#FFDC69',name:'Giallo ambra',rgb:'255,220,105',light:'#ffe999',dark:'#c8a800',textDark:true},
+  {hex:'#4B2E83',name:'Viola reale',rgb:'75,46,131',light:'#7c5ec0',dark:'#2e1a55'}
+];
+
+function applyAccent(hex){
+  const ac=ACCENT_COLORS.find(c=>c.hex===hex)||ACCENT_COLORS[0];
+  const root=document.documentElement;
+  root.style.setProperty('--accent',ac.hex);
+  root.style.setProperty('--accent-rgb',ac.rgb);
+  root.style.setProperty('--accent-bg',`rgba(${ac.rgb},.08)`);
+  root.style.setProperty('--accent-light',ac.light);
+  root.style.setProperty('--accent-dark',ac.dark);
+  root.style.setProperty('--grad1',`linear-gradient(135deg,${ac.hex},${ac.light})`);
+  root.style.setProperty('--grad2',`linear-gradient(135deg,${ac.dark},${ac.hex})`);
+  // Re-render charts to pick up new colors
+  Object.keys(charts).forEach(k=>{if(charts[k])charts[k].destroy();delete charts[k];});
+  renderAll();
+  // Update swatch active state
+  document.querySelectorAll('.accent-swatch').forEach(s=>{
+    s.classList.toggle('active',s.dataset.hex===hex);
+  });
+}
+
+function buildAccentGrid(){
+  const grid=document.getElementById('accent-grid');
+  if(!grid)return;
+  const isDark=document.body.classList.contains('dark');
+  const current=userSettings.accent||'#0570FE';
+  grid.innerHTML=ACCENT_COLORS.map(ac=>{
+    const isLightOnly=ac.lightOnly&&isDark;
+    return`<div class="accent-swatch${current===ac.hex?' active':''}${isLightOnly?' light-only':''}" 
+      data-hex="${ac.hex}" 
+      style="background:${ac.hex};${isLightOnly?'opacity:.3;cursor:not-allowed':''}" 
+      title="${ac.name}${isLightOnly?' (solo modalità chiara)':''}"
+      onclick="${isLightOnly?'':'selectAccent(\'' + ac.hex + '\')'}"></div>`;
+  }).join('');
+}
+
+function selectAccent(hex){
+  userSettings.accent=hex;
+  saveSetting('accent',hex);
+  applyAccent(hex);
+  buildAccentGrid();
+}
+
 function loadSettings(){
   const saved=localStorage.getItem('fp_settings_'+(currentUser?.id||'guest'));
-  userSettings=saved?JSON.parse(saved):{darkMode:false,saveTheme:true,notif:true,sound:false,widgets:{kpi:true,charts:true,cfp:true,prossimi:true}};
+  userSettings=saved?JSON.parse(saved):{darkMode:false,saveTheme:true,notif:true,sound:false,accent:'#0570FE',widgets:{kpi:true,charts:true,cfp:true,prossimi:true}};
+  if(userSettings.accent)applyAccent(userSettings.accent);
   applySettings();
 }
 
@@ -856,6 +993,7 @@ function applySettings(){
   document.getElementById('set-save-theme').checked=userSettings.saveTheme!==false;
   document.getElementById('set-notif').checked=userSettings.notif!==false;
   document.getElementById('set-sound').checked=userSettings.sound||false;
+  buildAccentGrid();
   // Apply widgets
   const w=userSettings.widgets||{};
   ['kpi','charts','cfp','prossimi'].forEach(id=>{
@@ -876,8 +1014,13 @@ function setDarkMode(on){
   document.body.classList.toggle('dark',on);
   if(userSettings.saveTheme!==false)localStorage.setItem('fp_theme',on?'dark':'light');
   saveSetting('darkMode',on);
+  // If current accent is light-only and switching to dark, reset to default
+  const cur=userSettings.accent||'#0570FE';
+  const ac=ACCENT_COLORS.find(c=>c.hex===cur);
+  if(on&&ac?.lightOnly){selectAccent('#0570FE');}
   Object.keys(charts).forEach(k=>{if(charts[k])charts[k].destroy();delete charts[k];});
   renderAll();
+  buildAccentGrid();
 }
 
 function setNotifPref(on){
@@ -1342,20 +1485,70 @@ function renderKPI(){
   const ore=svolti.reduce((s,e)=>s+parseFloat(e.ore||0),0);
   const cfpT=cfpS+cfpC+cfpD;
   const sess=kpi.reduce((s,e)=>s+sessEv(e),0);
-  document.getElementById('cfp-cards').innerHTML=`
-    <div class="kcard c1" style="margin-bottom:0"><div class="kcard-grad"></div><div class="klbl">CFP Seminari</div><div class="kval">${cfpS}</div>${progBar(cfpS,CFP_OBJ.sem,'b','','CFP')}<div class="ksub">target ${CFP_OBJ.sem} CFP</div></div>
-    <div class="kcard c2" style="margin-bottom:0"><div class="kcard-grad"></div><div class="klbl">CFP Corsi</div><div class="kval">${cfpC}</div>${progBar(cfpC,CFP_OBJ.corsi,'g','','CFP')}<div class="ksub">target ${CFP_OBJ.corsi} CFP</div></div>
-    <div class="kcard c3" style="margin-bottom:0"><div class="kcard-grad"></div><div class="klbl">CFP Deontologia</div><div class="kval">${cfpD}</div>${progBar(cfpD,CFP_OBJ.deo,'y','','CFP')}<div class="ksub">target ${CFP_OBJ.deo} CFP (min 6/triennio)</div></div>
-    <div class="kcard c4" style="margin-bottom:0"><div class="kcard-grad"></div><div class="klbl">CFP Totali</div><div class="kval">${cfpT}</div>${progBar(cfpT,146,'g','','CFP')}<div class="ksub">target 146 / anno</div></div>
-    <div class="kcard c1" style="margin-bottom:0"><div class="kcard-grad"></div><div class="klbl">Ore erogate</div><div class="kval">${ore.toFixed(0)}</div>${progBar(ore,150,'g','','h')}<div class="ksub">target 150+ ore</div></div>
-    <div class="kcard c2" style="margin-bottom:0"><div class="kcard-grad"></div><div class="klbl">Sessioni</div><div class="kval">${sess}</div><div class="ksub">eventi reali: ${kpi.length} / target 60+</div></div>`;
-  document.getElementById('cfp-bars').innerHTML=progBar(cfpS,CFP_OBJ.sem,'b','CFP Seminari','CFP')+progBar(cfpC,CFP_OBJ.corsi,'g','CFP Corsi tecnici','CFP')+progBar(cfpD,CFP_OBJ.deo,'y','CFP Deontologia','CFP')+progBar(ore,150,'g','Ore erogate','h')+progBar(kpi.length,60,'p','Eventi reali','');
   const tc={seminario:0,corso_4h:0,corso_6h:0,corso_deontologico:0};
   kpi.forEach(e=>{if(tc[e.tipologia]!==undefined)tc[e.tipologia]++;});
-  document.getElementById('tipo-bars').innerHTML=progBar(tc.seminario,OBJ.seminario,'b','Seminari 2h','eventi')+progBar(tc.corso_4h,OBJ.corso_4h,'g','Corsi tecnici 4h','eventi')+progBar(tc.corso_6h,OBJ.corso_6h,'p','Corsi tecnici 6h','eventi')+progBar(tc.corso_deontologico,OBJ.corso_deontologico,'y','Corsi deontologici','eventi');
+
+  // CFP counter cards (4 cards: seminari, corsi, deonto, totale)
+  function cfpRing(val,max,label,sub,grad){
+    const pct=max>0?Math.min(100,Math.round(val/max*100)):0;
+    const color=pct>=100?'var(--green)':pct>=60?'var(--accent)':pct>=30?'var(--yellow)':'var(--red)';
+    return`<div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:16px;text-align:center;box-shadow:var(--shadow)">
+      <div style="position:relative;width:80px;height:80px;margin:0 auto 12px">
+        <svg viewBox="0 0 80 80" style="transform:rotate(-90deg);width:80px;height:80px">
+          <circle cx="40" cy="40" r="32" fill="none" stroke="var(--bg3)" stroke-width="8"/>
+          <circle cx="40" cy="40" r="32" fill="none" stroke="${color}" stroke-width="8" stroke-dasharray="${Math.round(pct*2.01)} 201" stroke-linecap="round"/>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;font-family:'SF Mono',monospace;color:${color}">${val}</div>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:3px">${label}</div>
+      <div style="font-size:10px;color:var(--text3)">${pct}% di ${max} CFP · ${sub}</div>
+    </div>`;
+  }
+  document.getElementById('cfp-cards').innerHTML=
+    cfpRing(cfpS,CFP_OBJ.sem,'CFP Seminari','target '+CFP_OBJ.sem,'g')+
+    cfpRing(cfpC,CFP_OBJ.corsi,'CFP Corsi tecnici','target '+CFP_OBJ.corsi,'b')+
+    cfpRing(cfpD,CFP_OBJ.deo,'CFP Deontologia','min 6/triennio','y')+
+    cfpRing(cfpT,146,'CFP Totali','target 146/anno','p');
+
+  // CFP progress bars
+  document.getElementById('cfp-bars').innerHTML=
+    progBar(cfpS,CFP_OBJ.sem,'b','Seminari','CFP')+
+    progBar(cfpC,CFP_OBJ.corsi,'g','Corsi tecnici','CFP')+
+    progBar(cfpD,CFP_OBJ.deo,'y','Deontologia','CFP');
+
+  // Ops bars
+  document.getElementById('ops-bars').innerHTML=
+    progBar(ore,150,'g','Ore erogate','h')+
+    progBar(kpi.length,60,'b','Eventi reali','su 60 target')+
+    progBar(sess,kpi.length*1.5||1,'p','Sessioni calendario','');
+
+  // Tipologie cards
+  function tipoCard(label,val,target,grad,icon){
+    const pct=target>0?Math.min(100,Math.round(val/target*100)):0;
+    const color=pct>=100?'var(--green)':pct>=50?'var(--accent)':pct>=20?'var(--yellow)':'var(--red)';
+    return`<div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px;box-shadow:var(--shadow)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="font-size:11px;font-weight:600;color:var(--text2)">${label}</div>
+        <span style="font-size:10px;color:${color};font-weight:700;background:var(--bg3);padding:2px 7px;border-radius:20px">${pct}%</span>
+      </div>
+      <div style="font-size:28px;font-weight:800;font-family:'SF Mono',monospace;color:var(--text);margin-bottom:6px">${val} <span style="font-size:13px;color:var(--text3)">/ ${target}</span></div>
+      <div style="height:5px;background:var(--bg3);border-radius:3px;overflow:hidden"><div style="width:${pct}%;height:5px;border-radius:3px;background:${color};transition:width .5s"></div></div>
+    </div>`;
+  }
+  document.getElementById('tipo-cards').innerHTML=
+    tipoCard('Seminari (2h)',tc.seminario,OBJ.seminario,'b','📋')+
+    tipoCard('Corsi 4h',tc.corso_4h,OBJ.corso_4h,'g','📚')+
+    tipoCard('Corsi 6h',tc.corso_6h,OBJ.corso_6h,'p','📖')+
+    tipoCard('Deontologici',tc.corso_deontologico,OBJ.corso_deontologico,'y','⚖️');
+
+  // Temi bars (2 columns)
   const tC={};kpi.forEach(e=>{tC[e.tema]=(tC[e.tema]||0)+1;});
   const tot=kpi.length||1;
-  document.getElementById('temi-bars').innerHTML=Object.entries(TEMI_PESI).map(([t,w])=>{const cnt=tC[t]||0;const peff=+(cnt/tot*100).toFixed(1);return progBar(peff,w,'g',t,'%');}).join('');
+  document.getElementById('temi-bars').innerHTML=Object.entries(TEMI_PESI).map(([t,w])=>{
+    const cnt=tC[t]||0;const peff=+(cnt/tot*100).toFixed(1);
+    return progBar(peff,w,'g',t,'%');
+  }).join('');
+
   renderChartTemi(chartTypes['ch-temi']||'bar');
 }
 
@@ -1365,10 +1558,27 @@ function renderChartTemi(type){
   const tot=kpi.length||1;
   const tl=Object.keys(TEMI_PESI);
   const isDark=document.body.classList.contains('dark');
-  const colors=tl.map((_,i)=>{const hue=120+i*(240/tl.length);return`hsla(${hue},70%,${isDark?60:45}%,0.7)`;});
+  const ac=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#0570FE';
+  const wrap=document.getElementById('ch-temi-wrap');
+  const tview=document.getElementById('temi-table-view');
+  if(type==='table'){
+    if(wrap)wrap.style.display='none';
+    if(tview){
+      tview.style.display='block';
+      tview.innerHTML=`<table><thead><tr><th>Tema</th><th>Peso target</th><th>Effettivo</th><th>Scostamento</th><th>Trend</th></tr></thead><tbody>${tl.map(t=>{
+        const cnt=tC[t]||0;const peff=+(cnt/tot*100).toFixed(1);const pw=TEMI_PESI[t];const diff=+(peff-pw).toFixed(1);
+        const col=diff>=0?'var(--green)':'var(--red)';
+        return`<tr><td style="font-weight:500;color:var(--text)">${t}</td><td class="mono">${pw}%</td><td class="mono" style="color:${col}">${peff}%</td><td class="mono" style="color:${col}">${diff>=0?'+':''}${diff}%</td><td><div style="height:5px;width:80px;background:var(--bg3);border-radius:3px;overflow:hidden"><div style="width:${Math.min(100,Math.round(peff/pw*100))}%;height:5px;background:${col};border-radius:3px"></div></div></td></tr>`;
+      }).join('')}</tbody></table>`;
+    }
+    return;
+  }
+  if(wrap)wrap.style.display='block';
+  if(tview)tview.style.display='none';
+  const colors=tl.map((_,i)=>{const hue=180+i*(180/tl.length);return`hsla(${hue},65%,${isDark?62:48}%,0.75)`;});
   renderChartGrad('ch-temi',type,tl,[
-    {label:'% effettivo',data:tl.map(t=>+(((tC[t]||0)/tot*100).toFixed(1))),backgroundColor:type==='bar'?'rgba(18,183,106,.55)':colors,borderColor:isDark?'#3ecf8e':'#12b76a',borderWidth:2,borderRadius:type==='bar'?3:0},
-    ...(type!=='doughnut'&&type!=='pie'?[{label:'% target',data:Object.values(TEMI_PESI),backgroundColor:'rgba(37,99,235,.2)',borderColor:isDark?'#5b8dee':'#2563eb',borderWidth:1,borderRadius:3}]:[])
+    {label:'% effettivo',data:tl.map(t=>+(((tC[t]||0)/tot*100).toFixed(1))),backgroundColor:type==='bar'?ac+'88':colors,borderColor:ac,borderWidth:2,borderRadius:type==='bar'?3:0},
+    ...(type!=='doughnut'&&type!=='pie'?[{label:'% target',data:Object.values(TEMI_PESI),backgroundColor:'rgba(100,100,200,.15)',borderColor:'rgba(100,100,200,.4)',borderWidth:1,borderRadius:3}]:[])
   ],{indexAxis:type==='bar'?'y':undefined});
 }
 
@@ -1378,16 +1588,39 @@ function renderCommerciale(){
   const ip=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0),0);
   const pp=kpi.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
   const ta=ip>0?Math.round(pp/ip*100):0;
-  const ric=kpi.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0),0);
-  document.getElementById('c-pag').textContent=ip;document.getElementById('c-pres').textContent=pp;
-  document.getElementById('c-tasso').textContent=ta+'%';document.getElementById('c-ric').textContent='€'+Math.round(ric).toLocaleString('it');
+  const ric=kpi.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0),0);
+  document.getElementById('c-pag').textContent=ip;
+  document.getElementById('c-pres').textContent=pp;
+  document.getElementById('c-tasso').textContent=ta+'%';
+  document.getElementById('c-ric').textContent='€'+Math.round(ric).toLocaleString('it');
+  // FI section
+  const fi_isc=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
+  const fi_pres=kpi.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
+  const fi_ta=fi_isc>0?Math.round(fi_pres/fi_isc*100):0;
+  const fi_media=kpi.length>0?(fi_isc/kpi.length):0;
+  document.getElementById('fi-isc').textContent=fi_isc;
+  document.getElementById('fi-pres').textContent=fi_pres;
+  document.getElementById('fi-tasso').textContent=fi_ta+'%';
+  document.getElementById('fi-media').textContent=fi_media.toFixed(1);
   renderChartMix(chartTypes['ch-mix']||'doughnut');
   renderChartRicavi('ch-ric',chartTimeFilters['ch-ric']||'all');
+  // Paganti vs FI per mese
+  const mPag=Array(12).fill(0),mFI=Array(12).fill(0);
+  kpi.forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mPag[m]+=parseInt(e.presenti_paganti)||0;mFI[m]+=parseInt(e.presenti_illimitati)||0;}});
+  const isDark=document.body.classList.contains('dark');
+  const ac=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#0570FE';
+  renderChartGrad('ch-pag-fi','bar',MESI,[
+    {label:'Presenti paganti',data:mPag,backgroundColor:ac+'88',borderColor:ac,borderWidth:1.5,borderRadius:3},
+    {label:'Presenti FI',data:mFI,backgroundColor:(isDark?'#5b8dee':'#2563eb')+'88',borderColor:isDark?'#5b8dee':'#2563eb',borderWidth:1.5,borderRadius:3}
+  ]);
   const byT={};
-  kpi.forEach(e=>{if(!byT[e.tema])byT[e.tema]={p:0,c:0};byT[e.tema].p+=parseInt(e.presenti_paganti)||0;byT[e.tema].c++;});
+  kpi.forEach(e=>{if(!byT[e.tema])byT[e.tema]={p:0,fi:0,c:0};byT[e.tema].p+=parseInt(e.presenti_paganti)||0;byT[e.tema].fi+=parseInt(e.presenti_illimitati)||0;byT[e.tema].c++;});
   const sorted=Object.entries(byT).sort((a,b)=>(b[1].c?b[1].p/b[1].c:0)-(a[1].c?a[1].p/a[1].c:0));
-  const mx=sorted[0]?sorted[0][1].p/sorted[0][1].c||1:1;
-  document.getElementById('pres-tema').innerHTML=sorted.map(([t,d])=>{const avg=d.c?d.p/d.c:0;return progBar(+avg.toFixed(1),+mx.toFixed(1),'g',t,'');}).join('');
+  const mx=sorted[0]?Math.max(sorted[0][1].p/sorted[0][1].c,sorted[0][1].fi/sorted[0][1].c)||1:1;
+  document.getElementById('pres-tema').innerHTML=sorted.map(([t,d])=>{
+    const avgP=d.c?d.p/d.c:0,avgFI=d.c?d.fi/d.c:0;
+    return progBar(+avgP.toFixed(1),+mx.toFixed(1),'g',t+' (pag.)','')+progBar(+avgFI.toFixed(1),+mx.toFixed(1),'b',t+' (FI)','');
+  }).join('<div style="height:8px"></div>');
 }
 
 function renderChartMix(type){
@@ -1519,7 +1752,7 @@ function openEventoModal(id=null){
     document.getElementById('ef-ig').value=e.iscritti_gratuiti||'';document.getElementById('ef-pg').value=e.presenti_gratuiti||'';
     document.getElementById('ef-note').value=e.note||'';document.getElementById('ef-escludi').checked=e.escludi_kpi||false;
   }else{
-    ['ef-data','ef-orario','ef-titolo','ef-tema','ef-tipo','ef-docente','ef-ore','ef-prezzo','ef-modulo','ef-ip','ef-pp','ef-ii','ef-pi','ef-ig','ef-pg','ef-note'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+    ['ef-data','ef-orario','ef-titolo','ef-tema','ef-tipo','ef-docente','ef-ore','ef-prezzo','ef-eb','ef-ieb','ef-peb','ef-modulo','ef-ip','ef-pp','ef-ii','ef-pi','ef-ig','ef-pg','ef-note'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
     document.getElementById('ef-stato').value='pianificato';document.getElementById('ef-escludi').checked=false;
   }
   document.getElementById('ev-modal').style.display='flex';
@@ -1533,7 +1766,7 @@ async function saveEvento(){
   const tipo=document.getElementById('ef-tipo').value;
   if(!data||!titolo||!tema||!tipo){showToast('Compila i campi obbligatori','err');return;}
   const gg=['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
-  const payload={data,titolo,tema,tipologia:tipo,giorno:gg[new Date(data).getDay()],orario:document.getElementById('ef-orario').value||null,docente:document.getElementById('ef-docente').value||null,ore:parseFloat(document.getElementById('ef-ore').value)||2,prezzo:parseFloat(document.getElementById('ef-prezzo').value)||0,stato:document.getElementById('ef-stato').value,modulo_numero:parseInt(document.getElementById('ef-modulo').value)||null,iscritti_paganti:parseInt(document.getElementById('ef-ip').value)||0,presenti_paganti:parseInt(document.getElementById('ef-pp').value)||0,iscritti_illimitati:parseInt(document.getElementById('ef-ii').value)||0,presenti_illimitati:parseInt(document.getElementById('ef-pi').value)||0,iscritti_gratuiti:parseInt(document.getElementById('ef-ig').value)||0,presenti_gratuiti:parseInt(document.getElementById('ef-pg').value)||0,note:document.getElementById('ef-note').value||null,escludi_kpi:document.getElementById('ef-escludi').checked,modified_by:userProfile?.name||'—',modified_at:new Date().toISOString()};
+  const payload={data,titolo,tema,tipologia:tipo,giorno:gg[new Date(data).getDay()],orario:document.getElementById('ef-orario').value||null,docente:document.getElementById('ef-docente').value||null,ore:parseFloat(document.getElementById('ef-ore').value)||2,prezzo:parseFloat(document.getElementById('ef-prezzo').value)||0,prezzo_early_bird:parseFloat(document.getElementById('ef-eb').value)||null,iscritti_early_bird:parseInt(document.getElementById('ef-ieb').value)||0,presenti_early_bird:parseInt(document.getElementById('ef-peb').value)||0,stato:document.getElementById('ef-stato').value,modulo_numero:parseInt(document.getElementById('ef-modulo').value)||null,iscritti_paganti:parseInt(document.getElementById('ef-ip').value)||0,presenti_paganti:parseInt(document.getElementById('ef-pp').value)||0,iscritti_illimitati:parseInt(document.getElementById('ef-ii').value)||0,presenti_illimitati:parseInt(document.getElementById('ef-pi').value)||0,iscritti_gratuiti:parseInt(document.getElementById('ef-ig').value)||0,presenti_gratuiti:parseInt(document.getElementById('ef-pg').value)||0,note:document.getElementById('ef-note').value||null,escludi_kpi:document.getElementById('ef-escludi').checked,modified_by:userProfile?.name||'—',modified_at:new Date().toISOString()};
   try{
     let err;
     if(editId){({error:err}=await sb.from('eventi').update(payload).eq('id',editId));}
@@ -1564,7 +1797,7 @@ async function confirmImport(rows){
   const gg=['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
   const tipiV=['seminario','corso_4h','corso_6h','corso_deontologico'];
   const statiV=['pianificato','pubblicato','svolto','consuntivato','annullato','spostato'];
-  const payload=rows.map(r=>({data:r.data,titolo:r.titolo,tema:r.tema||'Altro',tipologia:tipiV.includes(r.tipologia)?r.tipologia:'seminario',giorno:r.data?gg[new Date(r.data).getDay()]:null,orario:r.orario||null,docente:r.docente||null,ore:parseFloat(r.ore)||2,prezzo:parseFloat(r.prezzo)||0,stato:statiV.includes(r.stato)?r.stato:'svolto',iscritti_paganti:parseInt(r.iscritti_paganti)||0,presenti_paganti:parseInt(r.presenti_paganti)||0,iscritti_illimitati:parseInt(r.iscritti_illimitati)||0,presenti_illimitati:parseInt(r.presenti_illimitati)||0,iscritti_gratuiti:parseInt(r.iscritti_gratuiti)||0,presenti_gratuiti:parseInt(r.presenti_gratuiti)||0,note:r.note||null,escludi_kpi:r.escludi_kpi==='true',modified_by:userProfile?.name||'import',modified_at:new Date().toISOString()}));
+  const payload=rows.map(r=>({data:r.data,titolo:r.titolo,tema:r.tema||'Altro',tipologia:tipiV.includes(r.tipologia)?r.tipologia:'seminario',giorno:r.data?gg[new Date(r.data).getDay()]:null,orario:r.orario||null,docente:r.docente||null,ore:parseFloat(r.ore)||2,prezzo:parseFloat(r.prezzo)||0,prezzo_early_bird:parseFloat(r.prezzo_early_bird)||null,iscritti_early_bird:parseInt(r.iscritti_early_bird)||0,presenti_early_bird:parseInt(r.presenti_early_bird)||0,stato:statiV.includes(r.stato)?r.stato:'svolto',iscritti_paganti:parseInt(r.iscritti_paganti)||0,presenti_paganti:parseInt(r.presenti_paganti)||0,iscritti_illimitati:parseInt(r.iscritti_illimitati)||0,presenti_illimitati:parseInt(r.presenti_illimitati)||0,iscritti_gratuiti:parseInt(r.iscritti_gratuiti)||0,presenti_gratuiti:parseInt(r.presenti_gratuiti)||0,note:r.note||null,escludi_kpi:r.escludi_kpi==='true',modified_by:userProfile?.name||'import',modified_at:new Date().toISOString()}));
   try{const{error}=await sb.from('eventi').insert(payload);if(error)throw error;showToast(`Importati ${payload.length} eventi`,'ok');await loadAll();document.getElementById('imp-preview').innerHTML=`<div style="color:var(--green);font-size:13px;font-weight:600">✓ Importati ${payload.length} eventi</div>`;}
   catch(e){showToast('Errore: '+e.message,'err');}
 }
@@ -1576,14 +1809,19 @@ function renderChartGrad(id,type,labels,datasets,extra={}){
   const isDark=document.body.classList.contains('dark');
   const gc=isDark?'rgba(255,255,255,.04)':'rgba(0,0,0,.05)';
   const tc=isDark?'#5a6a84':'#9ca3af';
-  // Apply gradient fill for line charts
+  // Apply gradient fill for line charts - always fade to transparent (never dark)
   if(type==='line'){
     datasets=datasets.map(ds=>{
-      if(ds.fill&&ctx.getContext){
-        const g=ctx.getContext('2d').createLinearGradient(0,0,0,200);
-        const bc=ds.borderColor||'rgba(18,183,106,1)';
-        g.addColorStop(0,bc.replace('rgb','rgba').replace(')',',0.3)').replace('rgba(','rgba('));
-        g.addColorStop(1,'rgba(0,0,0,0)');
+      if(ds.fill){
+        const g=ctx.getContext('2d').createLinearGradient(0,0,0,210);
+        const bc=ds.borderColor||'#0570FE';
+        // Parse color to get RGB components for proper fade
+        let r=5,gv=112,b=254;
+        const hex=bc.replace('#','');
+        if(hex.length===6){r=parseInt(hex.slice(0,2),16);gv=parseInt(hex.slice(2,4),16);b=parseInt(hex.slice(4,6),16);}
+        g.addColorStop(0,`rgba(${r},${gv},${b},0.25)`);
+        g.addColorStop(0.6,`rgba(${r},${gv},${b},0.08)`);
+        g.addColorStop(1,`rgba(${r},${gv},${b},0)`);
         return{...ds,backgroundColor:g};
       }
       return ds;
@@ -1606,7 +1844,7 @@ function showPage(id,el){
   const pg=document.getElementById('page-'+id);if(pg)pg.classList.add('active');
   if(el)el.classList.add('active');
   // Re-render page-specific
-  const map={'dashboard':renderDashboard,'kpi':renderKPI,'commerciale':renderCommerciale,'formatori':()=>renderFormatori(),'calendario':renderCalendario,'notifiche':()=>{markAllRead();},'impostazioni':()=>{document.getElementById('set-dark').checked=document.body.classList.contains('dark');},'profilo':()=>showPage('impostazioni',document.getElementById('nav-impostazioni'))};
+  const map={'dashboard':renderDashboard,'kpi':renderKPI,'commerciale':renderCommerciale,'formatori':()=>renderFormatori(),'calendario':renderCalendario,'notifiche':()=>{markAllRead();},'impostazioni':()=>{document.getElementById('set-dark').checked=document.body.classList.contains('dark');buildAccentGrid();},'profilo':()=>showPage('impostazioni',document.getElementById('nav-impostazioni'))};
   if(map[id])map[id]();
 }
 
