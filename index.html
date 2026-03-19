@@ -272,6 +272,32 @@ textarea.finp{min-height:72px;resize:vertical}
 .widget-wrap{transition:all .2s}
 .widget-wrap.hidden{display:none}
 
+
+/* ── INFO TOOLTIP ── */
+.info-btn{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);cursor:pointer;font-size:10px;color:var(--text3);position:relative;flex-shrink:0;transition:all .15s}
+.info-btn:hover{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
+.info-tooltip{position:absolute;right:0;top:calc(100% + 6px);background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;font-size:11px;color:var(--text2);line-height:1.6;width:240px;z-index:50;box-shadow:var(--shadow2);pointer-events:none;opacity:0;transform:translateY(-4px);transition:all .2s;text-align:left}
+.info-btn:hover .info-tooltip{opacity:1;transform:translateY(0)}
+/* ── EVENT DETAIL ── */
+.evd-stat{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px}
+.evd-stat-lbl{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px}
+.evd-stat-val{font-size:20px;font-weight:800;font-family:'SF Mono',monospace;color:var(--text)}
+.evd-stat-sub{font-size:10px;color:var(--text3);margin-top:3px}
+/* ── SVOLTI ULTIMI ── */
+.svolti-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:14px;cursor:pointer;transition:all .2s;position:relative}
+.svolti-card:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:var(--shadow2)}
+.svolti-card-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;padding-right:60px}
+.svolti-card-meta{font-size:10px;color:var(--text3);display:flex;gap:10px;flex-wrap:wrap}
+.svolti-card-kpi{position:absolute;top:14px;right:14px;text-align:right}
+.svolti-card-kpi-val{font-size:18px;font-weight:800;font-family:'SF Mono',monospace}
+.svolti-card-kpi-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em}
+/* ── TIME NAV ── */
+.time-nav{display:flex;align-items:center;gap:4px}
+.time-nav-btn{width:22px;height:22px;border-radius:50%;background:var(--bg3);border:.5px solid var(--border);cursor:pointer;font-size:11px;color:var(--text2);display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.time-nav-btn:hover{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
+.time-nav-btn:disabled{opacity:.3;cursor:default}
+.time-period-lbl{font-size:10px;color:var(--text3);min-width:70px;text-align:center;white-space:nowrap}
+
 /* ── ACCENT PICKER ── */
 .accent-grid{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
 .accent-swatch{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .2s;position:relative;flex-shrink:0}
@@ -378,7 +404,7 @@ textarea.finp{min-height:72px;resize:vertical}
     </div>
     <nav class="sb-nav">
       <div class="sb-sec">Monitoraggio</div>
-      <div class="sbi active" id="nav-dashboard" onclick="showPage('dashboard',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</div>
+      <div class="sbi active" id="nav-home" onclick="showPage('home',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</div>
       <div class="sbi" id="nav-calendario" onclick="showPage('calendario',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Calendario</div>
       <div class="sbi" id="nav-eventi" onclick="showPage('eventi',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Eventi</div>
       <div class="sbi" id="nav-formatori" onclick="showPage('formatori',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Formatori</div>
@@ -405,7 +431,7 @@ textarea.finp{min-height:72px;resize:vertical}
     <div class="main-content">
 
     <!-- DASHBOARD -->
-    <div class="page active" id="page-dashboard">
+    <div class="page active" id="page-home">
       <div class="ph">
         <div>
           <div class="greeting" id="greeting">Ciao!</div>
@@ -478,7 +504,11 @@ textarea.finp{min-height:72px;resize:vertical}
       </div>
       <div class="card widget-wrap" id="widget-prossimi">
         <div class="ctitle">Prossimi eventi <span class="ctitle-sub">pianificati / pubblicati</span></div>
-        <div class="twrap" id="prossimi-tbl"></div>
+        <div id="prossimi-list"></div>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <div class="ctitle">Ultimi svolti <span class="ctitle-sub">clicca per vedere dettagli e insights</span></div>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px" id="svolti-grid"></div>
       </div>
     </div>
 
@@ -568,18 +598,15 @@ textarea.finp{min-height:72px;resize:vertical}
 
       <!-- SECTION 4: EQUILIBRIO TEMI -->
       <div class="card" style="margin-bottom:16px">
-        <div class="chart-toolbar">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px">
           <div>
             <div class="ctitle" style="margin:0">Equilibrio temi</div>
-            <div style="font-size:11px;color:var(--text3);margin-top:2px">Distribuzione % effettiva vs peso target — barra verde = in target, rossa = sotto</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:4px">% effettiva vs peso target — verde ≥ target, rosso &lt; target</div>
           </div>
-          <div class="chart-type-btns" id="ctype-temi">
-            <button class="ct-btn on" onclick="setChartType('ch-temi','bar',this)">Grafico</button>
-            <button class="ct-btn" onclick="setChartType('ch-temi','table',this)">Tabella</button>
-          </div>
+          <div class="info-btn" style="margin-top:2px">ℹ<span class="info-tooltip">Mostra la distribuzione percentuale degli eventi per tema rispetto ai pesi target suggeriti dalla classificazione storica. Un tema è "in target" se la sua % effettiva ≥ al peso suggerito.</span></div>
         </div>
-        <div class="chw-lg" id="ch-temi-wrap"><canvas id="ch-temi"></canvas></div>
-        <div id="temi-table-view" style="display:none"></div>
+        <div id="temi-table-view"></div>
+        <div id="ch-temi-wrap" style="display:none"><canvas id="ch-temi"></canvas></div>
       </div>
 
       <!-- SECTION 5: TEMI PROGRESS -->
@@ -596,19 +623,19 @@ textarea.finp{min-height:72px;resize:vertical}
       <!-- PAGANTI -->
       <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Iscritti paganti</div>
       <div class="kgrid" style="margin-bottom:20px">
-        <div class="kcard c1"><div class="kcard-grad"></div><div class="klbl">Iscritti paganti</div><div class="kval" id="c-pag">—</div><div class="ksub">totale periodo</div></div>
-        <div class="kcard c2"><div class="kcard-grad"></div><div class="klbl">Presenti paganti</div><div class="kval" id="c-pres">—</div></div>
-        <div class="kcard c3"><div class="kcard-grad"></div><div class="klbl">Tasso presenza</div><div class="kval" id="c-tasso">—</div></div>
-        <div class="kcard c4"><div class="kcard-grad"></div><div class="klbl">Ricavi</div><div class="kval" id="c-ric">—</div></div>
+        <div class="kcard c1" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Totale iscritti che hanno pagato il biglietto (prezzo pieno o early bird). Esclusi FI e gratuiti/CAF/assicurativi.</span></div><div class="klbl">Iscritti paganti</div><div class="kval" id="c-pag">—</div><div class="ksub">totale periodo</div></div>
+        <div class="kcard c2" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Quanti iscritti paganti hanno effettivamente partecipato. Il gap tra iscritti e presenti è il tasso di no-show pagante.</span></div><div class="klbl">Presenti paganti</div><div class="kval" id="c-pres">—</div></div>
+        <div class="kcard c3" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Presenti paganti / Iscritti paganti. Benchmark: ≥80% ottimo, 60–80% normale, &lt;60% da investigare (comunicazione, tema, giorno).</span></div><div class="klbl">Tasso presenza</div><div class="kval" id="c-tasso">—</div></div>
+        <div class="kcard c4" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Ricavi calcolati su iscritti paganti × prezzo (pieno + early bird). Non include FI. Valore effettivo, non stimato.</span></div><div class="klbl">Ricavi</div><div class="kval" id="c-ric">—</div></div>
       </div>
 
       <!-- FORMAZIONE ILLIMITATA -->
       <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Formazione Illimitata (abbonati)</div>
       <div class="kgrid" style="margin-bottom:20px">
-        <div class="kcard c2"><div class="kcard-grad"></div><div class="klbl">Iscritti FI</div><div class="kval" id="fi-isc">—</div><div class="ksub">totale periodo</div></div>
-        <div class="kcard c3"><div class="kcard-grad"></div><div class="klbl">Presenti FI</div><div class="kval" id="fi-pres">—</div></div>
-        <div class="kcard c1"><div class="kcard-grad"></div><div class="klbl">Tasso presenza FI</div><div class="kval" id="fi-tasso">—</div></div>
-        <div class="kcard c4"><div class="kcard-grad"></div><div class="klbl">Media FI / evento</div><div class="kval" id="fi-media">—</div></div>
+        <div class="kcard c2" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Totale iscritti con abbonamento Formazione Illimitata nel periodo selezionato. Non generano ricavo diretto per evento.</span></div><div class="klbl">Iscritti FI</div><div class="kval" id="fi-isc">—</div><div class="ksub">totale periodo</div></div>
+        <div class="kcard c3" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Quanti degli iscritti FI hanno effettivamente partecipato all'evento. La differenza con gli iscritti indica il tasso di no-show.</span></div><div class="klbl">Presenti FI</div><div class="kval" id="fi-pres">—</div></div>
+        <div class="kcard c1" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Percentuale di presenti FI sul totale iscritti FI. Benchmark indicativo: ≥70% ottimo, 40–70% nella norma, &lt;40% da monitorare.</span></div><div class="klbl">Tasso presenza FI</div><div class="kval" id="fi-tasso">—</div></div>
+        <div class="kcard c4" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Numero medio di iscritti FI per evento nel periodo. Utile per capire quanto l'abbonamento FI contribuisce al riempimento delle aule.</span></div><div class="klbl">Media FI / evento</div><div class="kval" id="fi-media">—</div></div>
       </div>
 
       <div class="grid2">
@@ -639,8 +666,12 @@ textarea.finp{min-height:72px;resize:vertical}
         <div class="card">
           <div class="chart-toolbar">
             <div class="ctitle" style="margin:0">Confronto paganti vs FI per mese</div>
+            <div class="chart-type-btns" id="ctype-pagfi">
+              <button class="ct-btn on" onclick="setChartType('ch-pag-fi','bar',this)">Bar</button>
+              <button class="ct-btn" onclick="setChartType('ch-pag-fi','line',this)">Line</button>
+            </div>
           </div>
-          <div class="chw"><canvas id="ch-pag-fi"></canvas></div>
+          <div style="position:relative;height:240px"><canvas id="ch-pag-fi"></canvas></div>
         </div>
       </div>
     </div>
@@ -809,6 +840,45 @@ textarea.finp{min-height:72px;resize:vertical}
       <div class="twrap" id="fm-ev-list"></div>
     </div>
     <div class="mfoot"><button class="btn btn-s" onclick="closeFmModal()">Chiudi</button><button class="btn btn-p" onclick="saveFmData()">Salva scheda</button></div>
+  </div>
+</div>
+
+
+<!-- MODAL DETTAGLIO EVENTO -->
+<div class="mover" id="ev-detail-modal" style="display:none" onclick="if(event.target===this)closeEvDetail()">
+  <div class="modal" style="max-width:780px">
+    <div class="mhdr">
+      <div>
+        <div class="mtitle" id="evd-title">Dettaglio evento</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:3px" id="evd-subtitle"></div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-s btn-sm" id="evd-edit-btn" onclick="">✏️ Modifica</button>
+        <button class="btn btn-d btn-sm" id="evd-del-btn" onclick="">🗑 Elimina</button>
+        <button class="mclose" onclick="closeEvDetail()">✕</button>
+      </div>
+    </div>
+    <div class="mbody">
+      <!-- INFO GRID -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px" id="evd-info-grid"></div>
+      <!-- DIVIDER -->
+      <div style="height:.5px;background:var(--border);margin-bottom:18px"></div>
+      <!-- PARTECIPAZIONE -->
+      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">Partecipazione</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px" id="evd-part-grid"></div>
+      <!-- INSIGHT CHART -->
+      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">Confronto iscritti vs presenti</div>
+      <div style="position:relative;height:160px;margin-bottom:18px"><canvas id="evd-chart"></canvas></div>
+      <!-- DIVIDER -->
+      <div style="height:.5px;background:var(--border);margin-bottom:18px"></div>
+      <!-- ECONOMICS -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px" id="evd-eco-grid"></div>
+      <!-- NOTE -->
+      <div id="evd-note-section" style="display:none">
+        <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">Note</div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;font-size:12px;color:var(--text2);line-height:1.6" id="evd-note"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1274,14 +1344,86 @@ function progBar(val,max,grad,label,unit){
   </div>`;}
 
 // ── TIME BUTTONS ──
+// Time navigation offsets (how many periods back/forward)
+const timeNavOffsets={};
+
 function initTimeBtns(){
   document.querySelectorAll('.time-btns').forEach(wrap=>{
     if(wrap.innerHTML.trim())return;
-    wrap.innerHTML=['7d','30d','cur','6m','1y','all'].map((r,i)=>{
-      const lbl={['7d']:'7g',['30d']:'30g',cur:'Mese',['6m']:'6M',['1y']:'Anno',all:'Tutto'}[r]||r;
-      return`<button class="tb ${i===5?'on':''}" data-range="${r}" onclick="setTimeFilter('${wrap.id}',this)">${lbl}</button>`;
-    }).join('');
+    const wid=wrap.id;
+    timeNavOffsets[wid]=0;
+    wrap.innerHTML=`
+      <div class="time-nav">
+        <button class="time-nav-btn" id="tnav-prev-${wid}" onclick="timeNavStep('${wid}',-1)" title="Periodo precedente">‹</button>
+        <div style="display:flex;gap:4px" id="tbtn-group-${wid}">${
+          ['7d','30d','cur','6m','1y','all'].map((r,i)=>{
+            const lbl={['7d']:'7g',['30d']:'30g',cur:'Mese',['6m']:'6M',['1y']:'Anno',all:'Tutto'}[r]||r;
+            return`<button class="tb ${i===5?'on':''}" data-range="${r}" onclick="setTimeFilter('${wid}',this)">${lbl}</button>`;
+          }).join('')
+        }</div>
+        <span class="time-period-lbl" id="tnav-lbl-${wid}"></span>
+        <button class="time-nav-btn" id="tnav-next-${wid}" onclick="timeNavStep('${wid}',1)" title="Periodo successivo" disabled>›</button>
+      </div>`;
   });
+}
+
+function getActiveRange(wrapId){
+  const group=document.getElementById('tbtn-group-'+wrapId);
+  if(!group)return'all';
+  const on=group.querySelector('.tb.on');
+  return on?on.dataset.range:'all';
+}
+
+function timeNavStep(wrapId,dir){
+  const range=getActiveRange(wrapId);
+  if(range==='all')return;
+  timeNavOffsets[wrapId]=(timeNavOffsets[wrapId]||0)-dir;
+  if(timeNavOffsets[wrapId]>0)timeNavOffsets[wrapId]=0;
+  updateTimeNavUI(wrapId,range);
+  const chartId=document.getElementById(wrapId)?.dataset.chart;
+  const type=document.getElementById(wrapId)?.dataset.type;
+  if(chartId&&type)refreshChartWithNav(chartId,type,range,timeNavOffsets[wrapId]);
+}
+
+function updateTimeNavUI(wrapId,range){
+  const off=timeNavOffsets[wrapId]||0;
+  const nextBtn=document.getElementById('tnav-next-'+wrapId);
+  const lbl=document.getElementById('tnav-lbl-'+wrapId);
+  if(nextBtn)nextBtn.disabled=off>=0;
+  if(!lbl)return;
+  if(off===0){lbl.textContent='';return;}
+  const now=new Date();
+  const start=new Date();const end=new Date();
+  if(range==='7d'){start.setDate(now.getDate()+off*7);end.setDate(now.getDate()+(off+1)*7-1);}
+  else if(range==='30d'){start.setDate(now.getDate()+off*30);end.setDate(now.getDate()+(off+1)*30-1);}
+  else if(range==='cur'){const m=now.getMonth()+off;start.setFullYear(now.getFullYear());start.setMonth(m);start.setDate(1);end.setFullYear(now.getFullYear());end.setMonth(m+1);end.setDate(0);}
+  else if(range==='6m'){start.setMonth(now.getMonth()+off*6);end.setMonth(now.getMonth()+(off+1)*6);}
+  else if(range==='1y'){start.setFullYear(now.getFullYear()+off);end.setFullYear(now.getFullYear()+off+1);}
+  else{lbl.textContent='';return;}
+  const fmt=d=>d.toLocaleDateString('it',{day:'2-digit',month:'short'});
+  lbl.textContent=fmt(start)+' – '+fmt(end);
+}
+
+function filterByTimeWithNav(data,range,offset){
+  if(!range||range==='all')return data;
+  offset=offset||0;
+  const now=new Date();
+  const start=new Date();const end=new Date();
+  if(range==='7d'){start.setDate(now.getDate()+offset*7);end.setDate(now.getDate()+(offset+1)*7);}
+  else if(range==='30d'){start.setDate(now.getDate()+offset*30);end.setDate(now.getDate()+(offset+1)*30);}
+  else if(range==='cur'){const m=now.getMonth()+offset;start.setFullYear(now.getFullYear());start.setMonth(m);start.setDate(1);end.setFullYear(now.getFullYear());end.setMonth(m+1);end.setDate(0);}
+  else if(range==='6m'){start.setMonth(now.getMonth()+offset*6);end.setMonth(now.getMonth()+(offset+1)*6);}
+  else if(range==='1y'){start.setFullYear(now.getFullYear()+offset);end.setFullYear(now.getFullYear()+offset+1);}
+  else return data;
+  start.setHours(0,0,0,0);end.setHours(23,59,59,999);
+  return data.filter(e=>{if(!e.data)return false;const d=new Date(e.data+'T00:00:00');return d>=start&&d<=end;});
+}
+
+function refreshChartWithNav(chartId,type,range,offset){
+  if(type==='presenze')renderChartMese(chartId,range,offset);
+  else if(type==='trend')renderChartTrend(chartId,range,offset);
+  else if(type==='ricavi')renderChartRicavi(chartId,range,offset);
+  else if(type==='rank')renderFormatori(range);
 }
 
 function setTimeFilter(wrapId,btn){
@@ -1292,9 +1434,14 @@ function setTimeFilter(wrapId,btn){
   const chartId=wrap.dataset.chart;
   const type=wrap.dataset.type;
   chartTimeFilters[chartId]=range;
-  if(type==='presenze')renderChartMese(chartId,range);
-  else if(type==='trend')renderChartTrend(chartId,range);
-  else if(type==='ricavi')renderChartRicavi(chartId,range);
+  timeNavOffsets[wrapId]=0;
+  const nextBtn=document.getElementById('tnav-next-'+wrapId);
+  if(nextBtn)nextBtn.disabled=true;
+  const lbl=document.getElementById('tnav-lbl-'+wrapId);
+  if(lbl)lbl.textContent='';
+  if(type==='presenze')renderChartMese(chartId,range,0);
+  else if(type==='trend')renderChartTrend(chartId,range,0);
+  else if(type==='ricavi')renderChartRicavi(chartId,range,0);
   else if(type==='rank')renderFormatori(range);
 }
 
@@ -1304,14 +1451,14 @@ function setChartType(chartId,type,btn){
   parent.querySelectorAll('.ct-btn').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   chartTypes[chartId]=type;
-  // Re-render
-  if(chartId==='ch-mese')renderChartMese(chartId,chartTimeFilters[chartId]||'all');
-  else if(chartId==='ch-trend')renderChartTrend(chartId,chartTimeFilters[chartId]||'all');
+  if(chartId==='ch-mese')renderChartMese(chartId,chartTimeFilters[chartId]||'all',timeNavOffsets['tbtns-mese']||0);
+  else if(chartId==='ch-trend')renderChartTrend(chartId,chartTimeFilters[chartId]||'all',timeNavOffsets['tbtns-trend']||0);
   else if(chartId==='ch-tipo')renderChartTipo(type);
   else if(chartId==='ch-rank')renderFormatoriChart();
   else if(chartId==='ch-temi')renderChartTemi(type);
   else if(chartId==='ch-mix')renderChartMix(type);
-  else if(chartId==='ch-ric')renderChartRicavi(chartId,chartTimeFilters[chartId]||'all');
+  else if(chartId==='ch-ric')renderChartRicavi(chartId,chartTimeFilters[chartId]||'all',timeNavOffsets['tbtns-ric']||0);
+  else if(chartId==='ch-pag-fi')renderCommerciale();
 }
 
 // ── DASHBOARD ──
@@ -1327,14 +1474,66 @@ function renderDashboard(){
   const cfpEl=document.getElementById('cfp-prog-dash');
   if(cfpEl)cfpEl.innerHTML=progBar(cfpS,CFP_OBJ.sem,'b','CFP Seminari','CFP')+progBar(cfpC,CFP_OBJ.corsi,'g','CFP Corsi','CFP')+progBar(cfpD,CFP_OBJ.deo,'y','CFP Deontologia','CFP');
   const pross=DB.filter(e=>['pianificato','pubblicato'].includes(e.stato)).sort((a,b)=>a.data>b.data?1:-1).slice(0,6);
-  document.getElementById('prossimi-tbl').innerHTML=pross.length?`<table><thead><tr><th>Data</th><th>Titolo</th><th>Tipo</th><th>Docente</th><th>Stato</th></tr></thead><tbody>${pross.map(e=>`<tr><td class="mono">${fmtDate(e.data)}</td><td style="color:var(--text)">${e.titolo}</td><td>${badgeTipo(e.tipologia)}</td><td>${e.docente||'—'}</td><td>${badgeStato(e.stato)}</td></tr>`).join('')}</tbody></table>`:'<div class="empty"><div class="ei">📅</div><div class="et">Nessun evento in programma</div></div>';
+  const prossList=document.getElementById('prossimi-list');
+  if(prossList){
+    if(!pross.length){prossList.innerHTML='<div class="empty"><div class="ei">📅</div><div class="et">Nessun evento in programma</div></div>';}
+    else{prossList.innerHTML=pross.map(e=>{
+      const gi=new Date(e.data+'T00:00:00').toLocaleDateString('it',{weekday:'short'});
+      const totIsc=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_illimitati)||0);
+      return`<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:.5px solid var(--border);cursor:pointer" onclick="openEvDetail('${e.id}')" class="sbi" style="">
+        <div style="flex-shrink:0;width:42px;text-align:center;background:var(--bg3);border-radius:var(--r);padding:5px 0">
+          <div style="font-size:9px;color:var(--text3);text-transform:uppercase">${gi}</div>
+          <div style="font-size:16px;font-weight:800;color:var(--text);font-family:'SF Mono',monospace">${e.data?e.data.split('-')[2]:'—'}</div>
+          <div style="font-size:9px;color:var(--text3)">${e.data?MESI[parseInt(e.data.split('-')[1])-1]:''}</div>
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.titolo}</div>
+          <div style="display:flex;gap:8px;margin-top:4px;align-items:center;flex-wrap:wrap">
+            ${badgeTipo(e.tipologia)}
+            ${e.docente?`<span style="font-size:10px;color:var(--text3)">${e.docente}</span>`:''}
+            ${e.orario?`<span style="font-size:10px;color:var(--text3)">🕐 ${e.orario}</span>`:''}
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+          ${totIsc?`<span style="font-size:11px;color:var(--text2)">${totIsc} iscr.</span>`:''}
+          ${badgeStato(e.stato)}
+        </div>
+      </div>`;
+    }).join('');}
+  }
+  // Ultimi 4 svolti
+  const svoltiGrid=document.getElementById('svolti-grid');
+  if(svoltiGrid){
+    const ultimi=DB.filter(e=>['svolto','consuntivato'].includes(e.stato)).sort((a,b)=>b.data>a.data?1:-1).slice(0,4);
+    if(!ultimi.length){svoltiGrid.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="ei">📊</div><div class="et">Nessun evento svolto ancora</div></div>';}
+    else{svoltiGrid.innerHTML=ultimi.map(e=>{
+      const totPres=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
+      const totIsc=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_illimitati)||0);
+      const tasso=totIsc>0?Math.round(totPres/totIsc*100):null;
+      const tassoCol=tasso===null?'var(--text3)':tasso>=70?'var(--green)':tasso>=40?'var(--yellow)':'var(--red)';
+      return`<div class="svolti-card" onclick="openEvDetail('${e.id}')">
+        <div class="svolti-card-kpi">
+          <div class="svolti-card-kpi-val" style="color:${tassoCol}">${tasso!==null?tasso+'%':'—'}</div>
+          <div class="svolti-card-kpi-lbl">presenza</div>
+        </div>
+        <div class="svolti-card-title">${e.titolo}</div>
+        <div class="svolti-card-meta">
+          <span>${fmtDate(e.data)}</span>
+          ${badgeTipo(e.tipologia)}
+          ${e.docente?`<span>${e.docente}</span>`:''}
+          <span>${totPres} presenti</span>
+        </div>
+      </div>`;
+    }).join('');}
+  }
   renderChartMese('ch-mese',chartTimeFilters['ch-mese']||'all');
   renderChartTrend('ch-trend',chartTimeFilters['ch-trend']||'all');
   renderChartTipo(chartTypes['ch-tipo']||'doughnut');
 }
 
-function renderChartMese(id,range){
-  const svolti=filterByTime(getSvolti(),range);
+function renderChartMese(id,range,offset){
+  offset=offset||0;
+  const svolti=filterByTimeWithNav(getSvolti(),range,offset);
   const mD=Array(12).fill(0);
   svolti.forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mD[m]+=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);}});
   const type=chartTypes[id]||'bar';
@@ -1343,8 +1542,9 @@ function renderChartMese(id,range){
   renderChartGrad(id,type,MESI,[{label:'Presenze',data:mD,backgroundColor:type==='line'?grad[1]:'rgba(18,183,106,.55)',borderColor:isDark?'#3ecf8e':'#12b76a',borderWidth:2,borderRadius:type==='line'?0:4,fill:type==='line',tension:.4,pointRadius:type==='line'?3:0,pointBackgroundColor:isDark?'#3ecf8e':'#12b76a'}]);
 }
 
-function renderChartTrend(id,range){
-  const kpi=filterByTime(getKPI(),range);
+function renderChartTrend(id,range,offset){
+  offset=offset||0;
+  const kpi=filterByTimeWithNav(getKPI(),range,offset);
   const tipiMesi={seminario:Array(12).fill(0),corso_4h:Array(12).fill(0),corso_6h:Array(12).fill(0),corso_deontologico:Array(12).fill(0)};
   kpi.forEach(e=>{if(e.data&&tipiMesi[e.tipologia]){const m=parseInt(e.data.split('-')[1])-1;tipiMesi[e.tipologia][m]++;}});
   const type=chartTypes[id]||'bar';
@@ -1489,10 +1689,11 @@ function renderKPI(){
   kpi.forEach(e=>{if(tc[e.tipologia]!==undefined)tc[e.tipologia]++;});
 
   // CFP counter cards (4 cards: seminari, corsi, deonto, totale)
-  function cfpRing(val,max,label,sub,grad){
+  function cfpRingInfo(val,max,label,sub,grad,tooltip){
     const pct=max>0?Math.min(100,Math.round(val/max*100)):0;
     const color=pct>=100?'var(--green)':pct>=60?'var(--accent)':pct>=30?'var(--yellow)':'var(--red)';
-    return`<div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:16px;text-align:center;box-shadow:var(--shadow)">
+    return`<div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:16px;text-align:center;box-shadow:var(--shadow);position:relative">
+      <div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip" style="right:0;left:auto">${tooltip}</span></div>
       <div style="position:relative;width:80px;height:80px;margin:0 auto 12px">
         <svg viewBox="0 0 80 80" style="transform:rotate(-90deg);width:80px;height:80px">
           <circle cx="40" cy="40" r="32" fill="none" stroke="var(--bg3)" stroke-width="8"/>
@@ -1505,10 +1706,10 @@ function renderKPI(){
     </div>`;
   }
   document.getElementById('cfp-cards').innerHTML=
-    cfpRing(cfpS,CFP_OBJ.sem,'CFP Seminari','target '+CFP_OBJ.sem,'g')+
-    cfpRing(cfpC,CFP_OBJ.corsi,'CFP Corsi tecnici','target '+CFP_OBJ.corsi,'b')+
-    cfpRing(cfpD,CFP_OBJ.deo,'CFP Deontologia','min 6/triennio','y')+
-    cfpRing(cfpT,146,'CFP Totali','target 146/anno','p');
+    cfpRingInfo(cfpS,CFP_OBJ.sem,'CFP Seminari','target '+CFP_OBJ.sem,'g','CFP ottenuti da eventi di tipo Seminario (2h = 2 CFP). Limite: max 20 CFP da seminari validi nel triennio.')+
+    cfpRingInfo(cfpC,CFP_OBJ.corsi,'CFP Corsi tecnici','target '+CFP_OBJ.corsi,'b','CFP ottenuti da corsi tecnici (4h = 4 CFP, 6h = 6 CFP). Nessun limite massimo per triennio.')+
+    cfpRingInfo(cfpD,CFP_OBJ.deo,'CFP Deontologia','min 6/triennio','y','CFP ottenuti da corsi deontologici (2h = 2 CFP). Minimo obbligatorio: 6 CFP nel triennio su Ordinamento e Deontologia.')+
+    cfpRingInfo(cfpT,146,'CFP Totali','target 146/anno','p','Somma di tutti i CFP messi a disposizione: Seminari (90) + Corsi (36) + Deontologia (20) = 146 CFP. CFP in eccedenza vengono riportati al 50% al triennio successivo (max 20).');
 
   // CFP progress bars
   document.getElementById('cfp-bars').innerHTML=
@@ -1549,7 +1750,7 @@ function renderKPI(){
     return progBar(peff,w,'g',t,'%');
   }).join('');
 
-  renderChartTemi(chartTypes['ch-temi']||'bar');
+  renderChartTemi('table');
 }
 
 function renderChartTemi(type){
@@ -1609,9 +1810,10 @@ function renderCommerciale(){
   kpi.forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mPag[m]+=parseInt(e.presenti_paganti)||0;mFI[m]+=parseInt(e.presenti_illimitati)||0;}});
   const isDark=document.body.classList.contains('dark');
   const ac=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#0570FE';
-  renderChartGrad('ch-pag-fi','bar',MESI,[
-    {label:'Presenti paganti',data:mPag,backgroundColor:ac+'88',borderColor:ac,borderWidth:1.5,borderRadius:3},
-    {label:'Presenti FI',data:mFI,backgroundColor:(isDark?'#5b8dee':'#2563eb')+'88',borderColor:isDark?'#5b8dee':'#2563eb',borderWidth:1.5,borderRadius:3}
+  const pagfiType=chartTypes['ch-pag-fi']||'bar';
+  renderChartGrad('ch-pag-fi',pagfiType,MESI,[
+    {label:'Presenti paganti',data:mPag,backgroundColor:pagfiType==='line'?ac+'22':ac+'88',borderColor:ac,borderWidth:2,borderRadius:pagfiType==='line'?0:3,fill:pagfiType==='line',tension:.4,pointRadius:pagfiType==='line'?3:0,pointBackgroundColor:ac},
+    {label:'Presenti FI',data:mFI,backgroundColor:pagfiType==='line'?(isDark?'#5b8dee':'#2563eb')+'22':(isDark?'#5b8dee':'#2563eb')+'88',borderColor:isDark?'#5b8dee':'#2563eb',borderWidth:2,borderRadius:pagfiType==='line'?0:3,fill:pagfiType==='line',tension:.4,pointRadius:pagfiType==='line'?3:0,pointBackgroundColor:isDark?'#5b8dee':'#2563eb'}
   ]);
   const byT={};
   kpi.forEach(e=>{if(!byT[e.tema])byT[e.tema]={p:0,fi:0,c:0};byT[e.tema].p+=parseInt(e.presenti_paganti)||0;byT[e.tema].fi+=parseInt(e.presenti_illimitati)||0;byT[e.tema].c++;});
@@ -1632,8 +1834,9 @@ function renderChartMix(type){
   renderChartGrad('ch-mix',type,['Paganti','Illimitati','Gratuiti'],[{data:[mP,mI,mG],backgroundColor:[isDark?'rgba(62,207,142,.8)':'rgba(18,183,106,.8)',isDark?'rgba(91,141,238,.8)':'rgba(37,99,235,.8)',isDark?'rgba(240,180,41,.8)':'rgba(240,180,41,.8)'],borderColor:[isDark?'#3ecf8e':'#12b76a',isDark?'#5b8dee':'#2563eb','#f0b429'],borderWidth:2}]);
 }
 
-function renderChartRicavi(id,range){
-  const kpi=filterByTime(getKPI(),range);
+function renderChartRicavi(id,range,offset){
+  offset=offset||0;
+  const kpi=filterByTimeWithNav(getKPI(),range,offset);
   const mR=Array(12).fill(0);
   kpi.forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mR[m]+=(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0);}});
   const type=chartTypes[id]||'bar';
@@ -1698,7 +1901,7 @@ function renderEventi(){
     const tp=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
     const ta=ti>0?Math.round(tp/ti*100):null;
     const tc=ta===null?'var(--text3)':ta>=70?'var(--green)':ta>=40?'var(--yellow)':'var(--red)';
-    return`<tr><td class="mono">${fmtDate(e.data)}</td><td style="color:var(--text);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.titolo}">${e.titolo}${e.escludi_kpi?'<span style="font-size:8px;color:var(--text3);margin-left:3px">[excl]</span>':''}</td><td>${e.tema||'—'}</td><td>${badgeTipo(e.tipologia)}</td><td>${e.docente||'—'}</td><td class="mono">${e.ore}h</td><td class="mono">${ti}</td><td class="mono">${tp}</td><td class="mono" style="color:${tc}">${ta!==null?ta+'%':'—'}</td><td>${badgeStato(e.stato)}</td><td style="font-size:10px;color:var(--text3)">${e.modified_by||'—'}</td><td><div class="tda"><button class="btn btn-s btn-sm" onclick="openEventoModal('${e.id}')">✏️</button><button class="btn btn-d btn-sm" onclick="delEvento('${e.id}')">🗑</button></div></td></tr>`;
+    return`<tr><td class="mono">${fmtDate(e.data)}</td><td style="color:var(--text);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.titolo}">${e.titolo}${e.escludi_kpi?'<span style="font-size:8px;color:var(--text3);margin-left:3px">[excl]</span>':''}</td><td>${e.tema||'—'}</td><td>${badgeTipo(e.tipologia)}</td><td>${e.docente||'—'}</td><td class="mono">${e.ore}h</td><td class="mono">${ti}</td><td class="mono">${tp}</td><td class="mono" style="color:${tc}">${ta!==null?ta+'%':'—'}</td><td>${badgeStato(e.stato)}</td><td style="font-size:10px;color:var(--text3)">${e.modified_by||'—'}</td><td><button class="btn btn-p btn-sm" onclick="openEvDetail('${e.id}')" style="white-space:nowrap">Apri →</button></td></tr>`;
   }).join('')}</tbody></table>`;
 }
 
@@ -1844,7 +2047,7 @@ function showPage(id,el){
   const pg=document.getElementById('page-'+id);if(pg)pg.classList.add('active');
   if(el)el.classList.add('active');
   // Re-render page-specific
-  const map={'dashboard':renderDashboard,'kpi':renderKPI,'commerciale':renderCommerciale,'formatori':()=>renderFormatori(),'calendario':renderCalendario,'notifiche':()=>{markAllRead();},'impostazioni':()=>{document.getElementById('set-dark').checked=document.body.classList.contains('dark');buildAccentGrid();},'profilo':()=>showPage('impostazioni',document.getElementById('nav-impostazioni'))};
+  const map={'home':renderDashboard,'kpi':renderKPI,'commerciale':renderCommerciale,'formatori':()=>renderFormatori(),'calendario':renderCalendario,'notifiche':()=>{markAllRead();},'impostazioni':()=>{document.getElementById('set-dark').checked=document.body.classList.contains('dark');buildAccentGrid();},'profilo':()=>showPage('impostazioni',document.getElementById('nav-impostazioni'))};
   if(map[id])map[id]();
 }
 
@@ -1860,6 +2063,112 @@ function showToast(msg,type='ok'){
   t.textContent=(type==='ok'?'✓  ':type==='err'?'✕  ':'ℹ  ')+msg;
   t.className='toast '+type+' show';
   setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+
+// ── EVENT DETAIL MODAL ──
+let evDetailChart=null;
+
+function openEvDetail(id){
+  const e=DB.find(x=>x.id===id);if(!e)return;
+  const modal=document.getElementById('ev-detail-modal');
+  const isDark=document.body.classList.contains('dark');
+
+  document.getElementById('evd-title').textContent=e.titolo;
+  const tipoLbl={seminario:'Seminario 2h',corso_4h:'Corso tecnico 4h',corso_6h:'Corso tecnico 6h',corso_deontologico:'Corso deontologico 2h'};
+  document.getElementById('evd-subtitle').innerHTML=`${fmtDate(e.data)}${e.orario?' · '+e.orario:''} · ${tipoLbl[e.tipologia]||e.tipologia}${e.docente?' · '+e.docente:''}`;
+
+  // Edit/Delete buttons
+  document.getElementById('evd-edit-btn').onclick=()=>{closeEvDetail();openEventoModal(e.id);};
+  document.getElementById('evd-del-btn').onclick=()=>{closeEvDetail();delEvento(e.id);};
+
+  // Info grid
+  const cfp=cfpEv(e);
+  document.getElementById('evd-info-grid').innerHTML=`
+    <div class="evd-stat"><div class="evd-stat-lbl">Tema</div><div class="evd-stat-val" style="font-size:14px">${e.tema||'—'}</div></div>
+    <div class="evd-stat"><div class="evd-stat-lbl">Stato</div><div style="margin-top:5px">${badgeStato(e.stato)}</div></div>
+    <div class="evd-stat"><div class="evd-stat-lbl">CFP generati</div><div class="evd-stat-val">${cfp}</div><div class="evd-stat-sub">ore: ${e.ore}h</div></div>
+    <div class="evd-stat"><div class="evd-stat-lbl">Giorno</div><div class="evd-stat-val" style="font-size:14px">${e.giorno||'—'}</div></div>
+    <div class="evd-stat"><div class="evd-stat-lbl">Orario</div><div class="evd-stat-val" style="font-size:14px">${e.orario||'—'}</div></div>
+    ${e.modulo_numero?`<div class="evd-stat"><div class="evd-stat-lbl">Modulo</div><div class="evd-stat-val">n° ${e.modulo_numero}</div></div>`:'<div></div>'}
+  `;
+
+  // Partecipazione
+  const ip=parseInt(e.iscritti_paganti)||0,pp=parseInt(e.presenti_paganti)||0;
+  const ii=parseInt(e.iscritti_illimitati)||0,pi=parseInt(e.presenti_illimitati)||0;
+  const ig=parseInt(e.iscritti_gratuiti)||0,pg=parseInt(e.presenti_gratuiti)||0;
+  const ieb=parseInt(e.iscritti_early_bird)||0,peb=parseInt(e.presenti_early_bird)||0;
+  const totI=ip+ii,totP=pp+pi;
+  const tasso=totI>0?Math.round(totP/totI*100):null;
+  const tCol=tasso===null?'var(--text2)':tasso>=70?'var(--green)':tasso>=40?'var(--yellow)':'var(--red)';
+  const tassoPag=ip>0?Math.round(pp/ip*100):null;
+  const tassoFI=ii>0?Math.round(pi/ii*100):null;
+
+  document.getElementById('evd-part-grid').innerHTML=`
+    <div class="evd-stat" style="grid-column:1/-1 / span 1">
+      <div class="evd-stat-lbl">Tasso presenza totale</div>
+      <div class="evd-stat-val" style="color:${tCol}">${tasso!==null?tasso+'%':'—'}</div>
+      <div class="evd-stat-sub">${totP} presenti su ${totI} iscritti</div>
+    </div>
+    <div class="evd-stat">
+      <div class="evd-stat-lbl">Paganti</div>
+      <div class="evd-stat-val">${ip}</div>
+      <div class="evd-stat-sub">Presenti: ${pp} ${tassoPag!==null?'('+tassoPag+'%)':''}</div>
+      ${e.prezzo_early_bird?`<div style="font-size:10px;color:var(--text3);margin-top:4px">EA: ${ieb} iscr. / ${peb} pres.</div>`:''}
+    </div>
+    <div class="evd-stat">
+      <div class="evd-stat-lbl">Form. Illimitata</div>
+      <div class="evd-stat-val">${ii}</div>
+      <div class="evd-stat-sub">Presenti: ${pi} ${tassoFI!==null?'('+tassoFI+'%)':''}</div>
+    </div>
+    <div class="evd-stat">
+      <div class="evd-stat-lbl">Gratuiti</div>
+      <div class="evd-stat-val" style="font-size:16px">${ig}</div>
+      <div class="evd-stat-sub">Presenti: ${pg}</div>
+    </div>
+  `;
+
+  // Chart iscritti vs presenti
+  if(evDetailChart){evDetailChart.destroy();evDetailChart=null;}
+  const ctx=document.getElementById('evd-chart');
+  if(ctx){
+    const ac=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#0570FE';
+    evDetailChart=new Chart(ctx,{
+      type:'bar',
+      data:{
+        labels:['Paganti','Form. Illimitata','Gratuiti'],
+        datasets:[
+          {label:'Iscritti',data:[ip,ii,ig],backgroundColor:ac+'55',borderColor:ac,borderWidth:1.5,borderRadius:4},
+          {label:'Presenti',data:[pp,pi,pg],backgroundColor:ac+'99',borderColor:ac,borderWidth:1.5,borderRadius:4}
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:true,labels:{color:isDark?'#8b9bb4':'#4b5563',font:{size:10},boxWidth:10}}},
+        scales:{x:{ticks:{color:isDark?'#5a6a84':'#9ca3af',font:{size:10}},grid:{display:false}},y:{ticks:{color:isDark?'#5a6a84':'#9ca3af',font:{size:10}},grid:{color:isDark?'rgba(255,255,255,.04)':'rgba(0,0,0,.05)'}}}
+      }
+    });
+  }
+
+  // Economics
+  const ric=(parseFloat(e.prezzo)||0)*ip+(parseFloat(e.prezzo_early_bird)||0)*ieb;
+  document.getElementById('evd-eco-grid').innerHTML=`
+    <div class="evd-stat"><div class="evd-stat-lbl">Prezzo pieno</div><div class="evd-stat-val" style="font-size:16px">€${parseFloat(e.prezzo||0).toFixed(0)}</div></div>
+    ${e.prezzo_early_bird?`<div class="evd-stat"><div class="evd-stat-lbl">Prezzo early bird</div><div class="evd-stat-val" style="font-size:16px">€${parseFloat(e.prezzo_early_bird).toFixed(0)}</div></div>`:'<div></div>'}
+    <div class="evd-stat"><div class="evd-stat-lbl">Ricavi evento</div><div class="evd-stat-val" style="font-size:16px">€${Math.round(ric).toLocaleString('it')}</div><div class="evd-stat-sub">da iscritti paganti</div></div>
+  `;
+
+  // Note
+  const noteSection=document.getElementById('evd-note-section');
+  const noteEl=document.getElementById('evd-note');
+  if(e.note){noteSection.style.display='block';noteEl.textContent=e.note;}
+  else{noteSection.style.display='none';}
+
+  modal.style.display='flex';
+}
+
+function closeEvDetail(){
+  document.getElementById('ev-detail-modal').style.display='none';
+  if(evDetailChart){evDetailChart.destroy();evDetailChart=null;}
 }
 
 // ── START ──
