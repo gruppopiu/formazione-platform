@@ -318,10 +318,10 @@ textarea.finp{min-height:72px;resize:vertical}
 .cdot.ok{background:var(--accent);box-shadow:0 0 6px var(--accent)}
 .finp:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.1)}
 .toggle input:checked+.toggle-slider{background:var(--accent)}
-.tb.on{background:var(--accent);border-color:var(--accent)}
+.tb.on{background:var(--accent);border-color:var(--accent);color:var(--btn-text,#fff)}
 .ct-btn.on{background:rgba(var(--accent-rgb),.12);color:var(--accent);border-color:var(--accent)}
 .widget-toggle.on{background:rgba(var(--accent-rgb),.12);color:var(--accent);border-color:var(--accent)}
-.auth-tab.active{background:var(--accent)}
+.auth-tab.active{background:var(--accent);color:var(--btn-text,#fff)}
 .notif-dot.new{background:var(--accent);box-shadow:0 0 6px var(--accent)}
 .sb-logo-dot{background:var(--accent)}
 .cal-day.today{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
@@ -920,6 +920,8 @@ textarea.finp{min-height:72px;resize:vertical}
     <div class="mbody">
       <!-- INFO GRID -->
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px" id="evd-info-grid"></div>
+      <!-- FORMATORE BOX -->
+      <div id="evd-formatore-box" style="display:none;margin-bottom:18px"></div>
       <!-- DIVIDER -->
       <div style="height:.5px;background:var(--border);margin-bottom:18px"></div>
       <!-- PARTECIPAZIONE -->
@@ -1068,6 +1070,36 @@ function closeTutorial(){
 }
 
 // ── SETTINGS ──
+
+function getFmAvatar(nome, size=24){
+  const fmD=FM_DATA[nome]||{};
+  const grad=typeof getAvatarGradient==='function'?getAvatarGradient():'var(--grad1)';
+  const ini=getInit(nome);
+  if(fmD.avatar_url){
+    return`<div style="width:${size}px;height:${size}px;border-radius:50%;background:${grad};padding:2px;flex-shrink:0;display:inline-flex">
+      <img src="${fmD.avatar_url}" alt="${nome}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">
+    </div>`;
+  }
+  return`<div style="width:${size}px;height:${size}px;border-radius:50%;background:${grad};padding:2px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center">
+    <div style="width:100%;height:100%;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:${Math.round(size*0.35)}px;font-weight:700;color:var(--accent)">${ini}</div>
+  </div>`;
+}
+
+function getUserAvatar(actorName, size=28){
+  // Find user profile from known users, else show initials
+  const ini=getInit(actorName||'?');
+  const grad=typeof getAvatarGradient==='function'?getAvatarGradient():'var(--grad1)';
+  // Check if actor matches current user
+  if(userProfile&&actorName===userProfile.name&&userProfile.avatar){
+    return`<div style="width:${size}px;height:${size}px;border-radius:50%;background:${grad};padding:2px;flex-shrink:0;display:inline-flex">
+      <img src="${userProfile.avatar}" alt="${actorName}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">
+    </div>`;
+  }
+  return`<div style="width:${size}px;height:${size}px;border-radius:50%;background:${grad};padding:2px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center">
+    <div style="width:100%;height:100%;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:${Math.round(size*0.35)}px;font-weight:700;color:var(--accent)">${ini}</div>
+  </div>`;
+}
+
 const THEMES={
   galaxy:{
     name:'Galaxy',icon:'🌌',
@@ -1297,6 +1329,15 @@ function applyAvatarGradients(){
   });
 }
 
+function getLuminance(hex){
+  const h=(hex||'#000').replace('#','');
+  const r=parseInt(h.slice(0,2),16)/255;
+  const g=parseInt(h.slice(2,4),16)/255;
+  const b=parseInt(h.slice(4,6),16)/255;
+  const toL=c=>c<=.03928?c/12.92:Math.pow((c+.055)/1.055,2.4);
+  return .2126*toL(r)+.7152*toL(g)+.0722*toL(b);
+}
+
 function applyTheme(themeKey, mode){
   const theme=THEMES[themeKey];
   if(!theme)return;
@@ -1304,6 +1345,10 @@ function applyTheme(themeKey, mode){
   currentMode=mode||currentMode;
   const t=theme[currentMode];
   const root=document.documentElement;
+  // Set button text color based on accent luminance
+  const accentLum=getLuminance(t.accent);
+  const btnText=accentLum>0.4?'#111827':'#ffffff';
+  root.style.setProperty('--btn-text',btnText);
   root.style.setProperty('--bg',t.bg);
   root.style.setProperty('--bg2',t.bg2);
   root.style.setProperty('--bg3',t.bg3);
@@ -1650,7 +1695,10 @@ function subscribeRealtime(){
       const title=ev.titolo||'un evento';
       const detail=[ev.data?fmtDate(ev.data):'',ev.tipologia?({seminario:'Seminario',corso_4h:'Corso 4h',corso_6h:'Corso 6h',corso_deontologico:'Deontologico'}[ev.tipologia]||ev.tipologia):'',ev.tema||'',ev.docente?'Docente: '+ev.docente:'',ev.stato||''].filter(Boolean).join(' · ');
       const n={text:`${actor} ${action} "${title}"`,detail,type:payload.eventType,evento_id:ev.id||null,evento_titolo:title,actor,read:false,time:new Date().toISOString()};
-      NOTIFICHE.unshift(n);unreadCount++;
+      // Only count as unread if not already in list
+      const isNew=!NOTIFICHE.some(x=>x.text===n.text&&Math.abs(new Date(x.time)-new Date(n.time))<5000);
+      NOTIFICHE.unshift(n);
+      if(isNew)unreadCount++;
       updateNotifBadge();renderNotifiche();
       sendBrowserNotif(n.text,detail);
       try{await sb.from('notifiche').insert({text:n.text,type:n.type,read:false});}catch(e){}
@@ -2010,7 +2058,7 @@ function renderFormatori(range='all'){
   if(rankEl)rankEl.innerHTML=`<thead><tr><th>#</th><th>Docente</th><th>Eventi</th><th>Paganti medi</th><th>Tasso pres.</th><th>FI medi</th><th>Tasso pres. FI</th><th>Ricavi</th></tr></thead><tbody>${stats.map((f,i)=>{
     const rc=i===0?'p1':i===1?'p2':i===2?'p3':'pn';
     const tc=f.s.tassoPag>=80?'var(--green)':f.s.tassoPag>=60?'var(--yellow)':'var(--red)';
-    return`<tr><td><div class="rank-pos ${rc}">${i+1}</div></td><td style="color:var(--text);font-weight:600">${f.nome}</td><td class="mono">${f.s.tot}</td><td><div class="rank-bar"><div class="rank-bg"><div class="rank-fill" style="width:${maxPag>0?Math.round(f.s.avgPag/maxPag*100):0}%;background:var(--accent)"></div></div><span class="mono" style="font-size:11px">${f.s.avgPag.toFixed(1)}</span></div></td><td class="mono" style="color:${tc}">${f.s.tassoPag}%</td><td class="mono">${f.s.avgFI.toFixed(1)}</td><td class="mono">${f.s.tassoFI}%</td><td class="mono">€${Math.round(f.s.ric).toLocaleString('it')}</td></tr>`;
+    return`<tr><td><div class="rank-pos ${rc}">${i+1}</div></td><td><div style="display:flex;align-items:center;gap:7px">${getFmAvatar(f.nome,26)}<span style="color:var(--text);font-weight:600">${f.nome}</span></div></td><td class="mono">${f.s.tot}</td><td><div class="rank-bar"><div class="rank-bg"><div class="rank-fill" style="width:${maxPag>0?Math.round(f.s.avgPag/maxPag*100):0}%;background:var(--accent)"></div></div><span class="mono" style="font-size:11px">${f.s.avgPag.toFixed(1)}</span></div></td><td class="mono" style="color:${tc}">${f.s.tassoPag}%</td><td class="mono">${f.s.avgFI.toFixed(1)}</td><td class="mono">${f.s.tassoFI}%</td><td class="mono">€${Math.round(f.s.ric).toLocaleString('it')}</td></tr>`;
   }).join('')}</tbody>`;
   renderFormatoriChart(stats);
   // Cards
@@ -2020,7 +2068,7 @@ function renderFormatori(range='all'){
     const fmD=FM_DATA[f.nome]||{};
     const grad=typeof getAvatarGradient==='function'?getAvatarGradient():'var(--grad1)';
       const av=fmD.avatar_url?`<img src="${fmD.avatar_url}?t=${Date.now()}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:`<div style="width:100%;height:100%;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--accent)">${getInit(f.nome)}</div>`;
-    return`<div class="fc" onclick="openFmModal('${f.nome}')">
+    return`<div class="fc" data-fname="${f.nome}" onclick="openFmModal(this.dataset.fname)">
       <div class="fc-top"><div class="fc-av" style="background:${grad};padding:2px">${av}</div><div style="flex:1"><div class="fc-name">${f.nome}</div><div class="fc-role">${f.temi.slice(0,2).join(' · ')}</div></div><div class="rank-pos ${rc}" style="position:absolute;top:10px;right:10px">${i+1}</div></div>
       <div class="fc-stats"><div class="fc-stat"><div class="fc-sv">${f.s.tot}</div><div class="fc-sl">Eventi</div></div><div class="fc-stat"><div class="fc-sv" style="color:${f.s.tassoPag>=70?'var(--green)':f.s.tassoPag>=40?'var(--yellow)':'var(--red)'}">${f.s.tassoPag}%</div><div class="fc-sl">Tasso pres.</div></div><div class="fc-stat"><div class="fc-sv">${f.s.avgPag.toFixed(1)}</div><div class="fc-sl">Pag. medi</div></div></div>
     </div>`;
@@ -2373,7 +2421,7 @@ function renderEventi(){
     const tp=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
     const ta=ti>0?Math.round(tp/ti*100):null;
     const tc=ta===null?'var(--text3)':ta>=70?'var(--green)':ta>=40?'var(--yellow)':'var(--red)';
-    return`<tr><td class="mono">${fmtDate(e.data)}</td><td style="color:var(--text);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.titolo}">${e.titolo}${e.escludi_kpi?'<span style="font-size:8px;color:var(--text3);margin-left:3px">[excl]</span>':''}</td><td>${e.tema||'—'}</td><td>${badgeTipo(e.tipologia)}</td><td>${e.docente||'—'}</td><td class="mono">${e.ore}h</td><td class="mono">${ti}</td><td class="mono">${tp}</td><td class="mono" style="color:${tc}">${ta!==null?ta+'%':'—'}</td><td>${badgeStato(e.stato)}</td><td style="font-size:10px;color:var(--text3)">${e.modified_by||'—'}</td><td><button class="btn btn-p btn-sm" onclick="openEvDetail('${e.id}')" style="white-space:nowrap">Apri →</button></td></tr>`;
+    return`<tr><td class="mono">${fmtDate(e.data)}</td><td style="color:var(--text);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.titolo}">${e.titolo}${e.escludi_kpi?'<span style="font-size:8px;color:var(--text3);margin-left:3px">[excl]</span>':''}</td><td>${e.tema||'—'}</td><td>${badgeTipo(e.tipologia)}</td><td><div style="display:flex;align-items:center;gap:6px">${e.docente?getFmAvatar(e.docente,22):''}<span>${e.docente||'—'}</span></div></td><td class="mono">${e.ore}h</td><td class="mono">${ti}</td><td class="mono">${tp}</td><td class="mono" style="color:${tc}">${ta!==null?ta+'%':'—'}</td><td>${badgeStato(e.stato)}</td><td style="font-size:10px;color:var(--text3)">${e.modified_by||'—'}</td><td><button class="btn btn-p btn-sm" onclick="openEvDetail('${e.id}')" style="white-space:nowrap">Apri →</button></td></tr>`;
   }).join('')}</tbody></table>`;
 }
 
@@ -2396,20 +2444,35 @@ function renderNotifiche(){
     const actor=n.actor||n.modified_by||'';
     const evId=(n.evento_id||'').replace(/'/g,"\\'");
     const evTit=(n.evento_titolo||'').replace(/'/g,"\\'");
-    return`<div class="notif-item" style="background:${isNew?'rgba(var(--accent-rgb),.05)':'transparent'};border-radius:var(--r);margin-bottom:2px;padding:10px 8px" onclick="markNotifRead(${start+i});${hasEv?`goToEvento('${evId}','${evTit}')`:''}" >
-      <div class="notif-dot ${isNew?'new':'read'}" style="margin-top:5px;flex-shrink:0"></div>
-      <div style="flex:1;min-width:0">
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap">
-          <span>${typeIcon}</span>
-          <span class="badge" style="background:${n.type==='INSERT'?'var(--green-bg)':n.type==='DELETE'?'var(--red-bg)':'var(--blue-bg)'};color:${n.type==='INSERT'?'var(--green)':n.type==='DELETE'?'var(--red)':'var(--blue)'}">${typeLabel}</span>
-          ${actor?`<span style="font-size:11px;font-weight:700;color:var(--text)">${actor}</span>`:''}
-          ${isNew?'<span style="font-size:9px;background:var(--accent);color:#fff;padding:1px 6px;border-radius:20px;font-weight:700">NUOVO</span>':''}
+    const actorAv=actor?getUserAvatar(actor,32):'';
+    return`<div class="notif-item" style="
+        background:${isNew?'rgba(var(--accent-rgb),.06)':'transparent'};
+        border-radius:var(--r);margin-bottom:4px;padding:10px 10px;
+        border-left:${isNew?'3px solid var(--accent)':'3px solid transparent'};
+        opacity:${isNew?1:.75};
+        transition:all .15s;cursor:pointer
+      " onclick="handleNotifClick(${start+i},'${evId}','${evTit}')">
+      <div style="display:flex;align-items:flex-start;gap:10px">
+        <!-- Dot indicator -->
+        <div style="margin-top:8px;flex-shrink:0">
+          <div style="width:9px;height:9px;border-radius:50%;background:${isNew?'var(--accent)':'var(--border2)'};${isNew?'box-shadow:0 0 6px var(--accent)':''}"></div>
         </div>
-        <div style="font-size:12px;color:${isNew?'var(--text)':'var(--text2)'};margin-bottom:4px;font-weight:${isNew?600:400}">${n.text||n.message||'Aggiornamento'}</div>
-        ${n.detail?`<div style="font-size:10px;color:var(--text3);font-family:'SF Mono',monospace;background:var(--bg3);padding:3px 8px;border-radius:4px;margin-bottom:4px">${n.detail}</div>`:''}
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <span style="font-size:10px;color:var(--text3)">${ts}</span>
-          ${hasEv?`<span style="font-size:10px;color:var(--accent);font-weight:500">Vai all'evento →</span>`:''}
+        <!-- User avatar -->
+        ${actorAv?`<div style="margin-top:2px;flex-shrink:0">${actorAv}</div>`:''}
+        <!-- Content -->
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap">
+            <span>${typeIcon}</span>
+            <span class="badge" style="background:${n.type==='INSERT'?'var(--green-bg)':n.type==='DELETE'?'var(--red-bg)':'var(--blue-bg)'};color:${n.type==='INSERT'?'var(--green)':n.type==='DELETE'?'var(--red)':'var(--blue)'}">${typeLabel}</span>
+            ${actor?`<span style="font-size:11px;font-weight:700;color:var(--text)">${actor}</span>`:''}
+            ${isNew?'<span style="font-size:9px;background:var(--accent);color:#fff;padding:1px 6px;border-radius:20px;font-weight:700">NUOVO</span>':''}
+          </div>
+          <div style="font-size:12px;color:${isNew?'var(--text)':'var(--text2)'};margin-bottom:4px;font-weight:${isNew?600:400}">${n.text||n.message||'Aggiornamento'}</div>
+          ${n.detail?`<div style="font-size:10px;color:var(--text3);font-family:'SF Mono',monospace;background:var(--bg3);padding:3px 8px;border-radius:4px;margin-bottom:4px">${n.detail}</div>`:''}
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:10px;color:var(--text3)">${ts}</span>
+            ${hasEv?`<span style="font-size:10px;color:var(--accent);font-weight:600">Apri evento →</span>`:''}
+          </div>
         </div>
       </div>
     </div>`;
@@ -2433,10 +2496,20 @@ function markNotifRead(idx){
 }
 
 
+function handleNotifClick(idx,evId,evTit){
+  markNotifRead(idx);
+  if(evId&&evId!==''){
+    // Open event detail directly
+    openEvDetail(evId);
+  } else if(evTit&&evTit!==''){
+    showPage('eventi',document.getElementById('nav-eventi'));
+    setTimeout(()=>{const s=document.getElementById('fe-search');if(s){s.value=evTit;renderEventi();}},300);
+  }
+}
+
 function goToEvento(id,titolo){
-  showPage('eventi',document.getElementById('nav-eventi'));
-  if(id){setTimeout(()=>{openEventoModal(id);},300);}
-  else if(titolo){const s=document.getElementById('fe-search');if(s){s.value=titolo;renderEventi();}}
+  if(id&&id!==''){openEvDetail(id);}
+  else if(titolo){showPage('eventi',document.getElementById('nav-eventi'));setTimeout(()=>{const s=document.getElementById('fe-search');if(s){s.value=titolo;renderEventi();}},300);}
 }
 
 // ── MODAL EVENTO ──
@@ -2582,7 +2655,26 @@ function openEvDetail(id){
 
   document.getElementById('evd-title').textContent=e.titolo;
   const tipoLbl={seminario:'Seminario 2h',corso_4h:'Corso tecnico 4h',corso_6h:'Corso tecnico 6h',corso_deontologico:'Corso deontologico 2h'};
-  document.getElementById('evd-subtitle').innerHTML=`${fmtDate(e.data)}${e.orario?' · '+e.orario:''} · ${tipoLbl[e.tipologia]||e.tipologia}${e.docente?' · '+e.docente:''}`;
+  document.getElementById('evd-subtitle').innerHTML=`${fmtDate(e.data)}${e.orario?' · '+e.orario:''} · ${tipoLbl[e.tipologia]||e.tipologia}`;
+  // Formatore box
+  const fmBoxEl=document.getElementById('evd-formatore-box');
+  if(fmBoxEl){
+    if(e.docente){
+      fmBoxEl.style.display='flex';
+      fmBoxEl.innerHTML=`
+        <div style="display:flex;align-items:center;gap:12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px">
+          ${getFmAvatar(e.docente,40)}
+          <div>
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:2px">Docente</div>
+            <div style="font-size:15px;font-weight:700;color:var(--text)">${e.docente}</div>
+            ${(FORMATORI_DEF.find(f=>f.nome===e.docente)||{temi:[]}).temi.map(t=>`<span class="badge" style="background:var(--accent-bg);color:var(--accent);margin-top:4px;display:inline-block">${t}</span>`).join(' ')}
+          </div>
+          <button class="btn btn-s btn-sm" style="margin-left:auto" onclick="closeEvDetail();openFmModal('${e.docente.replace(/'/g,"\'")}')">Apri scheda →</button>
+        </div>`;
+    } else {
+      fmBoxEl.style.display='none';
+    }
+  }
 
   // Edit/Delete buttons
   document.getElementById('evd-edit-btn').onclick=()=>{closeEvDetail();openEventoModal(e.id);};
