@@ -1020,8 +1020,10 @@ function updateGreeting(){
   if(!userProfile)return;
   const h=new Date().getHours();
   const saluto=h<12?'Buongiorno':h<18?'Buon pomeriggio':'Buona sera';
-  document.getElementById('greeting').textContent=saluto+', '+userProfile.name.split(' ')[0]+'!';
-  document.getElementById('greeting-sub').textContent=h<12?'Pronto per una nuova giornata di formazione?':h<18?'Come procede la giornata?':'Riepilogo della tua giornata.';
+  const grEl=document.getElementById('greeting');
+  const grSub=document.getElementById('greeting-sub');
+  if(grEl)grEl.textContent=saluto+', '+userProfile.name.split(' ')[0]+'!';
+  if(grSub)grSub.textContent=h<12?'Pronto per una nuova giornata di formazione?':h<18?'Come procede la giornata?':'Riepilogo della tua giornata.';
 }
 
 // ── TUTORIAL ──
@@ -1296,27 +1298,38 @@ async function loadUserProfile(){
 function updateSbUser(){
   if(!userProfile)return;
   const ini=getInit(userProfile.name);
-  document.getElementById('sb-init').textContent=ini;
-  document.getElementById('sb-uname').textContent=userProfile.name;
-  document.getElementById('sb-urole').textContent=userProfile.role;
+  const sbInit=document.getElementById('sb-init');
+  const sbUname=document.getElementById('sb-uname');
+  const sbUrole=document.getElementById('sb-urole');
+  const sbAv=document.getElementById('sb-av');
   const homeInit=document.getElementById('home-init');
+  const homeAv=document.getElementById('home-av');
+  if(sbInit)sbInit.textContent=ini;
+  if(sbUname)sbUname.textContent=userProfile.name;
+  if(sbUrole)sbUrole.textContent=userProfile.role;
   if(homeInit)homeInit.textContent=ini;
   if(userProfile.avatar){
-    document.getElementById('sb-av').innerHTML=`<img src="${userProfile.avatar}" alt="">`;
-    const homeAv=document.getElementById('home-av');
+    if(sbAv)sbAv.innerHTML=`<img src="${userProfile.avatar}" alt="">`;
     if(homeAv)homeAv.innerHTML=`<img src="${userProfile.avatar}" alt="">`;
   }
 }
 
 function updateProfileUI(){
   if(!userProfile)return;
-  document.getElementById('prof-init').textContent=getInit(userProfile.name);
-  document.getElementById('prof-name').textContent=userProfile.name;
-  document.getElementById('prof-email').textContent=userProfile.email;
-  document.getElementById('prof-role').textContent=userProfile.role;
-  document.getElementById('pf-name').value=userProfile.name;
-  document.getElementById('pf-role').value=userProfile.role;
-  if(userProfile.avatar){document.getElementById('prof-av').innerHTML=`<img src="${userProfile.avatar}" alt=""><div class="av-overlay">Cambia foto</div>`;}
+  const ini=getInit(userProfile.name);
+  const els={
+    'prof-init':el=>el.textContent=ini,
+    'prof-name':el=>el.textContent=userProfile.name,
+    'prof-email':el=>el.textContent=userProfile.email,
+    'prof-role':el=>el.textContent=userProfile.role,
+    'pf-name':el=>el.value=userProfile.name,
+    'pf-role':el=>el.value=userProfile.role,
+  };
+  Object.entries(els).forEach(([id,fn])=>{const el=document.getElementById(id);if(el)fn(el);});
+  if(userProfile.avatar){
+    const profAv=document.getElementById('prof-av');
+    if(profAv)profAv.innerHTML=`<img src="${userProfile.avatar}" alt=""><div class="av-overlay">Cambia foto</div>`;
+  }
 }
 
 async function saveProfile(){
