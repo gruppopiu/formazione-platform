@@ -68,8 +68,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:
 .sb-bottom{padding:10px 8px;border-top:1px solid var(--border)}
 .sb-user{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r);cursor:pointer;transition:all .15s}
 .sb-user:hover{background:var(--bg3)}
-.av{width:30px;height:30px;border-radius:50%;background:var(--green-bg);border:1.5px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--green);flex-shrink:0;overflow:hidden}
-.av img{width:100%;height:100%;object-fit:cover}
+.av{width:30px;height:30px;border-radius:50%;background:var(--grad1);padding:2px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent);flex-shrink:0;overflow:hidden}
+.av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.av span{width:100%;height:100%;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent)}
 .sb-uname{font-size:12px;font-weight:500;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sb-urole{font-size:10px;color:var(--text3)}
 .conn-row{display:flex;align-items:center;gap:6px;padding:5px 10px;font-size:10px;color:var(--text);margin-bottom:2px;font-weight:500}
@@ -233,8 +234,9 @@ textarea.finp{min-height:72px;resize:vertical}
 .fc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
 .fc:hover{transform:translateY(-2px);box-shadow:var(--shadow2);border-color:var(--border2)}
 .fc-top{padding:16px;display:flex;align-items:center;gap:12px;position:relative}
-.fc-av{width:50px;height:50px;border-radius:50%;background:var(--green-bg);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--green);flex-shrink:0;overflow:hidden}
-.fc-av img{width:100%;height:100%;object-fit:cover}
+.fc-av{width:50px;height:50px;border-radius:50%;background:var(--grad1);padding:2px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--accent);flex-shrink:0;overflow:hidden}
+.fc-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.fc-av span{width:100%;height:100%;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--accent)}
 .fc-name{font-size:14px;font-weight:700;color:var(--text)}
 .fc-role{font-size:10px;color:var(--text3);margin-top:2px}
 .fc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;border-top:1px solid var(--border)}
@@ -250,8 +252,9 @@ textarea.finp{min-height:72px;resize:vertical}
 .rank-bg{flex:1;background:var(--bg3);border-radius:3px;height:6px;min-width:40px}
 .rank-fill{height:6px;border-radius:3px}
 /* ── PROFILO / FM MODAL AVATAR ── */
-.av-big{width:80px;height:80px;border-radius:50%;background:var(--green-bg);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:var(--green);overflow:hidden;cursor:pointer;position:relative;flex-shrink:0}
+.av-big{width:80px;height:80px;border-radius:50%;background:var(--grad1);padding:3px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:var(--accent);overflow:hidden;cursor:pointer;position:relative;flex-shrink:0}
 .av-big img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.av-big>span{width:100%;height:100%;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:var(--accent)}
 .av-overlay{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;border-radius:50%;font-size:10px;color:#fff;text-align:center;padding:4px}
 .av-big:hover .av-overlay{opacity:1}
 /* ── SETTINGS ── */
@@ -1261,6 +1264,39 @@ const THEMES={
 let currentTheme='galaxy';
 let currentMode='light';
 
+
+// ── AVATAR GRADIENTS ──
+const AVATAR_GRADIENTS={
+  galaxy:'linear-gradient(135deg,#8b5cf6,#f472b6,#60a5fa)',
+  forest:'linear-gradient(135deg,#22c55e,#84cc16,#06b6d4)',
+  atlantis:'linear-gradient(135deg,#06b6d4,#34d399,#818cf8)',
+  tron:'linear-gradient(135deg,#00f5ff,#00ff88,#aa00ff)',
+  summer:'linear-gradient(135deg,#f97316,#fbbf24,#f472b6)',
+  matrix:'linear-gradient(135deg,#00ff41,#00ffcc,#00aaff)',
+  sakura:'linear-gradient(135deg,#f472b6,#e879f9,#a78bfa)',
+  arctic:'linear-gradient(135deg,#7dd3fc,#a5b4fc,#34d399)',
+  ember:'linear-gradient(135deg,#ef4444,#f97316,#fbbf24)',
+  lotr:'linear-gradient(135deg,#c9a227,#d4af37,#92400e)'
+};
+
+function getAvatarGradient(){
+  return AVATAR_GRADIENTS[currentTheme]||'linear-gradient(135deg,var(--accent),var(--accent-light))';
+}
+
+function applyAvatarGradients(){
+  const grad=getAvatarGradient();
+  // Apply to all visible avatar elements
+  document.querySelectorAll('.av,.av-big,.fc-av,.fm-av').forEach(el=>{
+    // Only apply if not already an img container
+    el.style.background=grad;
+    el.style.padding='2px';
+  });
+  // Fix inner content to have bg2 background
+  document.querySelectorAll('.av img,.av-big img,.fc-av img,.fm-av img').forEach(img=>{
+    img.style.borderRadius='50%';
+  });
+}
+
 function applyTheme(themeKey, mode){
   const theme=THEMES[themeKey];
   if(!theme)return;
@@ -1303,6 +1339,8 @@ function applyTheme(themeKey, mode){
   Object.keys(charts).forEach(k=>{if(charts[k])charts[k].destroy();delete charts[k];});
   renderAll();
   buildThemeGrid();
+  // Apply avatar gradients after render
+  setTimeout(applyAvatarGradients, 50);
 }
 
 function hexToRgb2(hex){
@@ -1492,8 +1530,13 @@ function updateSbUser(){
   if(sbUrole)sbUrole.textContent=userProfile.role;
   if(homeInit)homeInit.textContent=ini;
   if(userProfile.avatar){
-    if(sbAv)sbAv.innerHTML=`<img src="${userProfile.avatar}" alt="">`;
-    if(homeAv)homeAv.innerHTML=`<img src="${userProfile.avatar}" alt="">`;
+    const grad=typeof getAvatarGradient==='function'?getAvatarGradient():'var(--grad1)';
+    if(sbAv){sbAv.style.background=grad;sbAv.style.padding='2px';sbAv.innerHTML=`<img src="${userProfile.avatar}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;}
+    if(homeAv){homeAv.style.background=grad;homeAv.style.padding='2px';homeAv.innerHTML=`<img src="${userProfile.avatar}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;}
+  } else {
+    const grad=typeof getAvatarGradient==='function'?getAvatarGradient():'var(--grad1)';
+    if(sbAv){sbAv.style.background=grad;sbAv.style.padding='2px';}
+    if(homeAv){homeAv.style.background=grad;homeAv.style.padding='2px';}
   }
 }
 
@@ -1975,9 +2018,10 @@ function renderFormatori(range='all'){
   if(grid)grid.innerHTML=stats.map((f,i)=>{
     const rc=i===0?'r1':i===1?'r2':i===2?'r3':'rn';
     const fmD=FM_DATA[f.nome]||{};
-    const av=fmD.avatar_url?`<img src="${fmD.avatar_url}?t=${Date.now()}" alt="">`:`<span>${getInit(f.nome)}</span>`;
+    const grad=typeof getAvatarGradient==='function'?getAvatarGradient():'var(--grad1)';
+      const av=fmD.avatar_url?`<img src="${fmD.avatar_url}?t=${Date.now()}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:`<div style="width:100%;height:100%;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--accent)">${getInit(f.nome)}</div>`;
     return`<div class="fc" onclick="openFmModal('${f.nome}')">
-      <div class="fc-top"><div class="fc-av">${av}</div><div style="flex:1"><div class="fc-name">${f.nome}</div><div class="fc-role">${f.temi.slice(0,2).join(' · ')}</div></div><div class="rank-pos ${rc}" style="position:absolute;top:10px;right:10px">${i+1}</div></div>
+      <div class="fc-top"><div class="fc-av" style="background:${grad};padding:2px">${av}</div><div style="flex:1"><div class="fc-name">${f.nome}</div><div class="fc-role">${f.temi.slice(0,2).join(' · ')}</div></div><div class="rank-pos ${rc}" style="position:absolute;top:10px;right:10px">${i+1}</div></div>
       <div class="fc-stats"><div class="fc-stat"><div class="fc-sv">${f.s.tot}</div><div class="fc-sl">Eventi</div></div><div class="fc-stat"><div class="fc-sv" style="color:${f.s.tassoPag>=70?'var(--green)':f.s.tassoPag>=40?'var(--yellow)':'var(--red)'}">${f.s.tassoPag}%</div><div class="fc-sl">Tasso pres.</div></div><div class="fc-stat"><div class="fc-sv">${f.s.avgPag.toFixed(1)}</div><div class="fc-sl">Pag. medi</div></div></div>
     </div>`;
   }).join('');
@@ -1996,31 +2040,69 @@ function renderFormatoriChart(stats){
 
 // ── MODAL FORMATORE ──
 function openFmModal(nome){
-  currentFm=nome;
-  const fd=FORMATORI_DEF.find(f=>f.nome===nome)||{nome,temi:[]};
-  const s=calcStats(nome);
-  const fmD=FM_DATA[nome]||{};
-  document.getElementById('fm-modal-title').textContent='Scheda — '+nome;
-  document.getElementById('fm-init').textContent=getInit(nome);
-  document.getElementById('fm-nome-edit').value=fmD.nome_display||nome;
-  if(fmD.avatar_url){document.getElementById('fm-av').innerHTML=`<img src="${fmD.avatar_url}?t=${Date.now()}" alt=""><div class="av-overlay">Cambia foto</div>`;}
-  else{document.getElementById('fm-av').innerHTML=`<span>${getInit(nome)}</span><div class="av-overlay">Cambia foto</div>`;}
-  document.getElementById('fm-temi-ref').innerHTML=fd.temi.map(t=>`<span class="badge" style="background:var(--green-bg);color:var(--green)">${t}</span>`).join('');
-  document.getElementById('fm-stats-top').innerHTML=`
-    <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:var(--text);font-family:'SF Mono',monospace">${s.tot}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">eventi</div></div>
-    <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:${s.tassoPag>=70?'var(--green)':s.tassoPag>=40?'var(--yellow)':'var(--red)'};font-family:'SF Mono',monospace">${s.tassoPag}%</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">tasso pres.</div></div>
-    <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:var(--green);font-family:'SF Mono',monospace">${s.avgPag.toFixed(1)}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">pag. medi</div></div>
-    <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:var(--text);font-family:'SF Mono',monospace">€${Math.round(s.ric/1000).toFixed(1)}k</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">ricavi</div></div>`;
-  const allStats=FORMATORI_DEF.map(f=>({nome:f.nome,avg:calcStats(f.nome).avgPag})).sort((a,b)=>b.avg-a.avg);
-  const pos=allStats.findIndex(f=>f.nome===nome)+1;
-  document.getElementById('fm-rank-row').innerHTML=`<div style="display:inline-flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:6px 12px"><span style="font-size:10px;color:var(--text3)">Classifica:</span><span style="font-size:16px;font-weight:800;color:${pos<=3?'var(--yellow)':'var(--text)'}">#${pos}</span><span style="font-size:10px;color:var(--text3)">su ${FORMATORI_DEF.length} formatori</span></div>`;
-  document.getElementById('fm-cv').value=fmD.cv||'';
-  document.getElementById('fm-email').value=fmD.email||'';
-  document.getElementById('fm-tel').value=fmD.telefono||'';
-  document.getElementById('fm-note').value=fmD.note||'';
-  const ev=s.ev.slice(-8).reverse();
-  document.getElementById('fm-ev-list').innerHTML=ev.length?`<table><thead><tr><th>Data</th><th>Titolo</th><th>Tipo</th><th>Pag.</th><th>FI</th><th>Stato</th></tr></thead><tbody>${ev.map(e=>`<tr><td class="mono">${fmtDate(e.data)}</td><td style="color:var(--text);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.titolo}</td><td>${badgeTipo(e.tipologia)}</td><td class="mono">${e.presenti_paganti||0}</td><td class="mono">${e.presenti_illimitati||0}</td><td>${badgeStato(e.stato)}</td></tr>`).join('')}</tbody></table>`:'<div class="empty"><div class="et">Nessun evento ancora</div></div>';
-  document.getElementById('fm-modal').style.display='flex';
+  try{
+    currentFm=nome;
+    const fd=FORMATORI_DEF.find(f=>f.nome===nome)||{nome,temi:[]};
+    const s=calcStats(nome);
+    const fmD=FM_DATA[nome]||{};
+
+    // Safe element setter
+    const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
+    const setV=(id,val)=>{const el=document.getElementById(id);if(el)el.value=val;};
+    const setH=(id,val)=>{const el=document.getElementById(id);if(el)el.innerHTML=val;};
+
+    set('fm-modal-title','Scheda — '+nome);
+    set('fm-init',getInit(nome));
+    setV('fm-nome-edit',fmD.nome_display||nome);
+
+    // Avatar with gradient border
+    const grad=getAvatarGradient();
+    const avEl=document.getElementById('fm-av');
+    if(avEl){
+      avEl.style.background=grad;
+      avEl.style.padding='2px';
+      if(fmD.avatar_url){
+        avEl.innerHTML=`<img src="${fmD.avatar_url}?t=${Date.now()}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%"><div class="av-overlay">Cambia foto</div>`;
+      } else {
+        avEl.innerHTML=`<div style="width:100%;height:100%;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--accent)">${getInit(nome)}</div><div class="av-overlay">Cambia foto</div>`;
+      }
+    }
+
+    setH('fm-temi-ref', fd.temi.map(t=>`<span class="badge" style="background:var(--accent-bg);color:var(--accent)">${t}</span>`).join(''));
+
+    setH('fm-stats-top',`
+      <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:var(--text);font-family:'SF Mono',monospace">${s.tot}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">eventi</div></div>
+      <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:${s.tassoPag>=70?'var(--green)':s.tassoPag>=40?'var(--yellow)':'var(--red)'};font-family:'SF Mono',monospace">${s.tassoPag}%</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">tasso pres.</div></div>
+      <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:var(--accent);font-family:'SF Mono',monospace">${s.avgPag.toFixed(1)}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">pag. medi</div></div>
+      <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:var(--text);font-family:'SF Mono',monospace">€${Math.round(s.ric/1000).toFixed(1)}k</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">ricavi</div></div>`);
+
+    // Use cached ranking from last renderFormatori call to avoid O(n²)
+    const allStats=FORMATORI_DEF.map(f=>({nome:f.nome,avg:calcStats(f.nome).avgPag})).sort((a,b)=>b.avg-a.avg);
+    const pos=allStats.findIndex(f=>f.nome===nome)+1;
+    setH('fm-rank-row',`<div style="display:inline-flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:6px 12px"><span style="font-size:10px;color:var(--text3)">Classifica:</span><span style="font-size:16px;font-weight:800;color:${pos<=3?'var(--yellow)':'var(--text)'}">#${pos}</span><span style="font-size:10px;color:var(--text3)">su ${FORMATORI_DEF.length} formatori</span></div>`);
+
+    setV('fm-cv',fmD.cv||'');
+    setV('fm-email',fmD.email||'');
+    setV('fm-tel',fmD.telefono||'');
+    setV('fm-note',fmD.note||'');
+
+    const ev=(s.ev||[]).slice(-8).reverse();
+    setH('fm-ev-list', ev.length
+      ? `<table><thead><tr><th>Data</th><th>Titolo</th><th>Tipo</th><th>Pag.</th><th>FI</th><th>Stato</th></tr></thead><tbody>${
+          ev.map(e=>{
+            try{
+              return `<tr><td class="mono">${fmtDate(e.data)}</td><td style="color:var(--text);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.titolo||'—'}</td><td>${badgeTipo(e.tipologia)}</td><td class="mono">${e.presenti_paganti||0}</td><td class="mono">${e.presenti_illimitati||0}</td><td>${badgeStato(e.stato)}</td></tr>`;
+            }catch(err){return '';}
+          }).join('')
+        }</tbody></table>`
+      : '<div class="empty"><div class="et">Nessun evento ancora</div></div>');
+
+    const modal=document.getElementById('fm-modal');
+    if(modal)modal.style.display='flex';
+  }catch(err){
+    console.error('openFmModal error:',err);
+    showToast('Errore apertura scheda: '+err.message,'err');
+  }
 }
 
 async function saveFmData(){
