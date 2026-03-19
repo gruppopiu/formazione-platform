@@ -1639,6 +1639,21 @@ async function uploadProfilePic(input){
 }
 
 // ── DATA ──
+async function loadEventsOnly(){
+  // Reload only events and formatori — does NOT touch NOTIFICHE
+  try{
+    const evRes=await sb.from('eventi').select('*').order('data',{ascending:true});
+    if(evRes.error)throw evRes.error;
+    DB=evRes.data||[];
+    setConn('ok','Connesso');
+  }catch(e){setConn('err','Errore connessione');DB=[];}
+  try{
+    const fmRes=await sb.from('formatori_data').select('*');
+    if(!fmRes.error)(fmRes.data||[]).forEach(f=>{FM_DATA[f.nome]=f;});
+  }catch(e){}
+  renderAll();
+}
+
 async function loadAll(){
   setConn('loading','Caricamento...');
   try{
@@ -1646,9 +1661,8 @@ async function loadAll(){
     if(evRes.error)throw evRes.error;
     DB=evRes.data||[];
     setConn('ok','Connesso');
-    document.getElementById('db-status').textContent='Connesso';
-    document.getElementById('db-status').style.background='var(--green-bg)';
-    document.getElementById('db-status').style.color='var(--green)';
+    const dbStatus=document.getElementById('db-status');
+    if(dbStatus){dbStatus.textContent='Connesso';dbStatus.style.background='var(--green-bg)';dbStatus.style.color='var(--green)';}
   }catch(e){
     setConn('err','Errore connessione');
     showToast('Errore connessione: '+e.message,'err');
@@ -1694,7 +1708,7 @@ function subscribeRealtime(){
   if(notifChannel)sb.removeChannel(notifChannel);
   notifChannel=sb.channel('eventi-rt')
     .on('postgres_changes',{event:'*',schema:'public',table:'eventi'},async(payload)=>{
-      await loadAll();
+      await loadEventsOnly();
       const ev=payload.new||payload.old||{};
       const actor=ev.modified_by||'Qualcuno';
       if(actor===userProfile?.name)return;
