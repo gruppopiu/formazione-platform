@@ -1695,13 +1695,24 @@ function subscribeRealtime(){
       const title=ev.titolo||'un evento';
       const detail=[ev.data?fmtDate(ev.data):'',ev.tipologia?({seminario:'Seminario',corso_4h:'Corso 4h',corso_6h:'Corso 6h',corso_deontologico:'Deontologico'}[ev.tipologia]||ev.tipologia):'',ev.tema||'',ev.docente?'Docente: '+ev.docente:'',ev.stato||''].filter(Boolean).join(' · ');
       const n={text:`${actor} ${action} "${title}"`,detail,type:payload.eventType,evento_id:ev.id||null,evento_titolo:title,actor,read:false,time:new Date().toISOString()};
-      // Only count as unread if not already in list
-      const isNew=!NOTIFICHE.some(x=>x.text===n.text&&Math.abs(new Date(x.time)-new Date(n.time))<5000);
-      NOTIFICHE.unshift(n);
-      if(isNew)unreadCount++;
-      updateNotifBadge();renderNotifiche();
+      // Only add if not already in list (dedup)
+      const isDup=NOTIFICHE.some(x=>x.text===n.text&&Math.abs(new Date(x.time||Date.now())-new Date(n.time||Date.now()))<5000);
+      if(!isDup){
+        NOTIFICHE.unshift(n);
+        unreadCount++;
+        updateNotifBadge();
+        renderNotifiche();
+      }
       sendBrowserNotif(n.text,detail);
-      try{await sb.from('notifiche').insert({text:n.text,type:n.type,read:false});}catch(e){}
+      try{await sb.from('notifiche').insert({
+        text:n.text,
+        type:n.type,
+        read:false,
+        detail:n.detail||null,
+        evento_id:n.evento_id||null,
+        evento_titolo:n.evento_titolo||null,
+        actor:n.actor||null
+      });}catch(e){}
     })
     .subscribe();
 }
@@ -1724,7 +1735,13 @@ function updateNotifBadge(){
 }
 
 function markAllRead(){
-  NOTIFICHE.forEach(n=>n.read=true);
+  NOTIFICHE.forEach(n=>{
+    if(!n.read){
+      n.read=true;
+      const id=n.id||n.text+(n.created_at||n.time||'');
+      saveLocalReadId(id);
+    }
+  });
   unreadCount=0;notifPage=0;updateNotifBadge();renderNotifiche();
 }
 
@@ -2489,6 +2506,9 @@ function setNotifPage(p){notifPage=p;renderNotifiche();}
 function markNotifRead(idx){
   if(NOTIFICHE[idx]&&!NOTIFICHE[idx].read){
     NOTIFICHE[idx].read=true;
+    // Persist read status locally
+    const id=NOTIFICHE[idx].id||NOTIFICHE[idx].text+(NOTIFICHE[idx].created_at||NOTIFICHE[idx].time||'');
+    saveLocalReadId(id);
     unreadCount=Math.max(0,unreadCount-1);
     updateNotifBadge();
     renderNotifiche();
@@ -2644,6 +2664,29 @@ function showToast(msg,type='ok'){
   setTimeout(()=>t.classList.remove('show'),3000);
 }
 
+
+
+// ── LOCAL READ STATUS for notifications ──
+function getLocalReadIds(){
+  try{
+    const saved=localStorage.getItem('fp_notif_read_'+(currentUser?.id||'guest'));
+    return new Set(saved?JSON.parse(saved):[]);
+  }catch(e){return new Set();}
+}
+
+function saveLocalReadId(id){
+  try{
+    const ids=getLocalReadIds();
+    ids.add(id);
+    // Keep max 500 read IDs
+    const arr=[...ids].slice(-500);
+    localStorage.setItem('fp_notif_read_'+(currentUser?.id||'guest'),JSON.stringify(arr));
+  }catch(e){}
+}
+
+function clearLocalReadIds(){
+  try{localStorage.removeItem('fp_notif_read_'+(currentUser?.id||'guest'));}catch(e){}
+}
 
 // ── EVENT DETAIL MODAL ──
 let evDetailChart=null;
