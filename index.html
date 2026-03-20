@@ -1983,7 +1983,7 @@ function badgeTipo(t){const m={seminario:'b-sem',corso_4h:'b-c4',corso_6h:'b-c6'
 function badgeStato(s){return`<span class="badge b-${s||'pia'}">${s||'—'}</span>`;}
 function fmtDate(d){if(!d)return'—';const p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
 function fmtEuro(val,decimals=2){const n=parseFloat(val)||0;return '€'+n.toLocaleString('it',{minimumFractionDigits:decimals,maximumFractionDigits:decimals});}
-function fmtEuroK(val){const n=parseFloat(val)||0;if(Math.abs(n)>=1000)return '€'+(n/1000).toLocaleString('it',{minimumFractionDigits:1,maximumFractionDigits:1})+'k';return fmtEuro(n,0);}
+function fmtEuroK(val){const n=parseFloat(val)||0;if(Math.abs(n)>=1000)return '€'+(n/1000).toLocaleString('it',{minimumFractionDigits:1,maximumFractionDigits:1})+'k';return fmtEuro(n,2);}
 function fmtNum(val,decimals=1){const n=parseFloat(val)||0;return n.toLocaleString('it',{minimumFractionDigits:decimals,maximumFractionDigits:decimals});}
 function getInit(name){return(name||'?').split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2);}
 
@@ -2303,7 +2303,7 @@ function renderFormatori(range='all'){
   if(rankEl)rankEl.innerHTML=`<thead><tr><th>#</th><th>Docente</th><th>Eventi</th><th>Paganti medi</th><th>Tasso pres.</th><th>FI medi</th><th>Tasso pres. FI</th><th>Ricavi</th></tr></thead><tbody>${stats.map((f,i)=>{
     const rc=i===0?'p1':i===1?'p2':i===2?'p3':'pn';
     const tc=f.s.tassoPag>=80?'var(--green)':f.s.tassoPag>=60?'var(--yellow)':'var(--red)';
-    return`<tr><td><div class="rank-pos ${rc}">${i+1}</div></td><td><div style="display:flex;align-items:center;gap:7px">${getFmAvatar(f.nome,26)}<span style="color:var(--text);font-weight:600">${f.nome}</span></div></td><td class="mono">${f.s.tot}</td><td><div class="rank-bar"><div class="rank-bg"><div class="rank-fill" style="width:${maxPag>0?Math.round(f.s.avgPag/maxPag*100):0}%;background:var(--accent)"></div></div><span class="mono" style="font-size:11px">${fmtNum(f.s.avgPag)}</span></div></td><td class="mono" style="color:${tc}">${f.s.tassoPag}%</td><td class="mono">${fmtNum(f.s.avgFI)}</td><td class="mono">${f.s.tassoFI}%</td><td class="mono">${fmtEuro(f.s.ric,0)}</td></tr>`;
+    return`<tr><td><div class="rank-pos ${rc}">${i+1}</div></td><td><div style="display:flex;align-items:center;gap:7px">${getFmAvatar(f.nome,26)}<span style="color:var(--text);font-weight:600">${f.nome}</span></div></td><td class="mono">${f.s.tot}</td><td><div class="rank-bar"><div class="rank-bg"><div class="rank-fill" style="width:${maxPag>0?Math.round(f.s.avgPag/maxPag*100):0}%;background:var(--accent)"></div></div><span class="mono" style="font-size:11px">${fmtNum(f.s.avgPag)}</span></div></td><td class="mono" style="color:${tc}">${f.s.tassoPag}%</td><td class="mono">${fmtNum(f.s.avgFI)}</td><td class="mono">${f.s.tassoFI}%</td><td class="mono">${fmtEuro(f.s.ric,2)}</td></tr>`;
   }).join('')}</tbody>`;
   renderFormatoriChart(stats);
   // Cards
@@ -2558,7 +2558,7 @@ function renderCommerciale(){
   document.getElementById('c-pag').textContent=ip;
   document.getElementById('c-pres').textContent=pp;
   document.getElementById('c-tasso').textContent=ta+'%';
-  document.getElementById('c-ric').textContent=fmtEuro(ric,0);
+  document.getElementById('c-ric').textContent=fmtEuro(ric,2);
   // FI section
   const fi_isc=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
   const fi_pres=kpi.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
@@ -3029,7 +3029,7 @@ function openEvDetail(id){
   document.getElementById('evd-eco-grid').innerHTML=`
     <div class="evd-stat"><div class="evd-stat-lbl">Prezzo pieno</div><div class="evd-stat-val" style="font-size:16px">${fmtEuro(e.prezzo||0)}</div></div>
     ${e.prezzo_early_bird?`<div class="evd-stat"><div class="evd-stat-lbl">Prezzo early bird</div><div class="evd-stat-val" style="font-size:16px">${fmtEuro(e.prezzo_early_bird)}</div></div>`:'<div></div>'}
-    <div class="evd-stat"><div class="evd-stat-lbl">Ricavi evento</div><div class="evd-stat-val" style="font-size:16px">${fmtEuro(ric,0)}</div><div class="evd-stat-sub">da iscritti paganti</div></div>
+    <div class="evd-stat"><div class="evd-stat-lbl">Ricavi evento</div><div class="evd-stat-val" style="font-size:16px">${fmtEuro(ric,2)}</div><div class="evd-stat-sub">da iscritti paganti</div></div>
   `;
 
   // Note
@@ -3314,7 +3314,7 @@ function repPreview(){
     const tp=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
     const tasso=ti>0?Math.round(tp/ti*100)+'%':'—';
     const ric=Math.round((parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0));
-    return '<tr><td class="mono">'+fmtDate(e.data)+'</td><td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+e.titolo+'</td><td>'+badgeTipo(e.tipologia)+'</td><td>'+(e.docente||'—')+'</td><td>'+badgeStato(e.stato)+'</td><td class="mono">'+ti+'</td><td class="mono">'+tp+'</td><td class="mono">'+tasso+'</td><td class="mono">'+cfpEv(e)+'</td><td class="mono">'+fmtEuro(ric,0)+'</td></tr>';
+    return '<tr><td class="mono">'+fmtDate(e.data)+'</td><td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+e.titolo+'</td><td>'+badgeTipo(e.tipologia)+'</td><td>'+(e.docente||'—')+'</td><td>'+badgeStato(e.stato)+'</td><td class="mono">'+ti+'</td><td class="mono">'+tp+'</td><td class="mono">'+tasso+'</td><td class="mono">'+cfpEv(e)+'</td><td class="mono">'+fmtEuro(ric,2)+'</td></tr>';
   }).join('');
   tbl.innerHTML='<table><thead><tr><th>Data</th><th>Titolo</th><th>Tipo</th><th>Docente</th><th>Stato</th><th>Iscr.</th><th>Pres.</th><th>Tasso</th><th>CFP</th><th>Ricavi</th></tr></thead><tbody>'+rows+'</tbody></table>';
 }
@@ -3429,11 +3429,11 @@ async function exportPDF(type){
   if(type==='eventi'){
     headers=['Data','Titolo','Tema','Tipo','Docente','Stato','Iscr.','Pres.','Tasso','CFP','Ricavi'];
     colWidths=[22,55,28,26,24,24,14,14,14,12,20];
-    rows=getRepEventiData().map(e=>[e.data,e.titolo.slice(0,35),e.tema,e.tipologia,e.docente,e.stato,e.iscritti,e.presenti,e.tasso,e.cfp,fmtEuro(e.ricavi,0)]);
+    rows=getRepEventiData().map(e=>[e.data,e.titolo.slice(0,35),e.tema,e.tipologia,e.docente,e.stato,e.iscritti,e.presenti,e.tasso,e.cfp,fmtEuro(e.ricavi,2)]);
   } else if(type==='formatori'){
     headers=['Formatore','N° eventi','Pag. medi','FI medi','Tasso pres.','Ricavi tot.','Rank'];
     colWidths=[40,24,24,24,26,30,16];
-    rows=getRepFormatoriData().map(f=>[f.nome,f.eventi,f.paganti_medi,f.fi_medi,f.tasso_presenza,fmtEuro(f.ricavi_tot,0),'#'+f.rank]);
+    rows=getRepFormatoriData().map(f=>[f.nome,f.eventi,f.paganti_medi,f.fi_medi,f.tasso_presenza,fmtEuro(f.ricavi_tot,2),'#'+f.rank]);
   } else if(type==='kpi'){
     headers=['Categoria','N° eventi','CFP','Target','% raggiunto'];
     colWidths=[60,30,20,20,30];
@@ -3441,7 +3441,7 @@ async function exportPDF(type){
   } else if(type==='commerciale'){
     headers=['Mese','N° eventi','Paganti pres.','FI presenti','Tasso pres.','Ricavi €'];
     colWidths=[20,20,30,26,26,30];
-    rows=getRepCommercialeData().map(r=>[r.mese,r.eventi,r.paganti_presenti,r.fi_presenti,r.tasso,fmtEuro(r.ricavi,0)]);
+    rows=getRepCommercialeData().map(r=>[r.mese,r.eventi,r.paganti_presenti,r.fi_presenti,r.tasso,fmtEuro(r.ricavi,2)]);
   }
 
   // Table
