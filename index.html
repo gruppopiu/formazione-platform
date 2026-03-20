@@ -2662,12 +2662,12 @@ function renderEventi(){
     return true;
   });
   if(!f.length){document.getElementById('ev-tbl').innerHTML='<div class="empty"><div class="ei">🔍</div><div class="et">Nessun evento trovato</div></div>';return;}
-  document.getElementById('ev-tbl').innerHTML=`<table><thead><tr><th>Data</th><th>Titolo</th><th>Tema</th><th>Tipo</th><th>Docente</th><th>Ore</th><th>Iscr.</th><th>Pres.</th><th>Tasso</th><th>Stato</th><th>Mod. da</th><th>Azioni</th></tr></thead><tbody>${f.map(e=>{
+  document.getElementById('ev-tbl').innerHTML=`<table><thead><tr><th>Data</th><th>Titolo</th><th>Tema</th><th>Tipo</th><th>Docente</th><th>Ore</th><th>Iscr.</th><th>Pres.</th><th>Tasso</th><th>Ricavo</th><th>Stato</th><th>Mod. da</th><th>Azioni</th></tr></thead><tbody>${f.map(e=>{
     const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_illimitati)||0);
     const tp=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
     const ta=ti>0?Math.round(tp/ti*100):null;
     const tc=ta===null?'var(--text3)':ta>=70?'var(--green)':ta>=40?'var(--yellow)':'var(--red)';
-    return`<tr><td class="mono">${fmtDate(e.data)}</td><td style="color:var(--text);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.titolo}">${e.titolo}${e.escludi_kpi?'<span style="font-size:8px;color:var(--text3);margin-left:3px">[excl]</span>':''}</td><td>${e.tema||'—'}</td><td>${badgeTipo(e.tipologia)}</td><td><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">${(e.docenti_nomi&&e.docenti_nomi.length>1)?e.docenti_nomi.map(d=>getFmAvatar(d,22)).join('')+'<span style="font-size:10px">'+e.docenti_nomi.join(', ')+'</span>':(e.docente?getFmAvatar(e.docente,22)+'<span>'+e.docente+'</span>':'<span>—</span>')}</div></td><td class="mono">${e.ore}h</td><td class="mono">${ti}</td><td class="mono">${tp}</td><td class="mono" style="color:${tc}">${ta!==null?ta+'%':'—'}</td><td>${badgeStato(e.stato)}</td><td style="font-size:10px;color:var(--text3)">${e.modified_by||'—'}</td><td><button class="btn btn-p btn-sm" onclick="openEvDetail('${e.id}')" style="white-space:nowrap">Apri →</button></td></tr>`;
+    return`<tr><td class="mono">${fmtDate(e.data)}</td><td style="color:var(--text);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.titolo}">${e.titolo}${e.escludi_kpi?'<span style="font-size:8px;color:var(--text3);margin-left:3px">[excl]</span>':''}</td><td>${e.tema||'—'}</td><td>${badgeTipo(e.tipologia)}</td><td><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">${(e.docenti_nomi&&e.docenti_nomi.length>1)?e.docenti_nomi.map(d=>getFmAvatar(d,22)).join('')+'<span style="font-size:10px">'+e.docenti_nomi.join(', ')+'</span>':(e.docente?getFmAvatar(e.docente,22)+'<span>'+e.docente+'</span>':'<span>—</span>')}</div></td><td class="mono">${e.ore}h</td><td class="mono">${ti}</td><td class="mono">${tp}</td><td class="mono" style="color:${tc}">${ta!==null?ta+'%':'—'}</td><td class="mono" style="font-size:11px">${(()=>{const r=((parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0))+((parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0));return r>0?fmtEuro(r,2):'—';})()}</td><td>${badgeStato(e.stato)}</td><td style="font-size:10px;color:var(--text3)">${e.modified_by||'—'}</td><td><button class="btn btn-p btn-sm" onclick="openEvDetail('${e.id}')" style="white-space:nowrap">Apri →</button></td></tr>`;
   }).join('')}</tbody></table>`;
 }
 
@@ -2936,17 +2936,28 @@ function openEvDetail(id){
   // Formatore box
   const fmBoxEl=document.getElementById('evd-formatore-box');
   if(fmBoxEl){
-    if(e.docente){
-      fmBoxEl.style.display='flex';
+    // Build list of docenti: prefer docenti_nomi array, fallback to docente string
+    const docList=e.docenti_nomi&&e.docenti_nomi.length>0
+      ? e.docenti_nomi
+      : (e.docente ? e.docente.split(',').map(d=>d.trim()).filter(Boolean) : []);
+    if(docList.length>0){
+      fmBoxEl.style.display='block';
+      const label=docList.length>1?'Docenti':'Docente';
       fmBoxEl.innerHTML=`
-        <div style="display:flex;align-items:center;gap:12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px">
-          ${getFmAvatar(e.docente,40)}
-          <div>
-            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:2px">Docente</div>
-            <div style="font-size:15px;font-weight:700;color:var(--text)">${e.docente}</div>
-            ${(FORMATORI_DEF.find(f=>f.nome===e.docente)||{temi:[]}).temi.map(t=>`<span class="badge" style="background:var(--accent-bg);color:var(--accent);margin-top:4px;display:inline-block">${t}</span>`).join(' ')}
-          </div>
-          <button class="btn btn-s btn-sm" style="margin-left:auto" onclick="closeEvDetail();openFmModal('${e.docente.replace(/'/g,"\'")}')">Apri scheda →</button>
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:10px">${label}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px">
+          ${docList.map(d=>{
+            const safe=d.replace(/'/g,'&#39;');
+            const temi=(FORMATORI_DEF.find(f=>f.nome===d)||{temi:[]}).temi;
+            return '<div style="flex:1;min-width:200px;display:flex;align-items:center;gap:12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px">'
+              +getFmAvatar(d,40)
+              +'<div style="flex:1;min-width:0">'
+              +'<div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px">'+d+'</div>'
+              +'<div style="display:flex;flex-wrap:wrap;gap:3px">'+temi.map(t=>'<span class="badge" style="background:var(--accent-bg);color:var(--accent)">'+t+'</span>').join('')+'</div>'
+              +'</div>'
+              +'<button class="btn btn-s btn-sm" style="flex-shrink:0" data-docente="'+safe+'" onclick="closeEvDetail();openFmModal(this.dataset.docente)">Apri scheda →</button>'
+              +'</div>';
+          }).join('')}
         </div>`;
     } else {
       fmBoxEl.style.display='none';
