@@ -451,7 +451,10 @@ textarea.finp{min-height:72px;resize:vertical}
       <div class="sbi" id="nav-commerciale" onclick="showPage('commerciale',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Commerciale</div>
       <div class="sb-sec">Dati</div>
       <div class="sbi" id="nav-importa" onclick="showPage('importa',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Importa CSV</div>
-      <div class="sbi" id="nav-notifiche" onclick="showPage('notifiche',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Notifiche<span class="nbadge" id="notif-badge" style="display:none">0</span></div>
+      <div class="sbi" id="nav-report" onclick="showPage('report',this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Report
+            </div>
+            <div class="sbi" id="nav-notifiche" onclick="showPage('notifiche',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Notifiche<span class="nbadge" id="notif-badge" style="display:none">0</span></div>
       <div class="sbi" id="nav-impostazioni" onclick="showPage('impostazioni',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Impostazioni</div>
     </nav>
     <div class="sb-bottom">
@@ -976,6 +979,60 @@ textarea.finp{min-height:72px;resize:vertical}
         <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;font-size:12px;color:var(--text2);line-height:1.6" id="evd-note"></div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- PAGE: REPORT -->
+<div id="page-report" class="page" style="display:none">
+  <div class="ph">
+    <div><div class="ptitle">Report & Download</div><div class="psub">Esporta i dati in CSV o PDF con filtri personalizzati</div></div>
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="ctitle">Filtri</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px">
+      <div class="fg"><label class="flbl">Da data</label><input type="date" class="finp" id="rep-from"></div>
+      <div class="fg"><label class="flbl">A data</label><input type="date" class="finp" id="rep-to"></div>
+      <div class="fg"><label class="flbl">Tipologia</label><select class="finp" id="rep-tipo"><option value="">Tutte</option><option value="seminario">Seminari</option><option value="corso_4h">Corsi 4h</option><option value="corso_6h">Corsi 6h</option><option value="corso_deontologico">Deontologici</option></select></div>
+      <div class="fg"><label class="flbl">Stato</label><select class="finp" id="rep-stato"><option value="">Tutti</option><option value="svolto">Svolto</option><option value="consuntivato">Consuntivato</option><option value="pianificato">Pianificato</option><option value="pubblicato">Pubblicato</option></select></div>
+      <div class="fg"><label class="flbl">Docente</label><select class="finp" id="rep-docente"><option value="">Tutti</option><option>Mion</option><option>Basso</option><option>De Castro</option><option>Di Leo</option><option>Masi</option><option value="Dell'Oste">Dell'Oste</option><option>Rivetti</option><option>Forte</option><option>Frediani</option><option>Caputo</option><option>Groppo</option><option>Cocozza</option></select></div>
+      <div class="fg"><label class="flbl">Tema</label><select class="finp" id="rep-tema"><option value="">Tutti</option><option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Comunità Energetiche</option><option>CTU</option><option>Bonus Casa</option></select></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="btn btn-s" onclick="repPreview()">👁 Anteprima</button>
+      <span style="font-size:11px;color:var(--text3)" id="rep-count"></span>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:16px">
+    <div class="card">
+      <div class="ctitle">📋 Lista eventi</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;line-height:1.5">Data · titolo · tema · tipologia · docente · stato · iscritti · presenti · tasso · CFP · ricavi</div>
+      <div style="display:flex;gap:8px"><button class="btn btn-p" onclick="exportCSV('eventi')">⬇ CSV</button><button class="btn btn-s" onclick="exportPDF('eventi')">⬇ PDF</button></div>
+    </div>
+    <div class="card">
+      <div class="ctitle">👨‍🏫 Performance formatori</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;line-height:1.5">Formatore · eventi · paganti medi · FI medi · tasso presenza · ricavi totali · classifica</div>
+      <div style="display:flex;gap:8px"><button class="btn btn-p" onclick="exportCSV('formatori')">⬇ CSV</button><button class="btn btn-s" onclick="exportPDF('formatori')">⬇ PDF</button></div>
+    </div>
+    <div class="card">
+      <div class="ctitle">🎓 KPI formativi (CFP)</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;line-height:1.5">CFP per categoria · vs target · ore erogate · eventi per tipologia · equilibrio temi</div>
+      <div style="display:flex;gap:8px"><button class="btn btn-p" onclick="exportCSV('kpi')">⬇ CSV</button><button class="btn btn-s" onclick="exportPDF('kpi')">⬇ PDF</button></div>
+    </div>
+    <div class="card">
+      <div class="ctitle">💶 KPI commerciali</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;line-height:1.5">Ricavi mensili · paganti vs FI · tasso presenza · ricavi per docente e per tema</div>
+      <div style="display:flex;gap:8px"><button class="btn btn-p" onclick="exportCSV('commerciale')">⬇ CSV</button><button class="btn btn-s" onclick="exportPDF('commerciale')">⬇ PDF</button></div>
+    </div>
+  </div>
+  <div class="card" id="rep-preview-card" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div class="ctitle" style="margin:0" id="rep-preview-title">Anteprima</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-p btn-sm" id="rep-csv-btn">⬇ CSV</button>
+        <button class="btn btn-s btn-sm" id="rep-pdf-btn">⬇ PDF</button>
+      </div>
+    </div>
+    <div class="twrap" id="rep-preview-tbl"></div>
   </div>
 </div>
 
@@ -2706,7 +2763,7 @@ function showPage(id,el){
   const pg=document.getElementById('page-'+id);if(pg)pg.classList.add('active');
   if(el)el.classList.add('active');
   // Re-render page-specific
-  const map={'home':renderDashboard,'kpi':renderKPI,'commerciale':renderCommerciale,'formatori':()=>renderFormatori(),'calendario':renderCalendario,'notifiche':()=>{notifPage=0;markAllRead();},'impostazioni':()=>{document.getElementById('set-dark').checked=currentMode==='dark';buildThemeGrid();},'profilo':()=>showPage('impostazioni',document.getElementById('nav-impostazioni'))};
+  const map={'home':renderDashboard,'kpi':renderKPI,'commerciale':renderCommerciale,'formatori':()=>renderFormatori(),'calendario':renderCalendario,'notifiche':()=>{notifPage=0;markAllRead();},'impostazioni':()=>{document.getElementById('set-dark').checked=currentMode==='dark';buildThemeGrid();},'profilo':()=>showPage('impostazioni',document.getElementById('nav-impostazioni')),'report':renderReport};
   if(map[id])map[id]();
 }
 
@@ -2911,12 +2968,23 @@ function removeDocente(nome){
 function setDocentiFromArray(arr){selectedDocenti=arr||[];renderDocentiSelected();}
 function renderDocentiSelected(){
   const el=document.getElementById('docenti-selected');if(!el)return;
-  el.innerHTML=selectedDocenti.map(d=>{
-    const safe=d.replace(/'/g,'&#39;');
+  el.innerHTML='';
+  selectedDocenti.forEach((d,idx)=>{
+    const wrap=document.createElement('div');
+    wrap.style.cssText='display:inline-flex;align-items:center;gap:5px;background:var(--accent-bg);border:1px solid var(--accent);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--accent)';
     const av=typeof getFmAvatar==='function'?getFmAvatar(d,18):'';
-    const html='<div style="display:inline-flex;align-items:center;gap:5px;background:var(--accent-bg);border:1px solid var(--accent);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--accent)">'+av+' '+d+'<span onclick="removeDocente(\"'+safe+'\")" style="cursor:pointer;font-size:14px;margin-left:2px">×</span></div>';
-    return html;
-  }).join('');
+    const x=document.createElement('span');
+    x.textContent='×';
+    x.style.cssText='cursor:pointer;font-size:14px;margin-left:2px;color:var(--accent)';
+    x.dataset.idx=idx;
+    x.addEventListener('click',function(){
+      selectedDocenti.splice(parseInt(this.dataset.idx),1);
+      renderDocentiSelected();
+    });
+    wrap.innerHTML=av+' '+d;
+    wrap.appendChild(x);
+    el.appendChild(wrap);
+  });
 }
 
 // ── MULTI-SESSIONE ──
@@ -3088,6 +3156,215 @@ async function saveEvento(){
     closeEventoModal();await loadAll();
   }catch(e){showToast('Errore: '+e.message,'err');}
 }
+
+
+// ── REPORT & EXPORT ──
+function renderReport(){} // placeholder, page is static
+
+function getRepFiltered(){
+  const from=document.getElementById('rep-from')?.value||'';
+  const to=document.getElementById('rep-to')?.value||'';
+  const tipo=document.getElementById('rep-tipo')?.value||'';
+  const stato=document.getElementById('rep-stato')?.value||'';
+  const doc=document.getElementById('rep-docente')?.value||'';
+  const tema=document.getElementById('rep-tema')?.value||'';
+  return DB.filter(e=>{
+    if(from&&e.data<from)return false;
+    if(to&&e.data>to)return false;
+    if(tipo&&e.tipologia!==tipo)return false;
+    if(stato&&e.stato!==stato)return false;
+    if(doc&&e.docente!==doc&&!(e.docenti_nomi&&e.docenti_nomi.includes(doc)))return false;
+    if(tema&&e.tema!==tema)return false;
+    return true;
+  });
+}
+
+function repPreview(){
+  const data=getRepFiltered();
+  const countEl=document.getElementById('rep-count');
+  if(countEl)countEl.textContent=data.length+' eventi trovati';
+  const card=document.getElementById('rep-preview-card');
+  const tbl=document.getElementById('rep-preview-tbl');
+  const title=document.getElementById('rep-preview-title');
+  const csvBtn=document.getElementById('rep-csv-btn');
+  const pdfBtn=document.getElementById('rep-pdf-btn');
+  if(card)card.style.display='block';
+  if(title)title.textContent='Anteprima lista eventi ('+data.length+')';
+  if(csvBtn)csvBtn.onclick=()=>exportCSV('eventi');
+  if(pdfBtn)pdfBtn.onclick=()=>exportPDF('eventi');
+  if(!tbl)return;
+  if(!data.length){tbl.innerHTML='<div class="empty"><div class="et">Nessun evento trovato con questi filtri</div></div>';return;}
+  const rows=data.map(e=>{
+    const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_illimitati)||0);
+    const tp=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
+    const tasso=ti>0?Math.round(tp/ti*100)+'%':'—';
+    const ric=Math.round((parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0));
+    return '<tr><td class="mono">'+fmtDate(e.data)+'</td><td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+e.titolo+'</td><td>'+badgeTipo(e.tipologia)+'</td><td>'+(e.docente||'—')+'</td><td>'+badgeStato(e.stato)+'</td><td class="mono">'+ti+'</td><td class="mono">'+tp+'</td><td class="mono">'+tasso+'</td><td class="mono">'+cfpEv(e)+'</td><td class="mono">€'+ric.toLocaleString('it')+'</td></tr>';
+  }).join('');
+  tbl.innerHTML='<table><thead><tr><th>Data</th><th>Titolo</th><th>Tipo</th><th>Docente</th><th>Stato</th><th>Iscr.</th><th>Pres.</th><th>Tasso</th><th>CFP</th><th>Ricavi</th></tr></thead><tbody>'+rows+'</tbody></table>';
+}
+
+function getRepEventiData(){
+  return getRepFiltered().map(e=>{
+    const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_illimitati)||0);
+    const tp=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
+    const tasso=ti>0?Math.round(tp/ti*100):0;
+    const ric=Math.round((parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0));
+    return{data:e.data||'',titolo:e.titolo||'',tema:e.tema||'',tipologia:e.tipologia||'',docente:e.docente||'',stato:e.stato||'',iscritti:ti,presenti:tp,tasso:tasso+'%',cfp:cfpEv(e),ricavi:ric};
+  });
+}
+
+function getRepFormatoriData(){
+  return FORMATORI_DEF.map(f=>{
+    const s=calcStats(f.nome);
+    return{nome:f.nome,eventi:s.tot,paganti_medi:s.avgPag.toFixed(1),fi_medi:s.avgFI.toFixed(1),tasso_presenza:s.tassoPag+'%',ricavi_tot:Math.round(s.ric),rank:FORMATORI_DEF.map(x=>({nome:x.nome,avg:calcStats(x.nome).avgPag})).sort((a,b)=>b.avg-a.avg).findIndex(x=>x.nome===f.nome)+1};
+  }).sort((a,b)=>a.rank-b.rank);
+}
+
+function getRepKPIData(){
+  const ev=DB.filter(e=>['svolto','consuntivato'].includes(e.stato)&&!e.escludi_kpi);
+  const cfpS=ev.filter(e=>e.tipologia==='seminario').reduce((s,e)=>s+cfpEv(e),0);
+  const seen=new Set();
+  const cfpC=ev.filter(e=>e.tipologia==='corso_4h'||e.tipologia==='corso_6h').reduce((s,e)=>{if(e.corso_padre_id){if(seen.has(e.corso_padre_id))return s;seen.add(e.corso_padre_id);return s+(e.tipologia==='corso_4h'?4:6);}return s+cfpEv(e);},0);
+  const cfpD=ev.filter(e=>e.tipologia==='corso_deontologico').reduce((s,e)=>s+cfpEv(e),0);
+  const ore=ev.reduce((s,e)=>s+(parseFloat(e.ore)||0),0);
+  return[
+    {categoria:'Seminari',eventi:ev.filter(e=>e.tipologia==='seminario').length,cfp:cfpS,target:CFP_OBJ.sem,pct:Math.round(cfpS/CFP_OBJ.sem*100)+'%'},
+    {categoria:'Corsi tecnici',eventi:ev.filter(e=>e.tipologia==='corso_4h'||e.tipologia==='corso_6h').length,cfp:cfpC,target:CFP_OBJ.corsi,pct:Math.round(cfpC/CFP_OBJ.corsi*100)+'%'},
+    {categoria:'Deontologici',eventi:ev.filter(e=>e.tipologia==='corso_deontologico').length,cfp:cfpD,target:CFP_OBJ.deo,pct:Math.round(cfpD/CFP_OBJ.deo*100)+'%'},
+    {categoria:'TOTALE',eventi:ev.length,cfp:cfpS+cfpC+cfpD,target:146,pct:Math.round((cfpS+cfpC+cfpD)/146*100)+'%'},
+    {categoria:'Ore totali',eventi:'—',cfp:'—',target:'—',pct:ore+'h'},
+  ];
+}
+
+function getRepCommercialeData(){
+  const ev=DB.filter(e=>['svolto','consuntivato'].includes(e.stato)&&!e.escludi_kpi);
+  return MESI.map((m,i)=>{
+    const me=ev.filter(e=>e.data&&parseInt(e.data.split('-')[1])-1===i);
+    const pag=me.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
+    const fi=me.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
+    const ric=me.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0),0);
+    const isc=me.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_illimitati)||0),0);
+    const pres=me.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0),0);
+    return{mese:m,eventi:me.length,paganti_presenti:pag,fi_presenti:fi,tasso:isc>0?Math.round(pres/isc*100)+'%':'—',ricavi:Math.round(ric)};
+  });
+}
+
+// ── CSV EXPORT ──
+function exportCSV(type){
+  let rows=[], headers=[], filename='';
+  if(type==='eventi'){
+    headers=['Data','Titolo','Tema','Tipologia','Docente','Stato','Iscritti','Presenti','Tasso %','CFP','Ricavi €'];
+    rows=getRepEventiData().map(e=>[e.data,e.titolo,e.tema,e.tipologia,e.docente,e.stato,e.iscritti,e.presenti,e.tasso,e.cfp,e.ricavi]);
+    filename='eventi_'+new Date().toISOString().slice(0,10)+'.csv';
+  } else if(type==='formatori'){
+    headers=['Formatore','N° eventi','Paganti medi','FI medi','Tasso presenza','Ricavi tot €','Rank'];
+    rows=getRepFormatoriData().map(f=>[f.nome,f.eventi,f.paganti_medi,f.fi_medi,f.tasso_presenza,f.ricavi_tot,f.rank]);
+    filename='formatori_'+new Date().toISOString().slice(0,10)+'.csv';
+  } else if(type==='kpi'){
+    headers=['Categoria','N° eventi','CFP','Target','% raggiunto'];
+    rows=getRepKPIData().map(r=>[r.categoria,r.eventi,r.cfp,r.target,r.pct]);
+    filename='kpi_formativi_'+new Date().toISOString().slice(0,10)+'.csv';
+  } else if(type==='commerciale'){
+    headers=['Mese','N° eventi','Paganti presenti','FI presenti','Tasso presenza','Ricavi €'];
+    rows=getRepCommercialeData().map(r=>[r.mese,r.eventi,r.paganti_presenti,r.fi_presenti,r.tasso,r.ricavi]);
+    filename='commerciale_'+new Date().toISOString().slice(0,10)+'.csv';
+  }
+  const bom='﻿'; // UTF-8 BOM for Excel
+    const csv=bom+[headers,...rows].map(r=>r.map(v=>'"'+(String(v||'').replace(/"/g,'""'))+'"').join(';')).join(String.fromCharCode(10));
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=filename;a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSV scaricato: '+filename,'ok');
+}
+
+// ── PDF EXPORT (jsPDF via CDN) ──
+async function exportPDF(type){
+  // Load jsPDF if not already loaded
+  if(typeof window.jspdf==='undefined'){
+    await new Promise((res,rej)=>{
+      const s=document.createElement('script');
+      s.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+      s.onload=res;s.onerror=rej;document.head.appendChild(s);
+    });
+  }
+  if(typeof window.jspdf?.jsPDF==='undefined'){showToast('Errore caricamento PDF library','err');return;}
+
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+  const accent=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#0570FE';
+  const acHex=accent.replace('#','');
+  const acR=parseInt(acHex.slice(0,2),16),acG=parseInt(acHex.slice(2,4),16),acB=parseInt(acHex.slice(4,6),16);
+
+  const now=new Date().toLocaleDateString('it',{day:'2-digit',month:'long',year:'numeric'});
+  const titles={eventi:'Report Lista Eventi',formatori:'Performance Formatori',kpi:'KPI Formativi — CFP',commerciale:'KPI Commerciali'};
+  const title=titles[type]||'Report';
+
+  // Header
+  doc.setFillColor(acR,acG,acB);
+  doc.rect(0,0,297,18,'F');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(13);doc.setFont('helvetica','bold');
+  doc.text('GruppoPiù — '+title,10,12);
+  doc.setFontSize(8);doc.setFont('helvetica','normal');
+  doc.text('Generato il '+now,240,12);
+
+  let headers=[], rows=[], colWidths=[];
+  if(type==='eventi'){
+    headers=['Data','Titolo','Tema','Tipo','Docente','Stato','Iscr.','Pres.','Tasso','CFP','Ricavi'];
+    colWidths=[22,55,28,26,24,24,14,14,14,12,20];
+    rows=getRepEventiData().map(e=>[e.data,e.titolo.slice(0,35),e.tema,e.tipologia,e.docente,e.stato,e.iscritti,e.presenti,e.tasso,e.cfp,'€'+e.ricavi.toLocaleString('it')]);
+  } else if(type==='formatori'){
+    headers=['Formatore','N° eventi','Pag. medi','FI medi','Tasso pres.','Ricavi tot.','Rank'];
+    colWidths=[40,24,24,24,26,30,16];
+    rows=getRepFormatoriData().map(f=>[f.nome,f.eventi,f.paganti_medi,f.fi_medi,f.tasso_presenza,'€'+f.ricavi_tot.toLocaleString('it'),'#'+f.rank]);
+  } else if(type==='kpi'){
+    headers=['Categoria','N° eventi','CFP','Target','% raggiunto'];
+    colWidths=[60,30,20,20,30];
+    rows=getRepKPIData().map(r=>[r.categoria,r.eventi,r.cfp,r.target,r.pct]);
+  } else if(type==='commerciale'){
+    headers=['Mese','N° eventi','Paganti pres.','FI presenti','Tasso pres.','Ricavi €'];
+    colWidths=[20,20,30,26,26,30];
+    rows=getRepCommercialeData().map(r=>[r.mese,r.eventi,r.paganti_presenti,r.fi_presenti,r.tasso,'€'+r.ricavi.toLocaleString('it')]);
+  }
+
+  // Table
+  let y=26;
+  const rowH=7;const margin=10;
+  // Header row
+  doc.setFillColor(acR,acG,acB,0.15);
+  doc.setFillColor(Math.min(255,acR+100),Math.min(255,acG+100),Math.min(255,acB+100));
+  doc.rect(margin,y,277,rowH,'F');
+  doc.setTextColor(acR,acG,acB);
+  doc.setFontSize(7);doc.setFont('helvetica','bold');
+  let x=margin;
+  headers.forEach((h,i)=>{doc.text(h,x+1,y+5);x+=colWidths[i];});
+  y+=rowH;
+
+  // Data rows
+  doc.setFont('helvetica','normal');
+  rows.forEach((row,ri)=>{
+    if(y>190){doc.addPage();y=20;}
+    if(ri%2===0){doc.setFillColor(248,248,252);doc.rect(margin,y,277,rowH,'F');}
+    doc.setTextColor(40,40,60);
+    x=margin;
+    row.forEach((cell,i)=>{
+      doc.text(String(cell||'').slice(0,colWidths[i]/2.2),x+1,y+5);
+      x+=colWidths[i];
+    });
+    y+=rowH;
+  });
+
+  // Footer
+  doc.setFontSize(7);doc.setTextColor(150,150,170);
+  doc.text('GruppoPiù — gruppopiu.it — '+now,margin,200);
+  doc.text('Pag. 1',270,200);
+
+  doc.save(type+'_report_'+new Date().toISOString().slice(0,10)+'.pdf');
+  showToast('PDF scaricato','ok');
+}
+
 
 // ── START ──
 init();
