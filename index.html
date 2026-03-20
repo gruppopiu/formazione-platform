@@ -1966,6 +1966,7 @@ function badgeStato(s){return`<span class="badge b-${s||'pia'}">${s||'—'}</spa
 function fmtDate(d){if(!d)return'—';const p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
 function fmtEuro(val,decimals=2){const n=parseFloat(val)||0;return '€'+n.toLocaleString('it',{minimumFractionDigits:decimals,maximumFractionDigits:decimals});}
 function fmtEuroK(val){const n=parseFloat(val)||0;if(Math.abs(n)>=1000)return '€'+(n/1000).toLocaleString('it',{minimumFractionDigits:1,maximumFractionDigits:1})+'k';return fmtEuro(n,0);}
+function fmtNum(val,decimals=1){const n=parseFloat(val)||0;return n.toLocaleString('it',{minimumFractionDigits:decimals,maximumFractionDigits:decimals});}
 function getInit(name){return(name||'?').split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2);}
 
 function filterByTime(data,range){
@@ -1986,8 +1987,10 @@ function progBar(val,max,grad,label,unit){
   const gradMap={g:'var(--grad1)',b:'var(--grad2)',y:'var(--grad3)',p:'var(--grad4)'};
   const bg=gradMap[grad]||'var(--grad1)';
   const color=pct>=100?'var(--green)':pct>=60?'var(--blue)':pct>=30?'var(--yellow)':'var(--red)';
+  const fVal=typeof val==='number'?fmtNum(val,1):val;
+  const fMax=typeof max==='number'?fmtNum(max,1):max;
   return`<div class="pw">
-    <div class="pl"><span>${label}</span><span class="pval" style="color:${color}">${val}${unit?' '+unit:''} <span style="color:var(--text3);">(${pct}%)</span> / ${max}${unit?' '+unit:''}</span></div>
+    <div class="pl"><span>${label}</span><span class="pval" style="color:${color}">${fVal}${unit?' '+unit:''} <span style="color:var(--text3);">(${pct}%)</span> / ${fMax}${unit?' '+unit:''}</span></div>
     <div class="pbg"><div class="pf" style="width:${dispW}%;background:${bg}"></div></div>
   </div>`;}
 
@@ -2151,7 +2154,7 @@ function renderDashboard(){
   document.getElementById('k-ev').textContent=kpi.length;
   document.getElementById('k-sess').textContent=kpi.reduce((s,e)=>s+sessEv(e),0);
   document.getElementById('k-cfp').textContent=svolti.reduce((s,e)=>s+cfpEv(e),0);
-  document.getElementById('k-ore').textContent=svolti.reduce((s,e)=>s+parseFloat(e.ore||0),0).toFixed(0);
+  document.getElementById('k-ore').textContent=svolti.reduce((s,e)=>s+parseFloat(e.ore||0),0).toLocaleString('it');
   const cfpS=svolti.filter(e=>e.tipologia==='seminario').reduce((s,e)=>s+cfpEv(e),0);
   const cfpC=(()=>{const _seen=new Set();return svolti.filter(e=>e.tipologia==='corso_4h'||e.tipologia==='corso_6h').reduce((s,e)=>{if(e.corso_padre_id){if(_seen.has(e.corso_padre_id))return s;_seen.add(e.corso_padre_id);return s+(e.tipologia==='corso_4h'?4:6);}return s+cfpEv(e);},0);})();
   const cfpD=svolti.filter(e=>e.tipologia==='corso_deontologico').reduce((s,e)=>s+cfpEv(e),0);
@@ -2282,7 +2285,7 @@ function renderFormatori(range='all'){
   if(rankEl)rankEl.innerHTML=`<thead><tr><th>#</th><th>Docente</th><th>Eventi</th><th>Paganti medi</th><th>Tasso pres.</th><th>FI medi</th><th>Tasso pres. FI</th><th>Ricavi</th></tr></thead><tbody>${stats.map((f,i)=>{
     const rc=i===0?'p1':i===1?'p2':i===2?'p3':'pn';
     const tc=f.s.tassoPag>=80?'var(--green)':f.s.tassoPag>=60?'var(--yellow)':'var(--red)';
-    return`<tr><td><div class="rank-pos ${rc}">${i+1}</div></td><td><div style="display:flex;align-items:center;gap:7px">${getFmAvatar(f.nome,26)}<span style="color:var(--text);font-weight:600">${f.nome}</span></div></td><td class="mono">${f.s.tot}</td><td><div class="rank-bar"><div class="rank-bg"><div class="rank-fill" style="width:${maxPag>0?Math.round(f.s.avgPag/maxPag*100):0}%;background:var(--accent)"></div></div><span class="mono" style="font-size:11px">${f.s.avgPag.toFixed(1)}</span></div></td><td class="mono" style="color:${tc}">${f.s.tassoPag}%</td><td class="mono">${f.s.avgFI.toFixed(1)}</td><td class="mono">${f.s.tassoFI}%</td><td class="mono">${fmtEuro(f.s.ric,0)}</td></tr>`;
+    return`<tr><td><div class="rank-pos ${rc}">${i+1}</div></td><td><div style="display:flex;align-items:center;gap:7px">${getFmAvatar(f.nome,26)}<span style="color:var(--text);font-weight:600">${f.nome}</span></div></td><td class="mono">${f.s.tot}</td><td><div class="rank-bar"><div class="rank-bg"><div class="rank-fill" style="width:${maxPag>0?Math.round(f.s.avgPag/maxPag*100):0}%;background:var(--accent)"></div></div><span class="mono" style="font-size:11px">${fmtNum(f.s.avgPag)}</span></div></td><td class="mono" style="color:${tc}">${f.s.tassoPag}%</td><td class="mono">${fmtNum(f.s.avgFI)}</td><td class="mono">${f.s.tassoFI}%</td><td class="mono">${fmtEuro(f.s.ric,0)}</td></tr>`;
   }).join('')}</tbody>`;
   renderFormatoriChart(stats);
   // Cards
@@ -2294,7 +2297,7 @@ function renderFormatori(range='all'){
       const av=fmD.avatar_url?`<img src="${fmD.avatar_url}?t=${Date.now()}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:`<div style="width:100%;height:100%;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--accent)">${getInit(f.nome)}</div>`;
     return`<div class="fc" data-fname="${f.nome}" onclick="openFmModal(this.dataset.fname)">
       <div class="fc-top"><div class="fc-av" style="background:${grad};padding:2px">${av}</div><div style="flex:1"><div class="fc-name">${f.nome}</div><div class="fc-role">${f.temi.slice(0,2).join(' · ')}</div></div><div class="rank-pos ${rc}" style="position:absolute;top:10px;right:10px">${i+1}</div></div>
-      <div class="fc-stats"><div class="fc-stat"><div class="fc-sv">${f.s.tot}</div><div class="fc-sl">Eventi</div></div><div class="fc-stat"><div class="fc-sv" style="color:${f.s.tassoPag>=70?'var(--green)':f.s.tassoPag>=40?'var(--yellow)':'var(--red)'}">${f.s.tassoPag}%</div><div class="fc-sl">Tasso pres.</div></div><div class="fc-stat"><div class="fc-sv">${f.s.avgPag.toFixed(1)}</div><div class="fc-sl">Pag. medi</div></div></div>
+      <div class="fc-stats"><div class="fc-stat"><div class="fc-sv">${f.s.tot}</div><div class="fc-sl">Eventi</div></div><div class="fc-stat"><div class="fc-sv" style="color:${f.s.tassoPag>=70?'var(--green)':f.s.tassoPag>=40?'var(--yellow)':'var(--red)'}">${f.s.tassoPag}%</div><div class="fc-sl">Tasso pres.</div></div><div class="fc-stat"><div class="fc-sv">${fmtNum(f.s.avgPag)}</div><div class="fc-sl">Pag. medi</div></div></div>
     </div>`;
   }).join('');
 }
@@ -2346,7 +2349,7 @@ function openFmModal(nome){
     setH('fm-stats-top',`
       <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:var(--text);font-family:'SF Mono',monospace">${s.tot}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">eventi</div></div>
       <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:${s.tassoPag>=70?'var(--green)':s.tassoPag>=40?'var(--yellow)':'var(--red)'};font-family:'SF Mono',monospace">${s.tassoPag}%</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">tasso pres.</div></div>
-      <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:var(--accent);font-family:'SF Mono',monospace">${s.avgPag.toFixed(1)}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">pag. medi</div></div>
+      <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:var(--accent);font-family:'SF Mono',monospace">${fmtNum(s.avgPag)}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">pag. medi</div></div>
       <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:var(--text);font-family:'SF Mono',monospace">${fmtEuroK(s.ric)}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">ricavi</div></div>`);
 
     // Use cached ranking from last renderFormatori call to avoid O(n²)
@@ -2510,7 +2513,7 @@ function renderChartTemi(type){
       tview.innerHTML=`<table><thead><tr><th>Tema</th><th>Peso target</th><th>Effettivo</th><th>Scostamento</th><th>Trend</th></tr></thead><tbody>${tl.map(t=>{
         const cnt=tC[t]||0;const peff=+(cnt/tot*100).toFixed(1);const pw=TEMI_PESI[t];const diff=+(peff-pw).toFixed(1);
         const col=diff>=0?'var(--green)':'var(--red)';
-        return`<tr><td style="font-weight:500;color:var(--text)">${t}</td><td class="mono">${pw}%</td><td class="mono" style="color:${col}">${peff}%</td><td class="mono" style="color:${col}">${diff>=0?'+':''}${diff}%</td><td><div style="height:5px;width:80px;background:var(--bg3);border-radius:3px;overflow:hidden"><div style="width:${Math.min(100,Math.round(peff/pw*100))}%;height:5px;background:${col};border-radius:3px"></div></div></td></tr>`;
+        return`<tr><td style="font-weight:500;color:var(--text)">${t}</td><td class="mono">${fmtNum(pw,1)}%</td><td class="mono" style="color:${col}">${fmtNum(peff,1)}%</td><td class="mono" style="color:${col}">${diff>=0?'+':''}${fmtNum(Math.abs(diff),1)}%</td><td><div style="height:5px;width:80px;background:var(--bg3);border-radius:3px;overflow:hidden"><div style="width:${Math.min(100,Math.round(peff/pw*100))}%;height:5px;background:${col};border-radius:3px"></div></div></td></tr>`;
       }).join('')}</tbody></table>`;
     }
     return;
@@ -2546,7 +2549,7 @@ function renderCommerciale(){
   document.getElementById('fi-isc').textContent=fi_isc;
   document.getElementById('fi-pres').textContent=fi_pres;
   document.getElementById('fi-tasso').textContent=fi_ta+'%';
-  document.getElementById('fi-media').textContent=fi_media.toFixed(1);
+  document.getElementById('fi-media').textContent=fmtNum(fi_media);
   renderChartMix(chartTypes['ch-mix']||'doughnut');
   renderChartRicavi('ch-ric',chartTimeFilters['ch-ric']||'all');
   // Paganti vs FI per mese
@@ -3311,7 +3314,7 @@ function getRepEventiData(){
 function getRepFormatoriData(){
   return FORMATORI_DEF.map(f=>{
     const s=calcStats(f.nome);
-    return{nome:f.nome,eventi:s.tot,paganti_medi:s.avgPag.toFixed(1),fi_medi:s.avgFI.toFixed(1),tasso_presenza:s.tassoPag+'%',ricavi_tot:Math.round(s.ric),rank:FORMATORI_DEF.map(x=>({nome:x.nome,avg:calcStats(x.nome).avgPag})).sort((a,b)=>b.avg-a.avg).findIndex(x=>x.nome===f.nome)+1};
+    return{nome:f.nome,eventi:s.tot,paganti_medi:fmtNum(s.avgPag),fi_medi:fmtNum(s.avgFI),tasso_presenza:s.tassoPag+'%',ricavi_tot:Math.round(s.ric),rank:FORMATORI_DEF.map(x=>({nome:x.nome,avg:calcStats(x.nome).avgPag})).sort((a,b)=>b.avg-a.avg).findIndex(x=>x.nome===f.nome)+1};
   }).sort((a,b)=>a.rank-b.rank);
 }
 
