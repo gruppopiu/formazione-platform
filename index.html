@@ -3600,8 +3600,13 @@ function closeEventoModal(){
 async function saveEvento(){
   const titolo=document.getElementById('ef-titolo').value.trim();
   const tema=document.getElementById('ef-tema').value;
-  const tipo=document.getElementById('ef-tipo').value;
-  if(!titolo||!tema||!tipo){showToast('Compila i campi obbligatori','err');return;}
+  const stato=document.getElementById('ef-stato').value;
+  let tipo=document.getElementById('ef-tipo').value;
+  // Se tipo è vuoto e stiamo modificando un evento esistente, recupera dal DB
+  if(!tipo&&editId){const ev=DB.find(x=>x.id===editId);if(ev)tipo=ev.tipologia||'';}
+  // Tipo non obbligatorio se lo stato è 'chiuso'
+  const tipoRequired=stato!=='chiuso';
+  if(!titolo||!tema||(tipoRequired&&!tipo)){showToast('Compila i campi obbligatori','err');return;}
   const gg=['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
   const oreMap={seminario:2,corso_4h:4,corso_6h:6,corso_deontologico:2};
   const ore=oreMap[tipo]||2;
