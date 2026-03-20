@@ -824,6 +824,60 @@ textarea.finp{min-height:72px;resize:vertical}
   </main>
 </div>
 
+
+<!-- PAGE: REPORT -->
+<div id="page-report" class="page" style="display:none">
+  <div class="ph">
+    <div><div class="ptitle">Report & Download</div><div class="psub">Esporta i dati in CSV o PDF con filtri personalizzati</div></div>
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="ctitle">Filtri</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px">
+      <div class="fg"><label class="flbl">Da data</label><input type="date" class="finp" id="rep-from"></div>
+      <div class="fg"><label class="flbl">A data</label><input type="date" class="finp" id="rep-to"></div>
+      <div class="fg"><label class="flbl">Tipologia</label><select class="finp" id="rep-tipo"><option value="">Tutte</option><option value="seminario">Seminari</option><option value="corso_4h">Corsi 4h</option><option value="corso_6h">Corsi 6h</option><option value="corso_deontologico">Deontologici</option></select></div>
+      <div class="fg"><label class="flbl">Stato</label><select class="finp" id="rep-stato"><option value="">Tutti</option><option value="svolto">Svolto</option><option value="consuntivato">Consuntivato</option><option value="pianificato">Pianificato</option><option value="pubblicato">Pubblicato</option></select></div>
+      <div class="fg"><label class="flbl">Docente</label><select class="finp" id="rep-docente"><option value="">Tutti</option><option>Mion</option><option>Basso</option><option>De Castro</option><option>Di Leo</option><option>Masi</option><option value="Dell'Oste">Dell'Oste</option><option>Rivetti</option><option>Forte</option><option>Frediani</option><option>Caputo</option><option>Groppo</option><option>Cocozza</option></select></div>
+      <div class="fg"><label class="flbl">Tema</label><select class="finp" id="rep-tema"><option value="">Tutti</option><option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Comunità Energetiche</option><option>CTU</option><option>Bonus Casa</option></select></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="btn btn-s" onclick="repPreview()">👁 Anteprima</button>
+      <span style="font-size:11px;color:var(--text3)" id="rep-count"></span>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:16px">
+    <div class="card">
+      <div class="ctitle">📋 Lista eventi</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;line-height:1.5">Data · titolo · tema · tipologia · docente · stato · iscritti · presenti · tasso · CFP · ricavi</div>
+      <div style="display:flex;gap:8px"><button class="btn btn-p" onclick="exportCSV('eventi')">⬇ CSV</button><button class="btn btn-s" onclick="exportPDF('eventi')">⬇ PDF</button></div>
+    </div>
+    <div class="card">
+      <div class="ctitle">👨‍🏫 Performance formatori</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;line-height:1.5">Formatore · eventi · paganti medi · FI medi · tasso presenza · ricavi totali · classifica</div>
+      <div style="display:flex;gap:8px"><button class="btn btn-p" onclick="exportCSV('formatori')">⬇ CSV</button><button class="btn btn-s" onclick="exportPDF('formatori')">⬇ PDF</button></div>
+    </div>
+    <div class="card">
+      <div class="ctitle">🎓 KPI formativi (CFP)</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;line-height:1.5">CFP per categoria · vs target · ore erogate · eventi per tipologia · equilibrio temi</div>
+      <div style="display:flex;gap:8px"><button class="btn btn-p" onclick="exportCSV('kpi')">⬇ CSV</button><button class="btn btn-s" onclick="exportPDF('kpi')">⬇ PDF</button></div>
+    </div>
+    <div class="card">
+      <div class="ctitle">💶 KPI commerciali</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;line-height:1.5">Ricavi mensili · paganti vs FI · tasso presenza · ricavi per docente e per tema</div>
+      <div style="display:flex;gap:8px"><button class="btn btn-p" onclick="exportCSV('commerciale')">⬇ CSV</button><button class="btn btn-s" onclick="exportPDF('commerciale')">⬇ PDF</button></div>
+    </div>
+  </div>
+  <div class="card" id="rep-preview-card" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div class="ctitle" style="margin:0" id="rep-preview-title">Anteprima</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-p btn-sm" id="rep-csv-btn">⬇ CSV</button>
+        <button class="btn btn-s btn-sm" id="rep-pdf-btn">⬇ PDF</button>
+      </div>
+    </div>
+    <div class="twrap" id="rep-preview-tbl"></div>
+  </div>
+</div>
 <!-- MODAL EVENTO -->
 <div class="mover" id="ev-modal" style="display:none" onclick="if(event.target===this)closeEventoModal()">
   <div class="modal">
@@ -982,59 +1036,6 @@ textarea.finp{min-height:72px;resize:vertical}
   </div>
 </div>
 
-<!-- PAGE: REPORT -->
-<div id="page-report" class="page" style="display:none">
-  <div class="ph">
-    <div><div class="ptitle">Report & Download</div><div class="psub">Esporta i dati in CSV o PDF con filtri personalizzati</div></div>
-  </div>
-  <div class="card" style="margin-bottom:16px">
-    <div class="ctitle">Filtri</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px">
-      <div class="fg"><label class="flbl">Da data</label><input type="date" class="finp" id="rep-from"></div>
-      <div class="fg"><label class="flbl">A data</label><input type="date" class="finp" id="rep-to"></div>
-      <div class="fg"><label class="flbl">Tipologia</label><select class="finp" id="rep-tipo"><option value="">Tutte</option><option value="seminario">Seminari</option><option value="corso_4h">Corsi 4h</option><option value="corso_6h">Corsi 6h</option><option value="corso_deontologico">Deontologici</option></select></div>
-      <div class="fg"><label class="flbl">Stato</label><select class="finp" id="rep-stato"><option value="">Tutti</option><option value="svolto">Svolto</option><option value="consuntivato">Consuntivato</option><option value="pianificato">Pianificato</option><option value="pubblicato">Pubblicato</option></select></div>
-      <div class="fg"><label class="flbl">Docente</label><select class="finp" id="rep-docente"><option value="">Tutti</option><option>Mion</option><option>Basso</option><option>De Castro</option><option>Di Leo</option><option>Masi</option><option value="Dell'Oste">Dell'Oste</option><option>Rivetti</option><option>Forte</option><option>Frediani</option><option>Caputo</option><option>Groppo</option><option>Cocozza</option></select></div>
-      <div class="fg"><label class="flbl">Tema</label><select class="finp" id="rep-tema"><option value="">Tutti</option><option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Comunità Energetiche</option><option>CTU</option><option>Bonus Casa</option></select></div>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <button class="btn btn-s" onclick="repPreview()">👁 Anteprima</button>
-      <span style="font-size:11px;color:var(--text3)" id="rep-count"></span>
-    </div>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:16px">
-    <div class="card">
-      <div class="ctitle">📋 Lista eventi</div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;line-height:1.5">Data · titolo · tema · tipologia · docente · stato · iscritti · presenti · tasso · CFP · ricavi</div>
-      <div style="display:flex;gap:8px"><button class="btn btn-p" onclick="exportCSV('eventi')">⬇ CSV</button><button class="btn btn-s" onclick="exportPDF('eventi')">⬇ PDF</button></div>
-    </div>
-    <div class="card">
-      <div class="ctitle">👨‍🏫 Performance formatori</div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;line-height:1.5">Formatore · eventi · paganti medi · FI medi · tasso presenza · ricavi totali · classifica</div>
-      <div style="display:flex;gap:8px"><button class="btn btn-p" onclick="exportCSV('formatori')">⬇ CSV</button><button class="btn btn-s" onclick="exportPDF('formatori')">⬇ PDF</button></div>
-    </div>
-    <div class="card">
-      <div class="ctitle">🎓 KPI formativi (CFP)</div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;line-height:1.5">CFP per categoria · vs target · ore erogate · eventi per tipologia · equilibrio temi</div>
-      <div style="display:flex;gap:8px"><button class="btn btn-p" onclick="exportCSV('kpi')">⬇ CSV</button><button class="btn btn-s" onclick="exportPDF('kpi')">⬇ PDF</button></div>
-    </div>
-    <div class="card">
-      <div class="ctitle">💶 KPI commerciali</div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;line-height:1.5">Ricavi mensili · paganti vs FI · tasso presenza · ricavi per docente e per tema</div>
-      <div style="display:flex;gap:8px"><button class="btn btn-p" onclick="exportCSV('commerciale')">⬇ CSV</button><button class="btn btn-s" onclick="exportPDF('commerciale')">⬇ PDF</button></div>
-    </div>
-  </div>
-  <div class="card" id="rep-preview-card" style="display:none">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div class="ctitle" style="margin:0" id="rep-preview-title">Anteprima</div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-p btn-sm" id="rep-csv-btn">⬇ CSV</button>
-        <button class="btn btn-s btn-sm" id="rep-pdf-btn">⬇ PDF</button>
-      </div>
-    </div>
-    <div class="twrap" id="rep-preview-tbl"></div>
-  </div>
-</div>
 
 <div class="toast" id="toast"></div>
 
