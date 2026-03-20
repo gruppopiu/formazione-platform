@@ -3550,7 +3550,10 @@ function renderNewFmTemi(){
 async function saveNewFormatore(){
   const nome=document.getElementById('new-fm-nome')?.value.trim();
   if(!nome){showToast('Inserisci il nome del docente','err');return;}
+  // Start with existing data to preserve avatar_url and other fields
+  const existing=FM_DATA[editingFormatore||nome]||{};
   const payload={
+    ...existing,
     nome:editingFormatore||nome,
     nome_display:nome,
     email:document.getElementById('new-fm-email')?.value||null,
