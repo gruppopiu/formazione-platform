@@ -211,9 +211,9 @@ textarea.finp{min-height:72px;resize:vertical}
 .cal-month{font-size:15px;font-weight:700;min-width:160px;text-align:center}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
 .cal-dow{font-size:9px;font-weight:700;color:var(--text3);text-align:center;padding:6px 2px;text-transform:uppercase;letter-spacing:.05em}
-.cal-day{background:var(--bg3);border:1px solid var(--border);border-radius:8px;min-height:84px;padding:6px;cursor:pointer;transition:border .15s}
-.cal-day:hover{border-color:var(--border2)}
-.cal-day.today{border-color:var(--green);box-shadow:0 0 0 1px var(--green)}
+.cal-day{background:rgba(var(--accent-rgb),.03);border:1px solid var(--border);border-radius:8px;min-height:110px;padding:8px;cursor:pointer;transition:all .15s}
+.cal-day:hover{border-color:var(--accent);background:rgba(var(--accent-rgb),.06)}
+.cal-day.today{border:2px solid var(--accent);background:rgba(var(--accent-rgb),.12);box-shadow:0 0 0 1px rgba(var(--accent-rgb),.2)}
 .cal-day.empty-day{background:transparent;border-color:transparent;cursor:default}
 .cal-day.blocked{background:var(--red-bg);border-color:rgba(224,82,82,.2)}
 .cal-dn{font-size:10px;font-weight:700;color:var(--text3);margin-bottom:4px}
@@ -600,7 +600,7 @@ textarea.finp{min-height:72px;resize:vertical}
         <select class="fsel" id="fe-mese" onchange="renderEventi()"><option value="">Mese</option><option value="01">Gen</option><option value="02">Feb</option><option value="03">Mar</option><option value="04">Apr</option><option value="05">Mag</option><option value="06">Giu</option><option value="07">Lug</option><option value="08">Ago</option><option value="09">Set</option><option value="10">Ott</option><option value="11">Nov</option><option value="12">Dic</option></select>
         <select class="fsel" id="fe-tipo" onchange="renderEventi()"><option value="">Tipologia</option><option value="seminario">Seminario</option><option value="corso_4h">Corso 4h</option><option value="corso_6h">Corso 6h</option><option value="corso_deontologico">Deontologico</option></select>
         <select class="fsel" id="fe-tema" onchange="renderEventi()"><option value="">Tema</option></select>
-        <select class="fsel" id="fe-stato" onchange="renderEventi()"><option value="">Stato</option><option value="pianificato">Pianificato</option><option value="pubblicato">Pubblicato</option><option value="svolto">Svolto</option><option value="consuntivato">Consuntivato</option><option value="annullato">Annullato</option><option value="spostato">Spostato</option></select>
+        <select class="fsel" id="fe-stato" onchange="renderEventi()"><option value="">Stato</option><option value="pianificato">Pianificato</option><option value="pubblicato">Pubblicato</option><option value="svolto">Svolto</option><option value="chiuso">Chiuso</option></select>
         <select class="fsel" id="fe-kpi" onchange="renderEventi()"><option value="">Tutti</option><option value="no">Solo KPI</option></select>
       </div>
       <div class="card" style="padding:0"><div class="twrap" id="ev-tbl"></div></div>
@@ -830,7 +830,7 @@ textarea.finp{min-height:72px;resize:vertical}
       <div class="fg"><label class="flbl">A data</label><input type="date" class="finp" id="rep-to"></div>
       <div class="fg"><label class="flbl">Tipologia</label><select class="finp" id="rep-tipo"><option value="">Tutte</option><option value="seminario">Seminari</option><option value="corso_4h">Corsi 4h</option><option value="corso_6h">Corsi 6h</option><option value="corso_deontologico">Deontologici</option></select></div>
       <div class="fg"><label class="flbl">Stato</label><select class="finp" id="rep-stato"><option value="">Tutti</option><option value="svolto">Svolto</option><option value="consuntivato">Consuntivato</option><option value="pianificato">Pianificato</option><option value="pubblicato">Pubblicato</option></select></div>
-      <div class="fg"><label class="flbl">Docente</label><select class="finp" id="rep-docente"><option value="">Tutti</option><option>Mion</option><option>Basso</option><option>De Castro</option><option>Di Leo</option><option>Masi</option><option value="Dell'Oste">Dell'Oste</option><option>Rivetti</option><option>Forte</option><option>Frediani</option><option>Caputo</option><option>Groppo</option><option>Cocozza</option></select></div>
+      <div class="fg"><label class="flbl">Docente</label><select class="finp" id="rep-docente"><option value="">Tutti</option><option>Basso</option><option>Caputo</option><option>Cocozza</option><option>De Castro</option><option value="Dell'Oste">Dell'Oste</option><option>Di Leo</option><option>Forte</option><option>Frediani</option><option>Groppo</option><option>Masi</option><option>Mion</option><option>Rivetti</option></select></div>
       <div class="fg"><label class="flbl">Tema</label><select class="finp" id="rep-tema"><option value="">Tutti</option><option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Comunità Energetiche</option><option>CTU</option><option>Bonus Casa</option><option>CAF</option><option>Assicurazioni</option></select></div>
     </div>
     <div style="display:flex;align-items:center;gap:10px">
@@ -891,7 +891,7 @@ textarea.finp{min-height:72px;resize:vertical}
           <div class="fg full">
             <label class="flbl">Docente/i <span style="font-size:9px;color:var(--text3);text-transform:none;letter-spacing:0">selezione multipla possibile</span></label>
             <div style="display:flex;flex-wrap:wrap;gap:6px;min-height:28px;margin-bottom:8px" id="docenti-selected"></div>
-            <select class="finp" id="ef-docente-add" onchange="addDocente(this)"><option value="">+ Aggiungi docente</option><option>Mion</option><option>Basso</option><option>De Castro</option><option>Di Leo</option><option>Masi</option><option value="Dell'Oste">Dell'Oste</option><option>Rivetti</option><option>Forte</option><option>Frediani</option><option>Caputo</option><option>Groppo</option><option>Cocozza</option></select>
+            <select class="finp" id="ef-docente-add" onchange="addDocente(this)"><option value="">+ Aggiungi docente</option><option>Basso</option><option>Caputo</option><option>Cocozza</option><option>De Castro</option><option value="Dell'Oste">Dell'Oste</option><option>Di Leo</option><option>Forte</option><option>Frediani</option><option>Groppo</option><option>Masi</option><option>Mion</option><option>Rivetti</option></select>
           </div>
           <input type="hidden" id="ef-docente">
         </div>
@@ -907,7 +907,7 @@ textarea.finp{min-height:72px;resize:vertical}
         </div>
         <div id="date-multi" style="display:none"><div id="sessioni-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px"></div></div>
         <div class="fgrid" style="margin-top:10px">
-          <div class="fg"><label class="flbl">Stato</label><select class="finp" id="ef-stato"><option value="pianificato">Pianificato</option><option value="pubblicato">Pubblicato</option><option value="svolto">Svolto</option><option value="consuntivato">Consuntivato</option><option value="annullato">Annullato</option><option value="spostato">Spostato</option></select></div>
+          <div class="fg"><label class="flbl">Stato</label><select class="finp" id="ef-stato"><option value="pianificato">Pianificato</option><option value="pubblicato">Pubblicato</option><option value="svolto">Svolto</option><option value="chiuso">Chiuso</option></select></div>
           <div class="fg"><label class="flbl">Ore / CFP</label><div style="padding:8px 11px;background:var(--bg3);border-radius:var(--r);font-size:13px;font-weight:600;color:var(--accent)" id="ef-ore-display">—</div><input type="hidden" id="ef-ore"></div>
         </div>
       </div>
@@ -919,6 +919,18 @@ textarea.finp{min-height:72px;resize:vertical}
           <div style="background:var(--yellow-bg);border:1.5px dashed var(--yellow);border-radius:var(--r);padding:12px">
             <div style="font-size:10px;font-weight:700;color:var(--yellow);margin-bottom:8px">⚡ Early Bird</div>
             <div class="fg"><label class="flbl" style="color:var(--text3)">Prezzo EA (€)</label><input type="number" class="finp" id="ef-eb" placeholder="es. 59,00" min="0" step="0.01"></div>
+          </div>
+        </div>
+        <!-- BUONI SCONTO -->
+        <div style="margin-top:14px">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;color:var(--text2)">
+            <input type="checkbox" id="ef-has-buoni" onchange="toggleBuoniSconto()" style="accent-color:var(--accent);width:14px;height:14px">
+            <span>🎟 Sono presenti iscritti con buoni sconto</span>
+          </label>
+          <div id="ef-buoni-section" style="display:none;margin-top:12px;background:var(--bg3);border:1.5px dashed var(--accent);border-radius:var(--r);padding:12px">
+            <div style="font-size:10px;font-weight:700;color:var(--accent);margin-bottom:10px">🎟 Buoni sconto</div>
+            <div id="ef-buoni-list"></div>
+            <button type="button" class="btn btn-s btn-sm" onclick="addBuonoSconto()" style="margin-top:8px;font-size:11px">+ Aggiungi fascia sconto</button>
           </div>
         </div>
       </div>
@@ -999,15 +1011,16 @@ textarea.finp{min-height:72px;resize:vertical}
 <div class="mover" id="ev-detail-modal" style="display:none" onclick="if(event.target===this)closeEvDetail()">
   <div class="modal" style="max-width:780px">
     <div class="mhdr">
-      <div>
+      <div style="flex:1">
         <div class="mtitle" id="evd-title">Dettaglio evento</div>
         <div style="font-size:11px;color:var(--text3);margin-top:3px" id="evd-subtitle"></div>
+        <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">
+          <button class="btn btn-p" id="evd-dup-btn" onclick="evdDuplicate()" style="font-size:12px;padding:8px 16px">📋 Duplica</button>
+          <button class="btn btn-s" id="evd-edit-btn" onclick="" style="font-size:12px;padding:8px 16px">✏️ Modifica</button>
+          <button class="btn btn-d" id="evd-del-btn" onclick="" style="font-size:12px;padding:8px 16px">🗑 Elimina</button>
+        </div>
       </div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <button class="btn btn-s btn-sm" id="evd-edit-btn" onclick="">✏️ Modifica</button>
-        <button class="btn btn-d btn-sm" id="evd-del-btn" onclick="">🗑 Elimina</button>
-        <button class="mclose" onclick="closeEvDetail()">✕</button>
-      </div>
+      <button class="mclose" onclick="closeEvDetail()">✕</button>
     </div>
     <div class="mbody">
       <!-- INFO GRID -->
@@ -1124,8 +1137,11 @@ textarea.finp{min-height:72px;resize:vertical}
       </div>
     </div>
     <div class="mfoot">
-      <button class="btn btn-s" onclick="closeNewFormatoreModal()">Annulla</button>
-      <button class="btn btn-p" onclick="saveNewFormatore()">Salva docente</button>
+      <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
+        <button class="btn btn-d" id="new-fm-delete-btn" onclick="deleteFormatore()" style="display:none">🗑 Elimina docente</button>
+        <div style="display:flex;gap:8px;margin-left:auto">
+          <button class="btn btn-s" onclick="closeNewFormatoreModal()">Annulla</button>
+          <button class="btn btn-p" onclick="saveNewFormatore()">Salva docente</button>
     </div>
   </div>
 </div>
@@ -1143,18 +1159,18 @@ const CFP_OBJ={sem:90,corsi:36,deo:20};
 const MESI=['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
 const MESI_FULL=['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
 let FORMATORI_DEF=[
-  {nome:'Mion',temi:[]},
   {nome:'Basso',temi:[]},
+  {nome:'Caputo',temi:[]},
+  {nome:'Cocozza',temi:[]},
   {nome:'De Castro',temi:[]},
-  {nome:'Di Leo',temi:[]},
-  {nome:'Masi',temi:[]},
   {nome:"Dell'Oste",temi:[]},
-  {nome:'Rivetti',temi:[]},
+  {nome:'Di Leo',temi:[]},
   {nome:'Forte',temi:[]},
   {nome:'Frediani',temi:[]},
-  {nome:'Caputo',temi:[]},
   {nome:'Groppo',temi:[]},
-  {nome:'Cocozza',temi:[]}
+  {nome:'Masi',temi:[]},
+  {nome:'Mion',temi:[]},
+  {nome:'Rivetti',temi:[]}
 ];
 
 // ── STATE ──
@@ -1652,20 +1668,20 @@ const THEMES={
   rio:{
     name:'Rio',icon:'🌴',
     dark:{
-      bg:'#021206',bg2:'#051a08',bg3:'#08240c',bg4:'#0c2e10',
-      border:'#0e3812',border2:'#144a18',
-      text:'#f0fff5',text2:'#a0e8b8',text3:'#4a9860',
+      bg:'#001a0a',bg2:'#002e10',bg3:'#003d16',bg4:'#00501e',
+      border:'#006628',border2:'#008234',
+      text:'#f0fff4',text2:'#ffd600',text3:'#b8a000',
       accent:'#00c853',accentRgb:'0,200,83',accentLight:'#40e070',accentDark:'#009a3a',
-      green:'#00c853',red:'#ff1744',yellow:'#ffd600',blue:'#00b0ff',
-      chartColors:['#00c853','#ffd600','#ff1744','#00b0ff','#ff6d00','#c026d3']
+      green:'#00c853',red:'#ff1744',yellow:'#ffd600',blue:'#2979ff',
+      chartColors:['#00c853','#ffd600','#2979ff','#ff1744','#40e070','#ffea00']
     },
     light:{
-      bg:'#fafffe',bg2:'#ffffff',bg3:'#f0fef5',bg4:'#fefce8',
-      border:'#bbf7d0',border2:'#fde047',
-      text:'#002010',text2:'#14532d',text3:'#166534',
-      accent:'#16a34a',accentRgb:'22,163,74',accentLight:'#22c55e',accentDark:'#15803d',
+      bg:'#f5fff8',bg2:'#ffffff',bg3:'#e8fef0',bg4:'#fefde8',
+      border:'#86efac',border2:'#fde047',
+      text:'#001a08',text2:'#14532d',text3:'#15803d',
+      accent:'#16a34a',accentRgb:'22,163,74',accentLight:'#22c55e',accentDark:'#14532d',
       green:'#16a34a',red:'#dc2626',yellow:'#ca8a04',blue:'#1d4ed8',
-      chartColors:['#16a34a','#ca8a04','#1d4ed8','#dc2626','#eab308','#0891b2']
+      chartColors:['#16a34a','#eab308','#1d4ed8','#dc2626','#22c55e','#0284c7']
     }
   }
 };
@@ -1695,7 +1711,7 @@ const AVATAR_GRADIENTS={
   mycelium:'linear-gradient(135deg,#e040a0,#60ff90,#ffe860)',
   nordic:'linear-gradient(135deg,#38bdf8,#34d399,#fbbf24)',
   synthwave:'linear-gradient(135deg,#ff00ff,#00aaff,#ffff00)',
-  rio:'linear-gradient(135deg,#00c853,#ffd600,#00b0ff)'
+  rio:'linear-gradient(135deg,#009a3a,#ffd600,#2979ff)'
 };
 
 function getAvatarGradient(){
@@ -1793,7 +1809,7 @@ function applyAccent(hex){
 function buildThemeGrid(){
   const grid=document.getElementById('accent-grid');
   if(!grid)return;
-  grid.innerHTML=Object.entries(THEMES).map(([key,theme])=>{
+  grid.innerHTML=Object.entries(THEMES).sort(([,a],[,b])=>a.name.localeCompare(b.name,'it')).map(([key,theme])=>{
     const isActive=key===currentTheme;
     const t=theme[currentMode];
     return`<div onclick="selectTheme('${key}')" title="${theme.name}" style="
@@ -2167,8 +2183,8 @@ function renderAll(){
 }
 
 // ── HELPERS ──
-function getSvolti(){return DB.filter(e=>['svolto','consuntivato'].includes(e.stato)&&!e.escludi_kpi);}
-function getKPI(){return DB.filter(e=>!e.escludi_kpi&&['svolto','consuntivato'].includes(e.stato));}
+function getSvolti(){return DB.filter(e=>['chiuso'].includes(e.stato)&&!e.escludi_kpi);}
+function getKPI(){return DB.filter(e=>!e.escludi_kpi&&['chiuso'].includes(e.stato));}
 
 // Unique real events: corsi with same corso_padre_id counted once
 function getUniqueEventi(evArr){
@@ -2190,7 +2206,11 @@ function getTotOre(evArr){
 function cfpEv(e){if(e.tipologia==='seminario')return 2;if(e.tipologia==='corso_4h')return 4;if(e.tipologia==='corso_6h')return 6;if(e.tipologia==='corso_deontologico')return 2;return parseFloat(e.ore)||0;}
 function sessEv(e){if(e.tipologia==='corso_4h')return 2;if(e.tipologia==='corso_6h')return 3;return 1;}
 function badgeTipo(t){const m={seminario:'b-sem',corso_4h:'b-c4',corso_6h:'b-c6',corso_deontologico:'b-deo'};const l={seminario:'Seminario',corso_4h:'Corso 4h',corso_6h:'Corso 6h',corso_deontologico:'Deontologico'};return`<span class="badge ${m[t]||''}">${l[t]||t}</span>`;}
-function badgeStato(s){return`<span class="badge b-${s||'pia'}">${s||'—'}</span>`;}
+function badgeStato(s){
+  const labels={pianificato:'Pianificato',pubblicato:'Pubblicato',svolto:'Svolto',chiuso:'Chiuso'};
+  const cls={pianificato:'b-pia',pubblicato:'b-pub',svolto:'b-svol',chiuso:'b-chiu'};
+  return`<span class="badge ${cls[s]||'b-pia'}">${labels[s]||s||'—'}</span>`;
+}
 function fmtDate(d){if(!d)return'—';const p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
 function fmtEuro(val,decimals=2){const n=parseFloat(val)||0;return '€'+n.toLocaleString('it',{minimumFractionDigits:decimals,maximumFractionDigits:decimals});}
 function fmtEuroK(val){const n=parseFloat(val)||0;if(Math.abs(n)>=1000)return '€'+(n/1000).toLocaleString('it',{minimumFractionDigits:1,maximumFractionDigits:1})+'k';return fmtEuro(n,2);}
@@ -2222,6 +2242,51 @@ function progBar(val,max,grad,label,unit){
     <div class="pbg"><div class="pf" style="width:${dispW}%;background:${bg}"></div></div>
   </div>`;}
 
+
+// Custom time ranges storage
+const customRanges={};
+
+function applyCustomRange(wrapId){
+  const from=document.getElementById('custom-from-'+wrapId)?.value;
+  const to=document.getElementById('custom-to-'+wrapId)?.value;
+  if(!from||!to){showToast('Seleziona data inizio e fine','err');return;}
+  customRanges[wrapId]={from,to};
+  const wrap=document.getElementById(wrapId);
+  const chartId=wrap?.dataset.chart;
+  const type=wrap?.dataset.type;
+  chartTimeFilters[chartId]='custom';
+  if(type==='presenze')renderChartMeseCustom(chartId,from,to);
+  else if(type==='trend')renderChartTrendCustom(chartId,from,to);
+  else if(type==='ricavi')renderChartRicaviCustom(chartId,from,to);
+  else if(type==='rank'){renderFormatori('custom',from,to);}
+  const lbl=document.getElementById('tnav-lbl-'+wrapId);
+  if(lbl)lbl.textContent=from.slice(5)+' → '+to.slice(5);
+}
+
+function filterCustom(data,from,to){
+  return data.filter(e=>e.data&&e.data>=from&&e.data<=to);
+}
+
+function renderChartMeseCustom(id,from,to){
+  const svolti=filterCustom(getSvolti(),from,to);
+  const buckets={};
+  svolti.forEach(e=>{if(!e.data)return;buckets[e.data]=(buckets[e.data]||0)+(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);});
+  const days=[];const cur=new Date(from);const end=new Date(to);
+  while(cur<=end){const k=cur.toISOString().slice(0,10);days.push({lbl:cur.getDate()+'/'+String(cur.getMonth()+1).padStart(2,'0'),val:buckets[k]||0});cur.setDate(cur.getDate()+1);}
+  const type=chartTypes[id]||'bar';const c=getThemeChartColors();const col=c[0];
+  renderChartGrad(id,type,days.map(d=>d.lbl),[{label:'Presenze',data:days.map(d=>d.val),backgroundColor:type==='line'?col+'22':col+'88',borderColor:col,borderWidth:2,borderRadius:type==='line'?0:4,fill:type==='line',tension:.4,pointRadius:type==='line'?3:0,pointBackgroundColor:col}]);
+}
+
+function renderChartRicaviCustom(id,from,to){
+  const kpi=filterCustom(getKPI(),from,to);
+  const buckets={};
+  kpi.forEach(e=>{if(!e.data)return;buckets[e.data]=(buckets[e.data]||0)+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0);});
+  const days=[];const cur=new Date(from);const end=new Date(to);
+  while(cur<=end){const k=cur.toISOString().slice(0,10);days.push({lbl:cur.getDate()+'/'+String(cur.getMonth()+1).padStart(2,'0'),val:buckets[k]||0});cur.setDate(cur.getDate()+1);}
+  const type=chartTypes[id]||'bar';const cRic=getThemeChartColors();const colRic=cRic[2];
+  renderChartGrad(id,type,days.map(d=>d.lbl),[{label:'Ricavi €',data:days.map(d=>d.val),backgroundColor:type==='line'?colRic+'22':colRic+'88',borderColor:colRic,borderWidth:2,borderRadius:type==='line'?0:4,fill:type==='line',tension:.4,pointRadius:type==='line'?3:0,pointBackgroundColor:colRic}]);
+}
+
 // ── TIME BUTTONS ──
 // Time navigation offsets (how many periods back/forward)
 const timeNavOffsets={};
@@ -2234,14 +2299,21 @@ function initTimeBtns(){
     wrap.innerHTML=`
       <div class="time-nav">
         <button class="time-nav-btn" id="tnav-prev-${wid}" onclick="timeNavStep('${wid}',-1)" title="Periodo precedente">‹</button>
-        <div style="display:flex;gap:4px" id="tbtn-group-${wid}">${
-          ['7d','30d','cur','6m','1y','all'].map((r,i)=>{
-            const lbl={['7d']:'7g',['30d']:'30g',cur:'Mese',['6m']:'6M',['1y']:'Anno',all:'Tutto'}[r]||r;
-            return`<button class="tb ${i===5?'on':''}" data-range="${r}" onclick="setTimeFilter('${wid}',this)">${lbl}</button>`;
+        <div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center" id="tbtn-group-${wid}">${
+          ['7d','30d','cur','6m','1y','all','custom'].map((r,i)=>{
+            const lbl={['7d']:'7g',['30d']:'30g',cur:'Mese',['6m']:'6M',['1y']:'Anno',all:'Tutto',custom:'📅'}[r]||r;
+            const title={['7d']:'Ultimi 7 giorni',['30d']:'Ultimi 30 giorni',cur:'Mese corrente',['6m']:'Ultimi 6 mesi',['1y']:'Anno corrente',all:'Tutto',custom:'Periodo personalizzato'}[r]||r;
+            return`<button class="tb ${i===5?'on':''}" data-range="${r}" onclick="setTimeFilter('${wid}',this)" title="${title}">${lbl}</button>`;
           }).join('')
         }</div>
         <span class="time-period-lbl" id="tnav-lbl-${wid}"></span>
         <button class="time-nav-btn" id="tnav-next-${wid}" onclick="timeNavStep('${wid}',1)" title="Periodo successivo" disabled>›</button>
+      </div>
+      <div id="custom-range-${wid}" style="display:none;margin-top:8px;display:none;align-items:center;gap:8px;flex-wrap:wrap">
+        <input type="date" id="custom-from-${wid}" class="finp" style="max-width:140px;font-size:11px;padding:4px 8px">
+        <span style="font-size:11px;color:var(--text3)">→</span>
+        <input type="date" id="custom-to-${wid}" class="finp" style="max-width:140px;font-size:11px;padding:4px 8px">
+        <button class="btn btn-p btn-sm" onclick="applyCustomRange('${wid}')">Applica</button>
       </div>`;
   });
 }
@@ -2334,6 +2406,10 @@ function setTimeFilter(wrapId,btn){
   wrap.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   const range=btn.dataset.range;
+  // Show/hide custom range picker
+  const customDiv=document.getElementById('custom-range-'+wrapId);
+  if(customDiv)customDiv.style.display=range==='custom'?'flex':'none';
+  if(range==='custom')return; // wait for apply
   const chartId=wrap.dataset.chart;
   const type=wrap.dataset.type;
   chartTimeFilters[chartId]=range;
@@ -2380,7 +2456,7 @@ function setChartType(chartId,type,btn){
 function renderDashboard(){
   const kpi=getKPI(),svolti=getSvolti();
   document.getElementById('k-ev').textContent=getUniqueEventi(kpi).length;
-  document.getElementById('k-sess').textContent=kpi.reduce((s,e)=>s+sessEv(e),0);
+  document.getElementById('k-sess').textContent=getUniqueEventi(kpi).reduce((s,e)=>s+sessEv(e),0);
   document.getElementById('k-cfp').textContent=svolti.reduce((s,e)=>s+cfpEv(e),0);
   document.getElementById('k-ore').textContent=svolti.reduce((s,e)=>s+parseFloat(e.ore||0),0).toLocaleString('it');
   const cfpS=svolti.filter(e=>e.tipologia==='seminario').reduce((s,e)=>s+cfpEv(e),0);
@@ -2419,7 +2495,7 @@ function renderDashboard(){
   // Ultimi 4 svolti
   const svoltiGrid=document.getElementById('svolti-grid');
   if(svoltiGrid){
-    const ultimi=DB.filter(e=>['svolto','consuntivato'].includes(e.stato)).sort((a,b)=>b.data>a.data?1:-1).slice(0,4);
+    const ultimi=DB.filter(e=>['svolto','chiuso'].includes(e.stato)).sort((a,b)=>b.data>a.data?1:-1).slice(0,4);
     if(!ultimi.length){svoltiGrid.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="ei">📊</div><div class="et">Nessun evento svolto ancora</div></div>';}
     else{svoltiGrid.innerHTML=ultimi.map(e=>{
       const totPres=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
@@ -2449,12 +2525,47 @@ function renderDashboard(){
 function renderChartMese(id,range,offset){
   offset=offset||0;
   const svolti=filterByTimeWithNav(getSvolti(),range,offset);
-  const mD=Array(12).fill(0);
-  svolti.forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mD[m]+=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);}});
   const type=chartTypes[id]||'bar';
   const c=getThemeChartColors();
   const col=c[0];
-  renderChartGrad(id,type,MESI,[{label:'Presenze',data:mD,backgroundColor:type==='line'?col+'22':col+'88',borderColor:col,borderWidth:2,borderRadius:type==='line'?0:4,fill:type==='line',tension:.4,pointRadius:type==='line'?3:0,pointBackgroundColor:col}]);
+  let labels,data;
+  if(!range||range==='all'||range==='1y'||range==='6m'){
+    // Monthly grouping
+    const mD=Array(12).fill(0);
+    svolti.forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mD[m]+=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);}});
+    labels=MESI;data=mD;
+  } else if(range==='cur'||range==='30d'){
+    // Daily grouping within the period
+    const days=range==='30d'?30:new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate();
+    const now=new Date();const mo=now.getMonth()+offset*(range==='30d'?30:0);
+    const buckets={};
+    svolti.forEach(e=>{
+      if(!e.data)return;
+      const d=e.data;  // YYYY-MM-DD
+      buckets[d]=(buckets[d]||0)+(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
+    });
+    // Build last N days
+    const pts=[];
+    for(let i=days-1;i>=0;i--){
+      const d=new Date();d.setDate(d.getDate()-i+(offset*(range==='30d'?30:days)));
+      const key=d.toISOString().slice(0,10);
+      pts.push({lbl:d.getDate()+'/'+String(d.getMonth()+1).padStart(2,'0'),val:buckets[key]||0});
+    }
+    labels=pts.map(p=>p.lbl);data=pts.map(p=>p.val);
+  } else if(range==='7d'){
+    // Daily last 7 days
+    const buckets={};
+    svolti.forEach(e=>{if(!e.data)return;const d=e.data;buckets[d]=(buckets[d]||0)+(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);});
+    const pts=[];
+    for(let i=6;i>=0;i--){
+      const d=new Date();d.setDate(d.getDate()-i+(offset*7));
+      const key=d.toISOString().slice(0,10);
+      const lbl=['Dom','Lun','Mar','Mer','Gio','Ven','Sab'][d.getDay()]+' '+d.getDate();
+      pts.push({lbl,val:buckets[key]||0});
+    }
+    labels=pts.map(p=>p.lbl);data=pts.map(p=>p.val);
+  } else{labels=MESI;data=Array(12).fill(0);}
+  renderChartGrad(id,type,labels,[{label:'Presenze',data,backgroundColor:type==='line'?col+'22':col+'88',borderColor:col,borderWidth:2,borderRadius:type==='line'?0:4,fill:type==='line',tension:.4,pointRadius:type==='line'?3:0,pointBackgroundColor:col}]);
 }
 
 function renderChartTrend(id,range,offset){
@@ -2516,16 +2627,17 @@ function renderFormatori(range='all'){
     return`<tr><td><div class="rank-pos ${rc}">${i+1}</div></td><td><div style="display:flex;align-items:center;gap:7px">${getFmAvatar(f.nome,26)}<span style="color:var(--text);font-weight:600">${f.nome}</span></div></td><td class="mono">${f.s.tot}</td><td><div class="rank-bar"><div class="rank-bg"><div class="rank-fill" style="width:${maxPag>0?Math.round(f.s.avgPag/maxPag*100):0}%;background:var(--accent)"></div></div><span class="mono" style="font-size:11px">${fmtNum(f.s.avgPag)}</span></div></td><td class="mono" style="color:${tc}">${f.s.tassoPag}%</td><td class="mono">${fmtNum(f.s.avgFI)}</td><td class="mono">${f.s.tassoFI}%</td><td class="mono">${fmtEuro(f.s.ric,2)}</td></tr>`;
   }).join('')}</tbody>`;
   renderFormatoriChart(stats);
-  // Cards
+  // Cards — sorted alphabetically (rank table keeps performance sort)
+  const cardStats=[...stats].sort((a,b)=>a.nome.localeCompare(b.nome,'it'));
   const grid=document.getElementById('formatori-grid');
-  if(grid)grid.innerHTML=stats.map((f,i)=>{
+  if(grid)grid.innerHTML=cardStats.map((f,i)=>{
     const rc=i===0?'r1':i===1?'r2':i===2?'r3':'rn';
     const fmD=FM_DATA[f.nome]||{};
     const grad=typeof getAvatarGradient==='function'?getAvatarGradient():'var(--grad1)';
       const av=fmD.avatar_url?`<img src="${fmD.avatar_url}?t=${Date.now()}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:`<div style="width:100%;height:100%;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--accent)">${getInit(f.nome)}</div>`;
     return`<div class="fc" data-fname="${f.nome}" onclick="openFmModal(this.dataset.fname)">
       <div class="fc-top"><div class="fc-av" style="background:${grad};padding:2px">${av}</div><div style="flex:1"><div class="fc-name">${f.nome}</div><div class="fc-role">${f.temi.slice(0,2).join(' · ')}</div></div><div class="rank-pos ${rc}" style="position:absolute;top:10px;right:10px">${i+1}</div></div>
-      <div class="fc-stats"><div class="fc-stat"><div class="fc-sv">${f.s.tot}</div><div class="fc-sl">Eventi</div></div><div class="fc-stat"><div class="fc-sv" style="color:${f.s.tassoPag>=70?'var(--green)':f.s.tassoPag>=40?'var(--yellow)':'var(--red)'}">${f.s.tassoPag}%</div><div class="fc-sl">Tasso pres.</div></div><div class="fc-stat"><div class="fc-sv">${fmtNum(f.s.avgPag)}</div><div class="fc-sl">Pag. medi</div></div></div>
+      <div class="fc-stats"><div class="fc-stat"><div class="fc-sv">${f.s.tot}</div><div class="fc-sl">Eventi</div></div><div class="fc-stat"><div class="fc-sv" style="color:${f.s.tassoPag>=70?'var(--green)':f.s.tassoPag>=40?'var(--yellow)':'var(--red)'}">${f.s.tassoPag}%</div><div class="fc-sl">Tasso pres.</div></div><div class="fc-stat"><div class="fc-sv" style="color:${(()=>{const mx=Math.max(...FORMATORI_DEF.map(x=>calcStats(x.nome).avgPag));const pct=mx>0?f.s.avgPag/mx*100:0;return pct<25?'#7c3aed':pct<50?'#dc2626':pct<75?'#d97706':'#16a34a';})()}">${fmtNum(f.s.avgPag)}</div><div class="fc-sl">Pag. medi</div></div></div>
     </div>`;
   }).join('');
 }
@@ -2577,7 +2689,7 @@ function openFmModal(nome){
     setH('fm-stats-top',`
       <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:var(--text);font-family:'SF Mono',monospace">${s.tot}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">eventi</div></div>
       <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:${s.tassoPag>=70?'var(--green)':s.tassoPag>=40?'var(--yellow)':'var(--red)'};font-family:'SF Mono',monospace">${s.tassoPag}%</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">tasso pres.</div></div>
-      <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:var(--accent);font-family:'SF Mono',monospace">${fmtNum(s.avgPag)}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">pag. medi</div></div>
+      <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:${(()=>{const mx=Math.max(...FORMATORI_DEF.map(f=>calcStats(f.nome).avgPag));const pct=mx>0?s.avgPag/mx*100:0;return pct<25?'#7c3aed':pct<50?'#dc2626':pct<75?'#d97706':'#16a34a';})()};font-family:'SF Mono',monospace">${fmtNum(s.avgPag)}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">pag. medi</div></div>
       <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:var(--text);font-family:'SF Mono',monospace">${fmtEuroK(s.ric)}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">ricavi</div></div>`);
 
     // Use cached ranking from last renderFormatori call to avoid O(n²)
@@ -2656,7 +2768,7 @@ function renderKPI(){
   const cfpD=svolti.filter(e=>e.tipologia==='corso_deontologico').reduce((s,e)=>s+cfpEv(e),0);
   const ore=svolti.reduce((s,e)=>s+parseFloat(e.ore||0),0);
   const cfpT=cfpS+cfpC+cfpD;
-  const sess=kpi.reduce((s,e)=>s+sessEv(e),0);
+  const sess=getUniqueEventi(kpi).reduce((s,e)=>s+sessEv(e),0);
   const tc={seminario:0,corso_4h:0,corso_6h:0,corso_deontologico:0};
   kpi.forEach(e=>{if(tc[e.tipologia]!==undefined)tc[e.tipologia]++;});
 
@@ -2693,7 +2805,7 @@ function renderKPI(){
   document.getElementById('ops-bars').innerHTML=
     progBar(ore,150,'g','Ore erogate','h')+
     progBar(getUniqueEventi(kpi).length,60,'b','Eventi reali','su 60 target')+
-    progBar(sess,kpi.length*1.5||1,'p','Sessioni calendario','');
+    progBar(sess,getUniqueEventi(kpi).length*1.5||1,'p','Sessioni calendario','');
 
   // Tipologie cards
   function tipoCard(label,val,target,grad,icon){
@@ -2812,12 +2924,29 @@ function renderChartMix(type){
 function renderChartRicavi(id,range,offset){
   offset=offset||0;
   const kpi=filterByTimeWithNav(getKPI(),range,offset);
-  const mR=Array(12).fill(0);
-  kpi.forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mR[m]+=(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0);}});
   const type=chartTypes[id]||'bar';
   const cRic=getThemeChartColors();
   const colRic=cRic[2];
-  renderChartGrad(id,type,MESI,[{label:'Ricavi €',data:mR,backgroundColor:type==='line'?colRic+'22':colRic+'88',borderColor:colRic,borderWidth:2,fill:type==='line',tension:.4,borderRadius:type==='line'?0:4,pointRadius:type==='line'?3:0,pointBackgroundColor:colRic}]);
+  let labels,mR;
+  if(!range||range==='all'||range==='1y'||range==='6m'){
+    mR=Array(12).fill(0);
+    kpi.forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mR[m]+=(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0);}});
+    labels=MESI;
+  } else {
+    // Daily grouping
+    const nDays=range==='7d'?7:30;
+    const buckets={};
+    kpi.forEach(e=>{if(!e.data)return;const d=e.data;buckets[d]=(buckets[d]||0)+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0);});
+    const pts=[];
+    for(let i=nDays-1;i>=0;i--){
+      const d=new Date();d.setDate(d.getDate()-i+(offset*nDays));
+      const key=d.toISOString().slice(0,10);
+      const lbl=range==='7d'?['Dom','Lun','Mar','Mer','Gio','Ven','Sab'][d.getDay()]+' '+d.getDate():d.getDate()+'/'+String(d.getMonth()+1).padStart(2,'0');
+      pts.push({lbl,val:buckets[key]||0});
+    }
+    labels=pts.map(p=>p.lbl);mR=pts.map(p=>p.val);
+  }
+  renderChartGrad(id,type,labels,[{label:'Ricavi €',data:mR,backgroundColor:type==='line'?colRic+'22':colRic+'88',borderColor:colRic,borderWidth:2,borderRadius:type==='line'?0:4,fill:type==='line',tension:.4,pointRadius:type==='line'?3:0,pointBackgroundColor:colRic}]);
 }
 
 // ── CALENDARIO ──
@@ -3034,7 +3163,7 @@ async function handleCSV(input){
 async function confirmImport(rows){
   const gg=['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
   const tipiV=['seminario','corso_4h','corso_6h','corso_deontologico'];
-  const statiV=['pianificato','pubblicato','svolto','consuntivato','annullato','spostato'];
+  const statiV=['pianificato','pubblicato','svolto','chiuso','consuntivato','annullato','spostato'];
   const payload=rows.map(r=>({data:r.data,titolo:r.titolo,tema:r.tema||'Altro',tipologia:tipiV.includes(r.tipologia)?r.tipologia:'seminario',giorno:r.data?gg[new Date(r.data).getDay()]:null,orario:r.orario||null,docente:r.docente||null,ore:parseFloat(r.ore)||2,prezzo:parseFloat(r.prezzo)||0,prezzo_early_bird:parseFloat(r.prezzo_early_bird)||null,iscritti_early_bird:parseInt(r.iscritti_early_bird)||0,presenti_early_bird:parseInt(r.presenti_early_bird)||0,stato:statiV.includes(r.stato)?r.stato:'svolto',iscritti_paganti:parseInt(r.iscritti_paganti)||0,presenti_paganti:parseInt(r.presenti_paganti)||0,iscritti_illimitati:parseInt(r.iscritti_illimitati)||0,presenti_illimitati:parseInt(r.presenti_illimitati)||0,iscritti_gratuiti:parseInt(r.iscritti_gratuiti)||0,presenti_gratuiti:parseInt(r.presenti_gratuiti)||0,note:r.note||null,escludi_kpi:r.escludi_kpi==='true',modified_by:userProfile?.name||'import',modified_at:new Date().toISOString()}));
   try{const{error}=await sb.from('eventi').insert(payload);if(error)throw error;showToast(`Importati ${payload.length} eventi`,'ok');await loadAll();document.getElementById('imp-preview').innerHTML=`<div style="color:var(--green);font-size:13px;font-weight:600">✓ Importati ${payload.length} eventi</div>`;}
   catch(e){showToast('Errore: '+e.message,'err');}
@@ -3132,6 +3261,30 @@ function clearLocalReadIds(){
   try{localStorage.removeItem('fp_notif_read_'+(currentUser?.id||'guest'));}catch(e){}
 }
 
+
+function evdDuplicate(){
+  const id=document.getElementById('evd-title')?._currentEventId;
+  // Get current event id from the detail modal
+  const e=window._currentEvDetail;
+  if(!e)return;
+  closeEvDetail();
+  setTimeout(()=>{
+    openEventoModal(null);
+    setTimeout(()=>{
+      document.getElementById('ef-titolo').value=(e.titolo||'')+' (copia)';
+      document.getElementById('ef-tema').value=e.tema||'';
+      document.getElementById('ef-tipo').value=e.tipologia||'';
+      document.getElementById('ef-stato').value='pianificato';
+      if(e.prezzo)document.getElementById('ef-prezzo').value=e.prezzo;
+      if(e.note)document.getElementById('ef-note').value=e.note;
+      const docArr=e.docenti_nomi||(e.docente?[e.docente]:[]);
+      setDocentiFromArray(docArr);
+      onTipoChange();
+      showToast('Evento duplicato — modifica e salva','info');
+    },150);
+  },200);
+}
+
 // ── EVENT DETAIL MODAL ──
 let evDetailChart=null;
 
@@ -3140,6 +3293,7 @@ function openEvDetail(id){
   const modal=document.getElementById('ev-detail-modal');
   const isDark=document.body.classList.contains('dark');
 
+  window._currentEvDetail=e;
   document.getElementById('evd-title').textContent=e.titolo;
   const tipoLbl={seminario:'Seminario 2h',corso_4h:'Corso tecnico 4h',corso_6h:'Corso tecnico 6h',corso_deontologico:'Corso deontologico 2h'};
   document.getElementById('evd-subtitle').innerHTML=`${fmtDate(e.data)}${e.orario?' · '+e.orario:''} · ${tipoLbl[e.tipologia]||e.tipologia}`;
@@ -3394,6 +3548,13 @@ function openEventoModal(id=null){
   editId=id;selectedDocenti=[];sessioniCorso=[];
   const isEdit=!!id;
   document.getElementById('ev-modal-title').textContent=isEdit?'Modifica evento':'Nuovo evento';
+  // Reset buoni sconto
+  buoniScontoList=[];
+  const bChk=document.getElementById('ef-has-buoni');
+  const bSec=document.getElementById('ef-buoni-section');
+  if(bChk)bChk.checked=false;
+  if(bSec)bSec.style.display='none';
+  renderBuoniSconto();
   const dupBtn=document.getElementById('ev-dup-btn');
   if(dupBtn)dupBtn.style.display=isEdit?'inline-flex':'none';
   if(isEdit){
@@ -3409,6 +3570,8 @@ function openEventoModal(id=null){
     sv('ef-ig',e.iscritti_gratuiti);sv('ef-pg',e.presenti_gratuiti);
     sv('ef-note',e.note);
     document.getElementById('ef-escludi').checked=!!e.escludi_kpi;
+    // Load buoni sconto
+    if(e.buoni_sconto){try{setBuoniScontoFromData(JSON.parse(e.buoni_sconto));}catch(_){}}
     const oreDisp=document.getElementById('ef-ore-display');
     if(oreDisp)oreDisp.textContent=(oreMap[e.tipologia]||e.ore||2)+'h';
     setDocentiFromArray(e.docenti_nomi||(e.docente?[e.docente]:[]));
@@ -3460,7 +3623,8 @@ async function saveEvento(){
     note:document.getElementById('ef-note').value||null,
     escludi_kpi:document.getElementById('ef-escludi').checked,
     modified_by:userProfile?.name||'—',
-    modified_at:new Date().toISOString()
+    modified_at:new Date().toISOString(),
+    buoni_sconto:getBuoniScontoData().length>0?JSON.stringify(getBuoniScontoData()):null
   };
   if((tipo==='corso_4h'||tipo==='corso_6h')&&!editId){
     const nSess={corso_4h:2,corso_6h:3}[tipo];
@@ -3534,7 +3698,11 @@ function repPreview(){
     const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_illimitati)||0);
     const tp=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
     const tasso=ti>0?Math.round(tp/ti*100)+'%':'—';
-    const ric=Math.round((parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0));
+    const ric=(()=>{
+      let r=(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0);
+      if(e.buoni_sconto){try{const b=JSON.parse(e.buoni_sconto);if(Array.isArray(b))b.forEach(bu=>r+=(bu.nr||0)*(bu.prezzo||0));}catch(_){}}
+      return Math.round(r);
+    })();
     return '<tr><td class="mono">'+fmtDate(e.data)+'</td><td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+e.titolo+'</td><td>'+badgeTipo(e.tipologia)+'</td><td>'+(e.docente||'—')+'</td><td>'+badgeStato(e.stato)+'</td><td class="mono">'+ti+'</td><td class="mono">'+tp+'</td><td class="mono">'+tasso+'</td><td class="mono">'+cfpEv(e)+'</td><td class="mono">'+fmtEuro(ric,2)+'</td></tr>';
   }).join('');
   tbl.innerHTML='<table><thead><tr><th>Data</th><th>Titolo</th><th>Tipo</th><th>Docente</th><th>Stato</th><th>Iscr.</th><th>Pres.</th><th>Tasso</th><th>CFP</th><th>Ricavi</th></tr></thead><tbody>'+rows+'</tbody></table>';
@@ -3545,7 +3713,11 @@ function getRepEventiData(){
     const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_illimitati)||0);
     const tp=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
     const tasso=ti>0?Math.round(tp/ti*100):0;
-    const ric=Math.round((parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0));
+    const ric=(()=>{
+      let r=(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0);
+      if(e.buoni_sconto){try{const b=JSON.parse(e.buoni_sconto);if(Array.isArray(b))b.forEach(bu=>r+=(bu.nr||0)*(bu.prezzo||0));}catch(_){}}
+      return Math.round(r);
+    })();
     return{data:e.data||'',titolo:e.titolo||'',tema:e.tema||'',tipologia:e.tipologia||'',docente:e.docente||'',stato:e.stato||'',iscritti:ti,presenti:tp,tasso:tasso+'%',cfp:cfpEv(e),ricavi:ric};
   });
 }
@@ -3558,7 +3730,7 @@ function getRepFormatoriData(){
 }
 
 function getRepKPIData(){
-  const ev=DB.filter(e=>['svolto','consuntivato'].includes(e.stato)&&!e.escludi_kpi);
+  const ev=DB.filter(e=>['chiuso'].includes(e.stato)&&!e.escludi_kpi);
   const cfpS=ev.filter(e=>e.tipologia==='seminario').reduce((s,e)=>s+cfpEv(e),0);
   const seen=new Set();
   const cfpC=ev.filter(e=>e.tipologia==='corso_4h'||e.tipologia==='corso_6h').reduce((s,e)=>{if(e.corso_padre_id){if(seen.has(e.corso_padre_id))return s;seen.add(e.corso_padre_id);return s+(e.tipologia==='corso_4h'?4:6);}return s+cfpEv(e);},0);
@@ -3574,7 +3746,7 @@ function getRepKPIData(){
 }
 
 function getRepCommercialeData(){
-  const ev=DB.filter(e=>['svolto','consuntivato'].includes(e.stato)&&!e.escludi_kpi);
+  const ev=DB.filter(e=>['chiuso'].includes(e.stato)&&!e.escludi_kpi);
   return MESI.map((m,i)=>{
     const me=ev.filter(e=>e.data&&parseInt(e.data.split('-')[1])-1===i);
     const pag=me.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
@@ -3737,6 +3909,11 @@ function openNewFormatoreModal(nome=null){
     if(avPreview)avPreview.innerHTML='<span id="new-fm-av-init">?</span><div class="av-overlay">Foto</div>';
   }
   renderNewFmTemi();
+  // Show/hide delete and update save button label
+  const delBtn=document.getElementById('new-fm-delete-btn');
+  const saveBtn=document.getElementById('new-fm-save-btn');
+  if(delBtn) delBtn.style.display=isEdit?'block':'none';
+  if(saveBtn) saveBtn.textContent=isEdit?'Salva modifiche':'Crea formatore';
   document.getElementById('new-fm-modal').style.display='flex';
 }
 
@@ -3784,6 +3961,24 @@ function renderNewFmTemi(){
     x.addEventListener('click',()=>removeNewFmTema(t));
     chip.appendChild(x);el.appendChild(chip);
   });
+}
+
+
+async function deleteFormatore(){
+  const nome=editingFormatore;
+  if(!nome)return;
+  if(!confirm('Eliminare definitivamente il profilo di '+nome+'? Operazione non reversibile.'))return;
+  try{
+    const{error}=await sb.from('formatori_data').delete().eq('nome',nome);
+    if(error)throw error;
+    // Remove from FORMATORI_DEF
+    const idx=FORMATORI_DEF.findIndex(f=>f.nome===nome);
+    if(idx>-1)FORMATORI_DEF.splice(idx,1);
+    delete FM_DATA[nome];
+    closeNewFormatoreModal();
+    renderFormatori();
+    showToast('Docente '+nome+' eliminato','ok');
+  }catch(e){showToast('Errore eliminazione: '+e.message,'err');}
 }
 
 async function saveNewFormatore(){
@@ -3927,6 +4122,70 @@ async function saveNuovoFormatore(){
   showToast('Formatore '+nome+' creato','ok');
   closeNuovoFormatore();
   renderFormatori();
+}
+
+
+// ── BUONI SCONTO ──
+let buoniScontoList=[];
+
+function toggleBuoniSconto(){
+  const checked=document.getElementById('ef-has-buoni')?.checked;
+  const sec=document.getElementById('ef-buoni-section');
+  if(sec)sec.style.display=checked?'block':'none';
+  if(checked&&buoniScontoList.length===0)addBuonoSconto();
+}
+
+function addBuonoSconto(){
+  buoniScontoList.push({id:Date.now(),nr:0,prezzo:0});
+  renderBuoniSconto();
+}
+
+function removeBuonoSconto(id){
+  buoniScontoList=buoniScontoList.filter(b=>b.id!==id);
+  renderBuoniSconto();
+}
+
+function renderBuoniSconto(){
+  const el=document.getElementById('ef-buoni-list');
+  if(!el)return;
+  el.innerHTML='';
+  buoniScontoList.forEach((b,i)=>{
+    const row=document.createElement('div');
+    row.style.cssText='display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;margin-bottom:8px';
+    row.innerHTML=`
+      <div class="fg" style="margin:0">
+        <label class="flbl">Nr. iscritti fascia ${i+1}</label>
+        <input type="number" class="finp" value="${b.nr||''}" min="0" placeholder="es. 5"
+          onchange="buoniScontoList[${i}].nr=parseInt(this.value)||0" style="padding:6px 10px">
+      </div>
+      <div class="fg" style="margin:0">
+        <label class="flbl">Prezzo pagato (€)</label>
+        <input type="number" class="finp" value="${b.prezzo||''}" min="0" step="0.01" placeholder="es. 45,00"
+          onchange="buoniScontoList[${i}].prezzo=parseFloat(this.value)||0" style="padding:6px 10px">
+      </div>
+      <button type="button" onclick="removeBuonoSconto(${b.id})" class="btn btn-d btn-sm" style="padding:6px 10px;height:fit-content">✕</button>`;
+    el.appendChild(row);
+  });
+}
+
+function getBuoniScontoData(){
+  if(!document.getElementById('ef-has-buoni')?.checked)return[];
+  return buoniScontoList.filter(b=>b.nr>0);
+}
+
+function setBuoniScontoFromData(data){
+  const sec=document.getElementById('ef-buoni-section');
+  const chk=document.getElementById('ef-has-buoni');
+  if(!data||!data.length){
+    buoniScontoList=[];
+    if(chk)chk.checked=false;
+    if(sec)sec.style.display='none';
+    return;
+  }
+  buoniScontoList=data.map(d=>({id:Date.now()+Math.random(),nr:d.nr,prezzo:d.prezzo}));
+  if(chk)chk.checked=true;
+  if(sec)sec.style.display='block';
+  renderBuoniSconto();
 }
 
 // ── START ──
