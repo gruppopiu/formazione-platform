@@ -822,7 +822,7 @@ textarea.finp{min-height:72px;resize:vertical}
 
 
 <!-- PAGE: REPORT -->
-<div id="page-report" class="page" style="display:none">
+<div id="page-report" class="page">
   <div class="ph">
     <div><div class="ptitle">Report & Download</div><div class="psub">Esporta i dati in CSV o PDF con filtri personalizzati</div></div>
   </div>
@@ -2761,9 +2761,9 @@ function renderChartGrad(id,type,labels,datasets,extra={}){
 
 // ── NAV ──
 function showPage(id,el){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active');p.style.display='';}); 
   document.querySelectorAll('.sbi').forEach(i=>i.classList.remove('active'));
-  const pg=document.getElementById('page-'+id);if(pg)pg.classList.add('active');
+  const pg=document.getElementById('page-'+id);if(pg){pg.classList.add('active');pg.style.display='';}
   if(el)el.classList.add('active');
   // Re-render page-specific
   const map={'home':renderDashboard,'kpi':renderKPI,'commerciale':renderCommerciale,'formatori':()=>renderFormatori(),'calendario':renderCalendario,'notifiche':()=>{notifPage=0;markAllRead();},'impostazioni':()=>{document.getElementById('set-dark').checked=currentMode==='dark';buildThemeGrid();},'profilo':()=>showPage('impostazioni',document.getElementById('nav-impostazioni')),'report':renderReport};
