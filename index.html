@@ -1959,6 +1959,24 @@ function renderAll(){
 // ── HELPERS ──
 function getSvolti(){return DB.filter(e=>['svolto','consuntivato'].includes(e.stato)&&!e.escludi_kpi);}
 function getKPI(){return DB.filter(e=>!e.escludi_kpi&&['svolto','consuntivato'].includes(e.stato));}
+
+// Unique real events: corsi with same corso_padre_id counted once
+function getUniqueEventi(evArr){
+  const seen=new Set();
+  return evArr.filter(e=>{
+    if(e.corso_padre_id){
+      if(seen.has(e.corso_padre_id))return false;
+      seen.add(e.corso_padre_id);
+    }
+    return true;
+  });
+}
+
+// Total CFP hours for an array (deduplicated)
+function getTotOre(evArr){
+  // For multi-session courses, sum per-modulo hours (ore=2 each) - already correct
+  return evArr.reduce((s,e)=>s+(parseFloat(e.ore)||0),0);
+}
 function cfpEv(e){if(e.tipologia==='seminario')return 2;if(e.tipologia==='corso_4h')return 4;if(e.tipologia==='corso_6h')return 6;if(e.tipologia==='corso_deontologico')return 2;return parseFloat(e.ore)||0;}
 function sessEv(e){if(e.tipologia==='corso_4h')return 2;if(e.tipologia==='corso_6h')return 3;return 1;}
 function badgeTipo(t){const m={seminario:'b-sem',corso_4h:'b-c4',corso_6h:'b-c6',corso_deontologico:'b-deo'};const l={seminario:'Seminario',corso_4h:'Corso 4h',corso_6h:'Corso 6h',corso_deontologico:'Deontologico'};return`<span class="badge ${m[t]||''}">${l[t]||t}</span>`;}
@@ -2151,7 +2169,7 @@ function setChartType(chartId,type,btn){
 // ── DASHBOARD ──
 function renderDashboard(){
   const kpi=getKPI(),svolti=getSvolti();
-  document.getElementById('k-ev').textContent=kpi.length;
+  document.getElementById('k-ev').textContent=getUniqueEventi(kpi).length;
   document.getElementById('k-sess').textContent=kpi.reduce((s,e)=>s+sessEv(e),0);
   document.getElementById('k-cfp').textContent=svolti.reduce((s,e)=>s+cfpEv(e),0);
   document.getElementById('k-ore').textContent=svolti.reduce((s,e)=>s+parseFloat(e.ore||0),0).toLocaleString('it');
@@ -2464,7 +2482,7 @@ function renderKPI(){
   // Ops bars
   document.getElementById('ops-bars').innerHTML=
     progBar(ore,150,'g','Ore erogate','h')+
-    progBar(kpi.length,60,'b','Eventi reali','su 60 target')+
+    progBar(getUniqueEventi(kpi).length,60,'b','Eventi reali','su 60 target')+
     progBar(sess,kpi.length*1.5||1,'p','Sessioni calendario','');
 
   // Tipologie cards
@@ -2843,11 +2861,11 @@ function renderChartGrad(id,type,labels,datasets,extra={}){
       return ds;
     });
   }
-  const scalesBase={x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}},y:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}};
+  const scalesBase={x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}},y:{ticks:{color:tc,font:{size:9},callback:(v)=>typeof v==='number'?v.toLocaleString('it'):v},grid:{color:gc}}};
   const isCircular=type==='doughnut'||type==='pie';
   charts[id]=new Chart(ctx,{type,data:{labels,datasets},options:{
     responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:isCircular||datasets.length>1,labels:{color:tc,font:{size:10},boxWidth:10,padding:8}},tooltip:{backgroundColor:isDark?'#1c1c1c':'#fff',titleColor:isDark?'#e8eaf0':'#111',bodyColor:isDark?'#8b9bb4':'#4b5563',borderColor:isDark?'#2e2e2e':'#e2e6ed',borderWidth:1}},
+    plugins:{legend:{display:isCircular||datasets.length>1,labels:{color:tc,font:{size:10},boxWidth:10,padding:8}},tooltip:{backgroundColor:isDark?'#1c1c1c':'#fff',titleColor:isDark?'#e8eaf0':'#111',bodyColor:isDark?'#8b9bb4':'#4b5563',borderColor:isDark?'#2e2e2e':'#e2e6ed',borderWidth:1,callbacks:{label:(ctx)=>{const v=ctx.parsed.y??ctx.parsed;return ' '+(typeof v==='number'?v.toLocaleString('it'):v);}}}},
     scales:isCircular?{}:{...scalesBase,...(extra.indexAxis==='y'?{x:scalesBase.x,y:{...scalesBase.y}}:{}),...(extra.stacked?{x:{...scalesBase.x,stacked:true},y:{...scalesBase.y,stacked:true}}:{})},
     ...extra
   }});
