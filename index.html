@@ -450,7 +450,7 @@ textarea.finp{min-height:72px;resize:vertical}
       <div class="sbi" id="nav-kpi" onclick="showPage('kpi',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>KPI Formativi</div>
       <div class="sbi" id="nav-commerciale" onclick="showPage('commerciale',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Commerciale</div>
       <div class="sb-sec">Dati</div>
-      <div class="sbi" id="nav-importa" onclick="showPage('importa',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Importa CSV</div>
+      
       <div class="sbi" id="nav-report" onclick="showPage('report',this)">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Report
             </div>
@@ -598,7 +598,7 @@ textarea.finp{min-height:72px;resize:vertical}
 
     <!-- FORMATORI -->
     <div class="page" id="page-formatori">
-      <div class="ph"><div><div class="pt">Formatori</div><div class="ps">Classifica, schede e performance</div></div></div>
+      <div class="ph"><div><div class="pt">Formatori</div><div class="ps">Classifica, schede e performance</div></div><button class="btn btn-p" onclick="openNewFormatoreModal()">+ Nuovo formatore</button></div>
       <div class="card">
         <div class="chart-toolbar">
           <div class="ctitle" style="margin:0">Classifica andamento <span class="ctitle-sub">ordinata per paganti medi</span></div>
@@ -834,7 +834,7 @@ textarea.finp{min-height:72px;resize:vertical}
       <div class="fg"><label class="flbl">Tipologia</label><select class="finp" id="rep-tipo"><option value="">Tutte</option><option value="seminario">Seminari</option><option value="corso_4h">Corsi 4h</option><option value="corso_6h">Corsi 6h</option><option value="corso_deontologico">Deontologici</option></select></div>
       <div class="fg"><label class="flbl">Stato</label><select class="finp" id="rep-stato"><option value="">Tutti</option><option value="svolto">Svolto</option><option value="consuntivato">Consuntivato</option><option value="pianificato">Pianificato</option><option value="pubblicato">Pubblicato</option></select></div>
       <div class="fg"><label class="flbl">Docente</label><select class="finp" id="rep-docente"><option value="">Tutti</option><option>Mion</option><option>Basso</option><option>De Castro</option><option>Di Leo</option><option>Masi</option><option value="Dell'Oste">Dell'Oste</option><option>Rivetti</option><option>Forte</option><option>Frediani</option><option>Caputo</option><option>Groppo</option><option>Cocozza</option></select></div>
-      <div class="fg"><label class="flbl">Tema</label><select class="finp" id="rep-tema"><option value="">Tutti</option><option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Comunità Energetiche</option><option>CTU</option><option>Bonus Casa</option></select></div>
+      <div class="fg"><label class="flbl">Tema</label><select class="finp" id="rep-tema"><option value="">Tutti</option><option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Comunità Energetiche</option><option>CTU</option><option>Bonus Casa</option><option>CAF</option><option>Assicurazioni</option></select></div>
     </div>
     <div style="display:flex;align-items:center;gap:10px">
       <button class="btn btn-s" onclick="repPreview()">👁 Anteprima</button>
@@ -889,7 +889,7 @@ textarea.finp{min-height:72px;resize:vertical}
         <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">📋 Informazioni base</div>
         <div class="fgrid">
           <div class="fg full"><label class="flbl">Titolo *</label><input type="text" class="finp" id="ef-titolo" placeholder="Es: Urbanistica — novità 2026"></div>
-          <div class="fg"><label class="flbl">Tema *</label><select class="finp" id="ef-tema"><option value="">Seleziona tema</option><option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Successioni</option><option>Bonus Casa</option><option>Locazioni</option><option>Fisco Professionisti</option><option>Professione</option><option>Comunità Energetiche</option><option>CTU</option><option>Agricoltura</option><option>Inglese</option></select></div>
+          <div class="fg"><label class="flbl">Tema *</label><select class="finp" id="ef-tema"><option value="">Seleziona tema</option><option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Successioni</option><option>Bonus Casa</option><option>Locazioni</option><option>Fisco Professionisti</option><option>Professione</option><option>Comunità Energetiche</option><option>CTU</option><option>Agricoltura</option><option>Inglese</option><option>CAF</option><option>Assicurazioni</option></select></div>
           <div class="fg"><label class="flbl">Tipologia *</label><select class="finp" id="ef-tipo" onchange="onTipoChange()"><option value="">Seleziona</option><option value="seminario">Seminario (2h)</option><option value="corso_4h">Corso tecnico 4h (2 sessioni)</option><option value="corso_6h">Corso tecnico 6h (3 sessioni)</option><option value="corso_deontologico">Corso deontologico (2h)</option></select></div>
           <div class="fg full">
             <label class="flbl">Docente/i <span style="font-size:9px;color:var(--text3);text-transform:none;letter-spacing:0">selezione multipla possibile</span></label>
@@ -918,10 +918,10 @@ textarea.finp{min-height:72px;resize:vertical}
         <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">💶 Prezzi</div>
         <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Early bird opzionale</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-          <div class="fg"><label class="flbl">Prezzo pieno (€)</label><input type="number" class="finp" id="ef-prezzo" placeholder="es. 79" min="0"></div>
+          <div class="fg"><label class="flbl">Prezzo pieno (€)</label><input type="number" class="finp" id="ef-prezzo" placeholder="es. 79,00" min="0" step="0.01"></div>
           <div style="background:var(--yellow-bg);border:1.5px dashed var(--yellow);border-radius:var(--r);padding:12px">
             <div style="font-size:10px;font-weight:700;color:var(--yellow);margin-bottom:8px">⚡ Early Bird</div>
-            <div class="fg"><label class="flbl" style="color:var(--text3)">Prezzo EA (€)</label><input type="number" class="finp" id="ef-eb" placeholder="es. 59" min="0"></div>
+            <div class="fg"><label class="flbl" style="color:var(--text3)">Prezzo EA (€)</label><input type="number" class="finp" id="ef-eb" placeholder="es. 59,00" min="0" step="0.01"></div>
           </div>
         </div>
       </div>
@@ -1039,6 +1039,100 @@ textarea.finp{min-height:72px;resize:vertical}
 </div>
 
 
+
+<!-- MODAL NUOVO FORMATORE -->
+<div class="mover" id="nuovo-fm-modal" style="display:none" onclick="if(event.target===this)closeNuovoFormatore()">
+  <div class="modal" style="max-width:520px">
+    <div class="mhdr">
+      <div class="mtitle">Nuovo formatore</div>
+      <button class="mclose" onclick="closeNuovoFormatore()">✕</button>
+    </div>
+    <div class="mbody">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+        <div class="av-big" id="nfm-av-preview" onclick="document.getElementById('nfm-foto-inp').click()" style="cursor:pointer">
+          <span id="nfm-init">?</span>
+          <div class="av-overlay">Foto</div>
+        </div>
+        <input type="file" id="nfm-foto-inp" accept="image/*" style="display:none" onchange="previewNFmFoto(this)">
+        <div style="flex:1">
+          <div class="fg" style="margin-bottom:10px">
+            <label class="flbl">Nome completo *</label>
+            <input type="text" class="finp" id="nfm-nome" placeholder="es. Mario Rossi" oninput="document.getElementById('nfm-init').textContent=getInit(this.value)||'?'">
+          </div>
+          <div class="fg">
+            <label class="flbl">Email</label>
+            <input type="email" class="finp" id="nfm-email" placeholder="nome@studio.it">
+          </div>
+        </div>
+      </div>
+      <div class="fgrid">
+        <div class="fg">
+          <label class="flbl">Telefono</label>
+          <input type="text" class="finp" id="nfm-tel" placeholder="+39 ...">
+        </div>
+        <div class="fg">
+          <label class="flbl">Temi principali <span style="font-size:9px;color:var(--text3);text-transform:none">separati da virgola</span></label>
+          <input type="text" class="finp" id="nfm-temi" placeholder="es. Catasto, Urbanistica">
+        </div>
+        <div class="fg full">
+          <label class="flbl">CV / Presentazione</label>
+          <textarea class="finp" id="nfm-cv" placeholder="Breve presentazione del formatore..." style="min-height:80px"></textarea>
+        </div>
+        <div class="fg full">
+          <label class="flbl">Note interne</label>
+          <textarea class="finp" id="nfm-note" placeholder="Note operative, condizioni, disponibilità..." style="min-height:60px"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="btn btn-s" onclick="closeNuovoFormatore()">Annulla</button>
+      <button class="btn btn-p" onclick="saveNuovoFormatore()">Crea formatore</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL NUOVO FORMATORE -->
+<div class="mover" id="new-fm-modal" style="display:none" onclick="if(event.target===this)closeNewFormatoreModal()">
+  <div class="modal" style="max-width:500px">
+    <div class="mhdr">
+      <div class="mtitle" id="new-fm-title">Nuovo docente</div>
+      <button class="mclose" onclick="closeNewFormatoreModal()">✕</button>
+    </div>
+    <div class="mbody">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+        <div class="av-big" id="new-fm-av-preview" onclick="document.getElementById('new-fm-av-input').click()" style="cursor:pointer">
+          <span id="new-fm-av-init">?</span>
+          <div class="av-overlay">Foto</div>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:11px;color:var(--text3);margin-bottom:6px">Foto profilo (opzionale)</div>
+          <input type="file" id="new-fm-av-input" accept="image/*" style="display:none" onchange="previewNewFmAv(this)">
+          <button class="btn btn-s btn-sm" onclick="document.getElementById('new-fm-av-input').click()">Carica foto</button>
+        </div>
+      </div>
+      <div class="fgrid">
+        <div class="fg full"><label class="flbl">Nome completo *</label><input type="text" class="finp" id="new-fm-nome" placeholder="Es. Mario Rossi" oninput="updateNewFmInit()"></div>
+        <div class="fg full"><label class="flbl">Temi di competenza <span style="font-size:9px;color:var(--text3);text-transform:none;letter-spacing:0">seleziona uno o più temi</span></label>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px" id="new-fm-temi-sel"></div>
+          <select class="finp" id="new-fm-temi-add" onchange="addNewFmTema(this)">
+            <option value="">+ Aggiungi tema</option>
+            <option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Successioni</option><option>Bonus Casa</option><option>Locazioni</option><option>Fisco Professionisti</option><option>Professione</option><option>Comunità Energetiche</option><option>CTU</option><option>Agricoltura</option><option>Inglese</option><option>CAF</option><option>Assicurazioni</option>
+          </select>
+        </div>
+        <div class="fg"><label class="flbl">Email</label><input type="email" class="finp" id="new-fm-email" placeholder="nome@esempio.it"></div>
+        <div class="fg"><label class="flbl">Telefono</label><input type="text" class="finp" id="new-fm-tel" placeholder="+39 000 0000000"></div>
+        <div class="fg full"><label class="flbl">CV / Bio</label><textarea class="finp" id="new-fm-cv" placeholder="Breve presentazione, specializzazioni, esperienze..." style="min-height:80px"></textarea></div>
+        <div class="fg full"><label class="flbl">Note interne</label><textarea class="finp" id="new-fm-note" placeholder="Note riservate per uso interno..." style="min-height:50px"></textarea></div>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="btn btn-s" onclick="closeNewFormatoreModal()">Annulla</button>
+      <button class="btn btn-p" onclick="saveNewFormatore()">Salva docente</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1046,24 +1140,24 @@ const SB_URL='https://bubevkjpvwioudohnkng.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ1YmV2a2pwdndpb3Vkb2hua25nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MjY0MTMsImV4cCI6MjA4OTQwMjQxM30.7DKQDh35nej0cL1bRM_jvR8i1AhzaYZYvEdcCQjxePk';
 const sb=supabase.createClient(SB_URL,SB_KEY);
 
-const TEMI_PESI={'Urbanistica':20.9,'Catasto':13.97,'Deontologia':13.38,'Intelligenza Artificiale':10.69,'Fisco Immobiliare':8.88,'Successioni':8.61,'Bonus Casa':6.0,'Locazioni':4.66,'Fisco Professionisti':3.21,'Professione':3.13,'Comunità Energetiche':1.80,'CTU':1.80,'Agricoltura':1.73,'Inglese':1.21};
+const TEMI_PESI={'Urbanistica':20.9,'Catasto':13.97,'Deontologia':13.38,'Intelligenza Artificiale':10.69,'Fisco Immobiliare':8.88,'Successioni':8.61,'Bonus Casa':6.0,'Locazioni':4.66,'Fisco Professionisti':3.21,'Professione':3.13,'Comunità Energetiche':1.80,'CTU':1.80,'Agricoltura':1.73,'Inglese':1.21,'CAF':1.0,'Assicurazioni':1.0};
 const OBJ={seminario:55,corso_4h:6,corso_6h:2,corso_deontologico:10};
 const CFP_OBJ={sem:90,corsi:36,deo:20};
 const MESI=['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
 const MESI_FULL=['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
 let FORMATORI_DEF=[
-  {nome:'Mion',temi:['Catasto','Urbanistica','Fisco Immobiliare']},
-  {nome:'Basso',temi:['Catasto','Urbanistica','Bonus Casa']},
-  {nome:'De Castro',temi:['Urbanistica','Bonus Casa','Professione']},
-  {nome:'Di Leo',temi:['Urbanistica','Catasto','Fisco Immobiliare']},
-  {nome:'Masi',temi:['Deontologia','Professione']},
-  {nome:"Dell'Oste",temi:['Bonus Casa','Fisco Immobiliare','Successioni']},
-  {nome:'Rivetti',temi:['Fisco Professionisti','Fisco Immobiliare','Successioni']},
-  {nome:'Forte',temi:['Fisco Immobiliare','Successioni','Catasto']},
-  {nome:'Frediani',temi:['CTU','Professione']},
-  {nome:'Caputo',temi:['Intelligenza Artificiale','Deontologia']},
-  {nome:'Groppo',temi:['Inglese']},
-  {nome:'Cocozza',temi:['Deontologia','Professione','Intelligenza Artificiale']}
+  {nome:'Mion',temi:[]},
+  {nome:'Basso',temi:[]},
+  {nome:'De Castro',temi:[]},
+  {nome:'Di Leo',temi:[]},
+  {nome:'Masi',temi:[]},
+  {nome:"Dell'Oste",temi:[]},
+  {nome:'Rivetti',temi:[]},
+  {nome:'Forte',temi:[]},
+  {nome:'Frediani',temi:[]},
+  {nome:'Caputo',temi:[]},
+  {nome:'Groppo',temi:[]},
+  {nome:'Cocozza',temi:[]}
 ];
 
 // ── STATE ──
@@ -1877,7 +1971,7 @@ function renderAll(){
 
 // ── HELPERS ──
 function getSvolti(){return DB.filter(e=>['svolto','consuntivato'].includes(e.stato)&&!e.escludi_kpi);}
-function getKPI(){return DB.filter(e=>!e.escludi_kpi);}
+function getKPI(){return DB.filter(e=>!e.escludi_kpi&&['svolto','consuntivato'].includes(e.stato));}
 function cfpEv(e){if(e.tipologia==='seminario')return 2;if(e.tipologia==='corso_4h')return 4;if(e.tipologia==='corso_6h')return 6;if(e.tipologia==='corso_deontologico')return 2;return parseFloat(e.ore)||0;}
 function sessEv(e){if(e.tipologia==='corso_4h')return 2;if(e.tipologia==='corso_6h')return 3;return 1;}
 function badgeTipo(t){const m={seminario:'b-sem',corso_4h:'b-c4',corso_6h:'b-c6',corso_deontologico:'b-deo'};const l={seminario:'Seminario',corso_4h:'Corso 4h',corso_6h:'Corso 6h',corso_deontologico:'Deontologico'};return`<span class="badge ${m[t]||''}">${l[t]||t}</span>`;}
@@ -2169,15 +2263,22 @@ function renderChartTipo(type){
 
 // ── FORMATORI ──
 function calcStats(nome,range='all'){
-  const ev=filterByTime(DB.filter(e=>e.docente===nome&&!e.escludi_kpi),range);
-  const tot=ev.length;
+  // Include events where docente matches OR docenti_nomi array includes nome
+  const ev=filterByTime(DB.filter(e=>(e.docente===nome||(e.docenti_nomi&&e.docenti_nomi.includes(nome)))&&!e.escludi_kpi),range);
+  // Count unique events (deduplicate multi-session courses by corso_padre_id)
+  const seen=new Set();
+  const evUniq=ev.filter(e=>{
+    if(e.corso_padre_id){if(seen.has(e.corso_padre_id))return false;seen.add(e.corso_padre_id);}
+    return true;
+  });
+  const tot=evUniq.length;
   const ip=ev.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0),0);
   const pp=ev.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
   const ii=ev.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
   const pi=ev.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
   const avgPag=tot>0?ip/tot:0;const avgFI=tot>0?ii/tot:0;
   const tassoPag=ip>0?Math.round(pp/ip*100):0;const tassoFI=ii>0?Math.round(pi/ii*100):0;
-  const ric=ev.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0),0);
+  const ric=ev.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0),0);
   const temiUsati=[...new Set(ev.map(e=>e.tema).filter(Boolean))];
   return{tot,ip,pp,ii,pi,avgPag,avgFI,tassoPag,tassoFI,ric,temiUsati,ev};
 }
@@ -2250,7 +2351,8 @@ function openFmModal(nome){
       }
     }
 
-    setH('fm-temi-ref', fd.temi.map(t=>`<span class="badge" style="background:var(--accent-bg);color:var(--accent)">${t}</span>`).join(''));
+    const fmTemiDisplay=(FM_DATA[nome]?.temi)||fd.temi||[];
+    setH('fm-temi-ref', fmTemiDisplay.length?fmTemiDisplay.map(t=>`<span class="badge" style="background:var(--accent-bg);color:var(--accent)">${t}</span>`).join(''):'<span style="font-size:11px;color:var(--text3)">Nessun tema assegnato</span>');
 
     setH('fm-stats-top',`
       <div style="text-align:center"><div style="font-size:18px;font-weight:700;color:var(--text);font-family:'SF Mono',monospace">${s.tot}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase">eventi</div></div>
@@ -2555,7 +2657,7 @@ function renderEventi(){
     const tp=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
     const ta=ti>0?Math.round(tp/ti*100):null;
     const tc=ta===null?'var(--text3)':ta>=70?'var(--green)':ta>=40?'var(--yellow)':'var(--red)';
-    return`<tr><td class="mono">${fmtDate(e.data)}</td><td style="color:var(--text);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.titolo}">${e.titolo}${e.escludi_kpi?'<span style="font-size:8px;color:var(--text3);margin-left:3px">[excl]</span>':''}</td><td>${e.tema||'—'}</td><td>${badgeTipo(e.tipologia)}</td><td><div style="display:flex;align-items:center;gap:6px">${e.docente?getFmAvatar(e.docente,22):''}<span>${e.docente||'—'}</span></div></td><td class="mono">${e.ore}h</td><td class="mono">${ti}</td><td class="mono">${tp}</td><td class="mono" style="color:${tc}">${ta!==null?ta+'%':'—'}</td><td>${badgeStato(e.stato)}</td><td style="font-size:10px;color:var(--text3)">${e.modified_by||'—'}</td><td><button class="btn btn-p btn-sm" onclick="openEvDetail('${e.id}')" style="white-space:nowrap">Apri →</button></td></tr>`;
+    return`<tr><td class="mono">${fmtDate(e.data)}</td><td style="color:var(--text);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.titolo}">${e.titolo}${e.escludi_kpi?'<span style="font-size:8px;color:var(--text3);margin-left:3px">[excl]</span>':''}</td><td>${e.tema||'—'}</td><td>${badgeTipo(e.tipologia)}</td><td><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">${(e.docenti_nomi&&e.docenti_nomi.length>1)?e.docenti_nomi.map(d=>getFmAvatar(d,22)).join('')+'<span style="font-size:10px">'+e.docenti_nomi.join(', ')+'</span>':(e.docente?getFmAvatar(e.docente,22)+'<span>'+e.docente+'</span>':'<span>—</span>')}</div></td><td class="mono">${e.ore}h</td><td class="mono">${ti}</td><td class="mono">${tp}</td><td class="mono" style="color:${tc}">${ta!==null?ta+'%':'—'}</td><td>${badgeStato(e.stato)}</td><td style="font-size:10px;color:var(--text3)">${e.modified_by||'—'}</td><td><button class="btn btn-p btn-sm" onclick="openEvDetail('${e.id}')" style="white-space:nowrap">Apri →</button></td></tr>`;
   }).join('')}</tbody></table>`;
 }
 
@@ -2915,8 +3017,8 @@ function openEvDetail(id){
   // Economics
   const ric=(parseFloat(e.prezzo)||0)*ip+(parseFloat(e.prezzo_early_bird)||0)*ieb;
   document.getElementById('evd-eco-grid').innerHTML=`
-    <div class="evd-stat"><div class="evd-stat-lbl">Prezzo pieno</div><div class="evd-stat-val" style="font-size:16px">€${parseFloat(e.prezzo||0).toFixed(0)}</div></div>
-    ${e.prezzo_early_bird?`<div class="evd-stat"><div class="evd-stat-lbl">Prezzo early bird</div><div class="evd-stat-val" style="font-size:16px">€${parseFloat(e.prezzo_early_bird).toFixed(0)}</div></div>`:'<div></div>'}
+    <div class="evd-stat"><div class="evd-stat-lbl">Prezzo pieno</div><div class="evd-stat-val" style="font-size:16px">€${parseFloat(e.prezzo||0).toFixed(2).replace('.',',')}</div></div>
+    ${e.prezzo_early_bird?`<div class="evd-stat"><div class="evd-stat-lbl">Prezzo early bird</div><div class="evd-stat-val" style="font-size:16px">€${parseFloat(e.prezzo_early_bird).toFixed(2).replace('.',',')}</div></div>`:'<div></div>'}
     <div class="evd-stat"><div class="evd-stat-lbl">Ricavi evento</div><div class="evd-stat-val" style="font-size:16px">€${Math.round(ric).toLocaleString('it')}</div><div class="evd-stat-sub">da iscritti paganti</div></div>
   `;
 
@@ -3367,6 +3469,231 @@ async function exportPDF(type){
   showToast('PDF scaricato','ok');
 }
 
+
+
+// ── NUOVO FORMATORE ──
+let newFmTemi=[];
+let newFmAvatarFile=null;
+let editingFormatore=null; // null=new, nome=editing
+
+function openNewFormatoreModal(nome=null){
+  editingFormatore=nome;
+  newFmTemi=[];
+  newFmAvatarFile=null;
+  const isEdit=!!nome;
+  document.getElementById('new-fm-title').textContent=isEdit?'Modifica docente':'Nuovo docente';
+  // Reset form
+  ['new-fm-nome','new-fm-email','new-fm-tel','new-fm-cv','new-fm-note'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  const avPreview=document.getElementById('new-fm-av-preview');
+  const avInit=document.getElementById('new-fm-av-init');
+  if(isEdit){
+    const fd=FM_DATA[nome]||{};
+    if(document.getElementById('new-fm-nome'))document.getElementById('new-fm-nome').value=fd.nome_display||nome;
+    if(document.getElementById('new-fm-email'))document.getElementById('new-fm-email').value=fd.email||'';
+    if(document.getElementById('new-fm-tel'))document.getElementById('new-fm-tel').value=fd.telefono||'';
+    if(document.getElementById('new-fm-cv'))document.getElementById('new-fm-cv').value=fd.cv||'';
+    if(document.getElementById('new-fm-note'))document.getElementById('new-fm-note').value=fd.note||'';
+    newFmTemi=fd.temi||[];
+    if(avPreview&&fd.avatar_url){
+      avPreview.innerHTML=`<img src="${fd.avatar_url}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%"><div class="av-overlay">Foto</div>`;
+    } else if(avInit){
+      avInit.textContent=getInit(nome);
+    }
+  } else {
+    if(avInit)avInit.textContent='?';
+    if(avPreview)avPreview.innerHTML='<span id="new-fm-av-init">?</span><div class="av-overlay">Foto</div>';
+  }
+  renderNewFmTemi();
+  document.getElementById('new-fm-modal').style.display='flex';
+}
+
+function closeNewFormatoreModal(){
+  document.getElementById('new-fm-modal').style.display='none';
+  editingFormatore=null;newFmTemi=[];newFmAvatarFile=null;
+}
+
+function updateNewFmInit(){
+  const nome=document.getElementById('new-fm-nome')?.value||'?';
+  const el=document.getElementById('new-fm-av-init');
+  if(el)el.textContent=getInit(nome);
+}
+
+function previewNewFmAv(input){
+  const file=input.files[0];if(!file)return;
+  newFmAvatarFile=file;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const prev=document.getElementById('new-fm-av-preview');
+    if(prev)prev.innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"><div class="av-overlay">Foto</div>`;
+  };
+  reader.readAsDataURL(file);
+}
+
+function addNewFmTema(sel){
+  const val=sel.value;if(!val)return;
+  if(!newFmTemi.includes(val)){newFmTemi.push(val);renderNewFmTemi();}
+  sel.value='';
+}
+
+function removeNewFmTema(tema){
+  newFmTemi=newFmTemi.filter(t=>t!==tema);renderNewFmTemi();
+}
+
+function renderNewFmTemi(){
+  const el=document.getElementById('new-fm-temi-sel');if(!el)return;
+  el.innerHTML='';
+  newFmTemi.forEach((t,i)=>{
+    const chip=document.createElement('div');
+    chip.style.cssText='display:inline-flex;align-items:center;gap:5px;background:var(--accent-bg);border:1px solid var(--accent);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--accent)';
+    chip.textContent=t;
+    const x=document.createElement('span');
+    x.textContent='×';x.style.cssText='cursor:pointer;font-size:14px;margin-left:2px';
+    x.addEventListener('click',()=>removeNewFmTema(t));
+    chip.appendChild(x);el.appendChild(chip);
+  });
+}
+
+async function saveNewFormatore(){
+  const nome=document.getElementById('new-fm-nome')?.value.trim();
+  if(!nome){showToast('Inserisci il nome del docente','err');return;}
+  const payload={
+    nome:editingFormatore||nome,
+    nome_display:nome,
+    email:document.getElementById('new-fm-email')?.value||null,
+    telefono:document.getElementById('new-fm-tel')?.value||null,
+    cv:document.getElementById('new-fm-cv')?.value||null,
+    note:document.getElementById('new-fm-note')?.value||null,
+    temi:newFmTemi
+  };
+  try{
+    // Upload avatar if selected
+    if(newFmAvatarFile&&currentUser){
+      const ext=newFmAvatarFile.name.split('.').pop().toLowerCase();
+      const safeName=(editingFormatore||nome).replace(/[^a-zA-Z0-9]/g,'_');
+      const path=`formatori/${safeName}_${Date.now()}.${ext}`;
+      const{error:upErr}=await sb.storage.from('avatars').upload(path,newFmAvatarFile,{upsert:false});
+      if(!upErr){const{data}=sb.storage.from('avatars').getPublicUrl(path);payload.avatar_url=data.publicUrl+'?v='+Date.now();}
+    }
+    // Save to DB
+    const{error}=await sb.from('formatori_data').upsert(payload,{onConflict:'nome'});
+    if(error)throw error;
+    // Add to FORMATORI_DEF if new
+    if(!editingFormatore){
+      const exists=FORMATORI_DEF.find(f=>f.nome===nome);
+      if(!exists)FORMATORI_DEF.push({nome,temi:newFmTemi});
+    } else {
+      const fd=FORMATORI_DEF.find(f=>f.nome===editingFormatore);
+      if(fd)fd.temi=newFmTemi;
+    }
+    FM_DATA[editingFormatore||nome]={...payload};
+    closeNewFormatoreModal();
+    renderFormatori();
+    showToast((editingFormatore?'Docente aggiornato':'Nuovo docente aggiunto')+': '+nome,'ok');
+    // Refresh all selects that list docenti
+    updateDocenteSelects(nome);
+  }catch(e){showToast('Errore: '+e.message,'err');}
+}
+
+function updateDocenteSelects(nuovoNome){
+  // Add new docente to all docente selects in the app
+  document.querySelectorAll('#ef-docente-add, #rep-docente').forEach(sel=>{
+    if(![...sel.options].some(o=>o.value===nuovoNome)){
+      const opt=document.createElement('option');
+      opt.value=nuovoNome;opt.textContent=nuovoNome;
+      sel.appendChild(opt);
+    }
+  });
+}
+
+
+
+// ── NUOVO FORMATORE ──
+let nFmPhotoFile = null;
+
+function openNuovoFormatore(){
+  nFmPhotoFile = null;
+  ['nfm-nome','nfm-email','nfm-tel','nfm-temi','nfm-cv','nfm-note'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  document.getElementById('nfm-init').textContent='?';
+  const av=document.getElementById('nfm-av-preview');
+  if(av)av.innerHTML='<span id="nfm-init">?</span><div class="av-overlay">Foto</div>';
+  document.getElementById('nuovo-fm-modal').style.display='flex';
+}
+
+function closeNuovoFormatore(){
+  document.getElementById('nuovo-fm-modal').style.display='none';
+  nFmPhotoFile=null;
+}
+
+function previewNFmFoto(input){
+  const file=input.files[0];if(!file)return;
+  nFmPhotoFile=file;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const av=document.getElementById('nfm-av-preview');
+    if(av)av.innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"><div class="av-overlay">Cambia</div>`;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function saveNuovoFormatore(){
+  const nome=document.getElementById('nfm-nome').value.trim();
+  if(!nome){showToast('Il nome è obbligatorio','err');return;}
+  
+  // Check not duplicate
+  if(FORMATORI_DEF.find(f=>f.nome.toLowerCase()===nome.toLowerCase())){
+    showToast('Esiste già un formatore con questo nome','err');return;
+  }
+
+  let avatar_url=null;
+
+  // Upload foto if present
+  if(nFmPhotoFile&&currentUser){
+    try{
+      const ext=nFmPhotoFile.name.split('.').pop().toLowerCase();
+      const safeName=nome.replace(/[^a-zA-Z0-9]/g,'_');
+      const path=`formatori/${safeName}_${Date.now()}.${ext}`;
+      const{error:upErr}=await sb.storage.from('avatars').upload(path,nFmPhotoFile,{upsert:false,cacheControl:'0'});
+      if(!upErr){
+        const{data}=sb.storage.from('avatars').getPublicUrl(path);
+        avatar_url=data.publicUrl+'?v='+Date.now();
+      }
+    }catch(e){}
+  }
+
+  // Build temi array
+  const temiStr=document.getElementById('nfm-temi').value.trim();
+  const temi=temiStr?temiStr.split(',').map(t=>t.trim()).filter(Boolean):[];
+
+  // Save to formatori_data table
+  const payload={
+    nome,
+    nome_display:nome,
+    email:document.getElementById('nfm-email').value.trim()||null,
+    telefono:document.getElementById('nfm-tel').value.trim()||null,
+    cv:document.getElementById('nfm-cv').value.trim()||null,
+    note:document.getElementById('nfm-note').value.trim()||null,
+    avatar_url
+  };
+
+  try{
+    const{error}=await sb.from('formatori_data').upsert(payload,{onConflict:'nome'});
+    if(error)throw error;
+  }catch(e){
+    showToast('Errore salvataggio: '+e.message,'err');return;
+  }
+
+  // Add to FORMATORI_DEF in memory
+  FORMATORI_DEF.push({nome,temi});
+  FM_DATA[nome]={...payload};
+
+  showToast('Formatore '+nome+' creato','ok');
+  closeNuovoFormatore();
+  renderFormatori();
+}
 
 // ── START ──
 init();
