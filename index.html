@@ -824,7 +824,7 @@ textarea.finp{min-height:72px;resize:vertical}
 <!-- PAGE: REPORT -->
 <div id="page-report" class="page">
   <div class="ph">
-    <div><div class="ptitle">Report & Download</div><div class="psub">Esporta i dati in CSV o PDF con filtri personalizzati</div></div>
+    <div><div class="pt">Report & Download</div><div class="ps">Esporta i dati in CSV o PDF con filtri personalizzati</div></div>
   </div>
   <div class="card" style="margin-bottom:16px">
     <div class="ctitle">Filtri</div>
@@ -3304,8 +3304,8 @@ async function exportPDF(type){
   const titles={eventi:'Report Lista Eventi',formatori:'Performance Formatori',kpi:'KPI Formativi — CFP',commerciale:'KPI Commerciali'};
   const title=titles[type]||'Report';
 
-  // Header
-  doc.setFillColor(acR,acG,acB);
+  // Header — colori fissi indipendenti dal tema
+  doc.setFillColor(20,20,20); // #141414
   doc.rect(0,0,297,18,'F');
   doc.setTextColor(255,255,255);
   doc.setFontSize(13);doc.setFont('helvetica','bold');
@@ -3335,11 +3335,10 @@ async function exportPDF(type){
   // Table
   let y=26;
   const rowH=7;const margin=10;
-  // Header row
-  doc.setFillColor(acR,acG,acB,0.15);
-  doc.setFillColor(Math.min(255,acR+100),Math.min(255,acG+100),Math.min(255,acB+100));
+  // Table header row — colore fisso #0570FE
+  doc.setFillColor(5,112,254); // #0570FE
   doc.rect(margin,y,277,rowH,'F');
-  doc.setTextColor(acR,acG,acB);
+  doc.setTextColor(255,255,255);
   doc.setFontSize(7);doc.setFont('helvetica','bold');
   let x=margin;
   headers.forEach((h,i)=>{doc.text(h,x+1,y+5);x+=colWidths[i];});
@@ -3350,7 +3349,7 @@ async function exportPDF(type){
   rows.forEach((row,ri)=>{
     if(y>190){doc.addPage();y=20;}
     if(ri%2===0){doc.setFillColor(248,248,252);doc.rect(margin,y,277,rowH,'F');}
-    doc.setTextColor(40,40,60);
+    doc.setTextColor(20,20,20);
     x=margin;
     row.forEach((cell,i)=>{
       doc.text(String(cell||'').slice(0,colWidths[i]/2.2),x+1,y+5);
@@ -3360,7 +3359,7 @@ async function exportPDF(type){
   });
 
   // Footer
-  doc.setFontSize(7);doc.setTextColor(150,150,170);
+  doc.setFontSize(7);doc.setTextColor(100,100,120);
   doc.text('GruppoPiù — gruppopiu.it — '+now,margin,200);
   doc.text('Pag. 1',270,200);
 
