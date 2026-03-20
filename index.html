@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Formazione Platform — Planwise</title>
+<title>Formazione Platform — GruppoPiù</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
@@ -344,15 +344,113 @@ textarea.finp{min-height:72px;resize:vertical}
 .tut-dot{width:8px;height:8px;border-radius:50%;background:var(--border2);transition:all .2s}
 .tut-dot.on{background:var(--green);width:20px}
 /* ── RESPONSIVE ── */
-@media(max-width:900px){
+/* ── MOBILE HAMBURGER BUTTON ── */
+.mob-menu-btn{display:none;position:fixed;top:12px;left:12px;z-index:60;
+  width:38px;height:38px;border-radius:var(--r);background:var(--bg2);
+  border:1px solid var(--border);cursor:pointer;align-items:center;
+  justify-content:center;box-shadow:var(--shadow2)}
+.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);
+  z-index:40;backdrop-filter:blur(2px)}
+
+@media(max-width:768px){
+  /* Layout */
   .shell{grid-template-columns:1fr}
-  .sidebar{position:fixed;left:-228px;z-index:50;transition:left .2s}
+  .sidebar{position:fixed;left:-240px;top:0;z-index:50;
+    transition:left .25s cubic-bezier(.4,0,.2,1);height:100vh;width:240px}
   .sidebar.open{left:0}
-  .kgrid{grid-template-columns:repeat(2,1fr)}
+  .mob-menu-btn{display:flex}
+  .mob-overlay{display:block}
+  .main{padding:16px 14px 80px;padding-top:60px}
+
+  /* Grids */
+  .kgrid{grid-template-columns:repeat(2,1fr);gap:10px}
   .grid2,.grid3{grid-template-columns:1fr}
   .fgrid{grid-template-columns:1fr}
+  .cfp-grid{grid-template-columns:1fr 1fr}
+
+  /* Cards */
+  .card{padding:14px}
+  .kcard{padding:12px 14px}
+  .kval{font-size:20px}
+
+  /* Tables - horizontal scroll */
+  .twrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{min-width:500px;font-size:11px}
+  thead th{font-size:9px;padding:6px 8px}
+  td{padding:7px 8px}
+
+  /* Charts */
+  .chw{height:160px}
+  .chw-lg{height:200px}
+
+  /* Auth */
+  .auth-box{padding:24px 20px;margin:0 8px}
+
+  /* Modal */
+  .modal{max-width:100%;margin:8px;max-height:95vh;border-radius:var(--r)}
+  .mhdr{padding:14px 16px 12px;flex-wrap:wrap;gap:8px}
+  .mbody{padding:0}
+  .mfoot{padding:12px 16px;flex-wrap:wrap;gap:8px}
+
+  /* Form */
+  .fg{margin-bottom:2px}
+
+  /* Sidebar user */
+  .sb-uname{font-size:11px}
+
+  /* KPI on mobile */
+  .kgrid{grid-template-columns:1fr 1fr}
+
+  /* Filters */
+  .filters{gap:6px}
+  .fsearch{min-width:120px;font-size:11px}
+  .fsel{font-size:11px;padding:5px 7px}
+
+  /* Calendar */
+  .cal-day{min-height:50px;padding:3px}
+  .cal-ev{font-size:8px;padding:1px 3px}
+  .cal-dn{font-size:9px}
+
+  /* Formatori grid */
+  #formatori-grid{grid-template-columns:1fr}
+
+  /* Page header */
+  .ph{flex-direction:column;gap:10px}
+  .ph .btn{width:100%;justify-content:center}
+
+  /* Greeting */
+  .greeting{font-size:18px}
+
+  /* Widget bar */
+  .widget-bar{flex-wrap:wrap;gap:6px}
+
+  /* Notifiche */
+  .notif-item-wrap{padding:10px 8px}
+
+  /* Time nav */
+  .time-btns{flex-wrap:wrap}
+  .tb{font-size:9px;padding:2px 6px}
+
+  /* Rank table */
+  .rank-table{font-size:11px}
+  .rank-table th,.rank-table td{padding:6px 8px}
+
+  /* Buttons */
+  .btn{font-size:11px;padding:7px 12px}
+  .btn-sm{font-size:10px;padding:4px 8px}
+}
+
+@media(max-width:400px){
+  .kgrid{grid-template-columns:1fr}
+  .auth-box{padding:20px 14px}
+  .main{padding:12px 10px 80px;padding-top:56px}
 }
 </style>
+<!-- 
+  SQL REQUIRED on Supabase for new features:
+  alter table eventi add column if not exists docenti_nomi text[];
+  alter table eventi add column if not exists corso_padre_id text;
+-->
 </head>
 <body>
 
@@ -363,7 +461,7 @@ textarea.finp{min-height:72px;resize:vertical}
     <div class="auth-shape auth-shape2"></div>
     <div class="auth-box">
       <div class="auth-logo-t">Formazione Platform</div>
-      <div class="auth-logo-s">// planwise 2026</div>
+      <div class="auth-logo-s">// gruppopiu.it 2026</div>
       <div class="auth-tabs">
         <button class="auth-tab active" onclick="switchAuthTab('login',this)">Accedi</button>
         <button class="auth-tab" onclick="switchAuthTab('register',this)">Registrati</button>
@@ -422,11 +520,17 @@ textarea.finp{min-height:72px;resize:vertical}
 </div>
 
 <!-- APP -->
+<button class="mob-menu-btn" id="mob-menu" onclick="toggleSidebar()" aria-label="Menu">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+    <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
+</button>
+<div class="mob-overlay" id="mob-overlay" onclick="closeSidebar()" style="display:none"></div>
 <div class="shell" id="app-shell" style="display:none">
   <aside class="sidebar" id="sidebar">
     <div class="sb-logo">
       <div class="sb-logo-t"><div class="sb-logo-dot"></div>Formazione Platform</div>
-      <div class="sb-logo-s">// planwise 2026</div>
+      <div class="sb-logo-s">// gruppopiu.it 2026</div>
     </div>
     <nav class="sb-nav">
       <div class="sb-sec">Monitoraggio</div>
@@ -788,7 +892,7 @@ textarea.finp{min-height:72px;resize:vertical}
             <div class="ctitle">Account</div>
             <div class="setting-row">
               <div><div class="setting-label">Versione piattaforma</div><div class="setting-sub">Formazione Platform v1.9</div></div>
-              <span style="font-size:11px;color:var(--text3)">Planwise 2026</span>
+              <span style="font-size:11px;color:var(--text3)">GruppoPiù 2026</span>
             </div>
             <div class="setting-row">
               <div><div class="setting-label">Database</div><div class="setting-sub">Supabase — formazione_platform</div></div>
@@ -813,48 +917,65 @@ textarea.finp{min-height:72px;resize:vertical}
 <div class="mover" id="ev-modal" style="display:none" onclick="if(event.target===this)closeEventoModal()">
   <div class="modal">
     <div class="mhdr"><div class="mtitle" id="ev-modal-title">Nuovo evento</div><button class="mclose" onclick="closeEventoModal()">✕</button></div>
-    <div class="mbody" style="padding:0">
-      <!-- SEZIONE 1: INFO BASE -->
+        <div class="mbody" style="padding:0">
+      <!-- SEZ 1: INFO BASE -->
       <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
         <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">📋 Informazioni base</div>
         <div class="fgrid">
           <div class="fg full"><label class="flbl">Titolo evento *</label><input type="text" class="finp" id="ef-titolo" placeholder="Es: Urbanistica — novità normative 2026"></div>
           <div class="fg"><label class="flbl">Tema *</label><select class="finp" id="ef-tema"><option value="">Seleziona tema</option><option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Successioni</option><option>Bonus Casa</option><option>Locazioni</option><option>Fisco Professionisti</option><option>Professione</option><option>Comunità Energetiche</option><option>CTU</option><option>Agricoltura</option><option>Inglese</option></select></div>
-          <div class="fg"><label class="flbl">Tipologia *</label><select class="finp" id="ef-tipo"><option value="">Seleziona tipologia</option><option value="seminario">Seminario (2h)</option><option value="corso_4h">Corso tecnico (4h)</option><option value="corso_6h">Corso tecnico (6h)</option><option value="corso_deontologico">Corso deontologico (2h)</option></select></div>
-          <div class="fg"><label class="flbl">Docente</label><select class="finp" id="ef-docente"><option value="">Seleziona docente</option><option>Mion</option><option>Basso</option><option>De Castro</option><option>Di Leo</option><option>Masi</option><option value="Dell'Oste">Dell'Oste</option><option>Rivetti</option><option>Forte</option><option>Frediani</option><option>Caputo</option><option>Groppo</option><option>Cocozza</option></select></div>
-          <div class="fg"><label class="flbl">Ore (calcolate auto da tipologia)</label><input type="number" class="finp" id="ef-ore" placeholder="2" min="1" max="8" readonly style="opacity:.6;cursor:default" id="ef-ore"></div>
+          <div class="fg"><label class="flbl">Tipologia *</label><select class="finp" id="ef-tipo" onchange="onTipoChange()"><option value="">Seleziona tipologia</option><option value="seminario">Seminario (2h)</option><option value="corso_4h">Corso tecnico (4h — 2 sessioni)</option><option value="corso_6h">Corso tecnico (6h — 3 sessioni)</option><option value="corso_deontologico">Corso deontologico (2h)</option></select></div>
+          <!-- DOCENTI MULTIPLI -->
+          <div class="fg full">
+            <label class="flbl">Docente/i <span style="font-size:9px;color:var(--text3);text-transform:none;letter-spacing:0">puoi selezionarne più di uno</span></label>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px" id="docenti-selected"></div>
+            <select class="finp" id="ef-docente-add" onchange="addDocente(this)">
+              <option value="">+ Aggiungi docente</option>
+              <option>Mion</option><option>Basso</option><option>De Castro</option><option>Di Leo</option><option>Masi</option><option value="Dell'Oste">Dell'Oste</option><option>Rivetti</option><option>Forte</option><option>Frediani</option><option>Caputo</option><option>Groppo</option><option>Cocozza</option>
+            </select>
+          </div>
+          <div class="fg" style="display:none"><input type="hidden" id="ef-docente"></div>
         </div>
       </div>
-      <!-- SEZIONE 2: DATA E STATO -->
+      <!-- SEZ 2: DATE E SESSIONI -->
       <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
-        <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">📅 Data, orario e stato</div>
-        <div class="fgrid">
-          <div class="fg"><label class="flbl">Data *</label><input type="date" class="finp" id="ef-data"></div>
-          <div class="fg"><label class="flbl">Orario</label><input type="text" class="finp" id="ef-orario" placeholder="es. 15:00–17:00"></div>
+        <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">📅 Date e sessioni</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:12px" id="sessioni-hint">Inserisci la data dell'evento</div>
+        <!-- SINGLE DATE (seminari e deontologici) -->
+        <div id="date-single">
+          <div class="fgrid">
+            <div class="fg"><label class="flbl">Data *</label><input type="date" class="finp" id="ef-data"></div>
+            <div class="fg"><label class="flbl">Orario</label><input type="text" class="finp" id="ef-orario" placeholder="es. 15:00–17:00"></div>
+          </div>
+        </div>
+        <!-- MULTI DATE (corsi 4h e 6h) -->
+        <div id="date-multi" style="display:none">
+          <div id="sessioni-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px"></div>
+        </div>
+        <div class="fgrid" style="margin-top:10px">
           <div class="fg"><label class="flbl">Stato</label><select class="finp" id="ef-stato"><option value="pianificato">Pianificato</option><option value="pubblicato">Pubblicato</option><option value="svolto">Svolto</option><option value="consuntivato">Consuntivato</option><option value="annullato">Annullato</option><option value="spostato">Spostato</option></select></div>
-          <div class="fg"><label class="flbl">Modulo n° <span style="font-size:9px;color:var(--text3);text-transform:none;letter-spacing:0">per corsi multi-sessione</span></label><input type="number" class="finp" id="ef-modulo" placeholder="es. 1 di 3" min="1"></div>
+          <div class="fg"><input type="number" class="finp" id="ef-ore" style="display:none"><label class="flbl">Ore (auto)</label><div style="font-size:13px;font-weight:600;color:var(--accent);padding:8px 11px;background:var(--bg3);border-radius:var(--r)" id="ef-ore-display">—</div></div>
         </div>
       </div>
-      <!-- SEZIONE 3: PREZZI -->
+      <!-- SEZ 3: PREZZI -->
       <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
         <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">💶 Prezzi</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Se l'evento prevede un prezzo ridotto per le iscrizioni anticipate, compila anche la sezione Early Bird</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Se offri un prezzo early bird per iscrizioni anticipate, compilare anche la sezione EA</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
           <div class="fg"><label class="flbl">Prezzo pieno (€)</label><input type="number" class="finp" id="ef-prezzo" placeholder="es. 79" min="0"></div>
           <div style="background:var(--yellow-bg);border:1.5px dashed var(--yellow);border-radius:var(--r);padding:12px">
             <div style="font-size:10px;font-weight:700;color:var(--yellow);margin-bottom:8px">⚡ Early Bird <span style="font-size:9px;font-weight:400;color:var(--text3)">(opzionale)</span></div>
-            <div class="fg"><label class="flbl" style="color:var(--text3)">Prezzo early bird (€)</label><input type="number" class="finp" id="ef-eb" placeholder="es. 59" min="0"></div>
+            <div class="fg"><label class="flbl" style="color:var(--text3)">Prezzo EA (€)</label><input type="number" class="finp" id="ef-eb" placeholder="es. 59" min="0"></div>
           </div>
         </div>
       </div>
-      <!-- SEZIONE 4: PARTECIPANTI -->
+      <!-- SEZ 4: PARTECIPANTI -->
       <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
         <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">👥 Partecipanti</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Compila dopo lo svolgimento dell'evento. Inserisci prima gli iscritti, poi le presenze effettive.</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Compila dopo lo svolgimento dell'evento</div>
         <div style="display:flex;flex-direction:column;gap:10px">
-          <!-- PAGANTI -->
           <div style="background:var(--green-bg);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r);padding:12px">
-            <div style="font-size:10px;font-weight:700;color:var(--accent);margin-bottom:10px">Paganti (prezzo pieno + early bird)</div>
+            <div style="font-size:10px;font-weight:700;color:var(--accent);margin-bottom:10px">Paganti (prezzo pieno + EA)</div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px">
               <div class="fg"><label class="flbl">Iscr. pieno</label><input type="number" class="finp" id="ef-ip" placeholder="0" min="0"></div>
               <div class="fg"><label class="flbl">Pres. pieno</label><input type="number" class="finp" id="ef-pp" placeholder="0" min="0"></div>
@@ -862,32 +983,36 @@ textarea.finp{min-height:72px;resize:vertical}
               <div class="fg"><label class="flbl">Pres. EA</label><input type="number" class="finp" id="ef-peb" placeholder="0" min="0"></div>
             </div>
           </div>
-          <!-- FI -->
           <div style="background:var(--blue-bg);border:1px solid rgba(91,141,238,.25);border-radius:var(--r);padding:12px">
-            <div style="font-size:10px;font-weight:700;color:var(--blue);margin-bottom:10px">Formazione Illimitata (abbonati)</div>
+            <div style="font-size:10px;font-weight:700;color:var(--blue);margin-bottom:10px">Formazione Illimitata</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
               <div class="fg"><label class="flbl">Iscritti FI</label><input type="number" class="finp" id="ef-ii" placeholder="0" min="0"></div>
               <div class="fg"><label class="flbl">Presenti FI</label><input type="number" class="finp" id="ef-pi" placeholder="0" min="0"></div>
             </div>
           </div>
-          <!-- GRATUITI -->
           <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px">
-            <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:10px">Gratuiti / CAF / Assicurativi <span style="font-weight:400">(esclusi dai KPI)</span></div>
+            <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:10px">Gratuiti / CAF / Assicurativi</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-              <div class="fg"><label class="flbl">Iscritti gratuiti</label><input type="number" class="finp" id="ef-ig" placeholder="0" min="0"></div>
-              <div class="fg"><label class="flbl">Presenti gratuiti</label><input type="number" class="finp" id="ef-pg" placeholder="0" min="0"></div>
+              <div class="fg"><label class="flbl">Iscritti</label><input type="number" class="finp" id="ef-ig" placeholder="0" min="0"></div>
+              <div class="fg"><label class="flbl">Presenti</label><input type="number" class="finp" id="ef-pg" placeholder="0" min="0"></div>
             </div>
             <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="ef-escludi" style="width:15px;height:15px;cursor:pointer;accent-color:var(--accent)"><label for="ef-escludi" style="font-size:11px;color:var(--text2);cursor:pointer">Escludi questo evento dai KPI principali</label></div>
           </div>
         </div>
       </div>
-      <!-- SEZIONE 5: NOTE -->
+      <!-- SEZ 5: NOTE -->
       <div style="padding:16px 22px">
         <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">📝 Note</div>
-        <div class="fg"><textarea class="finp" id="ef-note" placeholder="Annotazioni: variazioni rispetto al programma, feedback iniziale, condizioni particolari..." style="min-height:60px"></textarea></div>
+        <div class="fg"><textarea class="finp" id="ef-note" placeholder="Annotazioni libere..." style="min-height:60px"></textarea></div>
       </div>
     </div>
-    <div class="mfoot"><button class="btn btn-s" onclick="closeEventoModal()">Annulla</button><button class="btn btn-p" onclick="saveEvento()">Salva evento</button></div>
+    <div class="mfoot" style="justify-content:space-between">
+      <button class="btn btn-s btn-sm" id="ev-dup-btn" onclick="duplicateEvento()" style="display:none">📋 Duplica</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-s" onclick="closeEventoModal()">Annulla</button>
+        <button class="btn btn-p" onclick="saveEvento()">Salva evento</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1002,7 +1127,7 @@ let unreadCount=0,notifChannel=null;
 
 // ── TUTORIAL DATA ──
 const TUT_STEPS=[
-  {icon:'👋',title:'Benvenuto in Formazione Platform',body:'La piattaforma di Planwise per monitorare la formazione professionale dei geometri in tempo reale con tutto il tuo team.',steps:[]},
+  {icon:'👋',title:'Benvenuto in Formazione Platform',body:'La piattaforma di GruppoPiù per monitorare la formazione professionale dei geometri in tempo reale con tutto il tuo team.',steps:[]},
   {icon:'📅',title:'Gestisci gli eventi',body:'Nella sezione <strong>Calendario</strong> e <strong>Eventi</strong> puoi inserire, modificare e monitorare ogni sessione formativa.',steps:['Usa il pulsante "+ Nuovo evento" per aggiungere','Filtra per mese, tema, tipologia e stato','Clicca su un evento in calendario per modificarlo']},
   {icon:'📊',title:'Monitora i KPI',body:'La sezione <strong>KPI Formativi</strong> tiene traccia dei CFP per categoria rispetto agli obiettivi SINF annuali.',steps:['CFP Seminari: target 90','CFP Corsi tecnici: target 36','CFP Deontologia: target 20']},
   {icon:'👤',title:'Schede formatori',body:'Ogni formatore ha una scheda personale con foto, CV, statistiche e posizione in classifica aggiornata live.',steps:['Clicca su una card formatore per aprire la scheda','Carica una foto e inserisci bio e contatti','La classifica si aggiorna automaticamente']},
@@ -2045,7 +2170,7 @@ function renderDashboard(){
   document.getElementById('k-cfp').textContent=svolti.reduce((s,e)=>s+cfpEv(e),0);
   document.getElementById('k-ore').textContent=svolti.reduce((s,e)=>s+parseFloat(e.ore||0),0).toFixed(0);
   const cfpS=svolti.filter(e=>e.tipologia==='seminario').reduce((s,e)=>s+cfpEv(e),0);
-  const cfpC=svolti.filter(e=>['corso_4h','corso_6h'].includes(e.tipologia)).reduce((s,e)=>s+cfpEv(e),0);
+  const cfpC=(()=>{const seen=new Set();return DB.filter(e=>['svolto','consuntivato'].includes(e.stato)&&!e.escludi_kpi&&['corso_4h','corso_6h'].includes(e.tipologia)).reduce((s,e)=>{if(e.corso_padre_id){if(seen.has(e.corso_padre_id))return s;seen.add(e.corso_padre_id);return s+(e.tipologia==='corso_4h'?4:6);}return s+cfpEv(e);},0);})();return svolti.filter(e=>['corso_4h','corso_6h'].includes(e.tipologia)).reduce((s,e)=>{if(e.corso_padre_id){if(seen.has(e.corso_padre_id))return s;seen.add(e.corso_padre_id);return s+(e.tipologia==='corso_4h'?4:6);}return s+cfpEv(e);},0);})();
   const cfpD=svolti.filter(e=>e.tipologia==='corso_deontologico').reduce((s,e)=>s+cfpEv(e),0);
   const cfpEl=document.getElementById('cfp-prog-dash');
   if(cfpEl)cfpEl.innerHTML=progBar(cfpS,CFP_OBJ.sem,'b','CFP Seminari','CFP')+progBar(cfpC,CFP_OBJ.corsi,'g','CFP Corsi','CFP')+progBar(cfpD,CFP_OBJ.deo,'y','CFP Deontologia','CFP');
@@ -2294,7 +2419,7 @@ async function uploadFmPhoto(input){
       showToast('Errore permessi storage. Esegui il fix SQL in Supabase (vedi console).','err');
       console.warn('FIX SUPABASE STORAGE: vai su Storage > Policies > avatars bucket e aggiungi policy INSERT per public o autenticati.');
     } else {
-      showToast('Errore upload: '+e.message,'err');
+      showToast('Errore uploaconst cfpC=(()=>{const seen=new Set();return DB.filter(e=>['svolto','consuntivato'].includes(e.stato)&&!e.escludi_kpi&&['corso_4h','corso_6h'].includes(e.tipologia)).reduce((s,e)=>{if(e.corso_padre_id){if(seen.has(e.corso_padre_id))return s;seen.add(e.corso_padre_id);return s+(e.tipologia==='corso_4h'?4:6);}return s+cfpEv(e);},0);})();
     }
   }
 }
@@ -2305,7 +2430,7 @@ function closeFmModal(){document.getElementById('fm-modal').style.display='none'
 function renderKPI(){
   const kpi=getKPI(),svolti=getSvolti();
   const cfpS=svolti.filter(e=>e.tipologia==='seminario').reduce((s,e)=>s+cfpEv(e),0);
-  const cfpC=svolti.filter(e=>['corso_4h','corso_6h'].includes(e.tipologia)).reduce((s,e)=>s+cfpEv(e),0);
+  const cfpC=(()=>{const seen=new Set();return svolti.filter(e=>['corso_4h','corso_6h'].includes(e.tipologia)).reduce((s,e)=>{if(e.corso_padre_id){if(seen.has(e.corso_padre_id))return s;seen.add(e.corso_padre_id);return s+(e.tipologia==='corso_4h'?4:6);}return s+cfpEv(e);},0);})();
   const cfpD=svolti.filter(e=>e.tipologia==='corso_deontologico').reduce((s,e)=>s+cfpEv(e),0);
   const ore=svolti.reduce((s,e)=>s+parseFloat(e.ore||0),0);
   const cfpT=cfpS+cfpC+cfpD;
@@ -2497,7 +2622,9 @@ function renderCalendario(){
     const dt=new Date(y,m,d);const bl=isBlocked(dt);
     const isToday=today.getFullYear()===y&&today.getMonth()===m&&today.getDate()===d;
     const evs=evByDay[d]||[];
-    const evHTML=evs.slice(0,3).map(e=>{const cls=e.stato==='annullato'?'ann':e.tipologia==='seminario'?'sem':e.tipologia==='corso_deontologico'?'deo':'cor';return`<div class="cal-ev ${cls}" title="${e.titolo}" onclick="event.stopPropagation();openEvDetail('${e.id}')">${e.titolo.length>18?e.titolo.slice(0,16)+'…':e.titolo}</div>`;}).join('')+(evs.length>3?`<div style="font-size:8px;color:var(--text3)">+${evs.length-3} altri</div>`:'');
+    const evHTML=evs.slice(0,3).map(e=>{const cls=e.stato==='annullato'?'ann':e.tipologia==='seminario'?'sem':e.tipologia==='corso_deontologico'?'deo':'cor';const mBadge=e.modulo_numero?` [M${e.modulo_numero}]`:'';
+    const calTitle=(e.titolo.length>16?e.titolo.slice(0,14)+'…':e.titolo)+mBadge;
+    return`<div class="cal-ev ${cls}" title="${e.titolo}${e.modulo_numero?' — Modulo '+e.modulo_numero:''}" onclick="event.stopPropagation();openEvDetail('${e.id}')">${calTitle}</div>`;}).join('')+(evs.length>3?`<div style="font-size:8px;color:var(--text3)">+${evs.length-3} altri</div>`:'');
     cells+=`<div class="cal-day${bl?' blocked':''}${isToday?' today':''}"><div class="cal-dn">${d}</div>${evHTML}${bl?`<div class="cal-block-label">${bl}</div>`:''}</div>`;
   }
   document.getElementById('cal-grid').innerHTML=cells;
@@ -2530,7 +2657,11 @@ function renderEventi(){
     const tp=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
     const ta=ti>0?Math.round(tp/ti*100):null;
     const tc=ta===null?'var(--text3)':ta>=70?'var(--green)':ta>=40?'var(--yellow)':'var(--red)';
-    return`<tr><td class="mono">${fmtDate(e.data)}</td><td style="color:var(--text);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.titolo}">${e.titolo}${e.escludi_kpi?'<span style="font-size:8px;color:var(--text3);margin-left:3px">[excl]</span>':''}</td><td>${e.tema||'—'}</td><td>${badgeTipo(e.tipologia)}</td><td><div style="display:flex;align-items:center;gap:6px">${e.docente?getFmAvatar(e.docente,22):''}<span>${e.docente||'—'}</span></div></td><td class="mono">${e.ore}h</td><td class="mono">${ti}</td><td class="mono">${tp}</td><td class="mono" style="color:${tc}">${ta!==null?ta+'%':'—'}</td><td>${badgeStato(e.stato)}</td><td style="font-size:10px;color:var(--text3)">${e.modified_by||'—'}</td><td><button class="btn btn-p btn-sm" onclick="openEvDetail('${e.id}')" style="white-space:nowrap">Apri →</button></td></tr>`;
+    return`<tr><td class="mono">${fmtDate(e.data)}</td><td style="color:var(--text);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.titolo}">${e.titolo}${e.escludi_kpi?'<span style="font-size:8px;color:var(--text3);margin-left:3px">[excl]</span>':''}</td><td>${e.tema||'—'}</td><td>${badgeTipo(e.tipologia)}</td><td><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+  ${(e.docenti_nomi&&e.docenti_nomi.length>1)
+    ? e.docenti_nomi.map(d=>getFmAvatar(d,20)).join('')+'<span style="font-size:10px">'+e.docenti_nomi.join(', ')+'</span>'
+    : e.docente?getFmAvatar(e.docente,22)+'<span>'+e.docente+'</span>':'<span>—</span>'
+  }</div></td><td class="mono">${e.ore}h</td><td class="mono">${ti}</td><td class="mono">${tp}</td><td class="mono" style="color:${tc}">${ta!==null?ta+'%':'—'}</td><td>${badgeStato(e.stato)}</td><td style="font-size:10px;color:var(--text3)">${e.modified_by||'—'}</td><td><button class="btn btn-p btn-sm" onclick="openEvDetail('${e.id}')" style="white-space:nowrap">Apri →</button></td></tr>`;
   }).join('')}</tbody></table>`;
 }
 
@@ -2663,45 +2794,10 @@ function goToEvento(id,titolo){
 }
 
 // ── MODAL EVENTO ──
-function openEventoModal(id=null){
-  editId=id;
-  document.getElementById('ev-modal-title').textContent=id?'Modifica evento':'Nuovo evento';
-  if(id){
-    const e=DB.find(x=>x.id===id);if(!e)return;
-    document.getElementById('ef-data').value=e.data||'';document.getElementById('ef-orario').value=e.orario||'';
-    document.getElementById('ef-titolo').value=e.titolo||'';document.getElementById('ef-tema').value=e.tema||'';
-    document.getElementById('ef-tipo').value=e.tipologia||'';document.getElementById('ef-docente').value=e.docente||'';
-    document.getElementById('ef-ore').value=e.ore||'';document.getElementById('ef-prezzo').value=e.prezzo||'';
-    document.getElementById('ef-stato').value=e.stato||'pianificato';document.getElementById('ef-modulo').value=e.modulo_numero||'';
-    document.getElementById('ef-ip').value=e.iscritti_paganti||'';document.getElementById('ef-pp').value=e.presenti_paganti||'';
-    document.getElementById('ef-ii').value=e.iscritti_illimitati||'';document.getElementById('ef-pi').value=e.presenti_illimitati||'';
-    document.getElementById('ef-ig').value=e.iscritti_gratuiti||'';document.getElementById('ef-pg').value=e.presenti_gratuiti||'';
-    document.getElementById('ef-note').value=e.note||'';document.getElementById('ef-escludi').checked=e.escludi_kpi||false;
-  }else{
-    ['ef-data','ef-orario','ef-titolo','ef-tema','ef-tipo','ef-docente','ef-ore','ef-prezzo','ef-eb','ef-ieb','ef-peb','ef-modulo','ef-ip','ef-pp','ef-ii','ef-pi','ef-ig','ef-pg','ef-note'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
-    document.getElementById('ef-stato').value='pianificato';document.getElementById('ef-escludi').checked=false;
-  }
-  document.getElementById('ev-modal').style.display='flex';
-}
-function closeEventoModal(){document.getElementById('ev-modal').style.display='none';editId=null;}
 
-async function saveEvento(){
-  const data=document.getElementById('ef-data').value;
-  const titolo=document.getElementById('ef-titolo').value;
-  const tema=document.getElementById('ef-tema').value;
-  const tipo=document.getElementById('ef-tipo').value;
-  if(!data||!titolo||!tema||!tipo){showToast('Compila i campi obbligatori','err');return;}
-  const gg=['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
-  const payload={data,titolo,tema,tipologia:tipo,giorno:gg[new Date(data).getDay()],orario:document.getElementById('ef-orario').value||null,docente:document.getElementById('ef-docente').value||null,ore:parseFloat(document.getElementById('ef-ore').value)||2,prezzo:parseFloat(document.getElementById('ef-prezzo').value)||0,prezzo_early_bird:parseFloat(document.getElementById('ef-eb').value)||null,iscritti_early_bird:parseInt(document.getElementById('ef-ieb').value)||0,presenti_early_bird:parseInt(document.getElementById('ef-peb').value)||0,stato:document.getElementById('ef-stato').value,modulo_numero:parseInt(document.getElementById('ef-modulo').value)||null,iscritti_paganti:parseInt(document.getElementById('ef-ip').value)||0,presenti_paganti:parseInt(document.getElementById('ef-pp').value)||0,iscritti_illimitati:parseInt(document.getElementById('ef-ii').value)||0,presenti_illimitati:parseInt(document.getElementById('ef-pi').value)||0,iscritti_gratuiti:parseInt(document.getElementById('ef-ig').value)||0,presenti_gratuiti:parseInt(document.getElementById('ef-pg').value)||0,note:document.getElementById('ef-note').value||null,escludi_kpi:document.getElementById('ef-escludi').checked,modified_by:userProfile?.name||'—',modified_at:new Date().toISOString()};
-  try{
-    let err;
-    if(editId){({error:err}=await sb.from('eventi').update(payload).eq('id',editId));}
-    else{({error:err}=await sb.from('eventi').insert(payload));}
-    if(err)throw err;
-    showToast(editId?'Evento aggiornato':'Evento salvato','ok');
-    closeEventoModal();await loadAll();
-  }catch(e){showToast('Errore: '+e.message,'err');}
-}
+
+
+
 
 async function delEvento(id){
   if(!confirm('Eliminare questo evento?'))return;
@@ -2834,18 +2930,23 @@ function openEvDetail(id){
   // Formatore box
   const fmBoxEl=document.getElementById('evd-formatore-box');
   if(fmBoxEl){
-    if(e.docente){
+    const docentiArr=e.docenti_nomi||(e.docente?[e.docente]:[]);
+    if(docentiArr.length>0){
       fmBoxEl.style.display='flex';
-      fmBoxEl.innerHTML=`
-        <div style="display:flex;align-items:center;gap:12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px">
-          ${getFmAvatar(e.docente,40)}
-          <div>
-            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:2px">Docente</div>
-            <div style="font-size:15px;font-weight:700;color:var(--text)">${e.docente}</div>
-            ${(FORMATORI_DEF.find(f=>f.nome===e.docente)||{temi:[]}).temi.map(t=>`<span class="badge" style="background:var(--accent-bg);color:var(--accent);margin-top:4px;display:inline-block">${t}</span>`).join(' ')}
-          </div>
-          <button class="btn btn-s btn-sm" style="margin-left:auto" onclick="closeEvDetail();openFmModal('${e.docente.replace(/'/g,"\'")}')">Apri scheda →</button>
-        </div>`;
+      fmBoxEl.innerHTML=`<div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;width:100%">
+        <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:10px">Docent${docentiArr.length>1?'i':'e'}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px">
+          ${docentiArr.map(d=>`
+            <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:160px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:8px 12px">
+              ${getFmAvatar(d,36)}
+              <div style="flex:1">
+                <div style="font-size:13px;font-weight:700;color:var(--text)">${d}</div>
+                <div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px">${(FORMATORI_DEF.find(f=>f.nome===d)||{temi:[]}).temi.map(t=>`<span class="badge" style="background:var(--accent-bg);color:var(--accent)">${t}</span>`).join('')}</div>
+              </div>
+              <button class="btn btn-s btn-sm" onclick="closeEvDetail();openFmModal('${d.replace(/'/g,"\'")}')">→</button>
+            </div>`).join('')}
+        </div>
+      </div>`;
     } else {
       fmBoxEl.style.display='none';
     }
@@ -2945,12 +3046,225 @@ function closeEvDetail(){
 }
 
 
-// Auto-set ore from tipologia
-document.getElementById('ef-tipo').addEventListener('change',function(){
-  const map={seminario:2,corso_4h:4,corso_6h:6,corso_deontologico:2};
-  const v=map[this.value];
-  const oreEl=document.getElementById('ef-ore');
-  if(v&&oreEl){oreEl.value=v;}
+
+// ── MULTI-DOCENTE ──
+let selectedDocenti=[];
+
+function addDocente(sel){
+  const val=sel.value;if(!val)return;
+  if(!selectedDocenti.includes(val)){selectedDocenti.push(val);renderDocentiSelected();}
+  sel.value='';
+}
+function removeDocente(nome){
+  selectedDocenti=selectedDocenti.filter(d=>d!==nome);renderDocentiSelected();
+}
+function setDocentiFromArray(arr){selectedDocenti=arr||[];renderDocentiSelected();}
+function renderDocentiSelected(){
+  const el=document.getElementById('docenti-selected');if(!el)return;
+  el.innerHTML=selectedDocenti.map(d=>{
+    const safe=d.replace(/'/g,"\\'");
+    return`<div style="display:inline-flex;align-items:center;gap:6px;background:var(--accent-bg);border:1px solid var(--accent);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--accent)">${getFmAvatar(d,18)} ${d}<span onclick="removeDocente('${safe}')" style="cursor:pointer;font-size:14px;margin-left:2px;color:var(--accent)">×</span></div>`;
+  }).join('');
+}
+
+// ── MULTI-SESSIONE ──
+let sessioniCorso=[];
+function onTipoChange(){
+  const tipo=document.getElementById('ef-tipo')?.value;
+  const single=document.getElementById('date-single');
+  const multi=document.getElementById('date-multi');
+  const hint=document.getElementById('sessioni-hint');
+  const oreDisp=document.getElementById('ef-ore-display');
+  const oreInp=document.getElementById('ef-ore');
+  const oreMap={seminario:2,corso_4h:4,corso_6h:6,corso_deontologico:2};
+  const sessMap={corso_4h:2,corso_6h:3};
+  const ore=oreMap[tipo]||2;
+  if(oreDisp)oreDisp.textContent=ore+'h ('+ore+' CFP)';
+  if(oreInp)oreInp.value=ore;
+  if(tipo==='corso_4h'||tipo==='corso_6h'){
+    const nSess=sessMap[tipo];
+    if(single)single.style.display='none';
+    if(multi)multi.style.display='block';
+    if(hint)hint.textContent='Corso da '+ore+'h = '+nSess+' sessioni da 2h · inserisci data e orario per ogni sessione';
+    buildSessioniInputs(nSess);
+  } else {
+    if(single)single.style.display='block';
+    if(multi)multi.style.display='none';
+    if(hint)hint.textContent="Inserisci la data dell'evento";
+    sessioniCorso=[];
+  }
+}
+function buildSessioniInputs(n){
+  sessioniCorso=Array(n).fill(null).map(()=>({data:'',orario:''}));
+  const el=document.getElementById('sessioni-list');if(!el)return;
+  el.innerHTML=Array(n).fill(0).map((_,i)=>
+    '<div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px">'
+    +'<div style="font-size:10px;font-weight:700;color:var(--accent);margin-bottom:8px">Sessione '+(i+1)+' di '+n+'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'
+    +'<div class="fg"><label class="flbl">Data *</label><input type="date" class="finp" data-sess="'+i+'" data-field="data" oninput="updateSessione(this)"></div>'
+    +'<div class="fg"><label class="flbl">Orario</label><input type="text" class="finp" data-sess="'+i+'" data-field="orario" placeholder="es. 09:00–11:00" oninput="updateSessione(this)"></div>'
+    +'</div></div>'
+  ).join('');
+}
+function updateSessione(inp){
+  const i=parseInt(inp.dataset.sess);
+  if(sessioniCorso[i])sessioniCorso[i][inp.dataset.field]=inp.value;
+}
+
+// ── DUPLICATE EVENT ──
+function duplicateEvento(){
+  if(!editId)return;
+  const e=DB.find(x=>x.id===editId);if(!e)return;
+  closeEventoModal();
+  setTimeout(()=>{
+    openEventoModal(null);
+    setTimeout(()=>{
+      ['ef-titolo','ef-tema','ef-tipo','ef-orario','ef-prezzo','ef-eb','ef-note'].forEach(id=>{
+        const src=e[id.replace('ef-','').replace('-','_')]||'';
+        const el=document.getElementById(id);if(el)el.value=id==='ef-titolo'?(e.titolo+' (copia)'):src;
+      });
+      document.getElementById('ef-titolo').value=(e.titolo||'')+ ' (copia)';
+      document.getElementById('ef-tema').value=e.tema||'';
+      document.getElementById('ef-tipo').value=e.tipologia||'';
+      document.getElementById('ef-stato').value='pianificato';
+      const docArr=e.docenti_nomi||(e.docente?[e.docente]:[]);
+      setDocentiFromArray(docArr);
+      onTipoChange();
+      showToast('Evento duplicato — modifica i dati e salva','info');
+    },150);
+  },200);
+}
+
+// ── SAVE EVENTO ──
+async function saveEvento(){
+  const titolo=document.getElementById('ef-titolo').value.trim();
+  const tema=document.getElementById('ef-tema').value;
+  const tipo=document.getElementById('ef-tipo').value;
+  if(!titolo||!tema||!tipo){showToast('Compila i campi obbligatori','err');return;}
+  const gg=['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
+  const oreMap={seminario:2,corso_4h:4,corso_6h:6,corso_deontologico:2};
+  const ore=oreMap[tipo]||2;
+  const docente=selectedDocenti.length===1?selectedDocenti[0]:(selectedDocenti.length?selectedDocenti.join(', '):null);
+  const docentiNomi=selectedDocenti.length?selectedDocenti:null;
+  const base={
+    titolo,tema,tipologia:tipo,docente,docenti_nomi:docentiNomi,
+    prezzo:parseFloat(document.getElementById('ef-prezzo').value)||0,
+    prezzo_early_bird:parseFloat(document.getElementById('ef-eb').value)||null,
+    stato:document.getElementById('ef-stato').value,
+    iscritti_paganti:parseInt(document.getElementById('ef-ip').value)||0,
+    presenti_paganti:parseInt(document.getElementById('ef-pp').value)||0,
+    iscritti_early_bird:parseInt(document.getElementById('ef-ieb').value)||0,
+    presenti_early_bird:parseInt(document.getElementById('ef-peb').value)||0,
+    iscritti_illimitati:parseInt(document.getElementById('ef-ii').value)||0,
+    presenti_illimitati:parseInt(document.getElementById('ef-pi').value)||0,
+    iscritti_gratuiti:parseInt(document.getElementById('ef-ig').value)||0,
+    presenti_gratuiti:parseInt(document.getElementById('ef-pg').value)||0,
+    note:document.getElementById('ef-note').value||null,
+    escludi_kpi:document.getElementById('ef-escludi').checked,
+    modified_by:userProfile?.name||'—',
+    modified_at:new Date().toISOString()
+  };
+  // Multi-sessione
+  if((tipo==='corso_4h'||tipo==='corso_6h')&&!editId){
+    const nSess={corso_4h:2,corso_6h:3}[tipo];
+    if(sessioniCorso.filter(s=>!s.data).length>0){
+      showToast('Inserisci la data per tutte le '+nSess+' sessioni','err');return;
+    }
+    const padreId=(typeof crypto!=='undefined'&&crypto.randomUUID)?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36);
+    const payloads=sessioniCorso.map((s,i)=>({
+      ...base,data:s.data,orario:s.orario||null,
+      giorno:gg[new Date(s.data+'T00:00:00').getDay()],
+      modulo_numero:i+1,corso_padre_id:padreId,ore:2
+    }));
+    try{
+      const{error}=await sb.from('eventi').insert(payloads);
+      if(error)throw error;
+      showToast('Corso salvato: '+nSess+' sessioni create','ok');
+      closeEventoModal();await loadAll();
+    }catch(e){showToast('Errore: '+e.message,'err');}
+    return;
+  }
+  // Single event
+  const data=document.getElementById('ef-data').value;
+  if(!data){showToast('Inserisci la data','err');return;}
+  const payload={...base,data,giorno:gg[new Date(data+'T00:00:00').getDay()],
+    orario:document.getElementById('ef-orario').value||null,ore};
+  try{
+    let err;
+    if(editId){({error:err}=await sb.from('eventi').update(payload).eq('id',editId));}
+    else{({error:err}=await sb.from('eventi').insert(payload));}
+    if(err)throw err;
+    showToast(editId?'Evento aggiornato':'Evento salvato','ok');
+    closeEventoModal();await loadAll();
+  }catch(e){showToast('Errore: '+e.message,'err');}
+}
+
+// ── OPEN/CLOSE EVENTO MODAL ──
+function openEventoModal(id=null){
+  editId=id;selectedDocenti=[];sessioniCorso=[];
+  document.getElementById('ev-modal-title').textContent=id?'Modifica evento':'Nuovo evento';
+  const dupBtn=document.getElementById('ev-dup-btn');
+  if(dupBtn)dupBtn.style.display=id?'inline-flex':'none';
+  if(id){
+    const e=DB.find(x=>x.id===id);if(!e)return;
+    const oreMap={seminario:2,corso_4h:4,corso_6h:6,corso_deontologico:2};
+    const setV=(elId,val)=>{const el=document.getElementById(elId);if(el)el.value=val||'';};
+    setV('ef-data',e.data);setV('ef-orario',e.orario);setV('ef-titolo',e.titolo);
+    setV('ef-tema',e.tema);setV('ef-tipo',e.tipologia);setV('ef-prezzo',e.prezzo);
+    setV('ef-eb',e.prezzo_early_bird);
+    document.getElementById('ef-stato').value=e.stato||'pianificato';
+    setV('ef-ip',e.iscritti_paganti);setV('ef-pp',e.presenti_paganti);
+    setV('ef-ieb',e.iscritti_early_bird);setV('ef-peb',e.presenti_early_bird);
+    setV('ef-ii',e.iscritti_illimitati);setV('ef-pi',e.presenti_illimitati);
+    setV('ef-ig',e.iscritti_gratuiti);setV('ef-pg',e.presenti_gratuiti);
+    setV('ef-note',e.note);
+    document.getElementById('ef-escludi').checked=e.escludi_kpi||false;
+    const docArr=e.docenti_nomi||(e.docente?[e.docente]:[]);
+    setDocentiFromArray(docArr);
+    const oreDisp=document.getElementById('ef-ore-display');
+    if(oreDisp)oreDisp.textContent=(oreMap[e.tipologia]||e.ore||2)+'h';
+    document.getElementById('date-single').style.display='block';
+    document.getElementById('date-multi').style.display='none';
+  }else{
+    const ids=['ef-data','ef-orario','ef-titolo','ef-tema','ef-tipo','ef-prezzo','ef-eb',
+               'ef-ip','ef-pp','ef-ieb','ef-peb','ef-ii','ef-pi','ef-ig','ef-pg','ef-note'];
+    ids.forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
+    document.getElementById('ef-stato').value='pianificato';
+    document.getElementById('ef-escludi').checked=false;
+    document.getElementById('date-single').style.display='block';
+    document.getElementById('date-multi').style.display='none';
+    const oreDisp=document.getElementById('ef-ore-display');
+    if(oreDisp)oreDisp.textContent='—';
+  }
+  document.getElementById('ev-modal').style.display='flex';
+}
+function closeEventoModal(){
+  document.getElementById('ev-modal').style.display='none';
+  editId=null;selectedDocenti=[];sessioniCorso=[];
+}
+
+
+
+function toggleSidebar(){
+  const sb=document.getElementById('sidebar');
+  const ov=document.getElementById('mob-overlay');
+  const isOpen=sb.classList.contains('open');
+  if(isOpen){closeSidebar();}
+  else{sb.classList.add('open');if(ov)ov.style.display='block';}
+}
+function closeSidebar(){
+  const sb=document.getElementById('sidebar');
+  const ov=document.getElementById('mob-overlay');
+  sb.classList.remove('open');
+  if(ov)ov.style.display='none';
+}
+// Close sidebar on nav click (mobile)
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.sbi').forEach(item=>{
+    item.addEventListener('click',()=>{
+      if(window.innerWidth<=768)closeSidebar();
+    });
+  });
 });
 
 // ── START ──
