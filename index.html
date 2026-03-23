@@ -2515,7 +2515,7 @@ function renderDashboard(){
     if(!pross.length){prossList.innerHTML='<div class="empty"><div class="ei">📅</div><div class="et">Nessun evento in programma</div></div>';}
     else{prossList.innerHTML=pross.map(e=>{
       const gi=new Date(e.data+'T00:00:00').toLocaleDateString('it',{weekday:'short'});
-      const totIsc=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+(parseInt(e.iscritti_illimitati)||0);
+      const totIsc=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e)+(parseInt(e.iscritti_illimitati)||0);
       return`<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:.5px solid var(--border);cursor:pointer" onclick="openEvDetail('${e.id}')" class="sbi" style="">
         <div style="flex-shrink:0;width:42px;text-align:center;background:var(--bg3);border-radius:var(--r);padding:5px 0">
           <div style="font-size:9px;color:var(--text3);text-transform:uppercase">${gi}</div>
@@ -2544,7 +2544,7 @@ function renderDashboard(){
     if(!ultimi.length){svoltiGrid.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="ei">📊</div><div class="et">Nessun evento svolto ancora</div></div>';}
     else{svoltiGrid.innerHTML=ultimi.map(e=>{
       const totPres=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
-      const totIsc=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+(parseInt(e.iscritti_illimitati)||0);
+      const totIsc=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e)+(parseInt(e.iscritti_illimitati)||0);
       const tasso=totIsc>0?Math.round(totPres/totIsc*100):null;
       const tassoCol=tasso===null?'var(--text3)':tasso>=70?'var(--green)':tasso>=40?'var(--yellow)':'var(--red)';
       return`<div class="svolti-card" onclick="openEvDetail('${e.id}')">
@@ -2649,14 +2649,14 @@ function calcStats(nome,range='all'){
   });
   const tot=evUniq.length;
   // BUG FIX 1: use evUniq for averages (not ev) to avoid counting multi-session moduli multiple times
-  const ip=evUniq.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0),0);
+  const ip=evUniq.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e),0);
   const pp=evUniq.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
   const ii=evUniq.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
   const pi=evUniq.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
   const avgPag=tot>0?ip/tot:0;const avgFI=tot>0?ii/tot:0;
   // BUG FIX 2: tasso presenze only on completed events (svolto/chiuso) — future events have no real presenti
   const evComp=evUniq.filter(e=>['svolto','chiuso'].includes(e.stato));
-  const ipC=evComp.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0),0);
+  const ipC=evComp.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e),0);
   const ppC=evComp.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
   const iiC=evComp.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
   const piC=evComp.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
@@ -2927,7 +2927,7 @@ function renderChartTemi(type){
 // ── COMMERCIALE ──
 function renderCommerciale(){
   const kpi=getKPI();
-  const ip=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0),0);
+  const ip=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e),0);
   const pp=kpi.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
   const ta=ip>0?Math.round(pp/ip*100):0;
   const ric=kpi.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0),0);
@@ -3156,12 +3156,12 @@ function renderEventi(){
       case 'tema':    va=(a.tema||'').toLowerCase(); vb=(b.tema||'').toLowerCase(); break;
       case 'tipo':    va=a.tipologia||''; vb=b.tipologia||''; break;
       case 'docente': va=(a.docente||'').toLowerCase(); vb=(b.docente||'').toLowerCase(); break;
-      case 'iscr':    va=(parseInt(a.iscritti_paganti)||0)+(parseInt(a.iscritti_early_bird)||0)+(parseInt(a.iscritti_illimitati)||0);
-                      vb=(parseInt(b.iscritti_paganti)||0)+(parseInt(b.iscritti_early_bird)||0)+(parseInt(b.iscritti_illimitati)||0); break;
+      case 'iscr':    va=(parseInt(a.iscritti_paganti)||0)+(parseInt(a.iscritti_early_bird)||0)+buoniNr(a)+(parseInt(a.iscritti_illimitati)||0);
+                      vb=(parseInt(b.iscritti_paganti)||0)+(parseInt(b.iscritti_early_bird)||0)+buoniNr(b)+(parseInt(b.iscritti_illimitati)||0); break;
       case 'pres':    va=(parseInt(a.presenti_paganti)||0)+(parseInt(a.presenti_illimitati)||0);
                       vb=(parseInt(b.presenti_paganti)||0)+(parseInt(b.presenti_illimitati)||0); break;
-      case 'tasso':   {const tia=(parseInt(a.iscritti_paganti)||0)+(parseInt(a.iscritti_early_bird)||0)+(parseInt(a.iscritti_illimitati)||0);
-                       const tib=(parseInt(b.iscritti_paganti)||0)+(parseInt(b.iscritti_early_bird)||0)+(parseInt(b.iscritti_illimitati)||0);
+      case 'tasso':   {const tia=(parseInt(a.iscritti_paganti)||0)+(parseInt(a.iscritti_early_bird)||0)+buoniNr(a)+(parseInt(a.iscritti_illimitati)||0);
+                       const tib=(parseInt(b.iscritti_paganti)||0)+(parseInt(b.iscritti_early_bird)||0)+buoniNr(b)+(parseInt(b.iscritti_illimitati)||0);
                        va=tia>0?((parseInt(a.presenti_paganti)||0)+(parseInt(a.presenti_illimitati)||0))/tia:0;
                        vb=tib>0?((parseInt(b.presenti_paganti)||0)+(parseInt(b.presenti_illimitati)||0))/tib:0; break;}
       case 'ricavo':  va=((parseFloat(a.prezzo)||0)*(parseInt(a.iscritti_paganti)||0))+((parseFloat(a.prezzo_early_bird)||0)*(parseInt(a.iscritti_early_bird)||0));
@@ -3175,7 +3175,7 @@ function renderEventi(){
   });
   if(!f.length){document.getElementById('ev-tbl').innerHTML='<div class="empty"><div class="ei">🔍</div><div class="et">Nessun evento trovato</div></div>';return;}
   document.getElementById('ev-tbl').innerHTML=`<table><thead><tr><th style="width:32px"><input type="checkbox" id="ev-sel-all" onchange="toggleSelectAll(this)" style="accent-color:var(--accent);cursor:pointer"></th><th onclick="setEvSort('data')" style="cursor:pointer;white-space:nowrap;user-select:none">Data${evSortArrow('data')}</th><th onclick="setEvSort('titolo')" style="cursor:pointer;user-select:none">Titolo${evSortArrow('titolo')}</th><th onclick="setEvSort('tema')" style="cursor:pointer;user-select:none">Tema${evSortArrow('tema')}</th><th onclick="setEvSort('tipo')" style="cursor:pointer;user-select:none">Tipo${evSortArrow('tipo')}</th><th onclick="setEvSort('docente')" style="cursor:pointer;user-select:none">Docente${evSortArrow('docente')}</th><th>Ore</th><th onclick="setEvSort('iscr')" style="cursor:pointer;user-select:none">Iscr.${evSortArrow('iscr')}</th><th onclick="setEvSort('pres')" style="cursor:pointer;user-select:none">Pres.${evSortArrow('pres')}</th><th onclick="setEvSort('tasso')" style="cursor:pointer;user-select:none">Tasso${evSortArrow('tasso')}</th><th onclick="setEvSort('ricavo')" style="cursor:pointer;user-select:none">Ricavo${evSortArrow('ricavo')}</th><th onclick="setEvSort('stato')" style="cursor:pointer;user-select:none">Stato${evSortArrow('stato')}</th><th>Mod. da</th><th>Azioni</th></tr></thead><tbody>${f.map(e=>{
-    const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+(parseInt(e.iscritti_illimitati)||0);
+    const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e)+(parseInt(e.iscritti_illimitati)||0);
     const tp=((parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_early_bird)||0))+(parseInt(e.presenti_illimitati)||0);
     const ta=ti>0?Math.round(tp/ti*100):null;
     const tc=ta===null?'var(--text3)':ta>=70?'var(--green)':ta>=40?'var(--yellow)':'var(--red)';
@@ -3524,7 +3524,8 @@ function openEvDetail(id){
   const ipTot=ip+ieb;   // iscritti paganti totali (pieno + EB)
   // ppTot: presenti paganti totali — handles both old (pp+peb separate) and new (pp unified) data
   const ppTot=peb>0?(pp+peb):pp;
-  const totI=ipTot+ii;
+  const buoniI=buoniNr(e);
+  const totI=ipTot+buoniI+ii;
   const totP=ppTot+pi;
   const tasso=totI>0?Math.round(totP/totI*100):null;
   const tCol=tasso===null?'var(--text2)':tasso>=70?'var(--green)':tasso>=40?'var(--yellow)':'var(--red)';
@@ -3877,7 +3878,7 @@ function repPreview(){
   if(!tbl)return;
   if(!data.length){tbl.innerHTML='<div class="empty"><div class="et">Nessun evento trovato con questi filtri</div></div>';return;}
   const rows=data.map(e=>{
-    const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+(parseInt(e.iscritti_illimitati)||0);
+    const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e)+(parseInt(e.iscritti_illimitati)||0);
     const tp=((parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_early_bird)||0))+(parseInt(e.presenti_illimitati)||0);
     const tasso=ti>0?Math.round(tp/ti*100)+'%':'—';
     const ric=(()=>{
@@ -3892,7 +3893,7 @@ function repPreview(){
 
 function getRepEventiData(){
   return getRepFiltered().map(e=>{
-    const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+(parseInt(e.iscritti_illimitati)||0);
+    const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e)+(parseInt(e.iscritti_illimitati)||0);
     const tp=((parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_early_bird)||0))+(parseInt(e.presenti_illimitati)||0);
     const tasso=ti>0?Math.round(tp/ti*100):0;
     const ric=(()=>{
@@ -3934,7 +3935,7 @@ function getRepCommercialeData(){
     const pag=me.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
     const fi=me.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
     const ric=me.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0),0);
-    const isc=me.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+(parseInt(e.iscritti_illimitati)||0),0);
+    const isc=me.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e)+(parseInt(e.iscritti_illimitati)||0),0);
     const pres=me.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0),0);
     return{mese:m,eventi:me.length,paganti_presenti:pag,fi_presenti:fi,tasso:isc>0?Math.round(pres/isc*100)+'%':'—',ricavi:Math.round(ric)};
   });
@@ -4348,6 +4349,13 @@ function renderBuoniSconto(){
       <button type="button" onclick="removeBuonoSconto(${b.id})" class="btn btn-d btn-sm" style="padding:6px 10px;height:fit-content">✕</button>`;
     el.appendChild(row);
   });
+}
+
+
+function buoniNr(e){
+  if(!e.buoni_sconto)return 0;
+  try{const b=JSON.parse(e.buoni_sconto);return Array.isArray(b)?b.reduce((s,x)=>s+(x.nr||0),0):0;}
+  catch(_){return 0;}
 }
 
 function getBuoniScontoData(){
