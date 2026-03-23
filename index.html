@@ -2569,10 +2569,14 @@ function filterByTime(data,range){
   const cutoff=new Date();
   if(range==='7d')cutoff.setDate(now.getDate()-7);
   else if(range==='30d')cutoff.setDate(now.getDate()-30);
-  else if(range==='current'){cutoff.setDate(1);cutoff.setHours(0,0,0,0);}
+  else if(range==='cur'||range==='current'){cutoff.setDate(1);cutoff.setHours(0,0,0,0);}
   else if(range==='6m')cutoff.setMonth(now.getMonth()-6);
   else if(range==='1y')cutoff.setFullYear(now.getFullYear()-1);
   return data.filter(e=>{if(!e.data)return false;return new Date(e.data)>=cutoff;});
+}
+
+function filterCustomRange(data,from,to){
+  return data.filter(e=>e.data&&e.data>=from&&e.data<=to);
 }
 
 function progBar(val,max,grad,label,unit){
@@ -2604,7 +2608,11 @@ function applyCustomRange(wrapId){
   if(type==='presenze')renderChartMeseCustom(chartId,from,to);
   else if(type==='trend')renderChartTrendCustom(chartId,from,to);
   else if(type==='ricavi')renderChartRicaviCustom(chartId,from,to);
-  else if(type==='rank'){renderFormatori('custom',from,to);}
+  else if(type==='rank'){
+    window._rankCustomFrom=from;
+    window._rankCustomTo=to;
+    renderFormatori('custom',0);
+  }
   const lbl=document.getElementById('tnav-lbl-'+wrapId);
   if(lbl)lbl.textContent=from.slice(5)+' → '+to.slice(5);
 }
@@ -2735,6 +2743,14 @@ function filterByTimeWithNav(data,range,offset){
   } else if(range==='1y'){
     start.setFullYear(now.getFullYear()+offset);start.setMonth(0);start.setDate(1);
     end.setFullYear(now.getFullYear()+offset);end.setMonth(11);end.setDate(31);
+  } else if(range==='custom'){
+    const f=window._rankCustomFrom||'';const t=window._rankCustomTo||'';
+    if(!f||!t)return data;
+    return data.filter(e=>e.data&&e.data>=f&&e.data<=t);
+  } else if(range==='custom'){
+    const f=window._rankCustomFrom||'';const t=window._rankCustomTo||'';
+    if(!f||!t)return data;
+    return data.filter(e=>e.data&&e.data>=f&&e.data<=t);
   } else return data;
   start.setHours(0,0,0,0);end.setHours(23,59,59,999);
   return data.filter(e=>{if(!e.data)return false;const d=new Date(e.data+'T00:00:00');return d>=start&&d<=end;});
@@ -2744,7 +2760,7 @@ function refreshChartWithNav(chartId,type,range,offset){
   if(type==='presenze')renderChartMese(chartId,range,offset);
   else if(type==='trend')renderChartTrend(chartId,range,offset);
   else if(type==='ricavi')renderChartRicavi(chartId,range,offset);
-  else if(type==='rank')renderFormatori(range);
+  else if(type==='rank')renderFormatori(range,0);
 }
 
 function setTimeFilter(wrapId,btn){
@@ -2767,7 +2783,7 @@ function setTimeFilter(wrapId,btn){
   if(type==='presenze')renderChartMese(chartId,range,0);
   else if(type==='trend')renderChartTrend(chartId,range,0);
   else if(type==='ricavi')renderChartRicavi(chartId,range,0);
-  else if(type==='rank')renderFormatori(range);
+  else if(type==='rank')renderFormatori(range,offset);
 }
 
 // ── CHART TYPES ──
@@ -2941,9 +2957,9 @@ function renderChartTipo(type){
 }
 
 // ── FORMATORI ──
-function calcStats(nome,range='all'){
+function calcStats(nome,range='all',offset=0){
   // Include events where docente matches OR docenti_nomi array includes nome
-  const ev=filterByTime(DB.filter(e=>(e.docente===nome||(e.docenti_nomi&&e.docenti_nomi.includes(nome)))&&!e.escludi_kpi),range);
+  const ev=filterByTimeWithNav(DB.filter(e=>(e.docente===nome||(e.docenti_nomi&&e.docenti_nomi.includes(nome)))&&!e.escludi_kpi),range,offset||0);
   // Deduplicate multi-session courses by corso_padre_id
   const seen=new Set();
   const evUniq=ev.filter(e=>{
@@ -2971,8 +2987,8 @@ function calcStats(nome,range='all'){
   return{tot,ip,pp,ii,pi,avgPag,avgFI,tassoPag,tassoFI,ric,temiUsati,ev};
 }
 
-function renderFormatori(range='all'){
-  const stats=FORMATORI_DEF.map(f=>({...f,s:calcStats(f.nome,range)}));
+function renderFormatori(range='all',offset=0){
+  const stats=FORMATORI_DEF.map(f=>({...f,s:calcStats(f.nome,range,offset)}));
   stats.sort((a,b)=>b.s.avgPag-a.s.avgPag);
   const maxPag=stats[0]?.s.avgPag||1;
   const isDark=document.body.classList.contains('dark');
