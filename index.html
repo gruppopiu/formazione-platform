@@ -518,7 +518,7 @@ textarea.finp{min-height:72px;resize:vertical}
         <div class="grid2">
           <div class="card">
             <div class="chart-toolbar">
-              <div class="ctitle" style="margin:0">Presenze mensili</div>
+              <div class="ctitle" style="margin:0">Presenze mensili <span style="font-size:10px;color:var(--text3);font-weight:400">(paganti + FI)</span></div>
               <div style="display:flex;gap:8px;align-items:center">
                 <div class="chart-type-btns" id="ctype-mese">
                   <button class="ct-btn on" onclick="setChartType('ch-mese','bar',this)">Bar</button>
@@ -528,6 +528,21 @@ textarea.finp{min-height:72px;resize:vertical}
               </div>
             </div>
             <div class="chw"><canvas id="ch-mese"></canvas></div>
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="card">
+            <div class="chart-toolbar">
+              <div class="ctitle" style="margin:0">Ricavi mensili</div>
+              <div style="display:flex;gap:8px;align-items:center">
+                <div class="chart-type-btns" id="ctype-ric-home">
+                  <button class="ct-btn on" onclick="setChartType('ch-ric-home','bar',this)">Bar</button>
+                  <button class="ct-btn" onclick="setChartType('ch-ric-home','line',this)">Line</button>
+                </div>
+                <div class="time-btns" id="tbtns-ric-home" data-chart="ch-ric-home" data-type="ricavi"></div>
+              </div>
+            </div>
+            <div class="chw"><canvas id="ch-ric-home"></canvas></div>
           </div>
           <div class="card">
             <div class="chart-toolbar">
@@ -2583,6 +2598,7 @@ function renderDashboard(){
     }).join('');}
   }
   renderChartMese('ch-mese',chartTimeFilters['ch-mese']||'all');
+  renderChartRicavi('ch-ric-home',chartTimeFilters['ch-ric-home']||'all');
   renderChartTrend('ch-trend',chartTimeFilters['ch-trend']||'all');
   renderChartTipo(chartTypes['ch-tipo']||'doughnut');
 }
