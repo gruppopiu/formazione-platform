@@ -2892,9 +2892,10 @@ function renderKPI(){
 }
 
 function renderChartTemi(type){
-  const kpi=getKPI();
-  const tC={};kpi.forEach(e=>{tC[e.tema]=(tC[e.tema]||0)+1;});
-  const tot=kpi.length||1;
+  const svoltiAll=getSvolti();
+  const temiCfp={};
+  svoltiAll.forEach(e=>{if(e.tema)temiCfp[e.tema]=(temiCfp[e.tema]||0)+cfpEv(e);});
+  const CFP_TOT=146;
   const tl=Object.keys(TEMI_PESI);
   const isDark=document.body.classList.contains('dark');
   const ac=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||getThemeChartColors()[0];
@@ -2902,25 +2903,31 @@ function renderChartTemi(type){
   const tview=document.getElementById('temi-table-view');
   if(type==='table'){
     if(wrap)wrap.style.display='none';
-    if(tview){
-      tview.style.display='block';
-      tview.innerHTML=`<table><thead><tr><th>Tema</th><th>Peso target</th><th>Effettivo</th><th>Scostamento</th><th>Trend</th></tr></thead><tbody>${tl.map(t=>{
-        const cnt=tC[t]||0;const peff=+(cnt/tot*100).toFixed(1);const pw=TEMI_PESI[t];const diff=+(peff-pw).toFixed(1);
-        const col=diff>=0?'var(--green)':'var(--red)';
-        return`<tr><td style="font-weight:500;color:var(--text)">${t}</td><td class="mono">${fmtNum(pw,1)}%</td><td class="mono" style="color:${col}">${fmtNum(peff,1)}%</td><td class="mono" style="color:${col}">${diff>=0?'+':''}${fmtNum(Math.abs(diff),1)}%</td><td><div style="height:5px;width:80px;background:var(--bg3);border-radius:3px;overflow:hidden"><div style="width:${Math.min(100,Math.round(peff/pw*100))}%;height:5px;background:${col};border-radius:3px"></div></div></td></tr>`;
-      }).join('')}</tbody></table>`;
-    }
+    if(tview)tview.style.display='block';
+    // temi-table-view is built in renderKPI using temiCfp — rebuild it here too
+    const temiCfp2={};svoltiAll.forEach(e=>{if(e.tema)temiCfp2[e.tema]=(temiCfp2[e.tema]||0)+cfpEv(e);});
+    const tv=document.getElementById('temi-table-view');
+    if(tv)tv.innerHTML=`<table><thead><tr><th>Tema</th><th>Target CFP</th><th>Erogati</th><th>Avanzamento</th><th>Trend</th></tr></thead><tbody>${
+      tl.map(t=>{
+        const target=Math.round(TEMI_PESI[t]/100*CFP_TOT*10)/10;
+        const actual=temiCfp2[t]||0;
+        const pct=target>0?Math.round(actual/target*100):0;
+        const col=pct>=100?'var(--green)':pct>=60?'var(--yellow)':'var(--red)';
+        const barW=Math.min(100,pct);
+        return`<tr><td style="font-weight:500;color:var(--text)">${t}</td><td class="mono">${fmtNum(target,1)} CFP</td><td class="mono" style="color:${col}">${fmtNum(actual,1)} CFP</td><td class="mono" style="color:${col}">${pct}%</td><td><div style="height:5px;width:80px;background:var(--bg3);border-radius:3px;overflow:hidden"><div style="height:100%;width:${barW}%;background:${col};border-radius:3px"></div></div></td></tr>`;
+      }).join('')
+    }</tbody></table>`;
     return;
   }
   if(wrap)wrap.style.display='block';
   if(tview)tview.style.display='none';
-  const themeC=getThemeChartColors();
-  // For bar: use rotating theme colors per bar for max distinctiveness
-  const temiBarColors=tl.map((_,i)=>themeC[i%themeC.length]);
-  const temiBarBorder=tl.map((_,i)=>themeC[i%themeC.length]);
-  renderChartGrad('ch-temi',type,tl,[
-    {label:'% effettivo',data:tl.map(t=>+(((tC[t]||0)/tot*100).toFixed(1))),backgroundColor:type==='bar'?temiBarColors.map(c=>c+'99'):tl.map((_,i)=>themeC[i%themeC.length]+'cc'),borderColor:type==='bar'?temiBarBorder:themeC[0],borderWidth:type==='bar'?1.5:2,borderRadius:type==='bar'?3:0},
-    ...(type!=='doughnut'&&type!=='pie'?[{label:'% target',data:Object.values(TEMI_PESI),backgroundColor:'rgba(128,128,128,.12)',borderColor:'rgba(128,128,128,.35)',borderWidth:1,borderRadius:3}]:[])
+  // Chart: actual CFP vs target CFP per tema
+  const actualData=tl.map(t=>temiCfp[t]||0);
+  const targetData=tl.map(t=>Math.round(TEMI_PESI[t]/100*CFP_TOT*10)/10);
+  const c=getThemeChartColors();
+  renderChartGrad('ch-temi',type==='bar'?'bar':'line',tl,[
+    {label:'CFP erogati',data:actualData,backgroundColor:c[0]+'aa',borderColor:c[0],borderWidth:2,borderRadius:3},
+    {label:'Target CFP',data:targetData,backgroundColor:'rgba(128,128,128,.12)',borderColor:'rgba(128,128,128,.35)',borderWidth:1,borderRadius:3}
   ],{indexAxis:type==='bar'?'y':undefined});
 }
 
