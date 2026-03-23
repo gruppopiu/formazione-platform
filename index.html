@@ -603,6 +603,22 @@ textarea.finp{min-height:72px;resize:vertical}
         <select class="fsel" id="fe-stato" onchange="renderEventi()"><option value="">Stato</option><option value="pianificato">Pianificato</option><option value="pubblicato">Pubblicato</option><option value="svolto">Svolto</option><option value="chiuso">Chiuso</option></select>
         <select class="fsel" id="fe-kpi" onchange="renderEventi()"><option value="">Tutti</option><option value="no">Solo KPI</option></select>
       </div>
+      <!-- BULK ACTION BAR -->
+      <div id="ev-bulk-bar" style="display:none;align-items:center;gap:12px;background:var(--accent-bg);border:1px solid var(--accent);border-radius:var(--r);padding:10px 16px;margin-bottom:10px;flex-wrap:wrap">
+        <span style="font-size:12px;font-weight:600;color:var(--accent)" id="ev-bulk-count">0 selezionati</span>
+        <div style="display:flex;align-items:center;gap:8px;flex:1;flex-wrap:wrap">
+          <label style="font-size:11px;color:var(--text2);white-space:nowrap">Cambia stato in:</label>
+          <select class="finp" id="ev-bulk-stato" style="max-width:150px;font-size:12px;padding:5px 10px">
+            <option value="">— seleziona —</option>
+            <option value="pianificato">Pianificato</option>
+            <option value="pubblicato">Pubblicato</option>
+            <option value="svolto">Svolto</option>
+            <option value="chiuso">Chiuso</option>
+          </select>
+          <button class="btn btn-p btn-sm" onclick="bulkUpdateStato()">✓ Applica</button>
+          <button class="btn btn-s btn-sm" onclick="clearEvSelection()">✕ Deseleziona tutto</button>
+        </div>
+      </div>
       <div class="card" style="padding:0"><div class="twrap" id="ev-tbl"></div></div>
     </div>
 
@@ -2982,7 +2998,77 @@ function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalend
 function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendario();}
 
 // ── EVENTI ──
+
+// ── BULK SELEZIONE EVENTI ──
+const selectedEventIds = new Set();
+
+function onEvCheck(chk){
+  const id = chk.dataset.id;
+  if(chk.checked) selectedEventIds.add(id);
+  else selectedEventIds.delete(id);
+  updateBulkBar();
+  // Update "select all" checkbox state
+  const all = document.getElementById('ev-sel-all');
+  if(!all) return;
+  const allChks = document.querySelectorAll('.ev-chk');
+  const checkedCount = document.querySelectorAll('.ev-chk:checked').length;
+  all.indeterminate = checkedCount > 0 && checkedCount < allChks.length;
+  all.checked = checkedCount === allChks.length && allChks.length > 0;
+}
+
+function toggleSelectAll(chk){
+  document.querySelectorAll('.ev-chk').forEach(c => {
+    c.checked = chk.checked;
+    const id = c.dataset.id;
+    if(chk.checked) selectedEventIds.add(id);
+    else selectedEventIds.delete(id);
+  });
+  updateBulkBar();
+}
+
+function updateBulkBar(){
+  const bar = document.getElementById('ev-bulk-bar');
+  const cnt = document.getElementById('ev-bulk-count');
+  const n = selectedEventIds.size;
+  if(bar) bar.style.display = n > 0 ? 'flex' : 'none';
+  if(cnt) cnt.textContent = n + (n === 1 ? ' evento selezionato' : ' eventi selezionati');
+}
+
+function clearEvSelection(){
+  selectedEventIds.clear();
+  document.querySelectorAll('.ev-chk').forEach(c => c.checked = false);
+  const all = document.getElementById('ev-sel-all');
+  if(all){ all.checked = false; all.indeterminate = false; }
+  updateBulkBar();
+}
+
+async function bulkUpdateStato(){
+  const nuovoStato = document.getElementById('ev-bulk-stato')?.value;
+  if(!nuovoStato){ showToast('Seleziona uno stato','err'); return; }
+  const ids = [...selectedEventIds];
+  if(!ids.length){ showToast('Nessun evento selezionato','err'); return; }
+  try{
+    const{error} = await sb.from('eventi')
+      .update({stato: nuovoStato, modified_by: userProfile?.name||'—', modified_at: new Date().toISOString()})
+      .in('id', ids);
+    if(error) throw error;
+    // Update local DB
+    ids.forEach(id => {
+      const ev = DB.find(e => e.id === id);
+      if(ev){ ev.stato = nuovoStato; ev.modified_by = userProfile?.name||'—'; }
+    });
+    showToast(`${ids.length} ${ids.length===1?'evento aggiornato':'eventi aggiornati'}: → ${nuovoStato}`, 'ok');
+    clearEvSelection();
+    renderEventi();
+  }catch(e){ showToast('Errore: ' + e.message, 'err'); }
+}
+
 function renderEventi(){
+  // Reset selection on re-render
+  selectedEventIds.clear();
+  updateBulkBar();
+  const allChkH=document.getElementById('ev-sel-all');
+  if(allChkH){allChkH.checked=false;allChkH.indeterminate=false;}
   const s=(document.getElementById('fe-search')?.value||'').toLowerCase();
   const an=document.getElementById('fe-anno')?.value||'';
   const me=document.getElementById('fe-mese')?.value||'';
@@ -3001,12 +3087,12 @@ function renderEventi(){
     return true;
   });
   if(!f.length){document.getElementById('ev-tbl').innerHTML='<div class="empty"><div class="ei">🔍</div><div class="et">Nessun evento trovato</div></div>';return;}
-  document.getElementById('ev-tbl').innerHTML=`<table><thead><tr><th>Data</th><th>Titolo</th><th>Tema</th><th>Tipo</th><th>Docente</th><th>Ore</th><th>Iscr.</th><th>Pres.</th><th>Tasso</th><th>Ricavo</th><th>Stato</th><th>Mod. da</th><th>Azioni</th></tr></thead><tbody>${f.map(e=>{
+  document.getElementById('ev-tbl').innerHTML=`<table><thead><tr><th style="width:32px"><input type="checkbox" id="ev-sel-all" onchange="toggleSelectAll(this)" style="accent-color:var(--accent);cursor:pointer"></th><th>Data</th><th>Titolo</th><th>Tema</th><th>Tipo</th><th>Docente</th><th>Ore</th><th>Iscr.</th><th>Pres.</th><th>Tasso</th><th>Ricavo</th><th>Stato</th><th>Mod. da</th><th>Azioni</th></tr></thead><tbody>${f.map(e=>{
     const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_illimitati)||0);
     const tp=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
     const ta=ti>0?Math.round(tp/ti*100):null;
     const tc=ta===null?'var(--text3)':ta>=70?'var(--green)':ta>=40?'var(--yellow)':'var(--red)';
-    return`<tr><td class="mono">${fmtDate(e.data)}</td><td style="color:var(--text);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.titolo}">${e.titolo}${e.escludi_kpi?'<span style="font-size:8px;color:var(--text3);margin-left:3px">[excl]</span>':''}</td><td>${e.tema||'—'}</td><td>${badgeTipo(e.tipologia)}</td><td><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">${(e.docenti_nomi&&e.docenti_nomi.length>1)?e.docenti_nomi.map(d=>getFmAvatar(d,22)).join('')+'<span style="font-size:10px">'+e.docenti_nomi.join(', ')+'</span>':(e.docente?getFmAvatar(e.docente,22)+'<span>'+e.docente+'</span>':'<span>—</span>')}</div></td><td class="mono">${e.ore}h</td><td class="mono">${ti}</td><td class="mono">${tp}</td><td class="mono" style="color:${tc}">${ta!==null?ta+'%':'—'}</td><td class="mono" style="font-size:11px">${(()=>{const r=((parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0))+((parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0));return r>0?fmtEuro(r,2):'—';})()}</td><td>${badgeStato(e.stato)}</td><td style="font-size:10px;color:var(--text3)">${e.modified_by||'—'}</td><td><button class="btn btn-p btn-sm" onclick="openEvDetail('${e.id}')" style="white-space:nowrap">Apri →</button></td></tr>`;
+    return`<tr data-id="${e.id}" class="ev-row" style="transition:background .1s"><td style="text-align:center;vertical-align:middle"><input type="checkbox" class="ev-chk" data-id="${e.id}" onchange="onEvCheck(this);this.closest('tr').style.background=this.checked?'rgba(var(--accent-rgb),.08)':''" style="accent-color:var(--accent);cursor:pointer;width:14px;height:14px"></td><td class="mono">${fmtDate(e.data)}</td><td style="color:var(--text);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.titolo}">${e.titolo}${e.escludi_kpi?'<span style="font-size:8px;color:var(--text3);margin-left:3px">[excl]</span>':''}</td><td>${e.tema||'—'}</td><td>${badgeTipo(e.tipologia)}</td><td><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">${(e.docenti_nomi&&e.docenti_nomi.length>1)?e.docenti_nomi.map(d=>getFmAvatar(d,22)).join('')+'<span style="font-size:10px">'+e.docenti_nomi.join(', ')+'</span>':(e.docente?getFmAvatar(e.docente,22)+'<span>'+e.docente+'</span>':'<span>—</span>')}</div></td><td class="mono">${e.ore}h</td><td class="mono">${ti}</td><td class="mono">${tp}</td><td class="mono" style="color:${tc}">${ta!==null?ta+'%':'—'}</td><td class="mono" style="font-size:11px">${(()=>{const r=((parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0))+((parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0));return r>0?fmtEuro(r,2):'—';})()}</td><td>${badgeStato(e.stato)}</td><td style="font-size:10px;color:var(--text3)">${e.modified_by||'—'}</td><td><button class="btn btn-p btn-sm" onclick="openEvDetail('${e.id}')" style="white-space:nowrap">Apri →</button></td></tr>`;
   }).join('')}</tbody></table>`;
 }
 
@@ -3600,13 +3686,8 @@ function closeEventoModal(){
 async function saveEvento(){
   const titolo=document.getElementById('ef-titolo').value.trim();
   const tema=document.getElementById('ef-tema').value;
-  const stato=document.getElementById('ef-stato').value;
-  let tipo=document.getElementById('ef-tipo').value;
-  // Se tipo è vuoto e stiamo modificando un evento esistente, recupera dal DB
-  if(!tipo&&editId){const ev=DB.find(x=>x.id===editId);if(ev)tipo=ev.tipologia||'';}
-  // Tipo non obbligatorio se lo stato è 'chiuso'
-  const tipoRequired=stato!=='chiuso';
-  if(!titolo||!tema||(tipoRequired&&!tipo)){showToast('Compila i campi obbligatori','err');return;}
+  const tipo=document.getElementById('ef-tipo').value;
+  if(!titolo||!tema||!tipo){showToast('Compila i campi obbligatori','err');return;}
   const gg=['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
   const oreMap={seminario:2,corso_4h:4,corso_6h:6,corso_deontologico:2};
   const ore=oreMap[tipo]||2;
