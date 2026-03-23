@@ -2881,14 +2881,33 @@ function renderKPI(){
     tipoCard('Deontologici',tc.corso_deontologico,OBJ.corso_deontologico,'y','⚖️');
 
   // Temi bars (2 columns)
-  const tC={};kpi.forEach(e=>{tC[e.tema]=(tC[e.tema]||0)+1;});
-  const tot=kpi.length||1;
-  document.getElementById('temi-bars').innerHTML=Object.entries(TEMI_PESI).map(([t,w])=>{
-    const cnt=tC[t]||0;const peff=+(cnt/tot*100).toFixed(1);
-    return progBar(peff,w,'g',t,'%');
+  // Conteggio eventi svolti per tema — assoluto e indipendente
+  const temiEv={};
+  getSvolti().forEach(e=>{if(e.tema){
+    const k=e.tema;
+    if(!temiEv[k])temiEv[k]=new Set();
+    // dedup corsi multi-sessione
+    const uid=e.corso_padre_id||e.id;
+    temiEv[k].add(uid);
+  }});
+  // Sort by count desc
+  const temiSorted=Object.keys(TEMI_PESI).map(t=>({t,n:temiEv[t]?temiEv[t].size:0}))
+    .sort((a,b)=>b.n-a.n);
+  const maxN=temiSorted[0]?.n||1;
+  const c=getThemeChartColors();
+  const rows=temiSorted.map(({t,n},i)=>{
+    const barW=maxN>0?Math.round(n/maxN*100):0;
+    const col=n===0?'var(--text3)':n===maxN?'var(--accent)':c[i%c.length];
+    return '<div style="display:flex;align-items:center;gap:8px;padding:4px 0">'
+      +'<div style="flex:1;min-width:0">'
+      +'<div style="font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px">'+t+'</div>'
+      +'<div style="height:5px;background:var(--bg3);border-radius:3px;overflow:hidden">'
+      +'<div style="height:100%;width:'+barW+'%;background:'+col+';border-radius:3px;transition:width .3s"></div>'
+      +'</div></div>'
+      +'<div style="font-size:13px;font-weight:700;color:'+col+';min-width:20px;text-align:right">'+n+'</div>'
+      +'</div>';
   }).join('');
-
-  renderChartTemi('table');
+  document.getElementById('temi-bars').innerHTML='<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px 24px">'+rows+'</div>';
 }
 
 function renderChartTemi(type){
