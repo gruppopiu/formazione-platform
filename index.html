@@ -930,11 +930,27 @@ textarea.finp{min-height:72px;resize:vertical}
       <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
         <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">💶 Prezzi</div>
         <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Early bird opzionale</div>
+        <datalist id="dl-prezzo-pieno">
+          <option value="48.36"><option value="64.75"><option value="89.34"><option value="122.13">
+          <option value="130.33"><option value="154.82"><option value="204.09"><option value="212.30">
+        </datalist>
+        <datalist id="dl-prezzo-eb">
+          <option value="36.89"><option value="48.36"><option value="64.75"><option value="89.34">
+          <option value="94.26"><option value="105.74"><option value="146.72"><option value="154.82">
+        </datalist>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-          <div class="fg"><label class="flbl">Prezzo pieno (€)</label><input type="number" class="finp" id="ef-prezzo" placeholder="es. 79,00" min="0" step="0.01"></div>
+          <div class="fg">
+            <label class="flbl">Prezzo pieno (€)</label>
+            <input type="number" list="dl-prezzo-pieno" class="finp" id="ef-prezzo" placeholder="es. 89,34" min="0" step="0.01">
+            <div style="font-size:10px;color:var(--text3);margin-top:4px">Digita o scegli dalla lista ↑</div>
+          </div>
           <div style="background:var(--yellow-bg);border:1.5px dashed var(--yellow);border-radius:var(--r);padding:12px">
             <div style="font-size:10px;font-weight:700;color:var(--yellow);margin-bottom:8px">⚡ Early Bird</div>
-            <div class="fg"><label class="flbl" style="color:var(--text3)">Prezzo EA (€)</label><input type="number" class="finp" id="ef-eb" placeholder="es. 59,00" min="0" step="0.01"></div>
+            <div class="fg">
+              <label class="flbl" style="color:var(--text3)">Prezzo EB (€)</label>
+              <input type="number" list="dl-prezzo-eb" class="finp" id="ef-eb" placeholder="es. 64,75" min="0" step="0.01">
+              <div style="font-size:10px;color:var(--text3);margin-top:4px">Digita o scegli dalla lista ↑</div>
+            </div>
           </div>
         </div>
         <!-- BUONI SCONTO -->
@@ -956,11 +972,10 @@ textarea.finp{min-height:72px;resize:vertical}
         <div style="display:flex;flex-direction:column;gap:10px">
           <div style="background:var(--green-bg);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r);padding:12px">
             <div style="font-size:10px;font-weight:700;color:var(--accent);margin-bottom:10px">Paganti</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px">
-              <div class="fg"><label class="flbl">Iscr. pieno</label><input type="number" class="finp" id="ef-ip" placeholder="0" min="0"></div>
-              <div class="fg"><label class="flbl">Pres. pieno</label><input type="number" class="finp" id="ef-pp" placeholder="0" min="0"></div>
-              <div class="fg"><label class="flbl">Iscr. EA</label><input type="number" class="finp" id="ef-ieb" placeholder="0" min="0"></div>
-              <div class="fg"><label class="flbl">Pres. EA</label><input type="number" class="finp" id="ef-peb" placeholder="0" min="0"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+              <div class="fg"><label class="flbl">Iscr. prezzo pieno</label><input type="number" class="finp" id="ef-ip" placeholder="0" min="0"></div>
+              <div class="fg"><label class="flbl">Iscr. Early Bird</label><input type="number" class="finp" id="ef-ieb" placeholder="0" min="0"></div>
+              <div class="fg"><label class="flbl">Presenti totali paganti</label><input type="number" class="finp" id="ef-pp" placeholder="0" min="0" title="Presenti totali: prezzo pieno + Early Bird"></div>
             </div>
           </div>
           <div style="background:var(--blue-bg);border:1px solid rgba(91,141,238,.25);border-radius:var(--r);padding:12px">
@@ -3459,7 +3474,7 @@ function openEvDetail(id){
       <div class="evd-stat-lbl">Paganti</div>
       <div class="evd-stat-val">${ip}</div>
       <div class="evd-stat-sub">Presenti: ${pp} ${tassoPag!==null?'('+tassoPag+'%)':''}</div>
-      ${e.prezzo_early_bird?`<div style="font-size:10px;color:var(--text3);margin-top:4px">EA: ${ieb} iscr. / ${peb} pres.</div>`:''}
+      ${e.prezzo_early_bird?`<div style="font-size:10px;color:var(--text3);margin-top:4px">EB: ${ieb} iscr.</div>`:''}
     </div>
     <div class="evd-stat">
       <div class="evd-stat-lbl">Form. Illimitata</div>
@@ -3660,7 +3675,7 @@ function openEventoModal(id=null){
     sv('ef-tema',e.tema);sv('ef-tipo',e.tipologia);sv('ef-prezzo',e.prezzo);
     sv('ef-eb',e.prezzo_early_bird);sv('ef-stato',e.stato||'pianificato');
     sv('ef-ip',e.iscritti_paganti);sv('ef-pp',e.presenti_paganti);
-    sv('ef-ieb',e.iscritti_early_bird);sv('ef-peb',e.presenti_early_bird);
+    sv('ef-ieb',e.iscritti_early_bird);// presenti_early_bird merged into ef-pp (presenti totali paganti)
     sv('ef-ii',e.iscritti_illimitati);sv('ef-pi',e.presenti_illimitati);
     sv('ef-ig',e.iscritti_gratuiti);sv('ef-pg',e.presenti_gratuiti);
     sv('ef-note',e.note);
@@ -3674,7 +3689,7 @@ function openEventoModal(id=null){
     document.getElementById('date-multi').style.display='none';
   } else {
     ['ef-data','ef-orario','ef-titolo','ef-tema','ef-tipo','ef-prezzo','ef-eb',
-     'ef-ip','ef-pp','ef-ieb','ef-peb','ef-ii','ef-pi','ef-ig','ef-pg','ef-note']
+     'ef-ip','ef-pp','ef-ieb','ef-ii','ef-pi','ef-ig','ef-pg','ef-note']
       .forEach(id2=>{const el=document.getElementById(id2);if(el)el.value='';});
     document.getElementById('ef-stato').value='pianificato';
     document.getElementById('ef-escludi').checked=false;
@@ -3710,7 +3725,7 @@ async function saveEvento(){
     iscritti_paganti:parseInt(document.getElementById('ef-ip').value)||0,
     presenti_paganti:parseInt(document.getElementById('ef-pp').value)||0,
     iscritti_early_bird:parseInt(document.getElementById('ef-ieb').value)||0,
-    presenti_early_bird:parseInt(document.getElementById('ef-peb').value)||0,
+    presenti_early_bird:0,
     iscritti_illimitati:parseInt(document.getElementById('ef-ii').value)||0,
     presenti_illimitati:parseInt(document.getElementById('ef-pi').value)||0,
     iscritti_gratuiti:parseInt(document.getElementById('ef-ig').value)||0,
