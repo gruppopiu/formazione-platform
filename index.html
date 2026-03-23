@@ -518,7 +518,7 @@ textarea.finp{min-height:72px;resize:vertical}
         <div class="grid2">
           <div class="card">
             <div class="chart-toolbar">
-              <div class="ctitle" style="margin:0">Presenze mensili <span style="font-size:10px;color:var(--text3);font-weight:400">(paganti + FI)</span></div>
+              <div class="ctitle" style="margin:0">Presenze mensili <span class="ctitle-sub">paganti + FI</span></div>
               <div style="display:flex;gap:8px;align-items:center">
                 <div class="chart-type-btns" id="ctype-mese">
                   <button class="ct-btn on" onclick="setChartType('ch-mese','bar',this)">Bar</button>
@@ -529,11 +529,9 @@ textarea.finp{min-height:72px;resize:vertical}
             </div>
             <div class="chw"><canvas id="ch-mese"></canvas></div>
           </div>
-        </div>
-        <div class="grid2">
           <div class="card">
             <div class="chart-toolbar">
-              <div class="ctitle" style="margin:0">Ricavi mensili</div>
+              <div class="ctitle" style="margin:0">Ricavi mensili <span class="ctitle-sub">eventi chiusi</span></div>
               <div style="display:flex;gap:8px;align-items:center">
                 <div class="chart-type-btns" id="ctype-ric-home">
                   <button class="ct-btn on" onclick="setChartType('ch-ric-home','bar',this)">Bar</button>
@@ -544,9 +542,10 @@ textarea.finp{min-height:72px;resize:vertical}
             </div>
             <div class="chw"><canvas id="ch-ric-home"></canvas></div>
           </div>
+        <div class="grid2">
           <div class="card">
             <div class="chart-toolbar">
-              <div class="ctitle" style="margin:0">Trend eventi per tipologia</div>
+              <div class="ctitle" style="margin:0">Trend eventi <span class="ctitle-sub">per tipologia</span></div>
               <div style="display:flex;gap:8px;align-items:center">
                 <div class="chart-type-btns" id="ctype-trend">
                   <button class="ct-btn on" onclick="setChartType('ch-trend','bar',this)">Bar</button>
@@ -557,8 +556,6 @@ textarea.finp{min-height:72px;resize:vertical}
             </div>
             <div class="chw"><canvas id="ch-trend"></canvas></div>
           </div>
-        </div>
-        <div class="grid2">
           <div class="card">
             <div class="chart-toolbar">
               <div class="ctitle" style="margin:0">Distribuzione tipologie</div>
@@ -570,12 +567,12 @@ textarea.finp{min-height:72px;resize:vertical}
             </div>
             <div class="chw"><canvas id="ch-tipo"></canvas></div>
           </div>
-          <div class="card widget-wrap" id="widget-cfp">
-            <div class="ctitle">Avanzamento CFP</div>
-            <div id="cfp-prog-dash"></div>
-          </div>
         </div>
-      </div>
+        </div>
+      <div class="card widget-wrap" id="widget-cfp">
+        <div class="ctitle">Avanzamento CFP</div>
+        <div id="cfp-prog-dash"></div>
+      </div>      </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:0">
         <div class="card widget-wrap" id="widget-prossimi" style="margin-bottom:0">
           <div class="ctitle">Prossimi eventi <span class="ctitle-sub">pianificati / pubblicati</span></div>
@@ -2516,7 +2513,8 @@ function setChartType(chartId,type,btn){
   else if(chartId==='ch-rank')renderFormatoriChart();
   else if(chartId==='ch-temi')renderChartTemi(type);
   else if(chartId==='ch-mix')renderChartMix(type);
-  else if(chartId==='ch-ric')renderChartRicavi(chartId,chartTimeFilters[chartId]||'all',timeNavOffsets['tbtns-ric']||0);
+  else if(chartId==='ch-ric'||chartId==='ch-ric-home')renderChartRicavi(chartId,chartTimeFilters[chartId]||'all',timeNavOffsets['tbtns-'+chartId]||0);
+  else if(chartId==='ch-ric-home')renderChartRicavi(chartId,chartTimeFilters[chartId]||'all',timeNavOffsets['tbtns-ric-home']||0);
   else if(chartId==='ch-pag-fi'){
     // Re-render only the pagfi chart without touching other sections
     const kpiD=getKPI();
