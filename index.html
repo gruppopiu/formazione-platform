@@ -25,7 +25,7 @@
   --grad3:linear-gradient(135deg,var(--yellow),var(--red));
   --grad4:linear-gradient(135deg,var(--blue),var(--accent-light));
   --r:8px;--r2:14px;--r3:20px;
-  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow:0 2px 12px rgba(var(--accent-rgb),.08),0 1px 3px rgba(0,0,0,.07);
   --shadow2:0 4px 16px rgba(0,0,0,.1);
 }
 .dark{
@@ -41,7 +41,7 @@
   --shadow2:0 4px 16px rgba(0,0,0,.5);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .25s,color .25s;overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:var(--bg-gradient,var(--bg));color:var(--text);min-height:100vh;transition:background .25s,color .25s;overflow-x:hidden}
 /* ── LAYOUT ── */
 .shell{display:grid;grid-template-columns:228px 1fr;min-height:100vh}
 .sidebar{background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;box-shadow:var(--shadow)}
@@ -111,7 +111,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:
 .kcard.c4 .kval{background:var(--grad4);-webkit-background-clip:text;background-clip:text}
 .ksub{font-size:11px;color:var(--text3);margin-top:4px}
 /* ── CARDS ── */
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.card{background:var(--bg2);border:1px solid rgba(var(--accent-rgb),.18);border-radius:var(--r2);padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.card:hover{border-color:rgba(var(--accent-rgb),.35);box-shadow:0 4px 20px rgba(var(--accent-rgb),.12),0 1px 4px rgba(0,0,0,.08);transition:border-color .2s,box-shadow .2s}
 .ctitle{font-size:13px;font-weight:600;color:var(--text);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .ctitle-sub{font-size:11px;color:var(--text3);font-weight:400}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -1838,8 +1839,10 @@ function applyTheme(themeKey, mode){
   root.style.setProperty('--grad4',`linear-gradient(135deg,${t.blue||t.accent},${t.accentLight})`);
   // dark/light body class
   document.body.classList.toggle('dark', currentMode==='dark');
-  // Force body background directly to override any CSS cascade
-  document.body.style.background=t.bg;
+  // Gradient background: bg at top → accent tint at bottom
+  const bgGrad=`linear-gradient(to bottom, ${t.bg} 0%, rgba(${t.accentRgb},.12) 100%)`;
+  root.style.setProperty('--bg-gradient', bgGrad);
+  document.body.style.background=bgGrad;
   document.documentElement.style.background=t.bg;
   // destroy and re-render charts
   Object.keys(charts).forEach(k=>{if(charts[k])charts[k].destroy();delete charts[k];});
