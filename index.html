@@ -2511,7 +2511,7 @@ function renderDashboard(){
     if(!pross.length){prossList.innerHTML='<div class="empty"><div class="ei">📅</div><div class="et">Nessun evento in programma</div></div>';}
     else{prossList.innerHTML=pross.map(e=>{
       const gi=new Date(e.data+'T00:00:00').toLocaleDateString('it',{weekday:'short'});
-      const totIsc=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_illimitati)||0);
+      const totIsc=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+(parseInt(e.iscritti_illimitati)||0);
       return`<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:.5px solid var(--border);cursor:pointer" onclick="openEvDetail('${e.id}')" class="sbi" style="">
         <div style="flex-shrink:0;width:42px;text-align:center;background:var(--bg3);border-radius:var(--r);padding:5px 0">
           <div style="font-size:9px;color:var(--text3);text-transform:uppercase">${gi}</div>
@@ -2540,7 +2540,7 @@ function renderDashboard(){
     if(!ultimi.length){svoltiGrid.innerHTML='<div class="empty" style="grid-column:1/-1"><div class="ei">📊</div><div class="et">Nessun evento svolto ancora</div></div>';}
     else{svoltiGrid.innerHTML=ultimi.map(e=>{
       const totPres=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
-      const totIsc=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_illimitati)||0);
+      const totIsc=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+(parseInt(e.iscritti_illimitati)||0);
       const tasso=totIsc>0?Math.round(totPres/totIsc*100):null;
       const tassoCol=tasso===null?'var(--text3)':tasso>=70?'var(--green)':tasso>=40?'var(--yellow)':'var(--red)';
       return`<div class="svolti-card" onclick="openEvDetail('${e.id}')">
@@ -2645,14 +2645,14 @@ function calcStats(nome,range='all'){
   });
   const tot=evUniq.length;
   // BUG FIX 1: use evUniq for averages (not ev) to avoid counting multi-session moduli multiple times
-  const ip=evUniq.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0),0);
+  const ip=evUniq.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0),0);
   const pp=evUniq.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
   const ii=evUniq.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
   const pi=evUniq.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
   const avgPag=tot>0?ip/tot:0;const avgFI=tot>0?ii/tot:0;
   // BUG FIX 2: tasso presenze only on completed events (svolto/chiuso) — future events have no real presenti
   const evComp=evUniq.filter(e=>['svolto','chiuso'].includes(e.stato));
-  const ipC=evComp.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0),0);
+  const ipC=evComp.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0),0);
   const ppC=evComp.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
   const iiC=evComp.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
   const piC=evComp.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
@@ -2923,7 +2923,7 @@ function renderChartTemi(type){
 // ── COMMERCIALE ──
 function renderCommerciale(){
   const kpi=getKPI();
-  const ip=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0),0);
+  const ip=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0),0);
   const pp=kpi.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
   const ta=ip>0?Math.round(pp/ip*100):0;
   const ric=kpi.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0),0);
@@ -2945,6 +2945,7 @@ function renderCommerciale(){
   // Paganti vs FI per mese
   const mPag=Array(12).fill(0),mFI=Array(12).fill(0);
   kpi.forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mPag[m]+=parseInt(e.presenti_paganti)||0;mFI[m]+=parseInt(e.presenti_illimitati)||0;}});
+  // Note: presenti_paganti already includes all paying attendees (pieno + EB combined)
   const c2=getThemeChartColors();
   const pagfiType=chartTypes['ch-pag-fi']||'bar';
   const mk2=(col)=>({backgroundColor:pagfiType==='line'?col+'22':col+'88',borderColor:col,borderWidth:2,borderRadius:pagfiType==='line'?0:3,fill:pagfiType==='line',tension:.4,pointRadius:pagfiType==='line'?3:0,pointBackgroundColor:col});
@@ -2964,7 +2965,7 @@ function renderCommerciale(){
 
 function renderChartMix(type){
   const kpi=getKPI();
-  const mP=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0),0);
+  const mP=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0),0);
   const mI=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
   const mG=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_gratuiti)||0),0);
   const mc=getThemeChartColors();
@@ -3122,8 +3123,8 @@ function renderEventi(){
   });
   if(!f.length){document.getElementById('ev-tbl').innerHTML='<div class="empty"><div class="ei">🔍</div><div class="et">Nessun evento trovato</div></div>';return;}
   document.getElementById('ev-tbl').innerHTML=`<table><thead><tr><th style="width:32px"><input type="checkbox" id="ev-sel-all" onchange="toggleSelectAll(this)" style="accent-color:var(--accent);cursor:pointer"></th><th>Data</th><th>Titolo</th><th>Tema</th><th>Tipo</th><th>Docente</th><th>Ore</th><th>Iscr.</th><th>Pres.</th><th>Tasso</th><th>Ricavo</th><th>Stato</th><th>Mod. da</th><th>Azioni</th></tr></thead><tbody>${f.map(e=>{
-    const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_illimitati)||0);
-    const tp=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
+    const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+(parseInt(e.iscritti_illimitati)||0);
+    const tp=((parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_early_bird)||0))+(parseInt(e.presenti_illimitati)||0);
     const ta=ti>0?Math.round(tp/ti*100):null;
     const tc=ta===null?'var(--text3)':ta>=70?'var(--green)':ta>=40?'var(--yellow)':'var(--red)';
     return`<tr data-id="${e.id}" class="ev-row" style="transition:background .1s"><td style="text-align:center;vertical-align:middle"><input type="checkbox" class="ev-chk" data-id="${e.id}" onchange="onEvCheck(this);this.closest('tr').style.background=this.checked?'rgba(var(--accent-rgb),.08)':''" style="accent-color:var(--accent);cursor:pointer;width:14px;height:14px"></td><td class="mono">${fmtDate(e.data)}</td><td style="color:var(--text);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.titolo}">${e.titolo}${e.escludi_kpi?'<span style="font-size:8px;color:var(--text3);margin-left:3px">[excl]</span>':''}</td><td>${e.tema||'—'}</td><td>${badgeTipo(e.tipologia)}</td><td><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">${(e.docenti_nomi&&e.docenti_nomi.length>1)?e.docenti_nomi.map(d=>getFmAvatar(d,22)).join('')+'<span style="font-size:10px">'+e.docenti_nomi.join(', ')+'</span>':(e.docente?getFmAvatar(e.docente,22)+'<span>'+e.docente+'</span>':'<span>—</span>')}</div></td><td class="mono">${e.ore}h</td><td class="mono">${ti}</td><td class="mono">${tp}</td><td class="mono" style="color:${tc}">${ta!==null?ta+'%':'—'}</td><td class="mono" style="font-size:11px">${(()=>{const r=((parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0))+((parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0));return r>0?fmtEuro(r,2):'—';})()}</td><td>${badgeStato(e.stato)}</td><td style="font-size:10px;color:var(--text3)">${e.modified_by||'—'}</td><td><button class="btn btn-p btn-sm" onclick="openEvDetail('${e.id}')" style="white-space:nowrap">Apri →</button></td></tr>`;
@@ -3464,14 +3465,18 @@ function openEvDetail(id){
   `;
 
   // Partecipazione
-  const ip=parseInt(e.iscritti_paganti)||0,pp=parseInt(e.presenti_paganti)||0;
+  const ip=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0),pp=parseInt(e.presenti_paganti)||0;
   const ii=parseInt(e.iscritti_illimitati)||0,pi=parseInt(e.presenti_illimitati)||0;
   const ig=parseInt(e.iscritti_gratuiti)||0,pg=parseInt(e.presenti_gratuiti)||0;
   const ieb=parseInt(e.iscritti_early_bird)||0,peb=parseInt(e.presenti_early_bird)||0;
-  const totI=ip+ii,totP=pp+pi;
+  const ipTot=ip+ieb;   // iscritti paganti totali (pieno + EB)
+  // ppTot: presenti paganti totali — handles both old (pp+peb separate) and new (pp unified) data
+  const ppTot=peb>0?(pp+peb):pp;
+  const totI=ipTot+ii;
+  const totP=ppTot+pi;
   const tasso=totI>0?Math.round(totP/totI*100):null;
   const tCol=tasso===null?'var(--text2)':tasso>=70?'var(--green)':tasso>=40?'var(--yellow)':'var(--red)';
-  const tassoPag=ip>0?Math.round(pp/ip*100):null;
+  const tassoPag=ipTot>0?Math.round(ppTot/ipTot*100):null;
   const tassoFI=ii>0?Math.round(pi/ii*100):null;
 
   document.getElementById('evd-part-grid').innerHTML=`
@@ -3482,8 +3487,8 @@ function openEvDetail(id){
     </div>
     <div class="evd-stat">
       <div class="evd-stat-lbl">Paganti</div>
-      <div class="evd-stat-val">${ip}</div>
-      <div class="evd-stat-sub">Presenti: ${pp} ${tassoPag!==null?'('+tassoPag+'%)':''}</div>
+      <div class="evd-stat-val">${ipTot}</div>
+      <div class="evd-stat-sub">di cui pieno: ${ip} · EB: ${ieb} — Presenti: ${ppTot} ${tassoPag!==null?'('+tassoPag+'%)':''}</div>
       ${e.prezzo_early_bird?`<div style="font-size:10px;color:var(--text3);margin-top:4px">EB: ${ieb} iscr.</div>`:''}
     </div>
     <div class="evd-stat">
@@ -3820,8 +3825,8 @@ function repPreview(){
   if(!tbl)return;
   if(!data.length){tbl.innerHTML='<div class="empty"><div class="et">Nessun evento trovato con questi filtri</div></div>';return;}
   const rows=data.map(e=>{
-    const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_illimitati)||0);
-    const tp=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
+    const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+(parseInt(e.iscritti_illimitati)||0);
+    const tp=((parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_early_bird)||0))+(parseInt(e.presenti_illimitati)||0);
     const tasso=ti>0?Math.round(tp/ti*100)+'%':'—';
     const ric=(()=>{
       let r=(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0);
@@ -3835,8 +3840,8 @@ function repPreview(){
 
 function getRepEventiData(){
   return getRepFiltered().map(e=>{
-    const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_illimitati)||0);
-    const tp=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
+    const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+(parseInt(e.iscritti_illimitati)||0);
+    const tp=((parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_early_bird)||0))+(parseInt(e.presenti_illimitati)||0);
     const tasso=ti>0?Math.round(tp/ti*100):0;
     const ric=(()=>{
       let r=(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0);
@@ -3877,7 +3882,7 @@ function getRepCommercialeData(){
     const pag=me.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
     const fi=me.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
     const ric=me.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0),0);
-    const isc=me.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_illimitati)||0),0);
+    const isc=me.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+(parseInt(e.iscritti_illimitati)||0),0);
     const pres=me.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0),0);
     return{mese:m,eventi:me.length,paganti_presenti:pag,fi_presenti:fi,tasso:isc>0?Math.round(pres/isc*100)+'%':'—',ricavi:Math.round(ric)};
   });
