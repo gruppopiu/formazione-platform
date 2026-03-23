@@ -2612,21 +2612,30 @@ function renderChartTipo(type){
 function calcStats(nome,range='all'){
   // Include events where docente matches OR docenti_nomi array includes nome
   const ev=filterByTime(DB.filter(e=>(e.docente===nome||(e.docenti_nomi&&e.docenti_nomi.includes(nome)))&&!e.escludi_kpi),range);
-  // Count unique events (deduplicate multi-session courses by corso_padre_id)
+  // Deduplicate multi-session courses by corso_padre_id
   const seen=new Set();
   const evUniq=ev.filter(e=>{
     if(e.corso_padre_id){if(seen.has(e.corso_padre_id))return false;seen.add(e.corso_padre_id);}
     return true;
   });
   const tot=evUniq.length;
-  const ip=ev.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0),0);
-  const pp=ev.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
-  const ii=ev.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
-  const pi=ev.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
+  // BUG FIX 1: use evUniq for averages (not ev) to avoid counting multi-session moduli multiple times
+  const ip=evUniq.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0),0);
+  const pp=evUniq.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
+  const ii=evUniq.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
+  const pi=evUniq.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
   const avgPag=tot>0?ip/tot:0;const avgFI=tot>0?ii/tot:0;
-  const tassoPag=ip>0?Math.round(pp/ip*100):0;const tassoFI=ii>0?Math.round(pi/ii*100):0;
-  const ric=ev.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0),0);
-  const temiUsati=[...new Set(ev.map(e=>e.tema).filter(Boolean))];
+  // BUG FIX 2: tasso presenze only on completed events (svolto/chiuso) — future events have no real presenti
+  const evComp=evUniq.filter(e=>['svolto','chiuso'].includes(e.stato));
+  const ipC=evComp.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0),0);
+  const ppC=evComp.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
+  const iiC=evComp.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
+  const piC=evComp.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
+  const tassoPag=ipC>0?Math.round(ppC/ipC*100):0;
+  const tassoFI=iiC>0?Math.round(piC/iiC*100):0;
+  // Ricavi on all events (fatturato al momento dell'iscrizione, non solo chiusi)
+  const ric=evUniq.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0),0);
+  const temiUsati=[...new Set(evUniq.map(e=>e.tema).filter(Boolean))];
   return{tot,ip,pp,ii,pi,avgPag,avgFI,tassoPag,tassoFI,ric,temiUsati,ev};
 }
 
