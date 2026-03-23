@@ -118,6 +118,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 /* ── TABLE ── */
 .twrap{overflow-x:auto}
+.twrap table th[onclick]{cursor:pointer;user-select:none;transition:color .1s,background .1s}
+.twrap table th[onclick]:hover{background:rgba(var(--accent-rgb),.08);color:var(--accent)}
+.twrap table th[onclick]{cursor:pointer;user-select:none;transition:color .1s,background .1s}
+.twrap table th[onclick]:hover{background:rgba(var(--accent-rgb),.08);color:var(--accent)}
 table{width:100%;border-collapse:collapse;font-size:12px}
 thead th{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;padding:9px 12px;border-bottom:1px solid var(--border);text-align:left;background:var(--bg3);white-space:nowrap}
 tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
@@ -3034,6 +3038,28 @@ function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalend
 
 // ── EVENTI ──
 
+
+// ── SORT STATE EVENTI ──
+let evSortField = 'data';
+let evSortDir = 'desc'; // desc = più recente prima (default)
+
+function setEvSort(field){
+  if(evSortField === field){
+    evSortDir = evSortDir === 'asc' ? 'desc' : 'asc';
+  } else {
+    evSortField = field;
+    evSortDir = field === 'data' ? 'desc' : 'asc'; // date: newest first; others: asc
+  }
+  renderEventi();
+}
+
+function evSortArrow(field){
+  if(evSortField !== field) return '<span style="opacity:.3;font-size:9px;margin-left:3px">↕</span>';
+  return evSortDir === 'asc'
+    ? '<span style="font-size:9px;margin-left:3px;color:var(--accent)">↑</span>'
+    : '<span style="font-size:9px;margin-left:3px;color:var(--accent)">↓</span>';
+}
+
 // ── BULK SELEZIONE EVENTI ──
 const selectedEventIds = new Set();
 
@@ -3121,8 +3147,34 @@ function renderEventi(){
     if(ko==='no'&&e.escludi_kpi)return false;
     return true;
   });
+  // ── SORT ──
+  f.sort((a,b)=>{
+    let va,vb;
+    switch(evSortField){
+      case 'data':    va=a.data||''; vb=b.data||''; break;
+      case 'titolo':  va=(a.titolo||'').toLowerCase(); vb=(b.titolo||'').toLowerCase(); break;
+      case 'tema':    va=(a.tema||'').toLowerCase(); vb=(b.tema||'').toLowerCase(); break;
+      case 'tipo':    va=a.tipologia||''; vb=b.tipologia||''; break;
+      case 'docente': va=(a.docente||'').toLowerCase(); vb=(b.docente||'').toLowerCase(); break;
+      case 'iscr':    va=(parseInt(a.iscritti_paganti)||0)+(parseInt(a.iscritti_early_bird)||0)+(parseInt(a.iscritti_illimitati)||0);
+                      vb=(parseInt(b.iscritti_paganti)||0)+(parseInt(b.iscritti_early_bird)||0)+(parseInt(b.iscritti_illimitati)||0); break;
+      case 'pres':    va=(parseInt(a.presenti_paganti)||0)+(parseInt(a.presenti_illimitati)||0);
+                      vb=(parseInt(b.presenti_paganti)||0)+(parseInt(b.presenti_illimitati)||0); break;
+      case 'tasso':   {const tia=(parseInt(a.iscritti_paganti)||0)+(parseInt(a.iscritti_early_bird)||0)+(parseInt(a.iscritti_illimitati)||0);
+                       const tib=(parseInt(b.iscritti_paganti)||0)+(parseInt(b.iscritti_early_bird)||0)+(parseInt(b.iscritti_illimitati)||0);
+                       va=tia>0?((parseInt(a.presenti_paganti)||0)+(parseInt(a.presenti_illimitati)||0))/tia:0;
+                       vb=tib>0?((parseInt(b.presenti_paganti)||0)+(parseInt(b.presenti_illimitati)||0))/tib:0; break;}
+      case 'ricavo':  va=((parseFloat(a.prezzo)||0)*(parseInt(a.iscritti_paganti)||0))+((parseFloat(a.prezzo_early_bird)||0)*(parseInt(a.iscritti_early_bird)||0));
+                      vb=((parseFloat(b.prezzo)||0)*(parseInt(b.iscritti_paganti)||0))+((parseFloat(b.prezzo_early_bird)||0)*(parseInt(b.iscritti_early_bird)||0)); break;
+      case 'stato':   va=a.stato||''; vb=b.stato||''; break;
+      default:        va=a.data||''; vb=b.data||'';
+    }
+    if(va < vb) return evSortDir==='asc' ? -1 : 1;
+    if(va > vb) return evSortDir==='asc' ? 1 : -1;
+    return 0;
+  });
   if(!f.length){document.getElementById('ev-tbl').innerHTML='<div class="empty"><div class="ei">🔍</div><div class="et">Nessun evento trovato</div></div>';return;}
-  document.getElementById('ev-tbl').innerHTML=`<table><thead><tr><th style="width:32px"><input type="checkbox" id="ev-sel-all" onchange="toggleSelectAll(this)" style="accent-color:var(--accent);cursor:pointer"></th><th>Data</th><th>Titolo</th><th>Tema</th><th>Tipo</th><th>Docente</th><th>Ore</th><th>Iscr.</th><th>Pres.</th><th>Tasso</th><th>Ricavo</th><th>Stato</th><th>Mod. da</th><th>Azioni</th></tr></thead><tbody>${f.map(e=>{
+  document.getElementById('ev-tbl').innerHTML=`<table><thead><tr><th style="width:32px"><input type="checkbox" id="ev-sel-all" onchange="toggleSelectAll(this)" style="accent-color:var(--accent);cursor:pointer"></th><th onclick="setEvSort('data')" style="cursor:pointer;white-space:nowrap;user-select:none">Data${evSortArrow('data')}</th><th onclick="setEvSort('titolo')" style="cursor:pointer;user-select:none">Titolo${evSortArrow('titolo')}</th><th onclick="setEvSort('tema')" style="cursor:pointer;user-select:none">Tema${evSortArrow('tema')}</th><th onclick="setEvSort('tipo')" style="cursor:pointer;user-select:none">Tipo${evSortArrow('tipo')}</th><th onclick="setEvSort('docente')" style="cursor:pointer;user-select:none">Docente${evSortArrow('docente')}</th><th>Ore</th><th onclick="setEvSort('iscr')" style="cursor:pointer;user-select:none">Iscr.${evSortArrow('iscr')}</th><th onclick="setEvSort('pres')" style="cursor:pointer;user-select:none">Pres.${evSortArrow('pres')}</th><th onclick="setEvSort('tasso')" style="cursor:pointer;user-select:none">Tasso${evSortArrow('tasso')}</th><th onclick="setEvSort('ricavo')" style="cursor:pointer;user-select:none">Ricavo${evSortArrow('ricavo')}</th><th onclick="setEvSort('stato')" style="cursor:pointer;user-select:none">Stato${evSortArrow('stato')}</th><th>Mod. da</th><th>Azioni</th></tr></thead><tbody>${f.map(e=>{
     const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+(parseInt(e.iscritti_illimitati)||0);
     const tp=((parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_early_bird)||0))+(parseInt(e.presenti_illimitati)||0);
     const ta=ti>0?Math.round(tp/ti*100):null;
