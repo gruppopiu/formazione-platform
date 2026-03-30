@@ -2398,7 +2398,19 @@ async function loadAll(){
   }
   try{
     const fmRes=await sb.from('formatori_data').select('*');
-    if(!fmRes.error)(fmRes.data||[]).forEach(f=>{FM_DATA[f.nome]=f;});
+    if(!fmRes.error)(fmRes.data||[]).forEach(f=>{
+      FM_DATA[f.nome]=f;
+      // Merge DB formatori into FORMATORI_DEF (handles new ones added via UI)
+      if(!FORMATORI_DEF.find(d=>d.nome===f.nome)){
+        FORMATORI_DEF.push({nome:f.nome,temi:f.temi||[]});
+      } else {
+        // Update temi from DB
+        const def=FORMATORI_DEF.find(d=>d.nome===f.nome);
+        if(def&&f.temi)def.temi=f.temi;
+      }
+    });
+    // Sort FORMATORI_DEF alphabetically after merge
+    FORMATORI_DEF.sort((a,b)=>a.nome.localeCompare(b.nome,'it'));
   }catch(e){}
   try{
     const nRes=await sb.from('notifiche').select('*').order('created_at',{ascending:false}).limit(200);
@@ -3869,7 +3881,8 @@ function openEvDetail(id){
   `;
 
   // Partecipazione
-  const ip=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0),pp=parseInt(e.presenti_paganti)||0;
+  const ip=parseInt(e.iscritti_paganti)||0;  // solo prezzo pieno
+  const pp=parseInt(e.presenti_paganti)||0;
   const ii=parseInt(e.iscritti_illimitati)||0,pi=parseInt(e.presenti_illimitati)||0;
   const ig=parseInt(e.iscritti_gratuiti)||0,pg=parseInt(e.presenti_gratuiti)||0;
   const ieb=parseInt(e.iscritti_early_bird)||0,peb=parseInt(e.presenti_early_bird)||0;
@@ -3892,9 +3905,8 @@ function openEvDetail(id){
     </div>
     <div class="evd-stat">
       <div class="evd-stat-lbl">Paganti</div>
-      <div class="evd-stat-val">${ipTot}</div>
-      <div class="evd-stat-sub">di cui pieno: ${ip} · EB: ${ieb} — Presenti: ${ppTot} ${tassoPag!==null?'('+tassoPag+'%)':''}</div>
-      ${e.prezzo_early_bird?`<div style="font-size:10px;color:var(--text3);margin-top:4px">EB: ${ieb} iscr.</div>`:''}
+      <div class="evd-stat-val">${ipTot+buoniI}</div>
+      <div class="evd-stat-sub">Pieno: ${ip} · EB: ${ieb}${buoniI>0?' · Sconto: '+buoniI:''} — Presenti: ${ppTot} ${tassoPag!==null?'('+tassoPag+'%)':''}</div>
     </div>
     <div class="evd-stat">
       <div class="evd-stat-lbl">Form. Illimitata</div>
@@ -3931,11 +3943,15 @@ function openEvDetail(id){
 
   // Economics
   const ric=(parseFloat(e.prezzo)||0)*ip+(parseFloat(e.prezzo_early_bird)||0)*ieb;
-  document.getElementById('evd-eco-grid').innerHTML=`
-    <div class="evd-stat"><div class="evd-stat-lbl">Prezzo pieno</div><div class="evd-stat-val" style="font-size:16px">${fmtEuro(e.prezzo||0)}</div></div>
-    ${e.prezzo_early_bird?`<div class="evd-stat"><div class="evd-stat-lbl">Prezzo early bird</div><div class="evd-stat-val" style="font-size:16px">${fmtEuro(e.prezzo_early_bird)}</div></div>`:'<div></div>'}
-    <div class="evd-stat"><div class="evd-stat-lbl">Ricavi evento</div><div class="evd-stat-val" style="font-size:16px">${fmtEuro(ric,2)}</div><div class="evd-stat-sub">da iscritti paganti</div></div>
-  `;
+  // Economics with buoni sconto
+  {const buoniData=(()=>{try{return e.buoni_sconto?JSON.parse(e.buoni_sconto):[];}catch(_){return[];}})();
+  const buoniHtml=buoniData.map((b,i)=>'<div class="evd-stat"><div class="evd-stat-lbl">Sconto '+(i+1)+'</div><div class="evd-stat-val" style="font-size:15px">'+b.nr+' iscr. × '+fmtEuro(b.prezzo,2)+'</div></div>').join('');
+  document.getElementById('evd-eco-grid').innerHTML=
+    '<div class="evd-stat"><div class="evd-stat-lbl">Prezzo pieno</div><div class="evd-stat-val" style="font-size:16px">'+fmtEuro(e.prezzo||0)+'</div></div>'
+    +(e.prezzo_early_bird?'<div class="evd-stat"><div class="evd-stat-lbl">Prezzo Early Bird</div><div class="evd-stat-val" style="font-size:16px">'+fmtEuro(e.prezzo_early_bird)+'</div></div>':'<div></div>')
+    +buoniHtml
+    +'<div class="evd-stat"><div class="evd-stat-lbl">Ricavi evento</div><div class="evd-stat-val" style="font-size:16px">'+fmtEuro(ric,2)+'</div><div class="evd-stat-sub">da iscritti paganti</div></div>';
+  }
 
   // Note
   const noteSection=document.getElementById('evd-note-section');
