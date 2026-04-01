@@ -2422,7 +2422,7 @@ async function loadAll(){
     FORMATORI_DEF.sort((a,b)=>a.nome.localeCompare(b.nome,'it'));
   }catch(e){}
   try{
-    const nRes=await sb.from('notifiche').select('*').order('created_at',{ascending:false}).limit(200);
+    const nRes=await sb.from('notifiche').select('*').order('created_at',{ascending:false}).limit(20);
     if(!nRes.error){
       const readIds=getLocalReadIds();
       NOTIFICHE=(nRes.data||[]).map(n=>{
@@ -2431,6 +2431,8 @@ async function loadAll(){
       });
       unreadCount=NOTIFICHE.filter(n=>!n.read).length;
       updateNotifBadge();
+      // Auto-delete notifications beyond the 20 most recent
+      await pruneNotifiche();
     }
   }catch(e){}
   renderAll();
@@ -2470,6 +2472,7 @@ function subscribeRealtime(){
       const isDup=NOTIFICHE.some(x=>x.text===n.text&&Math.abs(new Date(x.time||Date.now())-new Date(n.time||Date.now()))<5000);
       if(!isDup){
         NOTIFICHE.unshift(n);
+        if(NOTIFICHE.length>20)NOTIFICHE=NOTIFICHE.slice(0,20);
         unreadCount++;
         updateNotifBadge();
         renderNotifiche();
@@ -2500,6 +2503,7 @@ function subscribeRealtime(){
       const readIds=getLocalReadIds();
       const nid=n.id||(n.text+(n.created_at||''));
       NOTIFICHE.unshift({...n,read:readIds.has(nid),time:n.created_at});
+      if(NOTIFICHE.length>20)NOTIFICHE=NOTIFICHE.slice(0,20);
       unreadCount++;
       updateNotifBadge();
       renderNotifiche();
@@ -3551,7 +3555,7 @@ function renderEventi(){
 
 // ── NOTIFICHE ──
 let notifPage=0;
-const NOTIF_PER_PAGE=10;
+const NOTIF_PER_PAGE=20;
 
 function renderNotifiche(){
   const el=document.getElementById('notif-list');
@@ -5016,6 +5020,19 @@ function saveCustomThemeToSettings() {
   saveSetting('theme', 'custom');
   showToast('Tema personalizzato salvato e applicato','ok');
   buildThemeGrid();
+}
+
+// ── PRUNE NOTIFICHE (keep only 20 most recent) ──
+async function pruneNotifiche(){
+  try{
+    // Fetch all notification IDs ordered by date desc
+    const{data,error}=await sb.from('notifiche').select('id').order('created_at',{ascending:false});
+    if(error||!data||data.length<=20)return;
+    // IDs to delete: everything beyond the first 20
+    const toDelete=data.slice(20).map(r=>r.id);
+    if(!toDelete.length)return;
+    await sb.from('notifiche').delete().in('id',toDelete);
+  }catch(e){console.warn('pruneNotifiche error:',e);}
 }
 
 // ── START ──
