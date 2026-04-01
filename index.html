@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800;900&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
 <title>Formazione Platform — GruppoPiù</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -352,6 +354,8 @@ textarea.finp{min-height:72px;resize:vertical}
 .mob-menu-btn{display:none;position:fixed;top:12px;left:12px;z-index:60;width:38px;height:38px;border-radius:var(--r);background:var(--bg2);border:1px solid var(--border);cursor:pointer;align-items:center;justify-content:center;box-shadow:var(--shadow2)}
 .mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40}
 @media(max-width:768px){
+  .topbar-search{width:140px}
+  .topbar-search:focus{width:180px}
   .shell{grid-template-columns:1fr}
   .sidebar{position:fixed;left:-240px;top:0;z-index:50;transition:left .25s ease;height:100vh;width:240px}
   .sidebar.open{left:0}
@@ -380,6 +384,70 @@ textarea.finp{min-height:72px;resize:vertical}
   .kgrid{grid-template-columns:1fr}
   .main{padding:12px 10px 80px;padding-top:56px}
   .auth-box{padding:20px 14px;margin:0 6px}
+}
+
+/* ── STITCH DESIGN SYSTEM ── */
+.font-headline{font-family:'Manrope',sans-serif}
+.material-symbols-outlined{font-family:'Material Symbols Outlined';font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;font-style:normal;display:inline-block;line-height:1;vertical-align:middle}
+
+/* Sidebar Stitch style */
+.sbi{border-left:2px solid transparent;transition:all .2s}
+.sbi.active{background:rgba(var(--accent-rgb),.08);color:var(--accent);font-weight:600;border-left:2px solid var(--accent);border-radius:0 var(--r) var(--r) 0}
+.sbi:hover{background:rgba(var(--accent-rgb),.06);color:var(--text)}
+.sbi .msym{font-size:18px;flex-shrink:0;width:18px}
+
+/* KPI Cards Stitch style */
+.kcard-stitch{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:20px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:var(--shadow);transition:all .25s;cursor:default;overflow:hidden;position:relative}
+.kcard-stitch:hover{transform:translateY(-2px);box-shadow:var(--shadow2);border-color:var(--border2)}
+.kcard-stitch-icon{width:38px;height:38px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;background:rgba(var(--accent-rgb),.12);color:var(--accent);flex-shrink:0}
+.kcard-stitch-icon .material-symbols-outlined{font-size:20px}
+.kcard-stitch-tag{font-size:9px;font-weight:700;color:var(--text3);background:var(--bg3);padding:2px 8px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.kcard-stitch-label{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.kcard-stitch-val{font-size:32px;font-weight:900;font-family:'Manrope',sans-serif;color:var(--text);letter-spacing:-1.5px;line-height:1;margin-bottom:12px}
+.kcard-stitch-progress{width:100%;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-bottom:6px}
+.kcard-stitch-progress-fill{height:4px;border-radius:2px;background:var(--accent);transition:width .8s cubic-bezier(.4,0,.2,1)}
+.kcard-stitch-sub{font-size:10px;color:var(--accent);font-weight:600}
+
+/* Table rows Stitch style — accent bar on hover, no dividers */
+.stitch-table tbody tr{border-bottom:none;border-left:2px solid transparent;transition:all .15s}
+.stitch-table tbody tr:hover{background:var(--bg3);border-left:2px solid var(--accent)}
+.stitch-table tbody tr td:first-child{padding-left:14px}
+
+/* Event detail modal Stitch layout */
+.evd-modal-inner{display:grid;grid-template-columns:1fr 320px;gap:0}
+.evd-left{padding:24px;border-right:1px solid var(--border)}
+.evd-right{padding:24px;display:flex;flex-direction:column;gap:16px}
+.evd-info-tile{background:var(--bg3);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:4px}
+.evd-info-tile-lbl{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase}
+.evd-info-tile-val{font-size:14px;font-weight:600;color:var(--text)}
+.evd-part-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:16px}
+.evd-part-card-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.evd-part-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--text2);padding:4px 0}
+.evd-part-row-val{font-weight:700;color:var(--text)}
+.evd-part-divider{height:1px;background:rgba(var(--accent-rgb),.1);margin:8px 0}
+.evd-part-tasso{font-size:24px;font-weight:900;font-family:'Manrope',sans-serif}
+.evd-eco-card{background:var(--bg2);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r2);padding:20px;position:relative;overflow:hidden}
+.evd-eco-card::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:rgba(var(--accent-rgb),.06);border-radius:50%;filter:blur(20px)}
+.evd-eco-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(var(--accent-rgb),.08)}
+.evd-eco-row:last-child{border-bottom:none}
+.evd-eco-label{font-size:11px;color:var(--text3)}
+.evd-eco-value{font-size:14px;font-weight:700;color:var(--text)}
+.evd-total-ric{font-size:28px;font-weight:900;font-family:'Manrope',sans-serif;color:var(--text)}
+.evd-footer{background:var(--bg3);border-top:1px solid var(--border);padding:8px 24px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--text3)}
+.evd-timeline{border-left:2px solid rgba(var(--accent-rgb),.25);margin-left:8px;padding-left:16px;display:flex;flex-direction:column;gap:14px}
+.evd-timeline-dot{position:absolute;left:-25px;top:2px;width:14px;height:14px;border-radius:50%;border:3px solid var(--bg2)}
+.evd-timeline-item{position:relative;font-size:11px}
+
+/* Topbar search */
+.topbar-search{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:6px 14px 6px 36px;font-size:12px;color:var(--text);outline:none;width:220px;transition:all .2s;font-family:inherit}
+.topbar-search:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.1);width:280px}
+.topbar-search::placeholder{color:var(--text3)}
+.topbar-search-wrap{position:relative;display:flex;align-items:center}
+.topbar-search-icon{position:absolute;left:10px;font-size:16px;color:var(--text3);pointer-events:none}
+
+@media(max-width:768px){
+  .evd-modal-inner{grid-template-columns:1fr}
+  .evd-left{border-right:none;border-bottom:1px solid var(--border)}
 }
 </style>
 </head>
@@ -484,6 +552,14 @@ textarea.finp{min-height:72px;resize:vertical}
   <main class="main">
     <div class="shape shape1"></div>
     <div class="shape shape2"></div>
+    <!-- Topbar search + actions -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);position:relative;z-index:1">
+      <div class="topbar-search-wrap">
+        <span class="material-symbols-outlined topbar-search-icon">search</span>
+        <input class="topbar-search" id="global-search" placeholder="Cerca eventi, formatori..." oninput="globalSearchHandler(this.value)">
+      </div>
+      <button class="btn btn-p" onclick="openEventoModal()" style="gap:6px;flex-shrink:0"><span class="material-symbols-outlined" style="font-size:16px">add_circle</span>Nuovo evento</button>
+    </div>
     <div class="main-content">
 
     <!-- DASHBOARD -->
@@ -509,10 +585,58 @@ textarea.finp{min-height:72px;resize:vertical}
       </div>
       <div class="widget-wrap" id="widget-kpi">
         <div class="kgrid">
-          <div class="kcard c1"><div class="kcard-grad"></div><div class="klbl">Eventi reali</div><div class="kval" id="k-ev">—</div><div class="ksub">target: 60+ / anno</div></div>
-          <div class="kcard c2"><div class="kcard-grad"></div><div class="klbl">Sessioni calendario</div><div class="kval" id="k-sess">—</div><div class="ksub">seminari + moduli</div></div>
-          <div class="kcard c3"><div class="kcard-grad"></div><div class="klbl">CFP totali</div><div class="kval" id="k-cfp">—</div><div class="ksub">target: 146 / anno</div></div>
-          <div class="kcard c4"><div class="kcard-grad"></div><div class="klbl">Ore erogate</div><div class="kval" id="k-ore">—</div><div class="ksub">target: 150+ ore</div></div>
+          <div class="kcard-stitch">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+              <div class="kcard-stitch-icon"><span class="material-symbols-outlined">event_available</span></div>
+              <span class="kcard-stitch-tag">target 60+</span>
+            </div>
+            <div>
+              <div class="kcard-stitch-label">Eventi reali</div>
+              <div class="kcard-stitch-val" id="k-ev">—</div>
+              <div id="delta-k-ev" style="min-height:20px;margin-bottom:10px"></div>
+              <div class="kcard-stitch-progress"><div class="kcard-stitch-progress-fill" id="k-ev-bar" style="width:0%"></div></div>
+              <div class="kcard-stitch-sub" id="k-ev-pct">— del target annuale</div>
+            </div>
+          </div>
+          <div class="kcard-stitch">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+              <div class="kcard-stitch-icon" style="background:rgba(var(--accent-rgb),.08)"><span class="material-symbols-outlined">calendar_today</span></div>
+              <span class="kcard-stitch-tag">seminari + moduli</span>
+            </div>
+            <div>
+              <div class="kcard-stitch-label">Sessioni calendario</div>
+              <div class="kcard-stitch-val" id="k-sess">—</div>
+              <div id="delta-k-sess" style="min-height:20px;margin-bottom:10px"></div>
+              <div class="kcard-stitch-progress"><div class="kcard-stitch-progress-fill" id="k-sess-bar" style="width:0%;background:var(--blue)"></div></div>
+              <div class="kcard-stitch-sub" id="k-sess-sub" style="color:var(--blue)">sessioni totali</div>
+            </div>
+          </div>
+          <div class="kcard-stitch">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+              <div class="kcard-stitch-icon" style="background:rgba(var(--accent-rgb),.08)"><span class="material-symbols-outlined">workspace_premium</span></div>
+              <span class="kcard-stitch-tag">target 146</span>
+            </div>
+            <div>
+              <div class="kcard-stitch-label">CFP totali</div>
+              <div class="kcard-stitch-val" id="k-cfp">—</div>
+              <div id="delta-k-cfp" style="min-height:20px;margin-bottom:10px"></div>
+              <div class="kcard-stitch-progress"><div class="kcard-stitch-progress-fill" id="k-cfp-bar" style="width:0%;background:var(--yellow)"></div></div>
+              <div class="kcard-stitch-sub" id="k-cfp-pct" style="color:var(--yellow)">— del target annuale</div>
+            </div>
+          </div>
+          <div class="kcard-stitch">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+              <div class="kcard-stitch-icon" style="background:rgba(var(--green),.12);color:var(--green)"><span class="material-symbols-outlined">schedule</span></div>
+              <span class="kcard-stitch-tag">target 150+</span>
+            </div>
+            <div>
+              <div class="kcard-stitch-label">Ore erogate</div>
+              <div class="kcard-stitch-val" id="k-ore">—</div>
+              <div id="delta-k-ore" style="min-height:20px;margin-bottom:10px"></div>
+              <div class="kcard-stitch-progress"><div class="kcard-stitch-progress-fill" id="k-ore-bar" style="width:0%;background:var(--green)"></div></div>
+              <div class="kcard-stitch-sub" id="k-ore-pct" style="color:var(--green)">— del target annuale</div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="widget-wrap" id="widget-charts">
@@ -648,7 +772,7 @@ textarea.finp{min-height:72px;resize:vertical}
           <div class="ctitle" style="margin:0">Classifica andamento <span class="ctitle-sub">ordinata per paganti medi</span></div>
           <div class="time-btns" id="tbtns-rank" data-chart="ch-rank" data-type="rank"></div>
         </div>
-        <div class="twrap"><table id="rank-tbl"></table></div>
+        <div class="twrap"><table id="rank-tbl" class="stitch-table"></table></div>
       </div>
       <div class="card">
         <div class="chart-toolbar">
@@ -701,19 +825,85 @@ textarea.finp{min-height:72px;resize:vertical}
       <!-- PAGANTI -->
       <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Iscritti paganti</div>
       <div class="kgrid" style="margin-bottom:20px">
-        <div class="kcard c1" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Totale iscritti che hanno pagato il biglietto (prezzo pieno o early bird). Esclusi FI e gratuiti/CAF/assicurativi.</span></div><div class="klbl">Iscritti paganti</div><div class="kval" id="c-pag">—</div><div class="ksub">totale periodo</div></div>
-        <div class="kcard c2" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Quanti iscritti paganti hanno effettivamente partecipato. Il gap tra iscritti e presenti è il tasso di no-show pagante.</span></div><div class="klbl">Presenti paganti</div><div class="kval" id="c-pres">—</div></div>
-        <div class="kcard c3" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Presenti paganti / Iscritti paganti. Benchmark: ≥80% ottimo, 60–80% normale, &lt;60% da investigare (comunicazione, tema, giorno).</span></div><div class="klbl">Tasso presenza</div><div class="kval" id="c-tasso">—</div></div>
-        <div class="kcard c4" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Ricavi calcolati su iscritti paganti × prezzo (pieno + early bird). Non include FI. Valore effettivo, non stimato.</span></div><div class="klbl">Ricavi</div><div class="kval" id="c-ric">—</div></div>
+        <div class="kcard-stitch">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+            <div class="kcard-stitch-icon"><span class="material-symbols-outlined">person</span></div>
+            <div class="info-btn">ℹ<span class="info-tooltip">Totale iscritti che hanno pagato il biglietto (prezzo pieno o early bird). Esclusi FI e gratuiti/CAF/assicurativi.</span></div>
+          </div>
+          <div class="kcard-stitch-label">Iscritti paganti</div>
+          <div class="kcard-stitch-val" id="c-pag">—</div>
+          <div id="delta-c-pag" style="min-height:20px"></div>
+          <div style="font-size:10px;color:var(--text3);margin-top:4px">totale periodo</div>
+        </div>
+        <div class="kcard-stitch">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+            <div class="kcard-stitch-icon" style="background:rgba(var(--blue),.12);color:var(--blue)"><span class="material-symbols-outlined">how_to_reg</span></div>
+            <div class="info-btn">ℹ<span class="info-tooltip">Quanti iscritti paganti hanno effettivamente partecipato.</span></div>
+          </div>
+          <div class="kcard-stitch-label">Presenti paganti</div>
+          <div class="kcard-stitch-val" id="c-pres">—</div>
+          <div id="delta-c-pres" style="min-height:20px"></div>
+        </div>
+        <div class="kcard-stitch">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+            <div class="kcard-stitch-icon" style="background:rgba(var(--yellow),.12);color:var(--yellow)"><span class="material-symbols-outlined">percent</span></div>
+            <div class="info-btn">ℹ<span class="info-tooltip">Presenti paganti / Iscritti paganti. Benchmark: ≥80% ottimo.</span></div>
+          </div>
+          <div class="kcard-stitch-label">Tasso presenza</div>
+          <div class="kcard-stitch-val" id="c-tasso">—</div>
+          <div id="delta-c-tasso" style="min-height:20px"></div>
+        </div>
+        <div class="kcard-stitch">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+            <div class="kcard-stitch-icon" style="background:rgba(var(--green),.12);color:var(--green)"><span class="material-symbols-outlined">euro</span></div>
+            <div class="info-btn">ℹ<span class="info-tooltip">Ricavi calcolati su iscritti paganti × prezzo. Non include FI.</span></div>
+          </div>
+          <div class="kcard-stitch-label">Ricavi</div>
+          <div class="kcard-stitch-val" id="c-ric">—</div>
+          <div id="delta-c-ric" style="min-height:20px"></div>
+        </div>
       </div>
 
       <!-- FORMAZIONE ILLIMITATA -->
       <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Formazione Illimitata (abbonati)</div>
       <div class="kgrid" style="margin-bottom:20px">
-        <div class="kcard c2" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Totale iscritti con abbonamento Formazione Illimitata nel periodo selezionato. Non generano ricavo diretto per evento.</span></div><div class="klbl">Iscritti FI</div><div class="kval" id="fi-isc">—</div><div class="ksub">totale periodo</div></div>
-        <div class="kcard c3" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Quanti degli iscritti FI hanno effettivamente partecipato all'evento. La differenza con gli iscritti indica il tasso di no-show.</span></div><div class="klbl">Presenti FI</div><div class="kval" id="fi-pres">—</div></div>
-        <div class="kcard c1" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Percentuale di presenti FI sul totale iscritti FI. Benchmark indicativo: ≥70% ottimo, 40–70% nella norma, &lt;40% da monitorare.</span></div><div class="klbl">Tasso presenza FI</div><div class="kval" id="fi-tasso">—</div></div>
-        <div class="kcard c4" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Numero medio di iscritti FI per evento nel periodo. Utile per capire quanto l'abbonamento FI contribuisce al riempimento delle aule.</span></div><div class="klbl">Media FI / evento</div><div class="kval" id="fi-media">—</div></div>
+        <div class="kcard-stitch">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+            <div class="kcard-stitch-icon" style="background:rgba(var(--blue),.12);color:var(--blue)"><span class="material-symbols-outlined">all_inclusive</span></div>
+            <div class="info-btn">ℹ<span class="info-tooltip">Totale iscritti con abbonamento FI nel periodo.</span></div>
+          </div>
+          <div class="kcard-stitch-label">Iscritti FI</div>
+          <div class="kcard-stitch-val" id="fi-isc">—</div>
+          <div id="delta-fi-isc" style="min-height:20px"></div>
+          <div style="font-size:10px;color:var(--text3);margin-top:4px">totale periodo</div>
+        </div>
+        <div class="kcard-stitch">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+            <div class="kcard-stitch-icon" style="background:rgba(var(--accent-rgb),.1)"><span class="material-symbols-outlined">how_to_reg</span></div>
+            <div class="info-btn">ℹ<span class="info-tooltip">Iscritti FI che hanno effettivamente partecipato.</span></div>
+          </div>
+          <div class="kcard-stitch-label">Presenti FI</div>
+          <div class="kcard-stitch-val" id="fi-pres">—</div>
+          <div id="delta-fi-pres" style="min-height:20px"></div>
+        </div>
+        <div class="kcard-stitch">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+            <div class="kcard-stitch-icon" style="background:rgba(var(--yellow),.12);color:var(--yellow)"><span class="material-symbols-outlined">percent</span></div>
+            <div class="info-btn">ℹ<span class="info-tooltip">% presenti FI su iscritti FI.</span></div>
+          </div>
+          <div class="kcard-stitch-label">Tasso presenza FI</div>
+          <div class="kcard-stitch-val" id="fi-tasso">—</div>
+          <div id="delta-fi-tasso" style="min-height:20px"></div>
+        </div>
+        <div class="kcard-stitch">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+            <div class="kcard-stitch-icon" style="background:rgba(var(--green),.12);color:var(--green)"><span class="material-symbols-outlined">avg_pace</span></div>
+            <div class="info-btn">ℹ<span class="info-tooltip">Media FI per evento nel periodo.</span></div>
+          </div>
+          <div class="kcard-stitch-label">Media FI / evento</div>
+          <div class="kcard-stitch-val" id="fi-media">—</div>
+          <div id="delta-fi-media" style="min-height:20px"></div>
+        </div>
       </div>
 
       <div class="grid2">
@@ -1122,41 +1312,64 @@ textarea.finp{min-height:72px;resize:vertical}
 
 <!-- MODAL DETTAGLIO EVENTO -->
 <div class="mover" id="ev-detail-modal" style="display:none" onclick="if(event.target===this)closeEvDetail()">
-  <div class="modal" style="max-width:780px">
-    <div class="mhdr">
-      <div style="flex:1">
-        <div class="mtitle" id="evd-title">Dettaglio evento</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:3px" id="evd-subtitle"></div>
-        <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">
-          <button class="btn btn-p" id="evd-dup-btn" onclick="evdDuplicate()" style="font-size:12px;padding:8px 16px">📋 Duplica</button>
-          <button class="btn btn-s" id="evd-edit-btn" onclick="" style="font-size:12px;padding:8px 16px">✏️ Modifica</button>
-          <button class="btn btn-d" id="evd-del-btn" onclick="" style="font-size:12px;padding:8px 16px">🗑 Elimina</button>
+  <div class="modal" style="max-width:900px;padding:0;overflow:hidden">
+    <!-- STICKY HEADER -->
+    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:20px 24px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap">
+            <span id="evd-stato-badge"></span>
+            <span style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px"><span class="material-symbols-outlined" style="font-size:14px">calendar_today</span><span id="evd-subtitle"></span></span>
+          </div>
+          <div class="font-headline" style="font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.5px;line-height:1.2" id="evd-title">Dettaglio evento</div>
+        </div>
+        <button class="mclose" onclick="closeEvDetail()" style="flex-shrink:0;margin-top:4px">✕</button>
+      </div>
+    </div>
+    <!-- TWO-COLUMN BODY -->
+    <div class="evd-modal-inner" style="max-height:calc(92vh - 80px);overflow-y:auto">
+      <!-- LEFT COLUMN -->
+      <div class="evd-left">
+        <!-- Info tiles row -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px" id="evd-info-grid"></div>
+        <!-- Docente box -->
+        <div id="evd-formatore-box" style="display:none;margin-bottom:20px"></div>
+        <!-- Partecipazione header -->
+        <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px"><span class="material-symbols-outlined" style="font-size:14px">analytics</span>Analisi partecipazione</div>
+        <!-- 3-card participation grid -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px" id="evd-part-grid"></div>
+        <!-- Chart -->
+        <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">Iscritti vs presenti</div>
+        <div style="position:relative;height:150px;margin-bottom:20px"><canvas id="evd-chart"></canvas></div>
+        <!-- Note -->
+        <div id="evd-note-section" style="display:none">
+          <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">Note interne</div>
+          <div style="background:var(--bg3);border-left:3px solid rgba(var(--accent-rgb),.3);border-radius:0 var(--r) var(--r) 0;padding:12px 16px;font-size:12px;color:var(--text2);line-height:1.7;font-style:italic" id="evd-note"></div>
         </div>
       </div>
-      <button class="mclose" onclick="closeEvDetail()">✕</button>
-    </div>
-    <div class="mbody">
-      <!-- INFO GRID -->
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px" id="evd-info-grid"></div>
-      <!-- FORMATORE BOX -->
-      <div id="evd-formatore-box" style="display:none;margin-bottom:18px"></div>
-      <!-- DIVIDER -->
-      <div style="height:.5px;background:var(--border);margin-bottom:18px"></div>
-      <!-- PARTECIPAZIONE -->
-      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">Partecipazione</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px" id="evd-part-grid"></div>
-      <!-- INSIGHT CHART -->
-      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">Confronto iscritti vs presenti</div>
-      <div style="position:relative;height:160px;margin-bottom:18px"><canvas id="evd-chart"></canvas></div>
-      <!-- DIVIDER -->
-      <div style="height:.5px;background:var(--border);margin-bottom:18px"></div>
-      <!-- ECONOMICS -->
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px" id="evd-eco-grid"></div>
-      <!-- NOTE -->
-      <div id="evd-note-section" style="display:none">
-        <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">Note</div>
-        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;font-size:12px;color:var(--text2);line-height:1.6" id="evd-note"></div>
+      <!-- RIGHT COLUMN -->
+      <div class="evd-right">
+        <!-- Economics card -->
+        <div class="evd-eco-card" id="evd-eco-grid"></div>
+        <!-- Action buttons -->
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-p" id="evd-edit-btn" style="justify-content:center;padding:12px;font-size:13px;font-weight:700"><span class="material-symbols-outlined" style="font-size:16px">edit</span>Modifica evento</button>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <button class="btn btn-s" id="evd-dup-btn" onclick="evdDuplicate()" style="justify-content:center;padding:10px;font-size:12px"><span class="material-symbols-outlined" style="font-size:14px">content_copy</span>Duplica</button>
+            <button class="btn btn-d" id="evd-del-btn" style="justify-content:center;padding:10px;font-size:12px"><span class="material-symbols-outlined" style="font-size:14px">delete</span>Elimina</button>
+          </div>
+        </div>
+        <!-- Timeline -->
+        <div>
+          <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px">Cronologia</div>
+          <div class="evd-timeline" id="evd-timeline"></div>
+        </div>
       </div>
+    </div>
+    <!-- FOOTER -->
+    <div class="evd-footer" id="evd-footer-meta">
+      <span id="evd-footer-id">—</span>
+      <span style="display:flex;align-items:center;gap:4px"><span class="material-symbols-outlined" style="font-size:12px">update</span><span id="evd-footer-mod">—</span></span>
     </div>
   </div>
 </div>
@@ -2425,14 +2638,14 @@ async function loadAll(){
     const nRes=await sb.from('notifiche').select('*').order('created_at',{ascending:false}).limit(20);
     if(!nRes.error){
       const readIds=getLocalReadIds();
-      NOTIFICHE=(nRes.data||[]).map(n=>{
+      NOTIFICHE=(nRes.data||[]).slice(0,20).map(n=>{
         const nid=n.id||(n.text+(n.created_at||''));
         return{...n,read:n.read||readIds.has(nid)};
       });
       unreadCount=NOTIFICHE.filter(n=>!n.read).length;
       updateNotifBadge();
-      // Auto-delete notifications beyond the 20 most recent
-      await pruneNotifiche();
+      // Auto-delete notifications beyond the 20 most recent (fire and forget)
+      pruneNotifiche();
     }
   }catch(e){}
   renderAll();
@@ -2841,12 +3054,103 @@ function setChartType(chartId,type,btn){
 }
 
 // ── DASHBOARD ──
+
+// ── DELTA MOM (Month-over-Month) ──
+function getMonthData(year, month){
+  // Returns events from DB for a specific year/month (0-based month)
+  const mm=String(month+1).padStart(2,'0');
+  const prefix=`${year}-${mm}-`;
+  return DB.filter(e=>e.data&&e.data.startsWith(prefix));
+}
+
+function calcMoM(cur, prev){
+  // Returns {delta, pct, html} comparing cur vs prev numeric values
+  if(prev===0&&cur===0)return{delta:0,pct:0,html:''};
+  if(prev===0)return{delta:cur,pct:null,html:renderDeltaHtml(cur,null,false)};
+  const delta=cur-prev;
+  const pct=Math.round((delta/prev)*100);
+  return{delta,pct,html:renderDeltaHtml(delta,pct,false)};
+}
+
+function renderDeltaHtml(delta, pct, isAbsPercent){
+  // isAbsPercent: true when the metric itself is a %, so delta is pp not %
+  if(delta===0&&pct===0)return'';
+  const pos=delta>=0;
+  const color=pos?'var(--green)':'var(--red)';
+  const arrow=pos?'↑':'↓';
+  const absDelta=Math.abs(delta);
+  let label;
+  if(isAbsPercent){
+    // metric is a percentage: show delta in pp (percentage points)
+    label=`${arrow} ${absDelta}pp`;
+  }else if(pct===null){
+    label=`${arrow} ${absDelta}`;
+  }else{
+    const absPct=Math.abs(pct);
+    label=`${arrow} ${absPct}%`;
+  }
+  return`<span style="font-size:10px;font-weight:700;color:${color};display:inline-flex;align-items:center;gap:2px;background:${pos?'var(--green-bg)':'var(--red-bg)'};padding:2px 7px;border-radius:20px;margin-top:4px">${label}</span>`;
+}
+
+function setDelta(id, curVal, prevVal, isAbsPercent){
+  const el=document.getElementById('delta-'+id);
+  if(!el)return;
+  if(prevVal===null||prevVal===undefined){el.innerHTML='';return;}
+  const delta=curVal-prevVal;
+  const pct=prevVal===0?(delta!==0?null:0):Math.round((delta/prevVal)*100);
+  el.innerHTML=renderDeltaHtml(delta,pct,isAbsPercent||false);
+}
+
+function getPrevMonth(){
+  const now=new Date();
+  let y=now.getFullYear(),m=now.getMonth()-1;
+  if(m<0){m=11;y--;}
+  return{y,m};
+}
+
+function getCurMonth(){
+  const now=new Date();
+  return{y:now.getFullYear(),m:now.getMonth()};
+}
+
 function renderDashboard(){
   const kpi=getKPI(),svolti=getSvolti();
-  document.getElementById('k-ev').textContent=getUniqueEventi(kpi).length;
-  document.getElementById('k-sess').textContent=getUniqueEventi(kpi).reduce((s,e)=>s+sessEv(e),0);
-  document.getElementById('k-cfp').textContent=svolti.reduce((s,e)=>s+cfpEv(e),0);
-  document.getElementById('k-ore').textContent=svolti.reduce((s,e)=>s+parseFloat(e.ore||0),0).toLocaleString('it');
+  // Current values
+  const curEv=getUniqueEventi(kpi).length;
+  const curSess=getUniqueEventi(kpi).reduce((s,e)=>s+sessEv(e),0);
+  const curCfp=svolti.reduce((s,e)=>s+cfpEv(e),0);
+  const curOre=svolti.reduce((s,e)=>s+parseFloat(e.ore||0),0);
+  document.getElementById('k-ev').textContent=curEv;
+  document.getElementById('k-sess').textContent=curSess;
+  document.getElementById('k-cfp').textContent=curCfp;
+  document.getElementById('k-ore').textContent=curOre.toLocaleString('it');
+  // Progress bars for Stitch cards
+  const evPct=Math.min(100,Math.round(curEv/60*100));
+  const cfpPct=Math.min(100,Math.round(curCfp/146*100));
+  const orePct=Math.min(100,Math.round(curOre/150*100));
+  const evBar=document.getElementById('k-ev-bar');if(evBar)evBar.style.width=evPct+'%';
+  const cfpBar=document.getElementById('k-cfp-bar');if(cfpBar)cfpBar.style.width=cfpPct+'%';
+  const oreBar=document.getElementById('k-ore-bar');if(oreBar)oreBar.style.width=orePct+'%';
+  const evPctEl=document.getElementById('k-ev-pct');if(evPctEl)evPctEl.textContent=evPct+'% del target annuale';
+  const cfpPctEl=document.getElementById('k-cfp-pct');if(cfpPctEl)cfpPctEl.textContent=cfpPct+'% del target annuale';
+  const orePctEl=document.getElementById('k-ore-pct');if(orePctEl)orePctEl.textContent=orePct+'% del target annuale';
+  const sessSubEl=document.getElementById('k-sess-sub');if(sessSubEl)sessSubEl.textContent=curSess+' sessioni totali';
+  // MoM deltas — compare current month vs previous month
+  const{y:cy,m:cm}=getCurMonth();
+  const{y:py,m:pm}=getPrevMonth();
+  const kpiFilter=(arr,y,m)=>{const mm=String(m+1).padStart(2,'0');return arr.filter(e=>e.data&&e.data.startsWith(`${y}-${mm}-`));};
+  const kpiCur=kpiFilter(DB.filter(e=>!e.escludi_kpi&&e.stato==='chiuso'),cy,cm);
+  const kpiPrev=kpiFilter(DB.filter(e=>!e.escludi_kpi&&e.stato==='chiuso'),py,pm);
+  const svCur=kpiCur;
+  const svPrev=kpiPrev;
+  const prevEv=getUniqueEventi(kpiPrev).length;
+  const prevSess=getUniqueEventi(kpiPrev).reduce((s,e)=>s+sessEv(e),0);
+  const prevCfp=svPrev.reduce((s,e)=>s+cfpEv(e),0);
+  const prevOre=svPrev.reduce((s,e)=>s+parseFloat(e.ore||0),0);
+  setDelta('k-ev',curEv,prevEv);
+  setDelta('k-sess',curSess,prevSess);
+  setDelta('k-cfp',curCfp,prevCfp);
+  setDelta('k-ore',curOre,prevOre);
   const cfpS=svolti.filter(e=>e.tipologia==='seminario').reduce((s,e)=>s+cfpEv(e),0);
   const cfpC=(()=>{const _seen=new Set();return svolti.filter(e=>e.tipologia==='corso_4h'||e.tipologia==='corso_6h').reduce((s,e)=>{if(e.corso_padre_id){if(_seen.has(e.corso_padre_id))return s;_seen.add(e.corso_padre_id);return s+(e.tipologia==='corso_4h'?4:6);}return s+cfpEv(e);},0);})();
   const cfpD=svolti.filter(e=>e.tipologia==='corso_deontologico').reduce((s,e)=>s+cfpEv(e),0);
@@ -3314,6 +3618,35 @@ function renderCommerciale(){
   document.getElementById('fi-pres').textContent=fi_pres;
   document.getElementById('fi-tasso').textContent=fi_ta+'%';
   document.getElementById('fi-media').textContent=fmtNum(fi_media);
+  // MoM deltas
+  const{y:cy,m:cm}=getCurMonth();
+  const{y:py,m:pm}=getPrevMonth();
+  const kpiF=(y,m)=>{const mm=String(m+1).padStart(2,'0');return DB.filter(e=>!e.escludi_kpi&&e.stato==='chiuso'&&e.data&&e.data.startsWith(`${y}-${mm}-`));};
+  const kpiC=kpiF(cy,cm);const kpiP=kpiF(py,pm);
+  const pIpC=kpiC.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e),0);
+  const pIpP=kpiP.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e),0);
+  const pPpC=kpiC.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
+  const pPpP=kpiP.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
+  const pTaC=pIpC>0?Math.round(pPpC/pIpC*100):0;
+  const pTaP=pIpP>0?Math.round(pPpP/pIpP*100):0;
+  const pRicC=kpiC.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0),0);
+  const pRicP=kpiP.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0),0);
+  setDelta('c-pag',pIpC,pIpP);
+  setDelta('c-pres',pPpC,pPpP);
+  setDelta('c-tasso',pTaC,pTaP,true);
+  setDelta('c-ric',pRicC,pRicP);
+  const fIscC=kpiC.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
+  const fIscP=kpiP.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
+  const fPresC=kpiC.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
+  const fPresP=kpiP.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
+  const fTaC=fIscC>0?Math.round(fPresC/fIscC*100):0;
+  const fTaP=fIscP>0?Math.round(fPresP/fIscP*100):0;
+  const fMedC=kpiC.length>0?fIscC/kpiC.length:0;
+  const fMedP=kpiP.length>0?fIscP/kpiP.length:0;
+  setDelta('fi-isc',fIscC,fIscP);
+  setDelta('fi-pres',fPresC,fPresP);
+  setDelta('fi-tasso',fTaC,fTaP,true);
+  setDelta('fi-media',fMedC,fMedP);
   renderChartMix(chartTypes['ch-mix']||'doughnut');
   renderChartRicavi('ch-ric',chartTimeFilters['ch-ric']||'all');
   // Paganti vs FI per mese
@@ -3544,7 +3877,7 @@ function renderEventi(){
     return 0;
   });
   if(!f.length){document.getElementById('ev-tbl').innerHTML='<div class="empty"><div class="ei">🔍</div><div class="et">Nessun evento trovato</div></div>';return;}
-  document.getElementById('ev-tbl').innerHTML=`<table><thead><tr><th style="width:32px"><input type="checkbox" id="ev-sel-all" onchange="toggleSelectAll(this)" style="accent-color:var(--accent);cursor:pointer"></th><th onclick="setEvSort('data')" style="cursor:pointer;white-space:nowrap;user-select:none">Data${evSortArrow('data')}</th><th onclick="setEvSort('titolo')" style="cursor:pointer;user-select:none">Titolo${evSortArrow('titolo')}</th><th onclick="setEvSort('tema')" style="cursor:pointer;user-select:none">Tema${evSortArrow('tema')}</th><th onclick="setEvSort('tipo')" style="cursor:pointer;user-select:none">Tipo${evSortArrow('tipo')}</th><th onclick="setEvSort('docente')" style="cursor:pointer;user-select:none">Docente${evSortArrow('docente')}</th><th>Ore</th><th onclick="setEvSort('iscr')" style="cursor:pointer;user-select:none">Iscr.${evSortArrow('iscr')}</th><th onclick="setEvSort('pres')" style="cursor:pointer;user-select:none">Pres.${evSortArrow('pres')}</th><th onclick="setEvSort('tasso')" style="cursor:pointer;user-select:none">Tasso${evSortArrow('tasso')}</th><th onclick="setEvSort('ricavo')" style="cursor:pointer;user-select:none">Ricavo${evSortArrow('ricavo')}</th><th onclick="setEvSort('stato')" style="cursor:pointer;user-select:none">Stato${evSortArrow('stato')}</th><th>Mod. da</th><th>Azioni</th></tr></thead><tbody>${f.map(e=>{
+  document.getElementById('ev-tbl').innerHTML=`<table class="stitch-table"><thead><tr><th style="width:32px"><input type="checkbox" id="ev-sel-all" onchange="toggleSelectAll(this)" style="accent-color:var(--accent);cursor:pointer"></th><th onclick="setEvSort('data')" style="cursor:pointer;white-space:nowrap;user-select:none">Data${evSortArrow('data')}</th><th onclick="setEvSort('titolo')" style="cursor:pointer;user-select:none">Titolo${evSortArrow('titolo')}</th><th onclick="setEvSort('tema')" style="cursor:pointer;user-select:none">Tema${evSortArrow('tema')}</th><th onclick="setEvSort('tipo')" style="cursor:pointer;user-select:none">Tipo${evSortArrow('tipo')}</th><th onclick="setEvSort('docente')" style="cursor:pointer;user-select:none">Docente${evSortArrow('docente')}</th><th>Ore</th><th onclick="setEvSort('iscr')" style="cursor:pointer;user-select:none">Iscr.${evSortArrow('iscr')}</th><th onclick="setEvSort('pres')" style="cursor:pointer;user-select:none">Pres.${evSortArrow('pres')}</th><th onclick="setEvSort('tasso')" style="cursor:pointer;user-select:none">Tasso${evSortArrow('tasso')}</th><th onclick="setEvSort('ricavo')" style="cursor:pointer;user-select:none">Ricavo${evSortArrow('ricavo')}</th><th onclick="setEvSort('stato')" style="cursor:pointer;user-select:none">Stato${evSortArrow('stato')}</th><th>Mod. da</th><th>Azioni</th></tr></thead><tbody>${f.map(e=>{
     const ti=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e)+(parseInt(e.iscritti_illimitati)||0);
     const tp=((parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_early_bird)||0))+(parseInt(e.presenti_illimitati)||0);
     const ta=ti>0?Math.round(tp/ti*100):null;
@@ -3884,14 +4217,26 @@ function openEvDetail(id){
 
   // Info grid
   const cfp=cfpEv(e);
+  // Stato badge in header
+  const statoEl=document.getElementById('evd-stato-badge');
+  if(statoEl)statoEl.innerHTML=badgeStato(e.stato);
   document.getElementById('evd-info-grid').innerHTML=`
-    <div class="evd-stat"><div class="evd-stat-lbl">Tema</div><div class="evd-stat-val" style="font-size:14px">${e.tema||'—'}</div></div>
-    <div class="evd-stat"><div class="evd-stat-lbl">Stato</div><div style="margin-top:5px">${badgeStato(e.stato)}</div></div>
-    <div class="evd-stat"><div class="evd-stat-lbl">CFP generati</div><div class="evd-stat-val">${cfp}</div><div class="evd-stat-sub">ore: ${e.ore}h</div></div>
-    <div class="evd-stat"><div class="evd-stat-lbl">Giorno</div><div class="evd-stat-val" style="font-size:14px">${e.giorno||'—'}</div></div>
-    <div class="evd-stat"><div class="evd-stat-lbl">Orario</div><div class="evd-stat-val" style="font-size:14px">${e.orario||'—'}</div></div>
-    ${e.modulo_numero?`<div class="evd-stat"><div class="evd-stat-lbl">Modulo</div><div class="evd-stat-val">n° ${e.modulo_numero}</div></div>`:'<div></div>'}
+    <div class="evd-info-tile"><div class="evd-info-tile-lbl">Tipologia</div><div class="evd-info-tile-val">${{seminario:'Seminario 2h',corso_4h:'Corso 4h',corso_6h:'Corso 6h',corso_deontologico:'Deontologico 2h'}[e.tipologia]||e.tipologia}</div></div>
+    <div class="evd-info-tile"><div class="evd-info-tile-lbl">Tema</div><div class="evd-info-tile-val">${e.tema||'—'}</div></div>
+    <div class="evd-info-tile"><div class="evd-info-tile-lbl">CFP generati</div><div class="evd-info-tile-val font-headline" style="font-size:18px;font-weight:800;color:var(--accent)">${cfp}</div></div>
+    <div class="evd-info-tile"><div class="evd-info-tile-lbl">Ore totali</div><div class="evd-info-tile-val">${e.ore}h</div></div>
   `;
+  // Footer meta
+  const footerId=document.getElementById('evd-footer-id');
+  if(footerId)footerId.textContent='ID: '+(e.id||'—').slice(0,8)+'...';
+  const footerMod=document.getElementById('evd-footer-mod');
+  if(footerMod)footerMod.textContent=e.modified_by?'Ultima modifica: '+e.modified_by+(e.modified_at?' · '+new Date(e.modified_at).toLocaleDateString('it'):''):'—';
+  // Timeline
+  const tlEl=document.getElementById('evd-timeline');
+  if(tlEl){
+    const states=[{label:'Evento creato',date:e.created_at||null,done:true},{label:'Pubblicato',date:null,done:e.stato==='pubblicato'||e.stato==='svolto'||e.stato==='chiuso'},{label:'Svolto',date:e.data||null,done:e.stato==='svolto'||e.stato==='chiuso'},{label:'Chiuso',date:null,done:e.stato==='chiuso'}];
+    tlEl.innerHTML=states.map(s=>`<div class="evd-timeline-item"><div class="evd-timeline-dot" style="background:${s.done?'var(--accent)':'var(--border2)'}"></div><div style="font-size:11px;font-weight:${s.done?'700':'400'};color:${s.done?'var(--text)':'var(--text3)'}">${s.label}</div>${s.date?`<div style="font-size:10px;color:var(--text3)">${fmtDate(s.date.slice?s.date.slice(0,10):s.date)}</div>`:''}</div>`).join('');
+  }
 
   // Partecipazione
   const ip=parseInt(e.iscritti_paganti)||0;  // solo prezzo pieno
@@ -3911,25 +4256,44 @@ function openEvDetail(id){
   const tassoFI=ii>0?Math.round(pi/ii*100):null;
 
   document.getElementById('evd-part-grid').innerHTML=`
-    <div class="evd-stat" style="grid-column:1/-1 / span 1">
-      <div class="evd-stat-lbl">Tasso presenza totale</div>
-      <div class="evd-stat-val" style="color:${tCol}">${tasso!==null?tasso+'%':'—'}</div>
-      <div class="evd-stat-sub">${totP} presenti su ${totI} iscritti</div>
+    <div class="evd-part-card" style="border:1px solid rgba(var(--accent-rgb),.2)">
+      <div class="evd-part-card-title">
+        <span style="color:var(--accent)">Totali</span>
+        <span class="material-symbols-outlined" style="font-size:16px;color:var(--text3)">groups</span>
+      </div>
+      <div class="evd-part-row"><span>Iscritti</span><span class="evd-part-row-val">${totI}</span></div>
+      <div class="evd-part-row"><span>Presenti</span><span class="evd-part-row-val">${totP}</span></div>
+      <div class="evd-part-divider"></div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <span style="font-size:10px;color:var(--text3)">Tasso presenza</span>
+        <span class="evd-part-tasso font-headline" style="color:${tCol}">${tasso!==null?tasso+'%':'—'}</span>
+      </div>
     </div>
-    <div class="evd-stat">
-      <div class="evd-stat-lbl">Paganti</div>
-      <div class="evd-stat-val">${ipTot+buoniI}</div>
-      <div class="evd-stat-sub">Pieno: ${ip} · EB: ${ieb}${buoniI>0?' · Sconto: '+buoniI:''} — Presenti: ${ppTot} ${tassoPag!==null?'('+tassoPag+'%)':''}</div>
+    <div class="evd-part-card">
+      <div class="evd-part-card-title">
+        <span style="color:var(--accent)">Paganti</span>
+        <span class="material-symbols-outlined" style="font-size:16px;color:var(--text3)">payments</span>
+      </div>
+      <div class="evd-part-row"><span>Prezzo pieno</span><span class="evd-part-row-val">${ip}</span></div>
+      <div class="evd-part-row"><span>Early Bird</span><span class="evd-part-row-val">${ieb}</span></div>
+      ${buoniI>0?`<div class="evd-part-row"><span>Sconti</span><span class="evd-part-row-val">${buoniI}</span></div>`:''}
+      <div class="evd-part-divider"></div>
+      <div class="evd-part-row">
+        <span style="font-size:10px;color:var(--text3)">Presenti paganti</span>
+        <span style="font-weight:700;color:var(--accent)">${ppTot} ${tassoPag!==null?'('+tassoPag+'%)':''}</span>
+      </div>
     </div>
-    <div class="evd-stat">
-      <div class="evd-stat-lbl">Form. Illimitata</div>
-      <div class="evd-stat-val">${ii}</div>
-      <div class="evd-stat-sub">Presenti: ${pi} ${tassoFI!==null?'('+tassoFI+'%)':''}</div>
-    </div>
-    <div class="evd-stat">
-      <div class="evd-stat-lbl">Gratuiti</div>
-      <div class="evd-stat-val" style="font-size:16px">${ig}</div>
-      <div class="evd-stat-sub">Presenti: ${pg}</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div class="evd-part-card" style="flex:1">
+        <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">Form. Illimitata</div>
+        <div class="evd-part-row"><span>Iscritti</span><span class="evd-part-row-val">${ii}</span></div>
+        <div class="evd-part-row"><span>Presenti</span><span class="evd-part-row-val">${pi} ${tassoFI!==null?'('+tassoFI+'%)':''}</span></div>
+      </div>
+      <div class="evd-part-card" style="flex:1">
+        <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">Gratuiti / CAF</div>
+        <div class="evd-part-row"><span>Iscritti</span><span class="evd-part-row-val">${ig}</span></div>
+        <div class="evd-part-row"><span>Presenti</span><span class="evd-part-row-val">${pg}</span></div>
+      </div>
     </div>
   `;
 
@@ -3958,12 +4322,20 @@ function openEvDetail(id){
   const ric=(parseFloat(e.prezzo)||0)*ip+(parseFloat(e.prezzo_early_bird)||0)*ieb;
   // Economics with buoni sconto
   {const buoniData=(()=>{try{return e.buoni_sconto?JSON.parse(e.buoni_sconto):[];}catch(_){return[];}})();
-  const buoniHtml=buoniData.map((b,i)=>'<div class="evd-stat"><div class="evd-stat-lbl">Sconto '+(i+1)+'</div><div class="evd-stat-val" style="font-size:15px">'+b.nr+' iscr. × '+fmtEuro(b.prezzo,2)+'</div></div>').join('');
+  const buoniHtml=buoniData.map((b,i)=>'<div class="evd-eco-row"><span class="evd-eco-label">Sconto '+(i+1)+'</span><span class="evd-eco-value">'+b.nr+' iscr. × '+fmtEuro(b.prezzo,2)+'</span></div>').join('');
   document.getElementById('evd-eco-grid').innerHTML=
-    '<div class="evd-stat"><div class="evd-stat-lbl">Prezzo pieno</div><div class="evd-stat-val" style="font-size:16px">'+fmtEuro(e.prezzo||0)+'</div></div>'
-    +(e.prezzo_early_bird?'<div class="evd-stat"><div class="evd-stat-lbl">Prezzo Early Bird</div><div class="evd-stat-val" style="font-size:16px">'+fmtEuro(e.prezzo_early_bird)+'</div></div>':'<div></div>')
+    '<div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px">Dati economici</div>'
+    +'<div class="evd-eco-row"><span class="evd-eco-label">Prezzo pieno</span><span class="evd-eco-value">'+fmtEuro(e.prezzo||0)+'</span></div>'
+    +(e.prezzo_early_bird?'<div class="evd-eco-row"><span class="evd-eco-label">Early Bird</span><span class="evd-eco-value" style="color:var(--accent)">'+fmtEuro(e.prezzo_early_bird)+'</span></div>':'')
     +buoniHtml
-    +'<div class="evd-stat"><div class="evd-stat-lbl">Ricavi evento</div><div class="evd-stat-val" style="font-size:16px">'+fmtEuro(ric,2)+'</div><div class="evd-stat-sub">da iscritti paganti</div></div>';
+    +'<div style="padding-top:16px">'
+    +'<div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Ricavi totali</div>'
+    +'<div class="evd-total-ric font-headline">'+fmtEuro(ric,2)+'</div>'
+    +'<div style="margin-top:10px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden">'
+    +'<div style="height:4px;border-radius:2px;background:var(--accent);width:100%"></div>'
+    +'</div>'
+    +'<div style="font-size:10px;color:var(--text3);margin-top:6px;font-style:italic">da iscritti paganti</div>'
+    +'</div>';
   }
 
   // Note
@@ -5022,16 +5394,32 @@ function saveCustomThemeToSettings() {
   buildThemeGrid();
 }
 
+// ── GLOBAL SEARCH ──
+function globalSearchHandler(val){
+  if(!val||val.length<2){return;}
+  // If on eventi page, apply to filter; otherwise navigate there
+  const evPage=document.getElementById('page-eventi');
+  if(evPage&&evPage.classList.contains('active')){
+    const s=document.getElementById('fe-search');if(s){s.value=val;renderEventi();}
+  }else{
+    showPage('eventi',document.getElementById('nav-eventi'));
+    setTimeout(()=>{const s=document.getElementById('fe-search');if(s){s.value=val;renderEventi();}},200);
+  }
+}
+
 // ── PRUNE NOTIFICHE (keep only 20 most recent) ──
 async function pruneNotifiche(){
   try{
-    // Fetch all notification IDs ordered by date desc
-    const{data,error}=await sb.from('notifiche').select('id').order('created_at',{ascending:false});
+    // Get all IDs newest-first
+    const{data,error}=await sb.from('notifiche').select('id,created_at').order('created_at',{ascending:false});
     if(error||!data||data.length<=20)return;
-    // IDs to delete: everything beyond the first 20
+    // Delete in batches of 50 to avoid URL length limits
     const toDelete=data.slice(20).map(r=>r.id);
-    if(!toDelete.length)return;
-    await sb.from('notifiche').delete().in('id',toDelete);
+    for(let i=0;i<toDelete.length;i+=50){
+      const batch=toDelete.slice(i,i+50);
+      const{error:delErr}=await sb.from('notifiche').delete().in('id',batch);
+      if(delErr)console.warn('pruneNotifiche delete error:',delErr.message);
+    }
   }catch(e){console.warn('pruneNotifiche error:',e);}
 }
 
