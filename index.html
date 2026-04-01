@@ -1307,19 +1307,28 @@ let tutStep=0;
 // ── INIT ──
 async function init(){
   applyStoredTheme();
-  const{data:{session}}=await sb.auth.getSession();
-  if(session){
-    currentUser=session.user;
-    await loadUserProfile();
-    showApp();
-    await loadAll();
-    subscribeRealtime();
-    loadSettings();
-    updateGreeting();
-    checkTutorial();
-    requestNotifPermission();
-  }else{
-    document.getElementById('auth-screen').style.display='flex';
+  try{
+    const{data:{session},error}=await sb.auth.getSession();
+    if(error)throw error;
+    if(session){
+      currentUser=session.user;
+      await loadUserProfile();
+      showApp();
+      await loadAll();
+      subscribeRealtime();
+      loadSettings();
+      updateGreeting();
+      checkTutorial();
+      requestNotifPermission();
+    }else{
+      document.getElementById('auth-screen').style.display='flex';
+    }
+  }catch(err){
+    console.error('Init error:',err);
+    const authScreen=document.getElementById('auth-screen');
+    if(authScreen)authScreen.style.display='flex';
+    const authErr=document.getElementById('auth-err');
+    if(authErr)authErr.textContent='Errore di connessione. Riprova o controlla la rete.';
   }
 }
 
