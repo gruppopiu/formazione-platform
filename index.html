@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800;900&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;600;700;800;900&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
 <title>Formazione Platform — GruppoPiù</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -43,11 +43,11 @@
   --shadow2:0 4px 16px rgba(0,0,0,.5);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:var(--bg-gradient,var(--bg));color:var(--text);min-height:100vh;transition:background .25s,color .25s;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:var(--bg-gradient,var(--bg));color:var(--text);min-height:100vh;transition:background .25s,color .25s;overflow-x:hidden}
 /* ── LAYOUT ── */
 .shell{display:grid;grid-template-columns:228px 1fr;min-height:100vh}
-.sidebar{background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;box-shadow:var(--shadow)}
-.main{padding:28px 32px;overflow-x:hidden;min-width:0;position:relative}
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+.main{padding:24px 32px 32px;overflow-x:hidden;min-width:0;position:relative;background:var(--bg-gradient,var(--bg))}
 /* ── ABSTRACT BG SHAPES ── */
 .shape{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;opacity:.35}
 .shape1{width:400px;height:400px;background:radial-gradient(circle,rgba(18,183,106,.15),transparent);top:-100px;right:-80px}
@@ -57,12 +57,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:
 .main-content{position:relative;z-index:1}
 /* ── SIDEBAR ── */
 .sb-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
-.sb-logo-t{font-size:14px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px}
+.sb-logo-t{font-size:16px;font-weight:700;font-family:"Manrope",sans-serif;letter-spacing:-.3px;color:var(--accent);display:flex;align-items:center;gap:8px}
 .sb-logo-dot{width:8px;height:8px;border-radius:50%;background:var(--grad1)}
-.sb-logo-s{font-size:10px;color:var(--text3);font-family:'SF Mono',monospace;margin-top:3px}
+.sb-logo-s{font-size:9px;color:#475569;font-family:"Inter",sans-serif;font-weight:500;letter-spacing:.2em;text-transform:uppercase;margin-top:4px}
 .sb-nav{padding:10px 8px;flex:1}
-.sb-sec{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;padding:14px 10px 5px}
-.sbi{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r);cursor:pointer;font-size:12px;color:var(--text2);transition:all .15s;margin-bottom:1px;position:relative;user-select:none}
+.sb-sec{font-size:9px;font-weight:700;font-family:"Inter",sans-serif;color:#334155;letter-spacing:.15em;text-transform:uppercase;padding:16px 16px 4px}
+.sbi{display:flex;align-items:center;gap:12px;padding:10px 16px;border-radius:12px;cursor:pointer;font-size:12px;font-family:'Inter',sans-serif;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:#94a3b8;transition:all .2s;margin-bottom:2px;position:relative;user-select:none}
 .sbi:hover{background:var(--bg3);color:var(--text)}
 .sbi.active{background:var(--green-bg);color:var(--green);font-weight:500}
 .sbi svg{width:14px;height:14px;flex-shrink:0}
@@ -73,7 +73,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:
 .av{width:30px;height:30px;border-radius:50%;background:var(--grad1);padding:2px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent);flex-shrink:0;overflow:hidden}
 .av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .av span{width:100%;height:100%;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent)}
-.sb-uname{font-size:12px;font-weight:500;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-uname{font-size:12px;font-weight:600;font-family:"Inter",sans-serif;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sb-urole{font-size:10px;color:var(--text3)}
 .conn-row{display:flex;align-items:center;gap:6px;padding:5px 10px;font-size:10px;color:var(--text);margin-bottom:2px;font-weight:500}
 .cdot{width:8px;height:8px;border-radius:50%;background:var(--text3);flex-shrink:0;transition:all .3s}
@@ -84,13 +84,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:
 /* ── PAGES ── */
 .page{display:none}.page.active{display:block}
 .ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:12px}
-.pt{font-size:20px;font-weight:700;letter-spacing:-.5px}
-.ps{font-size:12px;color:var(--text3);margin-top:3px}
-.greeting{font-size:22px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px}
+.pt{font-size:32px;font-weight:800;letter-spacing:-.5px;font-family:"Manrope",sans-serif;color:var(--text)}
+.ps{font-size:12px;color:#8f909e;margin-top:6px;font-family:"Inter",sans-serif}
+.greeting{font-size:28px;font-weight:800;letter-spacing:-.5px;font-family:"Manrope",sans-serif;margin-bottom:4px;color:var(--text)}
 .greeting-sub{font-size:13px;color:var(--text3)}
 /* ── BUTTONS ── */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);font-size:12px;font-weight:500;cursor:pointer;border:none;transition:all .15s;font-family:inherit}
-.btn-p{background:var(--accent);color:var(--btn-text,#fff);box-shadow:0 2px 8px rgba(var(--accent-rgb),.3)}.btn-p:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:'Inter',sans-serif}
+.btn-p{background:linear-gradient(135deg,#bac3ff 0%,#4453a7 100%);color:#00105b;font-weight:700;box-shadow:0 4px 16px rgba(186,195,255,.2)}.btn-p:hover{filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 6px 20px rgba(186,195,255,.3)}
 .dark .btn-p{background:var(--accent);color:var(--btn-text,#fff);box-shadow:0 2px 8px rgba(var(--accent-rgb),.2)}
 .btn-s{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}.btn-s:hover{border-color:var(--border2);color:var(--text)}
 .btn-d{background:var(--red-bg);color:var(--red);border:1px solid rgba(224,82,82,.2)}
@@ -106,16 +106,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:
 .kcard.c2 .kcard-grad{background:var(--grad2)}
 .kcard.c3 .kcard-grad{background:var(--grad3)}
 .kcard.c4 .kcard-grad{background:var(--grad4)}
-.klbl{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;margin-top:4px}
-.kval{font-size:26px;font-weight:800;font-family:'SF Mono','Fira Code',monospace;letter-spacing:-1px;background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.klbl{font-size:9px;font-weight:700;font-family:"Inter",sans-serif;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;margin-top:4px}
+.kval{font-size:26px;font-weight:900;font-family:'Manrope',sans-serif;letter-spacing:-1px;background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .kcard.c2 .kval{background:var(--grad2);-webkit-background-clip:text;background-clip:text}
 .kcard.c3 .kval{background:var(--grad3);-webkit-background-clip:text;background-clip:text}
 .kcard.c4 .kval{background:var(--grad4);-webkit-background-clip:text;background-clip:text}
 .ksub{font-size:11px;color:var(--text3);margin-top:4px}
 /* ── CARDS ── */
-.card{background:var(--bg2);border:1px solid rgba(var(--accent-rgb),.18);border-radius:var(--r2);padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
-.card:hover{border-color:rgba(var(--accent-rgb),.35);box-shadow:0 4px 20px rgba(var(--accent-rgb),.12),0 1px 4px rgba(0,0,0,.08);transition:border-color .2s,box-shadow .2s}
-.ctitle{font-size:13px;font-weight:600;color:var(--text);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.card:hover{border-color:var(--border2);box-shadow:var(--shadow2);transition:all .2s}
+.ctitle{font-size:13px;font-weight:600;font-family:"Inter",sans-serif;color:var(--text);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .ctitle-sub{font-size:11px;color:var(--text3);font-weight:400}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
@@ -125,8 +125,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:
 .twrap table th[onclick]:hover{background:rgba(var(--accent-rgb),.08);color:var(--accent)}
 .twrap table th[onclick]{cursor:pointer;user-select:none;transition:color .1s,background .1s}
 .twrap table th[onclick]:hover{background:rgba(var(--accent-rgb),.08);color:var(--accent)}
-table{width:100%;border-collapse:collapse;font-size:12px}
-thead th{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;padding:9px 12px;border-bottom:1px solid var(--border);text-align:left;background:var(--bg3);white-space:nowrap}
+table{width:100%;border-collapse:collapse;font-size:12px;font-family:'Inter',sans-serif}
+thead th{font-family:"Inter",sans-serif;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;padding:9px 12px;border-bottom:1px solid var(--border);text-align:left;background:var(--bg3);white-space:nowrap}
 tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
 tbody tr:hover{background:var(--bg3)}
 tbody tr:last-child{border-bottom:none}
@@ -134,7 +134,7 @@ td{padding:10px 12px;color:var(--text2);vertical-align:middle}
 td.mono{font-family:'SF Mono',monospace;font-size:11px;color:var(--text)}
 .tda{display:flex;gap:5px}
 /* ── BADGES ── */
-.badge{display:inline-block;font-size:9px;font-weight:600;padding:2px 8px;border-radius:20px}
+.badge{display:inline-flex;align-items:center;font-size:9px;font-weight:700;font-family:"Inter",sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:4px}
 .b-sem{background:var(--blue-bg);color:var(--blue)}
 .b-c4{background:var(--green-bg);color:var(--green)}
 .b-c6{background:var(--purple-bg);color:var(--purple)}
@@ -183,10 +183,10 @@ td.mono{font-family:'SF Mono',monospace;font-size:11px;color:var(--text)}
 .fg{display:flex;flex-direction:column;gap:5px}
 .fg.full{grid-column:1/-1}
 .flbl{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.05em;text-transform:uppercase}
-.finp{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:8px 11px;font-size:12px;color:var(--text);outline:none;transition:border .15s,box-shadow .15s;font-family:inherit;width:100%}
+.finp{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:10px 14px;font-size:12px;color:var(--text);outline:none;transition:border .15s,box-shadow .15s;font-family:'Inter',sans-serif;width:100%}
 .finp:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(18,183,106,.1)}
 .dark .finp:focus{box-shadow:0 0 0 3px rgba(62,207,142,.08)}
-.finp::placeholder{color:var(--text3)}
+.finp::placeholder{color:#475569}
 select.finp{cursor:pointer}
 textarea.finp{min-height:72px;resize:vertical}
 /* ── TOAST ── */
@@ -322,7 +322,7 @@ textarea.finp{min-height:72px;resize:vertical}
 .dark .btn-p{background:var(--accent);color:#fff}
 .kval{background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .cdot.ok{background:var(--accent);box-shadow:0 0 6px var(--accent)}
-.finp:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.1)}
+.finp:focus{border-color:rgba(186,195,255,.3);box-shadow:0 0 0 2px rgba(186,195,255,.08)}
 .toggle input:checked+.toggle-slider{background:var(--accent)}
 .tb.on{background:var(--accent);border-color:var(--accent);color:var(--btn-text,#fff)}
 .ct-btn.on{background:rgba(var(--accent-rgb),.12);color:var(--accent);border-color:var(--accent)}
@@ -354,8 +354,6 @@ textarea.finp{min-height:72px;resize:vertical}
 .mob-menu-btn{display:none;position:fixed;top:12px;left:12px;z-index:60;width:38px;height:38px;border-radius:var(--r);background:var(--bg2);border:1px solid var(--border);cursor:pointer;align-items:center;justify-content:center;box-shadow:var(--shadow2)}
 .mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40}
 @media(max-width:768px){
-  .topbar-search{width:140px}
-  .topbar-search:focus{width:180px}
   .shell{grid-template-columns:1fr}
   .sidebar{position:fixed;left:-240px;top:0;z-index:50;transition:left .25s ease;height:100vh;width:240px}
   .sidebar.open{left:0}
@@ -386,68 +384,69 @@ textarea.finp{min-height:72px;resize:vertical}
   .auth-box{padding:20px 14px;margin:0 6px}
 }
 
-/* ── STITCH DESIGN SYSTEM ── */
+/* ── STITCH ── */
 .font-headline{font-family:'Manrope',sans-serif}
 .material-symbols-outlined{font-family:'Material Symbols Outlined';font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;font-style:normal;display:inline-block;line-height:1;vertical-align:middle}
-
-/* Sidebar Stitch style */
 .sbi{border-left:2px solid transparent;transition:all .2s}
-.sbi.active{background:rgba(var(--accent-rgb),.08);color:var(--accent);font-weight:600;border-left:2px solid var(--accent);border-radius:0 var(--r) var(--r) 0}
-.sbi:hover{background:rgba(var(--accent-rgb),.06);color:var(--text)}
-.sbi .msym{font-size:18px;flex-shrink:0;width:18px}
-
-/* KPI Cards Stitch style */
-.kcard-stitch{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:20px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:var(--shadow);transition:all .25s;cursor:default;overflow:hidden;position:relative}
-.kcard-stitch:hover{transform:translateY(-2px);box-shadow:var(--shadow2);border-color:var(--border2)}
-.kcard-stitch-icon{width:38px;height:38px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;background:rgba(var(--accent-rgb),.12);color:var(--accent);flex-shrink:0}
-.kcard-stitch-icon .material-symbols-outlined{font-size:20px}
-.kcard-stitch-tag{font-size:9px;font-weight:700;color:var(--text3);background:var(--bg3);padding:2px 8px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
-.kcard-stitch-label{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
-.kcard-stitch-val{font-size:32px;font-weight:900;font-family:'Manrope',sans-serif;color:var(--text);letter-spacing:-1.5px;line-height:1;margin-bottom:12px}
-.kcard-stitch-progress{width:100%;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-bottom:6px}
-.kcard-stitch-progress-fill{height:4px;border-radius:2px;background:var(--accent);transition:width .8s cubic-bezier(.4,0,.2,1)}
-.kcard-stitch-sub{font-size:10px;color:var(--accent);font-weight:600}
-
-/* Table rows Stitch style — accent bar on hover, no dividers */
+.sbi.active{background:rgba(255,255,255,.05);color:#bac3ff;font-weight:700;border-left:2px solid #00daf3;border-radius:0 12px 12px 0}
+.kcard-stitch{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px;display:flex;flex-direction:column;justify-content:space-between;transition:all .3s;overflow:hidden;position:relative;box-shadow:var(--shadow)}
+.kcard-stitch:hover{background:var(--bg3);transform:translateY(-2px);box-shadow:var(--shadow2)}
+.kcard-stitch-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(186,195,255,.1);color:#bac3ff;flex-shrink:0}
+.kcard-stitch-icon .material-symbols-outlined{font-size:22px}
+.kcard-stitch-tag{font-size:9px;font-weight:700;font-family:'Inter',sans-serif;color:#00daf3;background:rgba(0,218,243,.1);padding:3px 8px;border-radius:4px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.kcard-stitch-label{font-size:11px;font-weight:500;font-family:'Inter',sans-serif;color:#94a3b8;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px}
+.kcard-stitch-val{font-size:36px;font-weight:800;font-family:'Manrope',sans-serif;color:var(--text);letter-spacing:-1.5px;line-height:1;margin-bottom:16px}
+.kcard-stitch-progress{width:100%;height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.kcard-stitch-progress-fill{height:6px;border-radius:3px;background:#bac3ff;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.kcard-stitch-sub{font-size:11px;color:#bac3ff;font-weight:500;font-family:'Inter',sans-serif;margin-top:6px}
 .stitch-table tbody tr{border-bottom:none;border-left:2px solid transparent;transition:all .15s}
 .stitch-table tbody tr:hover{background:var(--bg3);border-left:2px solid var(--accent)}
-.stitch-table tbody tr td:first-child{padding-left:14px}
-
-/* Event detail modal Stitch layout */
-.evd-modal-inner{display:grid;grid-template-columns:1fr 320px;gap:0}
-.evd-left{padding:24px;border-right:1px solid var(--border)}
-.evd-right{padding:24px;display:flex;flex-direction:column;gap:16px}
-.evd-info-tile{background:var(--bg3);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:4px}
+.evd-modal-inner{display:grid;grid-template-columns:1fr 310px;gap:0}
+.evd-left{padding:22px 24px;border-right:1px solid var(--border)}
+.evd-right{padding:22px 20px;display:flex;flex-direction:column;gap:14px;background:var(--bg3)}
+.evd-info-tile{background:var(--bg3);border-radius:var(--r);padding:12px 14px;display:flex;flex-direction:column;gap:3px}
 .evd-info-tile-lbl{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase}
-.evd-info-tile-val{font-size:14px;font-weight:600;color:var(--text)}
-.evd-part-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:16px}
-.evd-part-card-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
-.evd-part-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--text2);padding:4px 0}
+.evd-info-tile-val{font-size:13px;font-weight:600;color:var(--text)}
+.evd-part-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px}
+.evd-part-card-title{font-size:11px;font-weight:700;color:var(--text);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.evd-part-row{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text2);padding:3px 0}
 .evd-part-row-val{font-weight:700;color:var(--text)}
-.evd-part-divider{height:1px;background:rgba(var(--accent-rgb),.1);margin:8px 0}
-.evd-part-tasso{font-size:24px;font-weight:900;font-family:'Manrope',sans-serif}
-.evd-eco-card{background:var(--bg2);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r2);padding:20px;position:relative;overflow:hidden}
-.evd-eco-card::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:rgba(var(--accent-rgb),.06);border-radius:50%;filter:blur(20px)}
-.evd-eco-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(var(--accent-rgb),.08)}
+.evd-part-divider{height:1px;background:rgba(var(--accent-rgb),.1);margin:7px 0}
+.evd-part-tasso{font-size:22px;font-weight:900;font-family:'Manrope',sans-serif}
+.evd-eco-card{background:var(--bg2);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r2);padding:18px;position:relative;overflow:hidden}
+.evd-eco-card::before{content:'';position:absolute;top:-30px;right:-30px;width:80px;height:80px;background:rgba(var(--accent-rgb),.06);border-radius:50%;filter:blur(16px)}
+.evd-eco-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(var(--accent-rgb),.08)}
 .evd-eco-row:last-child{border-bottom:none}
 .evd-eco-label{font-size:11px;color:var(--text3)}
-.evd-eco-value{font-size:14px;font-weight:700;color:var(--text)}
-.evd-total-ric{font-size:28px;font-weight:900;font-family:'Manrope',sans-serif;color:var(--text)}
-.evd-footer{background:var(--bg3);border-top:1px solid var(--border);padding:8px 24px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--text3)}
-.evd-timeline{border-left:2px solid rgba(var(--accent-rgb),.25);margin-left:8px;padding-left:16px;display:flex;flex-direction:column;gap:14px}
-.evd-timeline-dot{position:absolute;left:-25px;top:2px;width:14px;height:14px;border-radius:50%;border:3px solid var(--bg2)}
+.evd-eco-value{font-size:13px;font-weight:700;color:var(--text)}
+.evd-total-ric{font-size:26px;font-weight:900;font-family:'Manrope',sans-serif;color:var(--text)}
+.evd-footer{background:var(--bg3);border-top:1px solid var(--border);padding:7px 22px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--text3)}
+.evd-timeline{border-left:2px solid rgba(var(--accent-rgb),.2);margin-left:8px;padding-left:14px;display:flex;flex-direction:column;gap:12px}
+.evd-timeline-dot{position:absolute;left:-23px;top:2px;width:12px;height:12px;border-radius:50%;border:3px solid var(--bg2)}
 .evd-timeline-item{position:relative;font-size:11px}
-
-/* Topbar search */
-.topbar-search{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:6px 14px 6px 36px;font-size:12px;color:var(--text);outline:none;width:220px;transition:all .2s;font-family:inherit}
-.topbar-search:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.1);width:280px}
+.topbar-search{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:6px 14px 6px 34px;font-size:12px;color:var(--text);outline:none;width:200px;transition:all .2s;font-family:inherit}
+.topbar-search:focus{border-color:rgba(186,195,255,.3);box-shadow:0 0 0 2px rgba(186,195,255,.1);width:280px}
 .topbar-search::placeholder{color:var(--text3)}
 .topbar-search-wrap{position:relative;display:flex;align-items:center}
-.topbar-search-icon{position:absolute;left:10px;font-size:16px;color:var(--text3);pointer-events:none}
-
+.topbar-search-icon{position:absolute;left:9px;font-size:15px;color:var(--text3);pointer-events:none}
+.delta-wrap{position:relative;display:inline-flex;align-items:center}
+.delta-tooltip{position:fixed;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:11px;color:var(--text2);white-space:normal;min-width:200px;z-index:9999;box-shadow:var(--shadow2);pointer-events:none;opacity:0;transition:opacity .2s;line-height:1.7;font-family:"Inter",sans-serif}
+.delta-wrap:hover .delta-tooltip{opacity:1}
+.b-chiu{background:var(--bg3);color:var(--text2);border:1px solid var(--border2)}
+.tema-bar-row{display:flex;align-items:center;gap:10px;padding:5px 0}
+.tema-bar-label{min-width:130px;font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tema-bar-track{flex:1;height:5px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.tema-bar-fill{height:5px;border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.tema-bar-val{font-size:11px;font-weight:700;min-width:18px;text-align:right;font-family:'Manrope',sans-serif}
+.fm-modal-inner{display:grid;grid-template-columns:1fr 260px;gap:0;max-height:calc(92vh - 90px);overflow-y:auto}
+.fm-left{padding:20px 22px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.fm-right{padding:20px;background:var(--bg3);display:flex;flex-direction:column;gap:12px}
 @media(max-width:768px){
-  .evd-modal-inner{grid-template-columns:1fr}
+  .evd-modal-inner,.fm-modal-inner{grid-template-columns:1fr}
   .evd-left{border-right:none;border-bottom:1px solid var(--border)}
+  .fm-left{border-right:none;border-bottom:1px solid var(--border)}
+  .topbar-search{width:130px}.topbar-search:focus{width:170px}
+  #ev-modal-body{grid-template-columns:1fr!important}
 }
 </style>
 </head>
@@ -520,7 +519,7 @@ textarea.finp{min-height:72px;resize:vertical}
 <div class="shell" id="app-shell" style="display:none">
   <aside class="sidebar" id="sidebar">
     <div class="sb-logo">
-      <div class="sb-logo-t"><div class="sb-logo-dot"></div>Formazione Platform</div>
+      <div class="sb-logo-t font-headline" style="font-size:15px;font-weight:800;letter-spacing:-.5px"><div class="sb-logo-dot"></div>Formazione Platform</div>
       <div class="sb-logo-s">// gruppopiu 2026</div>
     </div>
     <nav class="sb-nav">
@@ -552,14 +551,7 @@ textarea.finp{min-height:72px;resize:vertical}
   <main class="main">
     <div class="shape shape1"></div>
     <div class="shape shape2"></div>
-    <!-- Topbar search + actions -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);position:relative;z-index:1">
-      <div class="topbar-search-wrap">
-        <span class="material-symbols-outlined topbar-search-icon">search</span>
-        <input class="topbar-search" id="global-search" placeholder="Cerca eventi, formatori..." oninput="globalSearchHandler(this.value)">
-      </div>
-      <button class="btn btn-p" onclick="openEventoModal()" style="gap:6px;flex-shrink:0"><span class="material-symbols-outlined" style="font-size:16px">add_circle</span>Nuovo evento</button>
-    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);position:relative;z-index:1"><div class="topbar-search-wrap"><span class="material-symbols-outlined topbar-search-icon">search</span><input class="topbar-search" id="global-search" placeholder="Cerca eventi, formatori..." oninput="globalSearchHandler(this.value)"></div><button class="btn btn-p" onclick="openEventoModal()" id="topbar-new-ev" style="gap:6px;flex-shrink:0"><span class="material-symbols-outlined" style="font-size:15px">add_circle</span>Nuovo evento</button></div>
     <div class="main-content">
 
     <!-- DASHBOARD -->
@@ -572,7 +564,7 @@ textarea.finp{min-height:72px;resize:vertical}
             <div class="greeting-sub" id="greeting-sub">Ecco il riepilogo della tua formazione</div>
           </div>
         </div>
-        <button class="btn btn-p" onclick="openEventoModal()">+ Nuovo evento</button>
+        
       </div>
       <!-- WIDGET BAR -->
       <div class="widget-bar">
@@ -586,56 +578,47 @@ textarea.finp{min-height:72px;resize:vertical}
       <div class="widget-wrap" id="widget-kpi">
         <div class="kgrid">
           <div class="kcard-stitch">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
               <div class="kcard-stitch-icon"><span class="material-symbols-outlined">event_available</span></div>
               <span class="kcard-stitch-tag">target 60+</span>
             </div>
-            <div>
-              <div class="kcard-stitch-label">Eventi reali</div>
-              <div class="kcard-stitch-val" id="k-ev">—</div>
-              <div id="delta-k-ev" style="min-height:20px;margin-bottom:10px"></div>
-              <div class="kcard-stitch-progress"><div class="kcard-stitch-progress-fill" id="k-ev-bar" style="width:0%"></div></div>
-              <div class="kcard-stitch-sub" id="k-ev-pct">— del target annuale</div>
-            </div>
+            <div class="kcard-stitch-label">Eventi reali</div>
+            <div class="kcard-stitch-val" id="k-ev">—</div>
+            <div id="delta-k-ev" style="min-height:20px;margin-bottom:8px"></div>
+            <div class="kcard-stitch-progress"><div class="kcard-stitch-progress-fill" id="k-ev-bar" style="width:0%"></div></div>
+            <div class="kcard-stitch-sub" id="k-ev-pct">— del target</div>
           </div>
           <div class="kcard-stitch">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-              <div class="kcard-stitch-icon" style="background:rgba(var(--accent-rgb),.08)"><span class="material-symbols-outlined">calendar_today</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+              <div class="kcard-stitch-icon"><span class="material-symbols-outlined">calendar_today</span></div>
               <span class="kcard-stitch-tag">seminari + moduli</span>
             </div>
-            <div>
-              <div class="kcard-stitch-label">Sessioni calendario</div>
-              <div class="kcard-stitch-val" id="k-sess">—</div>
-              <div id="delta-k-sess" style="min-height:20px;margin-bottom:10px"></div>
-              <div class="kcard-stitch-progress"><div class="kcard-stitch-progress-fill" id="k-sess-bar" style="width:0%;background:var(--blue)"></div></div>
-              <div class="kcard-stitch-sub" id="k-sess-sub" style="color:var(--blue)">sessioni totali</div>
-            </div>
+            <div class="kcard-stitch-label">Sessioni calendario</div>
+            <div class="kcard-stitch-val" id="k-sess">—</div>
+            <div id="delta-k-sess" style="min-height:20px;margin-bottom:8px"></div>
+            <div class="kcard-stitch-sub" id="k-sess-sub">sessioni totali</div>
           </div>
           <div class="kcard-stitch">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
-              <div class="kcard-stitch-icon" style="background:rgba(var(--accent-rgb),.08)"><span class="material-symbols-outlined">workspace_premium</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+              <div class="kcard-stitch-icon" style="background:rgba(var(--yellow),.12);color:var(--yellow)"><span class="material-symbols-outlined">workspace_premium</span></div>
               <span class="kcard-stitch-tag">target 146</span>
             </div>
-            <div>
-              <div class="kcard-stitch-label">CFP totali</div>
-              <div class="kcard-stitch-val" id="k-cfp">—</div>
-              <div id="delta-k-cfp" style="min-height:20px;margin-bottom:10px"></div>
-              <div class="kcard-stitch-progress"><div class="kcard-stitch-progress-fill" id="k-cfp-bar" style="width:0%;background:var(--yellow)"></div></div>
-              <div class="kcard-stitch-sub" id="k-cfp-pct" style="color:var(--yellow)">— del target annuale</div>
-            </div>
+            <div class="kcard-stitch-label">CFP totali</div>
+            <div class="kcard-stitch-val" id="k-cfp">—</div>
+            <div id="delta-k-cfp" style="min-height:20px;margin-bottom:8px"></div>
+            <div class="kcard-stitch-progress"><div class="kcard-stitch-progress-fill" id="k-cfp-bar" style="width:0%;background:var(--yellow)"></div></div>
+            <div class="kcard-stitch-sub" id="k-cfp-pct" style="color:var(--yellow)">— del target</div>
           </div>
           <div class="kcard-stitch">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
               <div class="kcard-stitch-icon" style="background:rgba(var(--green),.12);color:var(--green)"><span class="material-symbols-outlined">schedule</span></div>
               <span class="kcard-stitch-tag">target 150+</span>
             </div>
-            <div>
-              <div class="kcard-stitch-label">Ore erogate</div>
-              <div class="kcard-stitch-val" id="k-ore">—</div>
-              <div id="delta-k-ore" style="min-height:20px;margin-bottom:10px"></div>
-              <div class="kcard-stitch-progress"><div class="kcard-stitch-progress-fill" id="k-ore-bar" style="width:0%;background:var(--green)"></div></div>
-              <div class="kcard-stitch-sub" id="k-ore-pct" style="color:var(--green)">— del target annuale</div>
-            </div>
+            <div class="kcard-stitch-label">Ore erogate</div>
+            <div class="kcard-stitch-val" id="k-ore">—</div>
+            <div id="delta-k-ore" style="min-height:20px;margin-bottom:8px"></div>
+            <div class="kcard-stitch-progress"><div class="kcard-stitch-progress-fill" id="k-ore-bar" style="width:0%;background:var(--green)"></div></div>
+            <div class="kcard-stitch-sub" id="k-ore-pct" style="color:var(--green)">— del target</div>
           </div>
         </div>
       </div>
@@ -713,7 +696,7 @@ textarea.finp{min-height:72px;resize:vertical}
 
     <!-- CALENDARIO -->
     <div class="page" id="page-calendario">
-      <div class="ph"><div><div class="pt">Calendario</div><div class="ps">Vista mensile — vincoli temporali evidenziati</div></div><button class="btn btn-p" onclick="openEventoModal()">+ Nuovo evento</button></div>
+      <div class="ph"><div><div class="pt">Calendario</div><div class="ps">Vista mensile — vincoli temporali evidenziati</div></div></div>
       <div class="card">
         <div class="cal-header">
           <div style="display:flex;align-items:center;gap:8px">
@@ -735,7 +718,7 @@ textarea.finp{min-height:72px;resize:vertical}
 
     <!-- EVENTI -->
     <div class="page" id="page-eventi">
-      <div class="ph"><div><div class="pt">Eventi</div><div class="ps">Lista completa sessioni</div></div><button class="btn btn-p" onclick="openEventoModal()">+ Nuovo evento</button></div>
+      <div class="ph"><div><div class="pt">Eventi</div><div class="ps">Lista completa sessioni</div></div></div>
       <div class="filters">
         <input class="fsearch" id="fe-search" placeholder="Cerca titolo, tema, docente..." oninput="renderEventi()">
         <select class="fsel" id="fe-anno" onchange="renderEventi()"><option value="">Anno</option><option>2024</option><option>2025</option><option>2026</option></select>
@@ -772,7 +755,7 @@ textarea.finp{min-height:72px;resize:vertical}
           <div class="ctitle" style="margin:0">Classifica andamento <span class="ctitle-sub">ordinata per paganti medi</span></div>
           <div class="time-btns" id="tbtns-rank" data-chart="ch-rank" data-type="rank"></div>
         </div>
-        <div class="twrap"><table id="rank-tbl" class="stitch-table"></table></div>
+        <div class="twrap"><table id="rank-tbl"></table></div>
       </div>
       <div class="card">
         <div class="chart-toolbar">
@@ -826,9 +809,9 @@ textarea.finp{min-height:72px;resize:vertical}
       <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Iscritti paganti</div>
       <div class="kgrid" style="margin-bottom:20px">
         <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
             <div class="kcard-stitch-icon"><span class="material-symbols-outlined">person</span></div>
-            <div class="info-btn">ℹ<span class="info-tooltip">Totale iscritti che hanno pagato il biglietto (prezzo pieno o early bird). Esclusi FI e gratuiti/CAF/assicurativi.</span></div>
+            <div class="info-btn">ℹ<span class="info-tooltip">Totale iscritti paganti (pieno + EB + buoni sconto). Esclusi FI e gratuiti.</span></div>
           </div>
           <div class="kcard-stitch-label">Iscritti paganti</div>
           <div class="kcard-stitch-val" id="c-pag">—</div>
@@ -836,7 +819,7 @@ textarea.finp{min-height:72px;resize:vertical}
           <div style="font-size:10px;color:var(--text3);margin-top:4px">totale periodo</div>
         </div>
         <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
             <div class="kcard-stitch-icon" style="background:rgba(var(--blue),.12);color:var(--blue)"><span class="material-symbols-outlined">how_to_reg</span></div>
             <div class="info-btn">ℹ<span class="info-tooltip">Quanti iscritti paganti hanno effettivamente partecipato.</span></div>
           </div>
@@ -845,18 +828,18 @@ textarea.finp{min-height:72px;resize:vertical}
           <div id="delta-c-pres" style="min-height:20px"></div>
         </div>
         <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
             <div class="kcard-stitch-icon" style="background:rgba(var(--yellow),.12);color:var(--yellow)"><span class="material-symbols-outlined">percent</span></div>
-            <div class="info-btn">ℹ<span class="info-tooltip">Presenti paganti / Iscritti paganti. Benchmark: ≥80% ottimo.</span></div>
+            <div class="info-btn">ℹ<span class="info-tooltip">Presenti / Iscritti. Benchmark ≥80% ottimo.</span></div>
           </div>
           <div class="kcard-stitch-label">Tasso presenza</div>
           <div class="kcard-stitch-val" id="c-tasso">—</div>
           <div id="delta-c-tasso" style="min-height:20px"></div>
         </div>
         <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
             <div class="kcard-stitch-icon" style="background:rgba(var(--green),.12);color:var(--green)"><span class="material-symbols-outlined">euro</span></div>
-            <div class="info-btn">ℹ<span class="info-tooltip">Ricavi calcolati su iscritti paganti × prezzo. Non include FI.</span></div>
+            <div class="info-btn">ℹ<span class="info-tooltip">Ricavi da iscritti paganti × prezzo. Non include FI.</span></div>
           </div>
           <div class="kcard-stitch-label">Ricavi</div>
           <div class="kcard-stitch-val" id="c-ric">—</div>
@@ -868,26 +851,25 @@ textarea.finp{min-height:72px;resize:vertical}
       <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Formazione Illimitata (abbonati)</div>
       <div class="kgrid" style="margin-bottom:20px">
         <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
             <div class="kcard-stitch-icon" style="background:rgba(var(--blue),.12);color:var(--blue)"><span class="material-symbols-outlined">all_inclusive</span></div>
             <div class="info-btn">ℹ<span class="info-tooltip">Totale iscritti con abbonamento FI nel periodo.</span></div>
           </div>
           <div class="kcard-stitch-label">Iscritti FI</div>
           <div class="kcard-stitch-val" id="fi-isc">—</div>
           <div id="delta-fi-isc" style="min-height:20px"></div>
-          <div style="font-size:10px;color:var(--text3);margin-top:4px">totale periodo</div>
         </div>
         <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
-            <div class="kcard-stitch-icon" style="background:rgba(var(--accent-rgb),.1)"><span class="material-symbols-outlined">how_to_reg</span></div>
-            <div class="info-btn">ℹ<span class="info-tooltip">Iscritti FI che hanno effettivamente partecipato.</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div class="kcard-stitch-icon"><span class="material-symbols-outlined">how_to_reg</span></div>
+            <div class="info-btn">ℹ<span class="info-tooltip">Iscritti FI che hanno partecipato.</span></div>
           </div>
           <div class="kcard-stitch-label">Presenti FI</div>
           <div class="kcard-stitch-val" id="fi-pres">—</div>
           <div id="delta-fi-pres" style="min-height:20px"></div>
         </div>
         <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
             <div class="kcard-stitch-icon" style="background:rgba(var(--yellow),.12);color:var(--yellow)"><span class="material-symbols-outlined">percent</span></div>
             <div class="info-btn">ℹ<span class="info-tooltip">% presenti FI su iscritti FI.</span></div>
           </div>
@@ -896,7 +878,7 @@ textarea.finp{min-height:72px;resize:vertical}
           <div id="delta-fi-tasso" style="min-height:20px"></div>
         </div>
         <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
             <div class="kcard-stitch-icon" style="background:rgba(var(--green),.12);color:var(--green)"><span class="material-symbols-outlined">avg_pace</span></div>
             <div class="info-btn">ℹ<span class="info-tooltip">Media FI per evento nel periodo.</span></div>
           </div>
@@ -1157,160 +1139,229 @@ textarea.finp{min-height:72px;resize:vertical}
 
 <!-- MODAL EVENTO -->
 <div class="mover" id="ev-modal" style="display:none" onclick="if(event.target===this)closeEventoModal()">
-  <div class="modal">
-    <div class="mhdr"><div class="mtitle" id="ev-modal-title">Nuovo evento</div><button class="mclose" onclick="closeEventoModal()">✕</button></div>
-    <div class="mbody" style="padding:0">
-      <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
-        <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">📋 Informazioni base</div>
-        <div class="fgrid">
-          <div class="fg full"><label class="flbl">Titolo *</label><input type="text" class="finp" id="ef-titolo" placeholder="Es: Urbanistica — novità 2026"></div>
-          <div class="fg"><label class="flbl">Tema *</label><select class="finp" id="ef-tema"><option value="">Seleziona tema</option><option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Successioni</option><option>Bonus Casa</option><option>Locazioni</option><option>Fisco Professionisti</option><option>Professione</option><option>Comunità Energetiche</option><option>CTU</option><option>Agricoltura</option><option>Inglese</option><option>CAF</option><option>Assicurazioni</option></select></div>
-          <div class="fg"><label class="flbl">Tipologia *</label><select class="finp" id="ef-tipo" onchange="onTipoChange()"><option value="">Seleziona</option><option value="seminario">Seminario (2h)</option><option value="corso_4h">Corso tecnico 4h (2 sessioni)</option><option value="corso_6h">Corso tecnico 6h (3 sessioni)</option><option value="corso_deontologico">Corso deontologico (2h)</option></select></div>
-          <div class="fg full">
-            <label class="flbl">Docente/i <span style="font-size:9px;color:var(--text3);text-transform:none;letter-spacing:0">selezione multipla possibile</span></label>
-            <div style="display:flex;flex-wrap:wrap;gap:6px;min-height:28px;margin-bottom:8px" id="docenti-selected"></div>
-            <select class="finp" id="ef-docente-add" onchange="addDocente(this)"><option value="">+ Aggiungi docente</option><option>Basso</option><option>Caputo</option><option>Cocozza</option><option>De Castro</option><option value="Dell'Oste">Dell'Oste</option><option>Di Leo</option><option>Forte</option><option>Frediani</option><option>Groppo</option><option>Masi</option><option>Mion</option><option>Rivetti</option></select>
-          </div>
-          <input type="hidden" id="ef-docente">
-        </div>
-      </div>
-      <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
-        <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">📅 Date e sessioni</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:12px" id="sessioni-hint">Inserisci la data dell'evento</div>
-        <div id="date-single">
-          <div class="fgrid">
-            <div class="fg"><label class="flbl">Data *</label><input type="date" class="finp" id="ef-data"></div>
-            <div class="fg"><label class="flbl">Orario</label><input type="text" class="finp" id="ef-orario" placeholder="es. 15:00–17:00"></div>
-          </div>
-        </div>
-        <div id="date-multi" style="display:none"><div id="sessioni-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px"></div></div>
-        <div class="fgrid" style="margin-top:10px">
-          <div class="fg"><label class="flbl">Stato</label><select class="finp" id="ef-stato"><option value="pianificato">Pianificato</option><option value="pubblicato">Pubblicato</option><option value="svolto">Svolto</option><option value="chiuso">Chiuso</option></select></div>
-          <div class="fg"><label class="flbl">Ore / CFP</label><div style="padding:8px 11px;background:var(--bg3);border-radius:var(--r);font-size:13px;font-weight:600;color:var(--accent)" id="ef-ore-display">—</div><input type="hidden" id="ef-ore"></div>
-        </div>
-      </div>
-      <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
-        <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">💶 Prezzi</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Early bird opzionale</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-          <div class="fg">
-            <label class="flbl">Prezzo pieno (€)</label>
-            <select class="finp" id="ef-prezzo">
-              <option value="">— seleziona —</option>
-              <option value="48.36">€ 48,36</option>
-              <option value="64.75">€ 64,75</option>
-              <option value="89.34">€ 89,34</option>
-              <option value="122.13">€ 122,13</option>
-              <option value="130.33">€ 130,33</option>
-              <option value="154.82">€ 154,82</option>
-              <option value="204.09">€ 204,09</option>
-              <option value="212.30">€ 212,30</option>
-            </select>
-          </div>
-          <div style="background:var(--yellow-bg);border:1.5px dashed var(--yellow);border-radius:var(--r);padding:12px">
-            <div style="font-size:10px;font-weight:700;color:var(--yellow);margin-bottom:8px">⚡ Early Bird</div>
-            <div class="fg">
-              <label class="flbl" style="color:var(--text3)">Prezzo EB (€)</label>
-              <select class="finp" id="ef-eb">
-                <option value="">— nessuno —</option>
-                <option value="36.89">€ 36,89</option>
-                <option value="48.36">€ 48,36</option>
-                <option value="64.75">€ 64,75</option>
-                <option value="89.34">€ 89,34</option>
-                <option value="94.26">€ 94,26</option>
-                <option value="105.74">€ 105,74</option>
-                <option value="146.72">€ 146,72</option>
-                <option value="154.82">€ 154,82</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <!-- BUONI SCONTO -->
-        <div style="margin-top:14px">
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;color:var(--text2)">
-            <input type="checkbox" id="ef-has-buoni" onchange="toggleBuoniSconto()" style="accent-color:var(--accent);width:14px;height:14px">
-            <span>🎟 Sono presenti iscritti con buoni sconto</span>
-          </label>
-          <div id="ef-buoni-section" style="display:none;margin-top:12px;background:var(--bg3);border:1.5px dashed var(--accent);border-radius:var(--r);padding:12px">
-            <div style="font-size:10px;font-weight:700;color:var(--accent);margin-bottom:10px">🎟 Buoni sconto</div>
-            <div id="ef-buoni-list"></div>
-            <button type="button" class="btn btn-s btn-sm" onclick="addBuonoSconto()" style="margin-top:8px;font-size:11px">+ Aggiungi fascia sconto</button>
-          </div>
-        </div>
-      </div>
-      <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
-        <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">👥 Partecipanti</div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Compila dopo lo svolgimento</div>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="background:var(--green-bg);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r);padding:12px">
-            <div style="font-size:10px;font-weight:700;color:var(--accent);margin-bottom:10px">Paganti</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
-              <div class="fg"><label class="flbl">Iscr. prezzo pieno</label><input type="number" class="finp" id="ef-ip" placeholder="0" min="0"></div>
-              <div class="fg"><label class="flbl">Iscr. Early Bird</label><input type="number" class="finp" id="ef-ieb" placeholder="0" min="0"></div>
-              <div class="fg"><label class="flbl">Presenti totali paganti</label><input type="number" class="finp" id="ef-pp" placeholder="0" min="0" title="Presenti totali: prezzo pieno + Early Bird"></div>
-            </div>
-          </div>
-          <div style="background:var(--blue-bg);border:1px solid rgba(91,141,238,.25);border-radius:var(--r);padding:12px">
-            <div style="font-size:10px;font-weight:700;color:var(--blue);margin-bottom:10px">Formazione Illimitata</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-              <div class="fg"><label class="flbl">Iscritti FI</label><input type="number" class="finp" id="ef-ii" placeholder="0" min="0"></div>
-              <div class="fg"><label class="flbl">Presenti FI</label><input type="number" class="finp" id="ef-pi" placeholder="0" min="0"></div>
-            </div>
-          </div>
-          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px">
-            <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:10px">Gratuiti / CAF</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-              <div class="fg"><label class="flbl">Iscritti</label><input type="number" class="finp" id="ef-ig" placeholder="0" min="0"></div>
-              <div class="fg"><label class="flbl">Presenti</label><input type="number" class="finp" id="ef-pg" placeholder="0" min="0"></div>
-            </div>
-            <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="ef-escludi" style="width:15px;height:15px;cursor:pointer;accent-color:var(--accent)"><label for="ef-escludi" style="font-size:11px;color:var(--text2);cursor:pointer">Escludi dai KPI</label></div>
-          </div>
-        </div>
-      </div>
-      <div style="padding:16px 22px">
-        <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">📝 Note</div>
-        <div class="fg"><textarea class="finp" id="ef-note" placeholder="Annotazioni..." style="min-height:60px"></textarea></div>
-      </div>
-    </div>
-    <div class="mfoot" style="justify-content:space-between"><button class="btn btn-s btn-sm" id="ev-dup-btn" onclick="duplicateEvento()" style="display:none">📋 Duplica</button><div style="display:flex;gap:8px"><button class="btn btn-s" onclick="closeEventoModal()">Annulla</button><button class="btn btn-p" onclick="saveEvento()">Salva evento</button></div></div>
-  </div>
-</div>
-
-<!-- MODAL FORMATORE -->
-<div class="mover" id="fm-modal" style="display:none" onclick="if(event.target===this)closeFmModal()">
-  <div class="modal">
-    <div class="mhdr"><div class="mtitle" id="fm-modal-title">Scheda formatore</div><div style="display:flex;gap:8px;align-items:center"><button class="btn btn-s btn-sm" onclick="const n=currentFm;closeFmModal();openNewFormatoreModal(n)">✏️ Modifica</button><button class="mclose" onclick="closeFmModal()">✕</button></div></div>
-    <div class="mbody">
-      <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px">
-        <label style="cursor:pointer">
-          <div class="av-big" id="fm-av"><span id="fm-init"></span><div class="av-overlay">Cambia foto</div></div>
-          <input type="file" accept="image/*" style="display:none" id="fm-photo-inp" onchange="uploadFmPhoto(this)">
-        </label>
+  <div class="modal" style="max-width:860px;padding:0;overflow:hidden">
+    <!-- STICKY HEADER -->
+    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
         <div style="flex:1">
-          <div class="fg" style="margin-bottom:8px">
-            <label class="flbl">Nome formatore</label>
-            <input class="finp" id="fm-nome-edit" placeholder="Nome formatore" style="font-size:15px;font-weight:700">
+          <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px">
+            <span>Eventi</span> <span style="opacity:.4">›</span> <span style="color:var(--accent)" id="ev-modal-breadcrumb">Nuovo evento</span>
           </div>
-          <div id="fm-temi-ref" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px"></div>
-          <div id="fm-stats-top" style="display:flex;gap:16px;flex-wrap:wrap"></div>
+          <div class="font-headline" style="font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.3px" id="ev-modal-title">Nuovo evento</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn btn-s btn-sm" id="ev-dup-btn" onclick="duplicateEvento()" style="display:none"><span class="material-symbols-outlined" style="font-size:14px">content_copy</span>Duplica</button>
+          <button class="btn btn-p btn-sm" onclick="saveEvento()"><span class="material-symbols-outlined" style="font-size:14px">save</span>Salva</button>
+          <button class="mclose" onclick="closeEventoModal()">✕</button>
         </div>
       </div>
-      <div id="fm-rank-row" style="margin-bottom:14px"></div>
-      <div class="fgrid" style="margin-bottom:16px">
-        <div class="fg full"><label class="flbl">Bio / CV</label><textarea class="finp" id="fm-cv" placeholder="Bio, formazione, specializzazioni..." style="min-height:90px"></textarea></div>
-        <div class="fg"><label class="flbl">Email</label><input class="finp" id="fm-email" placeholder="email@esempio.it"></div>
-        <div class="fg"><label class="flbl">Telefono</label><input class="finp" id="fm-tel" placeholder="+39 ..."></div>
-        <div class="fg full"><label class="flbl">Note interne</label><textarea class="finp" id="fm-note" placeholder="Disponibilità, accordi, note operative..."></textarea></div>
-      </div>
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px">Ultimi eventi</div>
-      <div class="twrap" id="fm-ev-list"></div>
     </div>
-    <div class="mfoot"><button class="btn btn-s" onclick="closeFmModal()">Chiudi</button><button class="btn btn-p" onclick="saveFmData()">Salva scheda</button></div>
+    <!-- TWO-COLUMN BODY -->
+    <div style="display:grid;grid-template-columns:1fr 320px;max-height:calc(92vh - 72px);overflow-y:auto" id="ev-modal-body">
+      <!-- LEFT: form sections -->
+      <div style="padding:20px 24px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:16px">
+
+        <!-- SEZIONE: Info base -->
+        <div style="background:var(--bg3);border-radius:var(--r2);padding:16px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+            <div class="kcard-stitch-icon" style="width:30px;height:30px"><span class="material-symbols-outlined" style="font-size:16px">info</span></div>
+            <span style="font-size:11px;font-weight:700;color:var(--text)">Informazioni base</span>
+          </div>
+          <div class="fgrid">
+            <div class="fg full"><label class="flbl">Titolo *</label><input type="text" class="finp" id="ef-titolo" placeholder="Es: Urbanistica — novità 2026"></div>
+            <div class="fg"><label class="flbl">Tema *</label>
+              <select class="finp" id="ef-tema"><option value="">Seleziona tema</option><option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Successioni</option><option>Bonus Casa</option><option>Locazioni</option><option>Fisco Professionisti</option><option>Professione</option><option>Comunità Energetiche</option><option>CTU</option><option>Agricoltura</option><option>Inglese</option><option>CAF</option><option>Assicurazioni</option></select>
+            </div>
+            <div class="fg"><label class="flbl">Tipologia *</label>
+              <select class="finp" id="ef-tipo" onchange="onTipoChange()"><option value="">Seleziona</option><option value="seminario">Seminario (2h)</option><option value="corso_4h">Corso tecnico 4h</option><option value="corso_6h">Corso tecnico 6h</option><option value="corso_deontologico">Corso deontologico (2h)</option></select>
+            </div>
+            <div class="fg full">
+              <label class="flbl">Docente/i</label>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;min-height:28px;margin-bottom:8px" id="docenti-selected"></div>
+              <select class="finp" id="ef-docente-add" onchange="addDocente(this)"><option value="">+ Aggiungi docente</option></select>
+              <input type="hidden" id="ef-docente">
+            </div>
+          </div>
+        </div>
+
+        <!-- SEZIONE: Date e sessioni -->
+        <div style="background:var(--bg3);border-radius:var(--r2);padding:16px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+            <div class="kcard-stitch-icon" style="width:30px;height:30px;background:rgba(var(--blue),.12);color:var(--blue)"><span class="material-symbols-outlined" style="font-size:16px">schedule</span></div>
+            <span style="font-size:11px;font-weight:700;color:var(--text)">Programmazione</span>
+            <span style="font-size:10px;color:var(--text3);margin-left:4px" id="sessioni-hint">Inserisci la data dell'evento</span>
+          </div>
+          <div id="date-single">
+            <div class="fgrid">
+              <div class="fg"><label class="flbl">Data *</label><input type="date" class="finp" id="ef-data"></div>
+              <div class="fg"><label class="flbl">Orario</label><input type="text" class="finp" id="ef-orario" placeholder="es. 15:00–17:00"></div>
+            </div>
+          </div>
+          <div id="date-multi" style="display:none">
+            <div id="sessioni-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px"></div>
+          </div>
+          <div class="fgrid" style="margin-top:10px">
+            <div class="fg"><label class="flbl">Stato</label>
+              <select class="finp" id="ef-stato"><option value="pianificato">Pianificato</option><option value="pubblicato">Pubblicato</option><option value="svolto">Svolto</option><option value="chiuso">Chiuso</option></select>
+            </div>
+            <div class="fg">
+              <label class="flbl">Ore / CFP</label>
+              <div style="padding:8px 11px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);font-size:14px;font-weight:700;color:var(--accent);font-family:'Manrope',sans-serif" id="ef-ore-display">—</div>
+              <input type="hidden" id="ef-ore">
+            </div>
+          </div>
+        </div>
+
+        <!-- SEZIONE: Prezzi -->
+        <div style="background:var(--bg3);border-radius:var(--r2);padding:16px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+            <div class="kcard-stitch-icon" style="width:30px;height:30px;background:rgba(var(--green),.12);color:var(--green)"><span class="material-symbols-outlined" style="font-size:16px">euro</span></div>
+            <span style="font-size:11px;font-weight:700;color:var(--text)">Prezzi</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="fg"><label class="flbl">Prezzo pieno (€)</label>
+              <select class="finp" id="ef-prezzo"><option value="">— seleziona —</option><option value="48.36">€ 48,36</option><option value="64.75">€ 64,75</option><option value="89.34">€ 89,34</option><option value="122.13">€ 122,13</option><option value="130.33">€ 130,33</option><option value="154.82">€ 154,82</option><option value="204.09">€ 204,09</option><option value="212.30">€ 212,30</option></select>
+            </div>
+            <div style="background:var(--yellow-bg);border:1.5px dashed var(--yellow);border-radius:var(--r);padding:12px">
+              <div style="font-size:9px;font-weight:700;color:var(--yellow);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">⚡ Early Bird</div>
+              <div class="fg"><label class="flbl" style="color:var(--text3)">Prezzo EB (€)</label>
+                <select class="finp" id="ef-eb"><option value="">— nessuno —</option><option value="36.89">€ 36,89</option><option value="48.36">€ 48,36</option><option value="64.75">€ 64,75</option><option value="89.34">€ 89,34</option><option value="94.26">€ 94,26</option><option value="105.74">€ 105,74</option><option value="146.72">€ 146,72</option><option value="154.82">€ 154,82</option></select>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:12px">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;color:var(--text2)">
+              <input type="checkbox" id="ef-has-buoni" onchange="toggleBuoniSconto()" style="accent-color:var(--accent);width:14px;height:14px">
+              <span>🎟 Iscritti con buoni sconto</span>
+            </label>
+            <div id="ef-buoni-section" style="display:none;margin-top:10px;background:var(--bg2);border:1.5px dashed var(--accent);border-radius:var(--r);padding:12px">
+              <div style="font-size:9px;font-weight:700;color:var(--accent);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">🎟 Buoni sconto</div>
+              <div id="ef-buoni-list"></div>
+              <button type="button" class="btn btn-s btn-sm" onclick="addBuonoSconto()" style="margin-top:8px">+ Aggiungi fascia</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEZIONE: Note -->
+        <div style="background:var(--bg3);border-radius:var(--r2);padding:16px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+            <div class="kcard-stitch-icon" style="width:30px;height:30px;background:rgba(var(--text3),.1);color:var(--text3)"><span class="material-symbols-outlined" style="font-size:16px">notes</span></div>
+            <span style="font-size:11px;font-weight:700;color:var(--text)">Note</span>
+          </div>
+          <textarea class="finp" id="ef-note" placeholder="Annotazioni interne, comunicazioni, variazioni..." style="min-height:70px"></textarea>
+        </div>
+      </div>
+
+      <!-- RIGHT: partecipanti + CFP summary -->
+      <div style="padding:20px 20px;display:flex;flex-direction:column;gap:14px;background:var(--bg3)">
+        <!-- CFP badge -->
+        <div style="background:var(--bg2);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r2);padding:14px;text-align:center">
+          <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">CFP generati</div>
+          <div class="font-headline" style="font-size:32px;font-weight:900;color:var(--accent)" id="ef-ore-display-right">—</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px">ore formazione</div>
+        </div>
+
+        <!-- Partecipanti: Paganti -->
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px">
+          <div style="font-size:9px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;align-items:center;gap:5px"><span class="material-symbols-outlined" style="font-size:13px">payments</span>Paganti</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+            <div class="fg"><label class="flbl">Iscr. prezzo pieno</label><input type="number" class="finp" id="ef-ip" placeholder="0" min="0"></div>
+            <div class="fg"><label class="flbl">Iscr. Early Bird</label><input type="number" class="finp" id="ef-ieb" placeholder="0" min="0"></div>
+          </div>
+          <div class="fg"><label class="flbl">Presenti paganti</label><input type="number" class="finp" id="ef-pp" placeholder="0" min="0"></div>
+        </div>
+
+        <!-- Partecipanti: FI -->
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px">
+          <div style="font-size:9px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;align-items:center;gap:5px"><span class="material-symbols-outlined" style="font-size:13px">all_inclusive</span>Formazione Illimitata</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div class="fg"><label class="flbl">Iscritti FI</label><input type="number" class="finp" id="ef-ii" placeholder="0" min="0"></div>
+            <div class="fg"><label class="flbl">Presenti FI</label><input type="number" class="finp" id="ef-pi" placeholder="0" min="0"></div>
+          </div>
+        </div>
+
+        <!-- Partecipanti: Gratuiti -->
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px">
+          <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;align-items:center;gap:5px"><span class="material-symbols-outlined" style="font-size:13px">volunteer_activism</span>Gratuiti / CAF</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+            <div class="fg"><label class="flbl">Iscritti</label><input type="number" class="finp" id="ef-ig" placeholder="0" min="0"></div>
+            <div class="fg"><label class="flbl">Presenti</label><input type="number" class="finp" id="ef-pg" placeholder="0" min="0"></div>
+          </div>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;color:var(--text2)">
+            <input type="checkbox" id="ef-escludi" style="width:14px;height:14px;cursor:pointer;accent-color:var(--accent)">
+            <span>Escludi dai KPI</span>
+          </label>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
+<div class="mover" id="fm-modal" style="display:none" onclick="if(event.target===this)closeFmModal()">
+  <div class="modal" style="max-width:860px;padding:0;overflow:hidden">
+    <!-- STICKY HEADER -->
+    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+        <div style="display:flex;align-items:center;gap:14px;flex:1">
+          <label style="cursor:pointer;flex-shrink:0">
+            <div class="av-big" id="fm-av" style="width:56px;height:56px;font-size:18px"><span id="fm-init"></span><div class="av-overlay">Cambia</div></div>
+            <input type="file" accept="image/*" style="display:none" id="fm-photo-inp" onchange="uploadFmPhoto(this)">
+          </label>
+          <div style="flex:1;min-width:0">
+            <input class="finp" id="fm-nome-edit" placeholder="Nome formatore" style="font-size:16px;font-weight:700;border:none;background:transparent;padding:0 0 2px 0;margin-bottom:4px;border-bottom:1px solid var(--border);border-radius:0;width:100%">
+            <div id="fm-temi-ref" style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px"></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
+          <button class="btn btn-s btn-sm" onclick="const n=currentFm;closeFmModal();openNewFormatoreModal(n)"><span class="material-symbols-outlined" style="font-size:14px">edit</span>Modifica</button>
+          <button class="btn btn-p btn-sm" onclick="saveFmData()"><span class="material-symbols-outlined" style="font-size:14px">save</span>Salva</button>
+          <button class="mclose" onclick="closeFmModal()">✕</button>
+        </div>
+      </div>
+    </div>
+    <!-- TWO-COLUMN BODY -->
+    <div style="display:grid;grid-template-columns:1fr 280px;max-height:calc(92vh - 90px);overflow-y:auto">
+      <!-- LEFT: stats + bio + events -->
+      <div style="padding:20px 24px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:16px">
+        <!-- Stats row -->
+        <div id="fm-stats-top" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px"></div>
+        <!-- Rank -->
+        <div id="fm-rank-row"></div>
+        <!-- Bio/CV -->
+        <div style="background:var(--bg3);border-radius:var(--r2);padding:14px">
+          <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:5px"><span class="material-symbols-outlined" style="font-size:13px">person</span>Bio / CV</div>
+          <textarea class="finp" id="fm-cv" placeholder="Bio, formazione, specializzazioni..." style="min-height:80px;background:var(--bg2)"></textarea>
+        </div>
+        <!-- Note interne -->
+        <div style="background:var(--bg3);border-radius:var(--r2);padding:14px">
+          <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:5px"><span class="material-symbols-outlined" style="font-size:13px">lock</span>Note interne</div>
+          <textarea class="finp" id="fm-note" placeholder="Note riservate, accordi, disponibilità..." style="background:var(--bg2)"></textarea>
+        </div>
+        <!-- Ultimi eventi -->
+        <div>
+          <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;display:flex;align-items:center;gap:5px"><span class="material-symbols-outlined" style="font-size:13px">event</span>Ultimi eventi</div>
+          <div class="twrap" id="fm-ev-list"></div>
+        </div>
+      </div>
+      <!-- RIGHT: contact + actions -->
+      <div style="padding:20px;background:var(--bg3);display:flex;flex-direction:column;gap:14px">
+        <!-- Contact card -->
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px">
+          <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px">Contatti</div>
+          <div class="fg" style="margin-bottom:10px"><label class="flbl">Email</label><input class="finp" id="fm-email" placeholder="email@esempio.it"></div>
+          <div class="fg"><label class="flbl">Telefono</label><input class="finp" id="fm-tel" placeholder="+39 ..."></div>
+        </div>
+        <!-- Performance card populated by JS -->
+        <div style="background:var(--bg2);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r2);padding:14px;position:relative;overflow:hidden">
+          <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:rgba(var(--accent-rgb),.06);border-radius:50%;filter:blur(20px)"></div>
+          <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Performance periodo</div>
+          <div id="fm-perf-card" style="display:flex;flex-direction:column;gap:8px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-<!-- MODAL DETTAGLIO EVENTO -->
 <div class="mover" id="ev-detail-modal" style="display:none" onclick="if(event.target===this)closeEvDetail()">
   <div class="modal" style="max-width:900px;padding:0;overflow:hidden">
     <!-- STICKY HEADER -->
@@ -1430,44 +1481,60 @@ textarea.finp{min-height:72px;resize:vertical}
 
 <!-- MODAL NUOVO FORMATORE -->
 <div class="mover" id="new-fm-modal" style="display:none" onclick="if(event.target===this)closeNewFormatoreModal()">
-  <div class="modal" style="max-width:500px">
-    <div class="mhdr">
-      <div class="mtitle" id="new-fm-title">Nuovo docente</div>
-      <button class="mclose" onclick="closeNewFormatoreModal()">✕</button>
+  <div class="modal" style="max-width:540px;padding:0;overflow:hidden">
+    <!-- HEADER -->
+    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px">Formatori › <span style="color:var(--accent)" id="new-fm-breadcrumb">Nuovo docente</span></div>
+          <div class="font-headline" style="font-size:16px;font-weight:800;color:var(--text)" id="new-fm-title">Nuovo docente</div>
+        </div>
+        <button class="mclose" onclick="closeNewFormatoreModal()">✕</button>
+      </div>
     </div>
-    <div class="mbody">
-      <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
-        <div class="av-big" id="new-fm-av-preview" onclick="document.getElementById('new-fm-av-input').click()" style="cursor:pointer">
-          <span id="new-fm-av-init">?</span>
-          <div class="av-overlay">Foto</div>
+    <!-- BODY -->
+    <div style="padding:20px 24px;max-height:calc(92vh - 70px);overflow-y:auto;display:flex;flex-direction:column;gap:14px">
+      <!-- Avatar + nome -->
+      <div style="display:flex;align-items:center;gap:16px;background:var(--bg3);border-radius:var(--r2);padding:14px">
+        <div style="cursor:pointer;flex-shrink:0" onclick="document.getElementById('new-fm-av-input').click()">
+          <div class="av-big" id="new-fm-av-preview" style="width:56px;height:56px;font-size:18px"><span id="new-fm-av-init">?</span><div class="av-overlay">Foto</div></div>
+          <input type="file" id="new-fm-av-input" accept="image/*" style="display:none" onchange="previewNewFmAv(this)">
         </div>
         <div style="flex:1">
-          <div style="font-size:11px;color:var(--text3);margin-bottom:6px">Foto profilo (opzionale)</div>
-          <input type="file" id="new-fm-av-input" accept="image/*" style="display:none" onchange="previewNewFmAv(this)">
-          <button class="btn btn-s btn-sm" onclick="document.getElementById('new-fm-av-input').click()">Carica foto</button>
+          <div class="fg"><label class="flbl">Nome completo *</label><input type="text" class="finp" id="new-fm-nome" placeholder="Es. Mario Rossi" oninput="updateNewFmInit()"></div>
         </div>
       </div>
-      <div class="fgrid">
-        <div class="fg full"><label class="flbl">Nome completo *</label><input type="text" class="finp" id="new-fm-nome" placeholder="Es. Mario Rossi" oninput="updateNewFmInit()"></div>
-        <div class="fg full"><label class="flbl">Temi di competenza <span style="font-size:9px;color:var(--text3);text-transform:none;letter-spacing:0">seleziona uno o più temi</span></label>
-          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px" id="new-fm-temi-sel"></div>
-          <select class="finp" id="new-fm-temi-add" onchange="addNewFmTema(this)">
-            <option value="">+ Aggiungi tema</option>
-            <option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Successioni</option><option>Bonus Casa</option><option>Locazioni</option><option>Fisco Professionisti</option><option>Professione</option><option>Comunità Energetiche</option><option>CTU</option><option>Agricoltura</option><option>Inglese</option><option>CAF</option><option>Assicurazioni</option>
-          </select>
+      <!-- Temi -->
+      <div style="background:var(--bg3);border-radius:var(--r2);padding:14px">
+        <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;display:flex;align-items:center;gap:5px"><span class="material-symbols-outlined" style="font-size:13px">label</span>Temi di competenza</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px" id="new-fm-temi-sel"></div>
+        <select class="finp" id="new-fm-temi-add" onchange="addNewFmTema(this)">
+          <option value="">+ Aggiungi tema</option>
+          <option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Successioni</option><option>Bonus Casa</option><option>Locazioni</option><option>Fisco Professionisti</option><option>Professione</option><option>Comunità Energetiche</option><option>CTU</option><option>Agricoltura</option><option>Inglese</option><option>CAF</option><option>Assicurazioni</option>
+        </select>
+      </div>
+      <!-- Contatti -->
+      <div style="background:var(--bg3);border-radius:var(--r2);padding:14px">
+        <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;display:flex;align-items:center;gap:5px"><span class="material-symbols-outlined" style="font-size:13px">contact_mail</span>Contatti</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="fg"><label class="flbl">Email</label><input type="email" class="finp" id="new-fm-email" placeholder="nome@esempio.it"></div>
+          <div class="fg"><label class="flbl">Telefono</label><input type="text" class="finp" id="new-fm-tel" placeholder="+39 000 0000000"></div>
         </div>
-        <div class="fg"><label class="flbl">Email</label><input type="email" class="finp" id="new-fm-email" placeholder="nome@esempio.it"></div>
-        <div class="fg"><label class="flbl">Telefono</label><input type="text" class="finp" id="new-fm-tel" placeholder="+39 000 0000000"></div>
-        <div class="fg full"><label class="flbl">CV / Bio</label><textarea class="finp" id="new-fm-cv" placeholder="Breve presentazione, specializzazioni, esperienze..." style="min-height:80px"></textarea></div>
-        <div class="fg full"><label class="flbl">Note interne</label><textarea class="finp" id="new-fm-note" placeholder="Note riservate per uso interno..." style="min-height:50px"></textarea></div>
+      </div>
+      <!-- CV + Note -->
+      <div style="background:var(--bg3);border-radius:var(--r2);padding:14px">
+        <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;display:flex;align-items:center;gap:5px"><span class="material-symbols-outlined" style="font-size:13px">description</span>Profilo</div>
+        <div class="fg" style="margin-bottom:10px"><label class="flbl">CV / Bio</label><textarea class="finp" id="new-fm-cv" placeholder="Breve presentazione, specializzazioni, esperienze..." style="min-height:70px"></textarea></div>
+        <div class="fg"><label class="flbl">Note interne</label><textarea class="finp" id="new-fm-note" placeholder="Note riservate per uso interno..." style="min-height:50px"></textarea></div>
       </div>
     </div>
-    <div class="mfoot">
-      <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
-        <button class="btn btn-d" id="new-fm-delete-btn" onclick="deleteFormatore()" style="display:none">🗑 Elimina docente</button>
-        <div style="display:flex;gap:8px;margin-left:auto">
-          <button class="btn btn-s" onclick="closeNewFormatoreModal()">Annulla</button>
-          <button class="btn btn-p" onclick="saveNewFormatore()">Salva docente</button>
+    <!-- FOOTER ACTIONS -->
+    <div style="padding:14px 24px;border-top:1px solid var(--border);background:var(--bg2);display:flex;justify-content:space-between;align-items:center">
+      <button class="btn btn-d btn-sm" id="new-fm-delete-btn" onclick="deleteFormatore()" style="display:none"><span class="material-symbols-outlined" style="font-size:14px">delete</span>Elimina docente</button>
+      <div style="display:flex;gap:8px;margin-left:auto">
+        <button class="btn btn-s" onclick="closeNewFormatoreModal()">Annulla</button>
+        <button class="btn btn-p" id="new-fm-save-btn" onclick="saveNewFormatore()"><span class="material-symbols-outlined" style="font-size:14px">save</span>Salva docente</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1548,7 +1615,7 @@ async function init(){
 function applyStoredTheme(){
   const savedMode=localStorage.getItem('fp_theme');
   currentMode=savedMode==='dark'?'dark':'light';
-  if(currentMode==='dark')document.body.classList.add('dark');
+  document.body.classList.toggle('dark',currentMode==='dark');
   // Try to get settings from any saved key
   let savedTheme='galaxy';
   for(const key of Object.keys(localStorage)){
@@ -2644,7 +2711,6 @@ async function loadAll(){
       });
       unreadCount=NOTIFICHE.filter(n=>!n.read).length;
       updateNotifBadge();
-      // Auto-delete notifications beyond the 20 most recent (fire and forget)
       pruneNotifiche();
     }
   }catch(e){}
@@ -2791,8 +2857,8 @@ function cfpEv(e){if(e.tipologia==='seminario')return 2;if(e.tipologia==='corso_
 function sessEv(e){if(e.tipologia==='corso_4h')return 2;if(e.tipologia==='corso_6h')return 3;return 1;}
 function badgeTipo(t){const m={seminario:'b-sem',corso_4h:'b-c4',corso_6h:'b-c6',corso_deontologico:'b-deo'};const l={seminario:'Seminario',corso_4h:'Corso 4h',corso_6h:'Corso 6h',corso_deontologico:'Deontologico'};return`<span class="badge ${m[t]||''}">${l[t]||t}</span>`;}
 function badgeStato(s){
-  const labels={pianificato:'Pianificato',pubblicato:'Pubblicato',svolto:'Svolto',chiuso:'Chiuso'};
-  const cls={pianificato:'b-pia',pubblicato:'b-pub',svolto:'b-svol',chiuso:'b-chiu'};
+  const labels={pianificato:'Pianificato',pubblicato:'Pubblicato',svolto:'Svolto',chiuso:'Chiuso',annullato:'Annullato'};
+  const cls={pianificato:'b-pia',pubblicato:'b-pub',svolto:'b-svo',chiuso:'b-chiu',annullato:'b-ann'};
   return`<span class="badge ${cls[s]||'b-pia'}">${labels[s]||s||'—'}</span>`;
 }
 function fmtDate(d){if(!d)return'—';const p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
@@ -3055,67 +3121,67 @@ function setChartType(chartId,type,btn){
 
 // ── DASHBOARD ──
 
-// ── DELTA MOM (Month-over-Month) ──
-function getMonthData(year, month){
-  // Returns events from DB for a specific year/month (0-based month)
-  const mm=String(month+1).padStart(2,'0');
-  const prefix=`${year}-${mm}-`;
-  return DB.filter(e=>e.data&&e.data.startsWith(prefix));
-}
+// ── MoM DELTA HELPERS ──
+function getCurMonth(){const n=new Date();return{y:n.getFullYear(),m:n.getMonth()};}
+function getPrevMonth(){const n=new Date();let y=n.getFullYear(),m=n.getMonth()-1;if(m<0){m=11;y--;}return{y,m};}
 
-function calcMoM(cur, prev){
-  // Returns {delta, pct, html} comparing cur vs prev numeric values
-  if(prev===0&&cur===0)return{delta:0,pct:0,html:''};
-  if(prev===0)return{delta:cur,pct:null,html:renderDeltaHtml(cur,null,false)};
-  const delta=cur-prev;
-  const pct=Math.round((delta/prev)*100);
-  return{delta,pct,html:renderDeltaHtml(delta,pct,false)};
-}
-
-function renderDeltaHtml(delta, pct, isAbsPercent){
-  // isAbsPercent: true when the metric itself is a %, so delta is pp not %
-  if(delta===0&&pct===0)return'';
+function renderDeltaHtml(delta,pct,isAbsPercent,tooltip){
+  if(delta===0&&(pct===0||pct===null))return'';
   const pos=delta>=0;
-  const color=pos?'var(--green)':'var(--red)';
+  const color=pos?'#3ecf8e':'#ffb4ab';
+  const bg=pos?'rgba(62,207,142,.12)':'rgba(255,180,171,.12)';
   const arrow=pos?'↑':'↓';
-  const absDelta=Math.abs(delta);
   let label;
-  if(isAbsPercent){
-    // metric is a percentage: show delta in pp (percentage points)
-    label=`${arrow} ${absDelta}pp`;
-  }else if(pct===null){
-    label=`${arrow} ${absDelta}`;
-  }else{
-    const absPct=Math.abs(pct);
-    label=`${arrow} ${absPct}%`;
-  }
-  return`<span style="font-size:10px;font-weight:700;color:${color};display:inline-flex;align-items:center;gap:2px;background:${pos?'var(--green-bg)':'var(--red-bg)'};padding:2px 7px;border-radius:20px;margin-top:4px">${label}</span>`;
+  if(isAbsPercent){label=`${arrow} ${Math.abs(delta)}pp`;}
+  else if(pct===null){label=`${arrow} ${Math.abs(delta)}`;}
+  else{label=`${arrow} ${Math.abs(pct)}%`;}
+  const tipId='tip-'+Math.random().toString(36).slice(2,7);
+  const tipAttr=tooltip?`onmouseenter="showDeltaTip(this,'${tipId}')" onmouseleave="hideDeltaTip('${tipId}')" data-tip="${tooltip.replace(/"/g,'&quot;')}"`:'' ;
+  return`<span class="delta-wrap" style="display:inline-flex;position:relative"><span ${tipAttr} style="font-size:10px;font-weight:700;color:${color};display:inline-flex;align-items:center;gap:2px;background:${bg};padding:3px 8px;border-radius:6px;margin-top:3px;cursor:default;font-family:Inter,sans-serif">${label}</span></span>`;
 }
 
-function setDelta(id, curVal, prevVal, isAbsPercent){
-  const el=document.getElementById('delta-'+id);
-  if(!el)return;
+function showDeltaTip(el,id){
+  let tip=document.getElementById(id);
+  if(!tip){
+    tip=document.createElement('div');
+    tip.id=id;
+    tip.className='delta-tooltip';
+    tip.innerHTML=el.dataset.tip;
+    document.body.appendChild(tip);
+  }
+  const r=el.getBoundingClientRect();
+  tip.style.opacity='0';
+  tip.style.display='block';
+  const tw=tip.offsetWidth;
+  let left=r.left+r.width/2-tw/2;
+  if(left<8)left=8;
+  if(left+tw>window.innerWidth-8)left=window.innerWidth-8-tw;
+  tip.style.left=left+'px';
+  tip.style.top=(r.top-tip.offsetHeight-10+window.scrollY)+'px';
+  tip.style.opacity='1';
+}
+
+function hideDeltaTip(id){
+  const tip=document.getElementById(id);
+  if(tip){tip.style.opacity='0';setTimeout(()=>tip.remove(),200);}
+}
+
+function setDelta(id,curVal,prevVal,isAbsPercent){
+  const el=document.getElementById('delta-'+id);if(!el)return;
   if(prevVal===null||prevVal===undefined){el.innerHTML='';return;}
   const delta=curVal-prevVal;
   const pct=prevVal===0?(delta!==0?null:0):Math.round((delta/prevVal)*100);
-  el.innerHTML=renderDeltaHtml(delta,pct,isAbsPercent||false);
-}
-
-function getPrevMonth(){
-  const now=new Date();
-  let y=now.getFullYear(),m=now.getMonth()-1;
-  if(m<0){m=11;y--;}
-  return{y,m};
-}
-
-function getCurMonth(){
-  const now=new Date();
-  return{y:now.getFullYear(),m:now.getMonth()};
+  const MESI_N=['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+  const{y:cy,m:cm}=getCurMonth();const{y:py,m:pm}=getPrevMonth();
+  const curM=MESI_N[cm]+' '+cy;const prevM=MESI_N[pm]+(py!==cy?' '+py:'');
+  const fmt=(v)=>isAbsPercent?Math.round(v)+'%':typeof v==='number'&&!Number.isInteger(v)?v.toLocaleString('it',{minimumFractionDigits:1,maximumFractionDigits:1}):String(Math.round(v));
+  const pctLabel=pct===null?'nuovo':pct===0?'invariato':(pct>0?'+':'')+pct+'%';
+  const tooltip=`<div style="min-width:190px"><div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px">Variazione mensile</div><div style="display:flex;justify-content:space-between;gap:12px"><span style="color:var(--text3)">${curM}:</span><strong style="color:var(--text)">${fmt(curVal)}</strong></div><div style="display:flex;justify-content:space-between;gap:12px"><span style="color:var(--text3)">${prevM}:</span><strong style="color:var(--text)">${fmt(prevVal)}</strong></div><div style="margin-top:5px;padding-top:5px;border-top:1px solid var(--border);font-size:9px;color:var(--text3)">Δ ${pctLabel} rispetto al mese precedente</div></div>`;
+  el.innerHTML=renderDeltaHtml(delta,pct,isAbsPercent||false,tooltip);
 }
 
 function renderDashboard(){
   const kpi=getKPI(),svolti=getSvolti();
-  // Current values
   const curEv=getUniqueEventi(kpi).length;
   const curSess=getUniqueEventi(kpi).reduce((s,e)=>s+sessEv(e),0);
   const curCfp=svolti.reduce((s,e)=>s+cfpEv(e),0);
@@ -3124,33 +3190,32 @@ function renderDashboard(){
   document.getElementById('k-sess').textContent=curSess;
   document.getElementById('k-cfp').textContent=curCfp;
   document.getElementById('k-ore').textContent=curOre.toLocaleString('it');
-  // Progress bars for Stitch cards
+  // Progress bars
   const evPct=Math.min(100,Math.round(curEv/60*100));
   const cfpPct=Math.min(100,Math.round(curCfp/146*100));
   const orePct=Math.min(100,Math.round(curOre/150*100));
   const evBar=document.getElementById('k-ev-bar');if(evBar)evBar.style.width=evPct+'%';
   const cfpBar=document.getElementById('k-cfp-bar');if(cfpBar)cfpBar.style.width=cfpPct+'%';
   const oreBar=document.getElementById('k-ore-bar');if(oreBar)oreBar.style.width=orePct+'%';
-  const evPctEl=document.getElementById('k-ev-pct');if(evPctEl)evPctEl.textContent=evPct+'% del target annuale';
-  const cfpPctEl=document.getElementById('k-cfp-pct');if(cfpPctEl)cfpPctEl.textContent=cfpPct+'% del target annuale';
-  const orePctEl=document.getElementById('k-ore-pct');if(orePctEl)orePctEl.textContent=orePct+'% del target annuale';
-  const sessSubEl=document.getElementById('k-sess-sub');if(sessSubEl)sessSubEl.textContent=curSess+' sessioni totali';
-  // MoM deltas — compare current month vs previous month
-  const{y:cy,m:cm}=getCurMonth();
-  const{y:py,m:pm}=getPrevMonth();
-  const kpiFilter=(arr,y,m)=>{const mm=String(m+1).padStart(2,'0');return arr.filter(e=>e.data&&e.data.startsWith(`${y}-${mm}-`));};
-  const kpiCur=kpiFilter(DB.filter(e=>!e.escludi_kpi&&e.stato==='chiuso'),cy,cm);
-  const kpiPrev=kpiFilter(DB.filter(e=>!e.escludi_kpi&&e.stato==='chiuso'),py,pm);
-  const svCur=kpiCur;
-  const svPrev=kpiPrev;
-  const prevEv=getUniqueEventi(kpiPrev).length;
-  const prevSess=getUniqueEventi(kpiPrev).reduce((s,e)=>s+sessEv(e),0);
-  const prevCfp=svPrev.reduce((s,e)=>s+cfpEv(e),0);
-  const prevOre=svPrev.reduce((s,e)=>s+parseFloat(e.ore||0),0);
-  setDelta('k-ev',curEv,prevEv);
-  setDelta('k-sess',curSess,prevSess);
-  setDelta('k-cfp',curCfp,prevCfp);
-  setDelta('k-ore',curOre,prevOre);
+  ['k-ev-pct','k-cfp-pct','k-ore-pct'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=[evPct,cfpPct,orePct][i]+'% del target';});
+  const ksSub=document.getElementById('k-sess-sub');if(ksSub)ksSub.textContent=curSess+' sessioni totali';
+  // MoM deltas — confronto mese corrente vs mese precedente
+  const{y:cy,m:cm}=getCurMonth();const{y:py,m:pm}=getPrevMonth();
+  const momFilter=(y,mo)=>{const mm=String(mo+1).padStart(2,'0');return DB.filter(e=>!e.escludi_kpi&&['svolto','chiuso'].includes(e.stato)&&e.data&&e.data.startsWith(`${y}-${mm}-`));};
+  const kC=momFilter(cy,cm);const kP=momFilter(py,pm);
+  // Valori del MESE CORRENTE (non annuali) per il confronto
+  const momEv=getUniqueEventi(kC).length;
+  const momSess=getUniqueEventi(kC).reduce((s,e)=>s+sessEv(e),0);
+  const momCfp=kC.reduce((s,e)=>s+cfpEv(e),0);
+  const momOre=kC.reduce((s,e)=>s+parseFloat(e.ore||0),0);
+  const prevEv=getUniqueEventi(kP).length;
+  const prevSess=getUniqueEventi(kP).reduce((s,e)=>s+sessEv(e),0);
+  const prevCfp=kP.reduce((s,e)=>s+cfpEv(e),0);
+  const prevOre=kP.reduce((s,e)=>s+parseFloat(e.ore||0),0);
+  setDelta('k-ev',momEv,prevEv);
+  setDelta('k-sess',momSess,prevSess);
+  setDelta('k-cfp',momCfp,prevCfp);
+  setDelta('k-ore',momOre,prevOre);
   const cfpS=svolti.filter(e=>e.tipologia==='seminario').reduce((s,e)=>s+cfpEv(e),0);
   const cfpC=(()=>{const _seen=new Set();return svolti.filter(e=>e.tipologia==='corso_4h'||e.tipologia==='corso_6h').reduce((s,e)=>{if(e.corso_padre_id){if(_seen.has(e.corso_padre_id))return s;_seen.add(e.corso_padre_id);return s+(e.tipologia==='corso_4h'?4:6);}return s+cfpEv(e);},0);})();
   const cfpD=svolti.filter(e=>e.tipologia==='corso_deontologico').reduce((s,e)=>s+cfpEv(e),0);
@@ -3619,34 +3684,29 @@ function renderCommerciale(){
   document.getElementById('fi-tasso').textContent=fi_ta+'%';
   document.getElementById('fi-media').textContent=fmtNum(fi_media);
   // MoM deltas
-  const{y:cy,m:cm}=getCurMonth();
-  const{y:py,m:pm}=getPrevMonth();
-  const kpiF=(y,m)=>{const mm=String(m+1).padStart(2,'0');return DB.filter(e=>!e.escludi_kpi&&e.stato==='chiuso'&&e.data&&e.data.startsWith(`${y}-${mm}-`));};
-  const kpiC=kpiF(cy,cm);const kpiP=kpiF(py,pm);
-  const pIpC=kpiC.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e),0);
-  const pIpP=kpiP.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e),0);
-  const pPpC=kpiC.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
-  const pPpP=kpiP.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
-  const pTaC=pIpC>0?Math.round(pPpC/pIpC*100):0;
-  const pTaP=pIpP>0?Math.round(pPpP/pIpP*100):0;
-  const pRicC=kpiC.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0),0);
-  const pRicP=kpiP.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0),0);
-  setDelta('c-pag',pIpC,pIpP);
-  setDelta('c-pres',pPpC,pPpP);
-  setDelta('c-tasso',pTaC,pTaP,true);
-  setDelta('c-ric',pRicC,pRicP);
-  const fIscC=kpiC.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
-  const fIscP=kpiP.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
-  const fPresC=kpiC.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
-  const fPresP=kpiP.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
-  const fTaC=fIscC>0?Math.round(fPresC/fIscC*100):0;
-  const fTaP=fIscP>0?Math.round(fPresP/fIscP*100):0;
-  const fMedC=kpiC.length>0?fIscC/kpiC.length:0;
-  const fMedP=kpiP.length>0?fIscP/kpiP.length:0;
-  setDelta('fi-isc',fIscC,fIscP);
-  setDelta('fi-pres',fPresC,fPresP);
-  setDelta('fi-tasso',fTaC,fTaP,true);
-  setDelta('fi-media',fMedC,fMedP);
+  const{y:ccy,m:ccm}=getCurMonth();const{y:ppy,m:ppm}=getPrevMonth();
+  const kpiF=(y,mo)=>{const mm=String(mo+1).padStart(2,'0');return DB.filter(e=>!e.escludi_kpi&&['svolto','chiuso'].includes(e.stato)&&e.data&&e.data.startsWith(`${y}-${mm}-`));};
+  const kC2=kpiF(ccy,ccm);const kP2=kpiF(ppy,ppm);
+  const calcComm=(arr)=>{
+    const iPag=arr.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e),0);
+    const pPag=arr.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
+    const tPag=iPag>0?Math.round(pPag/iPag*100):0;
+    const ric=arr.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0),0);
+    const iFI=arr.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
+    const pFI=arr.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
+    const tFI=iFI>0?Math.round(pFI/iFI*100):0;
+    const mFI=arr.length>0?iFI/arr.length:0;
+    return{iPag,pPag,tPag,ric,iFI,pFI,tFI,mFI};
+  };
+  const cC=calcComm(kC2);const pC=calcComm(kP2);
+  setDelta('c-pag',cC.iPag,pC.iPag);
+  setDelta('c-pres',cC.pPag,pC.pPag);
+  setDelta('c-tasso',cC.tPag,pC.tPag,true);
+  setDelta('c-ric',cC.ric,pC.ric);
+  setDelta('fi-isc',cC.iFI,pC.iFI);
+  setDelta('fi-pres',cC.pFI,pC.pFI);
+  setDelta('fi-tasso',cC.tFI,pC.tFI,true);
+  setDelta('fi-media',cC.mFI,pC.mFI);
   renderChartMix(chartTypes['ch-mix']||'doughnut');
   renderChartRicavi('ch-ric',chartTimeFilters['ch-ric']||'all');
   // Paganti vs FI per mese
@@ -4217,26 +4277,14 @@ function openEvDetail(id){
 
   // Info grid
   const cfp=cfpEv(e);
-  // Stato badge in header
-  const statoEl=document.getElementById('evd-stato-badge');
-  if(statoEl)statoEl.innerHTML=badgeStato(e.stato);
   document.getElementById('evd-info-grid').innerHTML=`
-    <div class="evd-info-tile"><div class="evd-info-tile-lbl">Tipologia</div><div class="evd-info-tile-val">${{seminario:'Seminario 2h',corso_4h:'Corso 4h',corso_6h:'Corso 6h',corso_deontologico:'Deontologico 2h'}[e.tipologia]||e.tipologia}</div></div>
-    <div class="evd-info-tile"><div class="evd-info-tile-lbl">Tema</div><div class="evd-info-tile-val">${e.tema||'—'}</div></div>
-    <div class="evd-info-tile"><div class="evd-info-tile-lbl">CFP generati</div><div class="evd-info-tile-val font-headline" style="font-size:18px;font-weight:800;color:var(--accent)">${cfp}</div></div>
-    <div class="evd-info-tile"><div class="evd-info-tile-lbl">Ore totali</div><div class="evd-info-tile-val">${e.ore}h</div></div>
+    <div class="evd-stat"><div class="evd-stat-lbl">Tema</div><div class="evd-stat-val" style="font-size:14px">${e.tema||'—'}</div></div>
+    <div class="evd-stat"><div class="evd-stat-lbl">Stato</div><div style="margin-top:5px">${badgeStato(e.stato)}</div></div>
+    <div class="evd-stat"><div class="evd-stat-lbl">CFP generati</div><div class="evd-stat-val">${cfp}</div><div class="evd-stat-sub">ore: ${e.ore}h</div></div>
+    <div class="evd-stat"><div class="evd-stat-lbl">Giorno</div><div class="evd-stat-val" style="font-size:14px">${e.giorno||'—'}</div></div>
+    <div class="evd-stat"><div class="evd-stat-lbl">Orario</div><div class="evd-stat-val" style="font-size:14px">${e.orario||'—'}</div></div>
+    ${e.modulo_numero?`<div class="evd-stat"><div class="evd-stat-lbl">Modulo</div><div class="evd-stat-val">n° ${e.modulo_numero}</div></div>`:'<div></div>'}
   `;
-  // Footer meta
-  const footerId=document.getElementById('evd-footer-id');
-  if(footerId)footerId.textContent='ID: '+(e.id||'—').slice(0,8)+'...';
-  const footerMod=document.getElementById('evd-footer-mod');
-  if(footerMod)footerMod.textContent=e.modified_by?'Ultima modifica: '+e.modified_by+(e.modified_at?' · '+new Date(e.modified_at).toLocaleDateString('it'):''):'—';
-  // Timeline
-  const tlEl=document.getElementById('evd-timeline');
-  if(tlEl){
-    const states=[{label:'Evento creato',date:e.created_at||null,done:true},{label:'Pubblicato',date:null,done:e.stato==='pubblicato'||e.stato==='svolto'||e.stato==='chiuso'},{label:'Svolto',date:e.data||null,done:e.stato==='svolto'||e.stato==='chiuso'},{label:'Chiuso',date:null,done:e.stato==='chiuso'}];
-    tlEl.innerHTML=states.map(s=>`<div class="evd-timeline-item"><div class="evd-timeline-dot" style="background:${s.done?'var(--accent)':'var(--border2)'}"></div><div style="font-size:11px;font-weight:${s.done?'700':'400'};color:${s.done?'var(--text)':'var(--text3)'}">${s.label}</div>${s.date?`<div style="font-size:10px;color:var(--text3)">${fmtDate(s.date.slice?s.date.slice(0,10):s.date)}</div>`:''}</div>`).join('');
-  }
 
   // Partecipazione
   const ip=parseInt(e.iscritti_paganti)||0;  // solo prezzo pieno
@@ -4256,44 +4304,25 @@ function openEvDetail(id){
   const tassoFI=ii>0?Math.round(pi/ii*100):null;
 
   document.getElementById('evd-part-grid').innerHTML=`
-    <div class="evd-part-card" style="border:1px solid rgba(var(--accent-rgb),.2)">
-      <div class="evd-part-card-title">
-        <span style="color:var(--accent)">Totali</span>
-        <span class="material-symbols-outlined" style="font-size:16px;color:var(--text3)">groups</span>
-      </div>
-      <div class="evd-part-row"><span>Iscritti</span><span class="evd-part-row-val">${totI}</span></div>
-      <div class="evd-part-row"><span>Presenti</span><span class="evd-part-row-val">${totP}</span></div>
-      <div class="evd-part-divider"></div>
-      <div style="display:flex;justify-content:space-between;align-items:baseline">
-        <span style="font-size:10px;color:var(--text3)">Tasso presenza</span>
-        <span class="evd-part-tasso font-headline" style="color:${tCol}">${tasso!==null?tasso+'%':'—'}</span>
-      </div>
+    <div class="evd-stat" style="grid-column:1/-1 / span 1">
+      <div class="evd-stat-lbl">Tasso presenza totale</div>
+      <div class="evd-stat-val" style="color:${tCol}">${tasso!==null?tasso+'%':'—'}</div>
+      <div class="evd-stat-sub">${totP} presenti su ${totI} iscritti</div>
     </div>
-    <div class="evd-part-card">
-      <div class="evd-part-card-title">
-        <span style="color:var(--accent)">Paganti</span>
-        <span class="material-symbols-outlined" style="font-size:16px;color:var(--text3)">payments</span>
-      </div>
-      <div class="evd-part-row"><span>Prezzo pieno</span><span class="evd-part-row-val">${ip}</span></div>
-      <div class="evd-part-row"><span>Early Bird</span><span class="evd-part-row-val">${ieb}</span></div>
-      ${buoniI>0?`<div class="evd-part-row"><span>Sconti</span><span class="evd-part-row-val">${buoniI}</span></div>`:''}
-      <div class="evd-part-divider"></div>
-      <div class="evd-part-row">
-        <span style="font-size:10px;color:var(--text3)">Presenti paganti</span>
-        <span style="font-weight:700;color:var(--accent)">${ppTot} ${tassoPag!==null?'('+tassoPag+'%)':''}</span>
-      </div>
+    <div class="evd-stat">
+      <div class="evd-stat-lbl">Paganti</div>
+      <div class="evd-stat-val">${ipTot+buoniI}</div>
+      <div class="evd-stat-sub">Pieno: ${ip} · EB: ${ieb}${buoniI>0?' · Sconto: '+buoniI:''} — Presenti: ${ppTot} ${tassoPag!==null?'('+tassoPag+'%)':''}</div>
     </div>
-    <div style="display:flex;flex-direction:column;gap:8px">
-      <div class="evd-part-card" style="flex:1">
-        <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">Form. Illimitata</div>
-        <div class="evd-part-row"><span>Iscritti</span><span class="evd-part-row-val">${ii}</span></div>
-        <div class="evd-part-row"><span>Presenti</span><span class="evd-part-row-val">${pi} ${tassoFI!==null?'('+tassoFI+'%)':''}</span></div>
-      </div>
-      <div class="evd-part-card" style="flex:1">
-        <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">Gratuiti / CAF</div>
-        <div class="evd-part-row"><span>Iscritti</span><span class="evd-part-row-val">${ig}</span></div>
-        <div class="evd-part-row"><span>Presenti</span><span class="evd-part-row-val">${pg}</span></div>
-      </div>
+    <div class="evd-stat">
+      <div class="evd-stat-lbl">Form. Illimitata</div>
+      <div class="evd-stat-val">${ii}</div>
+      <div class="evd-stat-sub">Presenti: ${pi} ${tassoFI!==null?'('+tassoFI+'%)':''}</div>
+    </div>
+    <div class="evd-stat">
+      <div class="evd-stat-lbl">Gratuiti</div>
+      <div class="evd-stat-val" style="font-size:16px">${ig}</div>
+      <div class="evd-stat-sub">Presenti: ${pg}</div>
     </div>
   `;
 
@@ -4307,8 +4336,8 @@ function openEvDetail(id){
       data:{
         labels:['Paganti','Form. Illimitata','Gratuiti'],
         datasets:[
-          {label:'Iscritti',data:[ip,ii,ig],backgroundColor:[evC[0]+'88',evC[1]+'88',evC[2]+'88'],borderColor:[evC[0],evC[1],evC[2]],borderWidth:1.5,borderRadius:4},
-          {label:'Presenti',data:[pp,pi,pg],backgroundColor:[evC[0]+'cc',evC[1]+'cc',evC[2]+'cc'],borderColor:[evC[0],evC[1],evC[2]],borderWidth:1.5,borderRadius:4}
+          {label:'Iscritti',data:[ipTot+buoniI,ii,ig],backgroundColor:[evC[0]+'88',evC[1]+'88',evC[2]+'88'],borderColor:[evC[0],evC[1],evC[2]],borderWidth:1.5,borderRadius:4},
+          {label:'Presenti',data:[ppTot,pi,pg],backgroundColor:[evC[0]+'cc',evC[1]+'cc',evC[2]+'cc'],borderColor:[evC[0],evC[1],evC[2]],borderWidth:1.5,borderRadius:4}
         ]
       },
       options:{responsive:true,maintainAspectRatio:false,
@@ -4322,20 +4351,12 @@ function openEvDetail(id){
   const ric=(parseFloat(e.prezzo)||0)*ip+(parseFloat(e.prezzo_early_bird)||0)*ieb;
   // Economics with buoni sconto
   {const buoniData=(()=>{try{return e.buoni_sconto?JSON.parse(e.buoni_sconto):[];}catch(_){return[];}})();
-  const buoniHtml=buoniData.map((b,i)=>'<div class="evd-eco-row"><span class="evd-eco-label">Sconto '+(i+1)+'</span><span class="evd-eco-value">'+b.nr+' iscr. × '+fmtEuro(b.prezzo,2)+'</span></div>').join('');
+  const buoniHtml=buoniData.map((b,i)=>'<div class="evd-stat"><div class="evd-stat-lbl">Sconto '+(i+1)+'</div><div class="evd-stat-val" style="font-size:15px">'+b.nr+' iscr. × '+fmtEuro(b.prezzo,2)+'</div></div>').join('');
   document.getElementById('evd-eco-grid').innerHTML=
-    '<div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px">Dati economici</div>'
-    +'<div class="evd-eco-row"><span class="evd-eco-label">Prezzo pieno</span><span class="evd-eco-value">'+fmtEuro(e.prezzo||0)+'</span></div>'
-    +(e.prezzo_early_bird?'<div class="evd-eco-row"><span class="evd-eco-label">Early Bird</span><span class="evd-eco-value" style="color:var(--accent)">'+fmtEuro(e.prezzo_early_bird)+'</span></div>':'')
+    '<div class="evd-stat"><div class="evd-stat-lbl">Prezzo pieno</div><div class="evd-stat-val" style="font-size:16px">'+fmtEuro(e.prezzo||0)+'</div></div>'
+    +(e.prezzo_early_bird?'<div class="evd-stat"><div class="evd-stat-lbl">Prezzo Early Bird</div><div class="evd-stat-val" style="font-size:16px">'+fmtEuro(e.prezzo_early_bird)+'</div></div>':'<div></div>')
     +buoniHtml
-    +'<div style="padding-top:16px">'
-    +'<div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Ricavi totali</div>'
-    +'<div class="evd-total-ric font-headline">'+fmtEuro(ric,2)+'</div>'
-    +'<div style="margin-top:10px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden">'
-    +'<div style="height:4px;border-radius:2px;background:var(--accent);width:100%"></div>'
-    +'</div>'
-    +'<div style="font-size:10px;color:var(--text3);margin-top:6px;font-style:italic">da iscritti paganti</div>'
-    +'</div>';
+    +'<div class="evd-stat"><div class="evd-stat-lbl">Ricavi evento</div><div class="evd-stat-val" style="font-size:16px">'+fmtEuro(ric,2)+'</div><div class="evd-stat-sub">da iscritti paganti</div></div>';
   }
 
   // Note
@@ -5394,10 +5415,23 @@ function saveCustomThemeToSettings() {
   buildThemeGrid();
 }
 
+// ── PRUNE NOTIFICHE ──
+async function pruneNotifiche(){
+  try{
+    const{data,error}=await sb.from('notifiche').select('id').order('created_at',{ascending:false});
+    if(error||!data||data.length<=20)return;
+    const toDelete=data.slice(20).map(r=>r.id);
+    if(!toDelete.length)return;
+    for(let i=0;i<toDelete.length;i+=50){
+      const batch=toDelete.slice(i,i+50);
+      await sb.from('notifiche').delete().in('id',batch);
+    }
+  }catch(e){console.warn('pruneNotifiche error:',e);}
+}
+
 // ── GLOBAL SEARCH ──
 function globalSearchHandler(val){
-  if(!val||val.length<2){return;}
-  // If on eventi page, apply to filter; otherwise navigate there
+  if(!val||val.length<2)return;
   const evPage=document.getElementById('page-eventi');
   if(evPage&&evPage.classList.contains('active')){
     const s=document.getElementById('fe-search');if(s){s.value=val;renderEventi();}
@@ -5405,22 +5439,6 @@ function globalSearchHandler(val){
     showPage('eventi',document.getElementById('nav-eventi'));
     setTimeout(()=>{const s=document.getElementById('fe-search');if(s){s.value=val;renderEventi();}},200);
   }
-}
-
-// ── PRUNE NOTIFICHE (keep only 20 most recent) ──
-async function pruneNotifiche(){
-  try{
-    // Get all IDs newest-first
-    const{data,error}=await sb.from('notifiche').select('id,created_at').order('created_at',{ascending:false});
-    if(error||!data||data.length<=20)return;
-    // Delete in batches of 50 to avoid URL length limits
-    const toDelete=data.slice(20).map(r=>r.id);
-    for(let i=0;i<toDelete.length;i+=50){
-      const batch=toDelete.slice(i,i+50);
-      const{error:delErr}=await sb.from('notifiche').delete().in('id',batch);
-      if(delErr)console.warn('pruneNotifiche delete error:',delErr.message);
-    }
-  }catch(e){console.warn('pruneNotifiche error:',e);}
 }
 
 // ── START ──
