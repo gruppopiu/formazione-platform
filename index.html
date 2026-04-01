@@ -509,10 +509,10 @@ textarea.finp{min-height:72px;resize:vertical}
       </div>
       <div class="widget-wrap" id="widget-kpi">
         <div class="kgrid">
-          <div class="kcard c1"><div class="kcard-grad"></div><div class="klbl">Eventi reali</div><div class="kval" id="k-ev">—</div><div class="ksub">target: 60+ / anno</div></div>
-          <div class="kcard c2"><div class="kcard-grad"></div><div class="klbl">Sessioni calendario</div><div class="kval" id="k-sess">—</div><div class="ksub">seminari + moduli</div></div>
-          <div class="kcard c3"><div class="kcard-grad"></div><div class="klbl">CFP totali</div><div class="kval" id="k-cfp">—</div><div class="ksub">target: 146 / anno</div></div>
-          <div class="kcard c4"><div class="kcard-grad"></div><div class="klbl">Ore erogate</div><div class="kval" id="k-ore">—</div><div class="ksub">target: 150+ ore</div></div>
+          <div class="kcard c1"><div class="kcard-grad"></div><div class="klbl">Eventi reali</div><div class="kval" id="k-ev">—</div><div id="delta-k-ev" style="height:16px"></div><div class="ksub">target: 60+ / anno</div></div>
+          <div class="kcard c2"><div class="kcard-grad"></div><div class="klbl">Sessioni calendario</div><div class="kval" id="k-sess">—</div><div id="delta-k-sess" style="height:16px"></div><div class="ksub">seminari + moduli</div></div>
+          <div class="kcard c3"><div class="kcard-grad"></div><div class="klbl">CFP totali</div><div class="kval" id="k-cfp">—</div><div id="delta-k-cfp" style="height:16px"></div><div class="ksub">target: 146 / anno</div></div>
+          <div class="kcard c4"><div class="kcard-grad"></div><div class="klbl">Ore erogate</div><div class="kval" id="k-ore">—</div><div id="delta-k-ore" style="height:16px"></div><div class="ksub">target: 150+ ore</div></div>
         </div>
       </div>
       <div class="widget-wrap" id="widget-charts">
@@ -701,19 +701,19 @@ textarea.finp{min-height:72px;resize:vertical}
       <!-- PAGANTI -->
       <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Iscritti paganti</div>
       <div class="kgrid" style="margin-bottom:20px">
-        <div class="kcard c1" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Totale iscritti che hanno pagato il biglietto (prezzo pieno o early bird). Esclusi FI e gratuiti/CAF/assicurativi.</span></div><div class="klbl">Iscritti paganti</div><div class="kval" id="c-pag">—</div><div class="ksub">totale periodo</div></div>
-        <div class="kcard c2" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Quanti iscritti paganti hanno effettivamente partecipato. Il gap tra iscritti e presenti è il tasso di no-show pagante.</span></div><div class="klbl">Presenti paganti</div><div class="kval" id="c-pres">—</div></div>
-        <div class="kcard c3" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Presenti paganti / Iscritti paganti. Benchmark: ≥80% ottimo, 60–80% normale, &lt;60% da investigare (comunicazione, tema, giorno).</span></div><div class="klbl">Tasso presenza</div><div class="kval" id="c-tasso">—</div></div>
-        <div class="kcard c4" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Ricavi calcolati su iscritti paganti × prezzo (pieno + early bird). Non include FI. Valore effettivo, non stimato.</span></div><div class="klbl">Ricavi</div><div class="kval" id="c-ric">—</div></div>
+        <div class="kcard c1" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Totale iscritti che hanno pagato il biglietto (prezzo pieno o early bird). Esclusi FI e gratuiti/CAF/assicurativi.</span></div><div class="klbl">Iscritti paganti</div><div class="kval" id="c-pag">—</div><div id="delta-c-pag" style="height:16px"></div><div class="ksub">totale periodo</div></div>
+        <div class="kcard c2" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Quanti iscritti paganti hanno effettivamente partecipato. Il gap tra iscritti e presenti è il tasso di no-show pagante.</span></div><div class="klbl">Presenti paganti</div><div class="kval" id="c-pres">—</div><div id="delta-c-pres" style="height:16px"></div></div>
+        <div class="kcard c3" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Presenti paganti / Iscritti paganti. Benchmark: ≥80% ottimo, 60–80% normale, &lt;60% da investigare (comunicazione, tema, giorno).</span></div><div class="klbl">Tasso presenza</div><div class="kval" id="c-tasso">—</div><div id="delta-c-tasso" style="height:16px"></div></div>
+        <div class="kcard c4" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Ricavi calcolati su iscritti paganti × prezzo (pieno + early bird). Non include FI. Valore effettivo, non stimato.</span></div><div class="klbl">Ricavi</div><div class="kval" id="c-ric">—</div><div id="delta-c-ric" style="height:16px"></div></div>
       </div>
 
       <!-- FORMAZIONE ILLIMITATA -->
       <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Formazione Illimitata (abbonati)</div>
       <div class="kgrid" style="margin-bottom:20px">
-        <div class="kcard c2" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Totale iscritti con abbonamento Formazione Illimitata nel periodo selezionato. Non generano ricavo diretto per evento.</span></div><div class="klbl">Iscritti FI</div><div class="kval" id="fi-isc">—</div><div class="ksub">totale periodo</div></div>
-        <div class="kcard c3" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Quanti degli iscritti FI hanno effettivamente partecipato all'evento. La differenza con gli iscritti indica il tasso di no-show.</span></div><div class="klbl">Presenti FI</div><div class="kval" id="fi-pres">—</div></div>
-        <div class="kcard c1" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Percentuale di presenti FI sul totale iscritti FI. Benchmark indicativo: ≥70% ottimo, 40–70% nella norma, &lt;40% da monitorare.</span></div><div class="klbl">Tasso presenza FI</div><div class="kval" id="fi-tasso">—</div></div>
-        <div class="kcard c4" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Numero medio di iscritti FI per evento nel periodo. Utile per capire quanto l'abbonamento FI contribuisce al riempimento delle aule.</span></div><div class="klbl">Media FI / evento</div><div class="kval" id="fi-media">—</div></div>
+        <div class="kcard c2" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Totale iscritti con abbonamento Formazione Illimitata nel periodo selezionato. Non generano ricavo diretto per evento.</span></div><div class="klbl">Iscritti FI</div><div class="kval" id="fi-isc">—</div><div id="delta-fi-isc" style="height:16px"></div><div class="ksub">totale periodo</div></div>
+        <div class="kcard c3" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Quanti degli iscritti FI hanno effettivamente partecipato all'evento. La differenza con gli iscritti indica il tasso di no-show.</span></div><div class="klbl">Presenti FI</div><div class="kval" id="fi-pres">—</div><div id="delta-fi-pres" style="height:16px"></div></div>
+        <div class="kcard c1" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Percentuale di presenti FI sul totale iscritti FI. Benchmark indicativo: ≥70% ottimo, 40–70% nella norma, &lt;40% da monitorare.</span></div><div class="klbl">Tasso presenza FI</div><div class="kval" id="fi-tasso">—</div><div id="delta-fi-tasso" style="height:16px"></div></div>
+        <div class="kcard c4" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Numero medio di iscritti FI per evento nel periodo. Utile per capire quanto l'abbonamento FI contribuisce al riempimento delle aule.</span></div><div class="klbl">Media FI / evento</div><div class="kval" id="fi-media">—</div><div id="delta-fi-media" style="height:16px"></div></div>
       </div>
 
       <div class="grid2">
@@ -2425,14 +2425,14 @@ async function loadAll(){
     const nRes=await sb.from('notifiche').select('*').order('created_at',{ascending:false}).limit(20);
     if(!nRes.error){
       const readIds=getLocalReadIds();
-      NOTIFICHE=(nRes.data||[]).map(n=>{
+      NOTIFICHE=(nRes.data||[]).slice(0,20).map(n=>{
         const nid=n.id||(n.text+(n.created_at||''));
         return{...n,read:n.read||readIds.has(nid)};
       });
       unreadCount=NOTIFICHE.filter(n=>!n.read).length;
       updateNotifBadge();
-      // Auto-delete notifications beyond the 20 most recent
-      await pruneNotifiche();
+      // Auto-delete notifications beyond the 20 most recent (fire and forget)
+      pruneNotifiche();
     }
   }catch(e){}
   renderAll();
@@ -2841,12 +2841,92 @@ function setChartType(chartId,type,btn){
 }
 
 // ── DASHBOARD ──
+
+// ── DELTA MOM (Month-over-Month) ──
+function getMonthData(year, month){
+  // Returns events from DB for a specific year/month (0-based month)
+  const mm=String(month+1).padStart(2,'0');
+  const prefix=`${year}-${mm}-`;
+  return DB.filter(e=>e.data&&e.data.startsWith(prefix));
+}
+
+function calcMoM(cur, prev){
+  // Returns {delta, pct, html} comparing cur vs prev numeric values
+  if(prev===0&&cur===0)return{delta:0,pct:0,html:''};
+  if(prev===0)return{delta:cur,pct:null,html:renderDeltaHtml(cur,null,false)};
+  const delta=cur-prev;
+  const pct=Math.round((delta/prev)*100);
+  return{delta,pct,html:renderDeltaHtml(delta,pct,false)};
+}
+
+function renderDeltaHtml(delta, pct, isAbsPercent){
+  // isAbsPercent: true when the metric itself is a %, so delta is pp not %
+  if(delta===0&&pct===0)return'';
+  const pos=delta>=0;
+  const color=pos?'var(--green)':'var(--red)';
+  const arrow=pos?'↑':'↓';
+  const absDelta=Math.abs(delta);
+  let label;
+  if(isAbsPercent){
+    // metric is a percentage: show delta in pp (percentage points)
+    label=`${arrow} ${absDelta}pp`;
+  }else if(pct===null){
+    label=`${arrow} ${absDelta}`;
+  }else{
+    const absPct=Math.abs(pct);
+    label=`${arrow} ${absPct}%`;
+  }
+  return`<span style="font-size:10px;font-weight:700;color:${color};display:inline-flex;align-items:center;gap:2px;background:${pos?'var(--green-bg)':'var(--red-bg)'};padding:2px 7px;border-radius:20px;margin-top:4px">${label}</span>`;
+}
+
+function setDelta(id, curVal, prevVal, isAbsPercent){
+  const el=document.getElementById('delta-'+id);
+  if(!el)return;
+  if(prevVal===null||prevVal===undefined){el.innerHTML='';return;}
+  const delta=curVal-prevVal;
+  const pct=prevVal===0?(delta!==0?null:0):Math.round((delta/prevVal)*100);
+  el.innerHTML=renderDeltaHtml(delta,pct,isAbsPercent||false);
+}
+
+function getPrevMonth(){
+  const now=new Date();
+  let y=now.getFullYear(),m=now.getMonth()-1;
+  if(m<0){m=11;y--;}
+  return{y,m};
+}
+
+function getCurMonth(){
+  const now=new Date();
+  return{y:now.getFullYear(),m:now.getMonth()};
+}
+
 function renderDashboard(){
   const kpi=getKPI(),svolti=getSvolti();
-  document.getElementById('k-ev').textContent=getUniqueEventi(kpi).length;
-  document.getElementById('k-sess').textContent=getUniqueEventi(kpi).reduce((s,e)=>s+sessEv(e),0);
-  document.getElementById('k-cfp').textContent=svolti.reduce((s,e)=>s+cfpEv(e),0);
-  document.getElementById('k-ore').textContent=svolti.reduce((s,e)=>s+parseFloat(e.ore||0),0).toLocaleString('it');
+  // Current values
+  const curEv=getUniqueEventi(kpi).length;
+  const curSess=getUniqueEventi(kpi).reduce((s,e)=>s+sessEv(e),0);
+  const curCfp=svolti.reduce((s,e)=>s+cfpEv(e),0);
+  const curOre=svolti.reduce((s,e)=>s+parseFloat(e.ore||0),0);
+  document.getElementById('k-ev').textContent=curEv;
+  document.getElementById('k-sess').textContent=curSess;
+  document.getElementById('k-cfp').textContent=curCfp;
+  document.getElementById('k-ore').textContent=curOre.toLocaleString('it');
+  // MoM deltas — compare current month vs previous month
+  const{y:cy,m:cm}=getCurMonth();
+  const{y:py,m:pm}=getPrevMonth();
+  const kpiFilter=(arr,y,m)=>{const mm=String(m+1).padStart(2,'0');return arr.filter(e=>e.data&&e.data.startsWith(`${y}-${mm}-`));};
+  const kpiCur=kpiFilter(DB.filter(e=>!e.escludi_kpi&&e.stato==='chiuso'),cy,cm);
+  const kpiPrev=kpiFilter(DB.filter(e=>!e.escludi_kpi&&e.stato==='chiuso'),py,pm);
+  const svCur=kpiCur;
+  const svPrev=kpiPrev;
+  const prevEv=getUniqueEventi(kpiPrev).length;
+  const prevSess=getUniqueEventi(kpiPrev).reduce((s,e)=>s+sessEv(e),0);
+  const prevCfp=svPrev.reduce((s,e)=>s+cfpEv(e),0);
+  const prevOre=svPrev.reduce((s,e)=>s+parseFloat(e.ore||0),0);
+  setDelta('k-ev',curEv,prevEv);
+  setDelta('k-sess',curSess,prevSess);
+  setDelta('k-cfp',curCfp,prevCfp);
+  setDelta('k-ore',curOre,prevOre);
   const cfpS=svolti.filter(e=>e.tipologia==='seminario').reduce((s,e)=>s+cfpEv(e),0);
   const cfpC=(()=>{const _seen=new Set();return svolti.filter(e=>e.tipologia==='corso_4h'||e.tipologia==='corso_6h').reduce((s,e)=>{if(e.corso_padre_id){if(_seen.has(e.corso_padre_id))return s;_seen.add(e.corso_padre_id);return s+(e.tipologia==='corso_4h'?4:6);}return s+cfpEv(e);},0);})();
   const cfpD=svolti.filter(e=>e.tipologia==='corso_deontologico').reduce((s,e)=>s+cfpEv(e),0);
@@ -3314,6 +3394,35 @@ function renderCommerciale(){
   document.getElementById('fi-pres').textContent=fi_pres;
   document.getElementById('fi-tasso').textContent=fi_ta+'%';
   document.getElementById('fi-media').textContent=fmtNum(fi_media);
+  // MoM deltas
+  const{y:cy,m:cm}=getCurMonth();
+  const{y:py,m:pm}=getPrevMonth();
+  const kpiF=(y,m)=>{const mm=String(m+1).padStart(2,'0');return DB.filter(e=>!e.escludi_kpi&&e.stato==='chiuso'&&e.data&&e.data.startsWith(`${y}-${mm}-`));};
+  const kpiC=kpiF(cy,cm);const kpiP=kpiF(py,pm);
+  const pIpC=kpiC.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e),0);
+  const pIpP=kpiP.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e),0);
+  const pPpC=kpiC.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
+  const pPpP=kpiP.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
+  const pTaC=pIpC>0?Math.round(pPpC/pIpC*100):0;
+  const pTaP=pIpP>0?Math.round(pPpP/pIpP*100):0;
+  const pRicC=kpiC.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0),0);
+  const pRicP=kpiP.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0),0);
+  setDelta('c-pag',pIpC,pIpP);
+  setDelta('c-pres',pPpC,pPpP);
+  setDelta('c-tasso',pTaC,pTaP,true);
+  setDelta('c-ric',pRicC,pRicP);
+  const fIscC=kpiC.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
+  const fIscP=kpiP.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
+  const fPresC=kpiC.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
+  const fPresP=kpiP.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
+  const fTaC=fIscC>0?Math.round(fPresC/fIscC*100):0;
+  const fTaP=fIscP>0?Math.round(fPresP/fIscP*100):0;
+  const fMedC=kpiC.length>0?fIscC/kpiC.length:0;
+  const fMedP=kpiP.length>0?fIscP/kpiP.length:0;
+  setDelta('fi-isc',fIscC,fIscP);
+  setDelta('fi-pres',fPresC,fPresP);
+  setDelta('fi-tasso',fTaC,fTaP,true);
+  setDelta('fi-media',fMedC,fMedP);
   renderChartMix(chartTypes['ch-mix']||'doughnut');
   renderChartRicavi('ch-ric',chartTimeFilters['ch-ric']||'all');
   // Paganti vs FI per mese
@@ -5025,13 +5134,16 @@ function saveCustomThemeToSettings() {
 // ── PRUNE NOTIFICHE (keep only 20 most recent) ──
 async function pruneNotifiche(){
   try{
-    // Fetch all notification IDs ordered by date desc
-    const{data,error}=await sb.from('notifiche').select('id').order('created_at',{ascending:false});
+    // Get all IDs newest-first
+    const{data,error}=await sb.from('notifiche').select('id,created_at').order('created_at',{ascending:false});
     if(error||!data||data.length<=20)return;
-    // IDs to delete: everything beyond the first 20
+    // Delete in batches of 50 to avoid URL length limits
     const toDelete=data.slice(20).map(r=>r.id);
-    if(!toDelete.length)return;
-    await sb.from('notifiche').delete().in('id',toDelete);
+    for(let i=0;i<toDelete.length;i+=50){
+      const batch=toDelete.slice(i,i+50);
+      const{error:delErr}=await sb.from('notifiche').delete().in('id',batch);
+      if(delErr)console.warn('pruneNotifiche delete error:',delErr.message);
+    }
   }catch(e){console.warn('pruneNotifiche error:',e);}
 }
 
