@@ -30,7 +30,7 @@
   --shadow:0 2px 12px rgba(var(--accent-rgb),.08),0 1px 3px rgba(0,0,0,.07);
   --shadow2:0 4px 16px rgba(0,0,0,.1);
 }
-.dark{
+.dark{--logo-filter:brightness(1.2);
   --bg:#000;--bg2:#0a0a0a;--bg3:#141414;--bg4:#1c1c1c;
   --border:#1f1f1f;--border2:#2e2e2e;
   --text:#e8eaf0;--text2:#8b9bb4;--text3:#5a6a84;
@@ -56,7 +56,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg-gradient,var(--bg));colo
 .dark .shape2{background:radial-gradient(circle,rgba(91,141,238,.06),transparent)}
 .main-content{position:relative;z-index:1}
 /* ── SIDEBAR ── */
-.sb-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
+.sb-logo{padding:16px 18px 14px;border-bottom:1px solid var(--border)}
 .sb-logo-t{font-size:16px;font-weight:700;font-family:"Manrope",sans-serif;letter-spacing:-.3px;color:var(--accent);display:flex;align-items:center;gap:8px}
 .sb-logo-dot{width:8px;height:8px;border-radius:50%;background:var(--grad1)}
 .sb-logo-s{font-size:9px;color:#475569;font-family:"Inter",sans-serif;font-weight:500;letter-spacing:.2em;text-transform:uppercase;margin-top:4px}
@@ -458,6 +458,7 @@ textarea.finp{min-height:72px;resize:vertical}
     <div class="auth-shape auth-shape1"></div>
     <div class="auth-shape auth-shape2"></div>
     <div class="auth-box">
+      <div style="text-align:center;margin-bottom:20px"><img src="https://static.wixstatic.com/media/2abd89_86711235540e4b11922cbd25b142dfd2~mv2.png/v1/fill/w_936,h_526,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/1st%20copia.png" alt="GruppoPiù" style="width:180px;height:auto;display:inline-block;object-fit:contain"></div>
       <div class="auth-logo-t">Formazione Platform</div>
       <div class="auth-logo-s">// gruppopiu 2026</div>
       <div class="auth-tabs">
@@ -519,8 +520,7 @@ textarea.finp{min-height:72px;resize:vertical}
 <div class="shell" id="app-shell" style="display:none">
   <aside class="sidebar" id="sidebar">
     <div class="sb-logo">
-      <div class="sb-logo-t font-headline" style="font-size:15px;font-weight:800;letter-spacing:-.5px"><div class="sb-logo-dot"></div>Formazione Platform</div>
-      <div class="sb-logo-s">// gruppopiu 2026</div>
+      <img src="https://static.wixstatic.com/media/2abd89_86711235540e4b11922cbd25b142dfd2~mv2.png/v1/fill/w_936,h_526,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/1st%20copia.png" alt="GruppoPiù" style="width:140px;height:auto;display:block;object-fit:contain;filter:var(--logo-filter,none)">
     </div>
     <nav class="sb-nav">
       <div class="sb-sec">Monitoraggio</div>
@@ -4602,8 +4602,10 @@ async function saveEvento(){
   }
   const data=document.getElementById('ef-data').value;
   if(!data){showToast('Inserisci la data','err');return;}
+  // Per corsi multi-sessione in modifica, ogni sessione vale 2h (non le ore totali del corso)
+  const orePerRecord=(tipo==='corso_4h'||tipo==='corso_6h')?2:ore;
   const payload={...base,data,giorno:gg[new Date(data+'T00:00:00').getDay()],
-    orario:document.getElementById('ef-orario').value||null,ore};
+    orario:document.getElementById('ef-orario').value||null,ore:orePerRecord};
   try{
     let error;
     if(editId){({error}=await sb.from('eventi').update(payload).eq('id',editId));}
