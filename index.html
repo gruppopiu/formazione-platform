@@ -449,6 +449,16 @@ textarea.finp{min-height:72px;resize:vertical}
   #ev-modal-body{grid-template-columns:1fr!important}
 }
 </style>
+
+<script>
+(function(){
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#141414"/><text x="16" y="22" font-family="Arial,sans-serif" font-size="16" font-weight="800" text-anchor="middle" fill="white">G+</text></svg>';
+  var url='data:image/svg+xml,'+encodeURIComponent(svg);
+  var link=document.createElement('link');
+  link.rel='icon';link.type='image/svg+xml';link.href=url;
+  document.head.appendChild(link);
+})();
+</script>
 </head>
 <body>
 
