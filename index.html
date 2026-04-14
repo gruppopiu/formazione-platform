@@ -5461,14 +5461,13 @@ function renderFiTabella(){
     return;
   }
 
-  wrap.innerHTML='<table class="stitch-table"><thead><tr>'
-    +'<th onclick="setFiSort('nome')" style="cursor:pointer;user-select:none">Nome'+fiArrow('nome')+'</th>'
-    +'<th onclick="setFiSort('tipo')" style="cursor:pointer;user-select:none">Tipo'+fiArrow('tipo')+'</th>'
-    +'<th onclick="setFiSort('formula')" style="cursor:pointer;user-select:none">Formula'+fiArrow('formula')+'</th>'
-    +'<th onclick="setFiSort('scadenza')" style="cursor:pointer;white-space:nowrap;user-select:none">Scadenza'+fiArrow('scadenza')+'</th>'
-    +'<th onclick="setFiSort('importo')" style="cursor:pointer;user-select:none">Importo'+fiArrow('importo')+'</th>'
-    +'<th onclick="setFiSort('stato')" style="cursor:pointer;user-select:none">Status'+fiArrow('stato')+'</th>'
-    +'<th>Azioni</th></tr></thead><tbody>'
+  var hdrs=['nome','tipo','formula','scadenza','importo','stato'];
+  var hlbls=['Nome','Tipo','Formula','Scadenza','Importo','Status'];
+  var thHtml=hdrs.map(function(f,i){
+    var extra=f==='scadenza'?'white-space:nowrap;':'';
+    return '<th onclick="setFiSort(\'' +f+ '\')" style="cursor:pointer;'+extra+'user-select:none">'+hlbls[i]+fiArrow(f)+'</th>';
+  }).join('');
+  wrap.innerHTML='<table class="stitch-table"><thead><tr>'+thHtml+'<th>Azioni</th></tr></thead><tbody>'
     +rows.map(function(a){
       var st=getFiStatus(a);
       var scadStr=a.scadenza?new Date(a.scadenza+'T00:00:00').toLocaleDateString('it-IT',{day:'2-digit',month:'short',year:'numeric'}):'—';
@@ -5482,7 +5481,7 @@ function renderFiTabella(){
         +'<td style="padding:10px 12px;font-size:12px;font-weight:600"><span class="'+getFiStatusClass(st)+'">'+scadStr+'</span></td>'
         +'<td style="padding:10px 12px;font-size:13px;font-weight:700;color:var(--text)">'+impStr+'</td>'
         +'<td style="padding:10px 12px"><span class="'+getFiStatusClass(st)+'">'+getFiStatusLabel(st)+'</span></td>'
-        +'<td style="padding:10px 12px"><button class="btn btn-s btn-sm" onclick="openFiModal(''+a.id+'')">Modifica</button></td>'
+        +'<td style="padding:10px 12px"><button class="btn btn-s btn-sm" onclick="openFiModal(&quot;'+a.id+'&quot;)">Modifica</button></td>'
         +'</tr>';
     }).join('')+'</tbody></table>';
 }
@@ -5582,9 +5581,9 @@ async function saveFiAbbonato(){
     updated_at:new Date().toISOString()
   };
   try{
-    var error;
-    if(editFiId){var r=await sb.from('fi_abbonati').update(payload).eq('id',editFiId);error=r.error;}
-    else{var r2=await sb.from('fi_abbonati').insert(payload);error=r2.error;}
+    const{error}=editFiId
+    ? (await sb.from('fi_abbonati').update(payload).eq('id',editFiId))
+    : (await sb.from('fi_abbonati').insert(payload));
     if(error)throw error;
     showToast(editFiId?'Abbonato aggiornato':'Abbonato aggiunto','ok');
     closeFiModal();
@@ -5599,8 +5598,8 @@ async function deleteFiAbbonato(){
   var a=DB_FI.find(function(x){return x.id===editFiId;});
   if(!confirm('Eliminare '+(a?a.nome+' '+a.cognome:'questo abbonato')+'?'))return;
   try{
-    var r=await sb.from('fi_abbonati').delete().eq('id',editFiId);
-    if(r.error)throw r.error;
+    const{error:delErr}=await sb.from('fi_abbonati').delete().eq('id',editFiId);
+    if(delErr)throw delErr;
     showToast('Abbonato eliminato','ok');
     closeFiModal();
     DB_FI=DB_FI.filter(function(x){return x.id!==editFiId;});
@@ -5612,8 +5611,7 @@ async function deleteFiAbbonato(){
 function exportFiCSV(){
   var headers=['Nome','Cognome','Email','Tipo','Formula','Data inizio','Scadenza','Importo','Status','Note','Motivazione'];
   var rows=DB_FI.map(function(a){return [a.nome||'',a.cognome||'',a.email||'',getFiTipoLabel(a.tipo),getFiFormulaLabel(a.formula),a.data_inizio||'',a.scadenza||'',a.importo||0,getFiStatusLabel(getFiStatus(a)),a.note||'',a.motivazione_non_rinnovo||''];});
-  var csv=[headers].concat(rows).map(function(r){return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');}).join('
-');
+  var csv=[headers].concat(rows).map(function(r){return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');}).join('\n');
   var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
   var url=URL.createObjectURL(blob);
   var aa=document.createElement('a');aa.href=url;aa.download='fi_abbonati.csv';aa.click();
@@ -5638,12 +5636,7 @@ function handleFiFile(file){
 }
 
 function parseFiCSV(text){
-  var lines=text.replace(/
-/g,'
-').replace(/
-/g,'
-').trim().split('
-');
+  var lines=text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').trim().split('\n');
   if(lines.length<2){showToast('File vuoto','err');return;}
   var header=lines[0].split(',').map(function(h){return h.trim().toLowerCase().replace(/['"]/g,'');});
   var required=['nome','cognome','tipo','formula','scadenza'];
@@ -5687,9 +5680,9 @@ async function confirmFiImport(){
     var payload={nome:row.nome,cognome:row.cognome,email:row.email,tipo:row.tipo,formula:row.formula,data_inizio:row.data_inizio,scadenza:row.scadenza,importo:row.importo,note:row.note,updated_at:new Date().toISOString()};
     var existing=DB_FI.find(function(a){return a.nome.trim().toLowerCase()===row.nome.toLowerCase()&&a.cognome.trim().toLowerCase()===row.cognome.toLowerCase();});
     if(existing){
-      if(conflict==='update'){var r2=await sb.from('fi_abbonati').update(payload).eq('id',existing.id);if(!r2.error)updated++;}
+      if(conflict==='update'){const ur=await sb.from('fi_abbonati').update(payload).eq('id',existing.id);if(!ur.error)updated++;}
       else{skipped++;}
-    }else{var r3=await sb.from('fi_abbonati').insert(payload);if(!r3.error)inserted++;}
+    }else{const ir=await sb.from('fi_abbonati').insert(payload);if(!ir.error)inserted++;}
   }
   var res=await sb.from('fi_abbonati').select('*').order('scadenza',{ascending:true});
   if(!res.error)DB_FI=res.data||[];
