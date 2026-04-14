@@ -5740,34 +5740,32 @@ function setFiChartType(chartId,type,btn){
 }
 
 function openFiModal(id){
-  editFiId=id||null;
-  var isEdit=!!id;
-  document.getElementById('fi-modal-title').textContent=isEdit?'Modifica abbonato':'Nuovo abbonato';
-  document.getElementById('fi-del-btn').style.display=isEdit?'flex':'none';
-  var a=isEdit?DB_FI.find(function(x){return x.id===id;}):null;
-  ['fi-nome','fi-cognome','fi-email','fi-note','fi-motivazione'].forEach(function(elId){
-    var el=document.getElementById(elId);if(el)el.value=a?( a[elId.replace('fi-','')] || a[elId.replace('fi-','').replace('-','_')] || ''):'';
-  });
-  if(a){
-    document.getElementById('fi-nome').value=a.nome||'';
-    document.getElementById('fi-cognome').value=a.cognome||'';
-    document.getElementById('fi-email').value=a.email||'';
-    document.getElementById('fi-tipo').value=a.tipo||'';
-    document.getElementById('fi-formula').value=a.formula||'';
-    document.getElementById('fi-inizio').value=a.data_inizio||'';
-    document.getElementById('fi-scadenza').value=a.scadenza||'';
-    document.getElementById('fi-importo').value=a.importo||'';
-    document.getElementById('fi-note').value=a.note||'';
-    document.getElementById('fi-motivazione').value=a.motivazione_non_rinnovo||'';
-    document.getElementById('fi-motivazione-row').style.display=a.tipo==='non_rinnovo'?'block':'none';
-  } else {
-    ['fi-nome','fi-cognome','fi-email','fi-tipo','fi-formula','fi-note','fi-motivazione'].forEach(function(elId){var el=document.getElementById(elId);if(el)el.value='';});
-    ['fi-inizio','fi-scadenza','fi-importo'].forEach(function(elId){var el=document.getElementById(elId);if(el)el.value='';});
-    document.getElementById('fi-motivazione-row').style.display='none';
-  }
-  document.getElementById('fi-modal').style.display='flex';
+  try{
+    editFiId=id||null;
+    var isEdit=!!id;
+    document.getElementById('fi-modal-title').textContent=isEdit?'Modifica abbonato':'Nuovo abbonato';
+    document.getElementById('fi-del-btn').style.display=isEdit?'flex':'none';
+    var a=isEdit?DB_FI.find(function(x){return x.id===id;}):null;
+    if(a){
+      document.getElementById('fi-nome').value=a.nome||'';
+      document.getElementById('fi-cognome').value=a.cognome||'';
+      document.getElementById('fi-email').value=a.email||'';
+      document.getElementById('fi-tipo').value=a.tipo||'';
+      document.getElementById('fi-formula').value=a.formula||'';
+      document.getElementById('fi-inizio').value=a.data_inizio||'';
+      document.getElementById('fi-scadenza').value=a.scadenza||'';
+      document.getElementById('fi-importo').value=a.importo||'';
+      document.getElementById('fi-note').value=a.note||'';
+      document.getElementById('fi-motivazione').value=a.motivazione_non_rinnovo||'';
+      document.getElementById('fi-motivazione-row').style.display=a.tipo==='non_rinnovo'?'block':'none';
+    }else{
+      ['fi-nome','fi-cognome','fi-email','fi-tipo','fi-formula','fi-note','fi-motivazione'].forEach(function(i){var el=document.getElementById(i);if(el)el.value='';});
+      ['fi-inizio','fi-scadenza','fi-importo'].forEach(function(i){var el=document.getElementById(i);if(el)el.value='';});
+      document.getElementById('fi-motivazione-row').style.display='none';
+    }
+    document.getElementById('fi-modal').style.display='flex';
+  }catch(err){alert('openFiModal Error: '+err.message);console.error(err);}
 }
-
 function closeFiModal(){document.getElementById('fi-modal').style.display='none';}
 
 async function saveFiAbbonato(){
