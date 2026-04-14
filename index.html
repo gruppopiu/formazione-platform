@@ -399,7 +399,7 @@ textarea.finp{min-height:72px;resize:vertical}
 .kcard-stitch-progress{width:100%;height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;margin-bottom:6px}
 .kcard-stitch-progress-fill{height:6px;border-radius:3px;background:#bac3ff;transition:width 1s cubic-bezier(.4,0,.2,1)}
 .kcard-stitch-sub{font-size:11px;color:#bac3ff;font-weight:500;font-family:'Inter',sans-serif;margin-top:6px}
-.stitch-table tbody tr{border-bottom:none;border-left:2px solid transparent;transition:all .15s}
+.stitch-table tbody tr{border-bottom:none;border-left:2px solid transparent;transition:all .15s}.stitch-table thead th[onclick]{user-select:none}.stitch-table thead th[onclick]:hover{color:var(--text);background:var(--bg4)}
 .stitch-table tbody tr:hover{background:var(--bg3);border-left:2px solid var(--accent)}
 .evd-modal-inner{display:grid;grid-template-columns:1fr 310px;gap:0}
 .evd-left{padding:22px 24px;border-right:1px solid var(--border)}
@@ -541,6 +541,7 @@ textarea.finp{min-height:72px;resize:vertical}
       <div class="sb-sec">Analisi</div>
       <div class="sbi" id="nav-kpi" onclick="showPage('kpi',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>KPI Formativi</div>
       <div class="sbi" id="nav-commerciale" onclick="showPage('commerciale',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Commerciale</div>
+      <div class="sbi" id="nav-fi" onclick="showPage('fi',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Form. Illimitata</div>
       <div class="sb-sec">Dati</div>
       
       <div class="sbi" id="nav-report" onclick="showPage('report',this)">
@@ -580,6 +581,7 @@ textarea.finp{min-height:72px;resize:vertical}
       <div class="widget-bar">
         <span class="widget-bar-lbl">Mostra:</span>
         <div class="widget-toggle on" data-widget="kpi" onclick="toggleWidget(this)">KPI</div>
+        <div class="widget-toggle on" data-widget="fi-home" onclick="toggleWidget(this)">Form. Illimitata</div>
         <div class="widget-toggle on" data-widget="charts" onclick="toggleWidget(this)">Grafici</div>
         <div class="widget-toggle on" data-widget="cfp" onclick="toggleWidget(this)">CFP</div>
         <div class="widget-toggle on" data-widget="prossimi" onclick="toggleWidget(this)">Prossimi eventi</div>
@@ -630,6 +632,43 @@ textarea.finp{min-height:72px;resize:vertical}
             <div class="kcard-stitch-progress"><div class="kcard-stitch-progress-fill" id="k-ore-bar" style="width:0%;background:var(--green)"></div></div>
             <div class="kcard-stitch-sub" id="k-ore-pct" style="color:var(--green)">— del target</div>
           </div>
+        </div>
+      </div>
+      <!-- FI HOME WIDGET -->
+      <div class="widget-wrap" id="widget-fi-home">
+        <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px"><span class="material-symbols-outlined" style="font-size:14px">all_inclusive</span>Formazione Illimitata — panoramica</div>
+        <div class="kgrid" style="grid-template-columns:repeat(4,1fr)">
+          <div class="kcard-stitch">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+              <div class="kcard-stitch-icon" style="background:rgba(var(--blue),.12);color:var(--blue)"><span class="material-symbols-outlined">all_inclusive</span></div>
+            </div>
+            <div class="kcard-stitch-label">Abbonati attivi</div>
+            <div class="kcard-stitch-val" id="h-fi-tot">—</div>
+          </div>
+          <div class="kcard-stitch">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+              <div class="kcard-stitch-icon" style="background:rgba(var(--green),.12);color:var(--green)"><span class="material-symbols-outlined">euro</span></div>
+            </div>
+            <div class="kcard-stitch-label">Valore abbonamenti</div>
+            <div class="kcard-stitch-val" id="h-fi-val">—</div>
+          </div>
+          <div class="kcard-stitch">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+              <div class="kcard-stitch-icon" style="background:rgba(var(--yellow),.12);color:var(--yellow)"><span class="material-symbols-outlined">schedule</span></div>
+            </div>
+            <div class="kcard-stitch-label">In scadenza (30 gg)</div>
+            <div class="kcard-stitch-val" id="h-fi-exp">—</div>
+          </div>
+          <div class="kcard-stitch">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+              <div class="kcard-stitch-icon" style="background:rgba(var(--red),.12);color:var(--red)"><span class="material-symbols-outlined">warning</span></div>
+            </div>
+            <div class="kcard-stitch-label">Scaduti</div>
+            <div class="kcard-stitch-val" id="h-fi-scad">—</div>
+          </div>
+        </div>
+        <div style="text-align:right;margin-top:10px">
+          <button class="btn btn-s btn-sm" onclick="showPage('fi',document.getElementById('nav-fi'))">Vedi tutti →</button>
         </div>
       </div>
       <div class="widget-wrap" id="widget-charts">
@@ -858,7 +897,7 @@ textarea.finp{min-height:72px;resize:vertical}
       </div>
 
       <!-- FORMAZIONE ILLIMITATA -->
-      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Formazione Illimitata (abbonati)</div>
+      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Formazione Illimitata — partecipazione eventi</div>
       <div class="kgrid" style="margin-bottom:20px">
         <div class="kcard-stitch">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
@@ -898,6 +937,39 @@ textarea.finp{min-height:72px;resize:vertical}
         </div>
       </div>
 
+      <!-- FI ABBONAMENTI KPI -->
+      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin:20px 0 10px">Formazione Illimitata — abbonamenti</div>
+      <div class="kgrid" style="margin-bottom:20px">
+        <div class="kcard-stitch">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div class="kcard-stitch-icon" style="background:rgba(var(--blue),.12);color:var(--blue)"><span class="material-symbols-outlined">all_inclusive</span></div>
+          </div>
+          <div class="kcard-stitch-label">Abbonati attivi</div>
+          <div class="kcard-stitch-val" id="comm-fi-tot">—</div>
+        </div>
+        <div class="kcard-stitch">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div class="kcard-stitch-icon" style="background:rgba(var(--green),.12);color:var(--green)"><span class="material-symbols-outlined">euro</span></div>
+          </div>
+          <div class="kcard-stitch-label">Valore totale abbonamenti</div>
+          <div class="kcard-stitch-val" id="comm-fi-val">—</div>
+        </div>
+        <div class="kcard-stitch">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div class="kcard-stitch-icon" style="background:rgba(var(--yellow),.12);color:var(--yellow)"><span class="material-symbols-outlined">schedule</span></div>
+          </div>
+          <div class="kcard-stitch-label">In scadenza (30 gg)</div>
+          <div class="kcard-stitch-val" id="comm-fi-exp">—</div>
+        </div>
+        <div class="kcard-stitch">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div class="kcard-stitch-icon" style="background:rgba(var(--red),.12);color:var(--red)"><span class="material-symbols-outlined">warning</span></div>
+          </div>
+          <div class="kcard-stitch-label">Scaduti</div>
+          <div class="kcard-stitch-val" id="comm-fi-scad">—</div>
+        </div>
+      </div>
+
       <div class="grid2">
         <div class="card">
           <div class="chart-toolbar">
@@ -932,6 +1004,155 @@ textarea.finp{min-height:72px;resize:vertical}
             </div>
           </div>
           <div style="position:relative;height:240px"><canvas id="ch-pag-fi"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORMAZIONE ILLIMITATA -->
+    <div class="page" id="page-fi">
+      <div class="ph" style="margin-bottom:20px">
+        <div>
+          <div class="pt font-headline">Formazione Illimitata</div>
+          <div class="ps">Elenco abbonati · status · analisi andamento</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-s btn-sm" onclick="exportFiCSV()"><span class="material-symbols-outlined" style="font-size:14px">download</span>Esporta CSV</button>
+          <button class="btn btn-p" onclick="openFiModal(null)"><span class="material-symbols-outlined" style="font-size:15px">add_circle</span>Nuovo abbonato</button>
+        </div>
+      </div>
+
+      <!-- KPI CARDS FI -->
+      <div class="kgrid" style="margin-bottom:20px" id="fi-kpi-grid">
+        <div class="kcard-stitch">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div class="kcard-stitch-icon" style="background:rgba(var(--blue),.12);color:var(--blue)"><span class="material-symbols-outlined">all_inclusive</span></div>
+          </div>
+          <div class="kcard-stitch-label">Abbonati attivi</div>
+          <div class="kcard-stitch-val" id="fi-k-tot">—</div>
+        </div>
+        <div class="kcard-stitch">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div class="kcard-stitch-icon" style="background:rgba(var(--green),.12);color:var(--green)"><span class="material-symbols-outlined">euro</span></div>
+          </div>
+          <div class="kcard-stitch-label">Valore totale abbonamenti</div>
+          <div class="kcard-stitch-val" id="fi-k-val">—</div>
+        </div>
+        <div class="kcard-stitch">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div class="kcard-stitch-icon" style="background:rgba(var(--yellow),.12);color:var(--yellow)"><span class="material-symbols-outlined">schedule</span></div>
+          </div>
+          <div class="kcard-stitch-label">In scadenza (30 gg)</div>
+          <div class="kcard-stitch-val" id="fi-k-exp">—</div>
+        </div>
+        <div class="kcard-stitch">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+            <div class="kcard-stitch-icon" style="background:rgba(var(--red),.12);color:var(--red)"><span class="material-symbols-outlined">warning</span></div>
+          </div>
+          <div class="kcard-stitch-label">Scaduti</div>
+          <div class="kcard-stitch-val" id="fi-k-scad">—</div>
+        </div>
+      </div>
+
+      <!-- GRAFICI -->
+      <div class="grid2" style="margin-bottom:16px">
+        <div class="card">
+          <div class="ctitle">Andamento abbonamenti <span class="ctitle-sub">nuovi vs persi per mese</span></div>
+          <div class="chw"><canvas id="ch-fi-andamento"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="ctitle">Distribuzione tipologie <span class="ctitle-sub">singolo · duo · studio</span></div>
+          <div class="chw"><canvas id="ch-fi-tipi"></canvas></div>
+        </div>
+      </div>
+      <div class="grid2" style="margin-bottom:20px">
+        <div class="card">
+          <div class="ctitle">Formula abbonamento <span class="ctitle-sub">annuale vs semestrale</span></div>
+          <div class="chw"><canvas id="ch-fi-formula"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="ctitle">Valore per tipologia <span class="ctitle-sub">ricavi suddivisi per tipo</span></div>
+          <div class="chw"><canvas id="ch-fi-val"></canvas></div>
+        </div>
+      </div>
+
+      <!-- FILTRI TABELLA -->
+      <div class="filters" style="margin-bottom:12px">
+        <input class="finp" id="fi-search" placeholder="Cerca nome..." oninput="renderFiTabella()" style="max-width:220px">
+        <select class="finp" id="fi-filter-tipo" onchange="renderFiTabella()" style="max-width:160px">
+          <option value="">Tutti i tipi</option>
+          <option value="singolo">Singolo</option>
+          <option value="duo">Duo</option>
+          <option value="studio">Studio</option>
+        </select>
+        <select class="finp" id="fi-filter-formula" onchange="renderFiTabella()" style="max-width:160px">
+          <option value="">Tutte le formule</option>
+          <option value="annuale">Annuale</option>
+          <option value="semestrale">Semestrale</option>
+        </select>
+        <select class="finp" id="fi-filter-stato" onchange="renderFiTabella()" style="max-width:160px">
+          <option value="">Tutti gli stati</option>
+          <option value="regola">In regola</option>
+          <option value="scadenza">In scadenza</option>
+          <option value="scaduto">Scaduto</option>
+        </select>
+      </div>
+
+      <!-- TABELLA ABBONATI -->
+      <div class="card" style="padding:0;overflow:hidden">
+        <div class="twrap" id="fi-tbl-wrap">
+          <div class="empty"><div class="ei">♾️</div><div class="et">Caricamento abbonati...</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL ABBONATO FI -->
+    <div class="mover" id="fi-modal" style="display:none" onclick="if(event.target===this)closeFiModal()">
+      <div class="modal" style="max-width:520px;padding:0;overflow:hidden">
+        <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px">Form. Illimitata › <span style="color:var(--accent)" id="fi-modal-breadcrumb">Nuovo abbonato</span></div>
+            <div class="font-headline" style="font-size:16px;font-weight:800;color:var(--text)" id="fi-modal-title">Nuovo abbonato</div>
+          </div>
+          <button class="mclose" onclick="closeFiModal()">✕</button>
+        </div>
+        <div style="padding:20px 24px;max-height:calc(92vh - 70px);overflow-y:auto;display:flex;flex-direction:column;gap:14px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="fg"><label class="flbl">Nome *</label><input type="text" class="finp" id="fi-nome" placeholder="Mario"></div>
+            <div class="fg"><label class="flbl">Cognome *</label><input type="text" class="finp" id="fi-cognome" placeholder="Rossi"></div>
+          </div>
+          <div class="fg"><label class="flbl">Email</label><input type="email" class="finp" id="fi-email" placeholder="mario.rossi@esempio.it"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="fg">
+              <label class="flbl">Tipo abbonamento *</label>
+              <select class="finp" id="fi-tipo">
+                <option value="">— seleziona —</option>
+                <option value="singolo">Singolo</option>
+                <option value="duo">Duo</option>
+                <option value="studio">Studio</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label class="flbl">Formula *</label>
+              <select class="finp" id="fi-formula">
+                <option value="">— seleziona —</option>
+                <option value="annuale">Annuale</option>
+                <option value="semestrale">Semestrale</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="fg"><label class="flbl">Data inizio *</label><input type="date" class="finp" id="fi-inizio"></div>
+            <div class="fg"><label class="flbl">Data scadenza *</label><input type="date" class="finp" id="fi-scadenza"></div>
+          </div>
+          <div class="fg"><label class="flbl">Importo pagato (€) *</label><input type="number" class="finp" id="fi-importo" placeholder="0.00" min="0" step="0.01"></div>
+          <div class="fg"><label class="flbl">Note</label><textarea class="finp" id="fi-note" placeholder="Note aggiuntive..." style="min-height:60px"></textarea></div>
+        </div>
+        <div style="padding:14px 24px;border-top:1px solid var(--border);background:var(--bg2);display:flex;justify-content:space-between;align-items:center">
+          <button class="btn btn-d btn-sm" id="fi-del-btn" onclick="deleteFiAbbonato()" style="display:none"><span class="material-symbols-outlined" style="font-size:14px">delete</span>Elimina</button>
+          <div style="display:flex;gap:8px;margin-left:auto">
+            <button class="btn btn-s" onclick="closeFiModal()">Annulla</button>
+            <button class="btn btn-p" onclick="saveFiAbbonato()"><span class="material-symbols-outlined" style="font-size:14px">save</span>Salva</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1577,7 +1798,7 @@ let FORMATORI_DEF=[
 ];
 
 // ── STATE ──
-let DB=[],NOTIFICHE=[],FM_DATA={};
+let DB=[],NOTIFICHE=[],FM_DATA={},DB_FI=[];
 let currentUser=null,userProfile=null,userSettings={};
 let editId=null,currentFm=null;
 let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
@@ -2677,6 +2898,11 @@ async function loadEventsOnly(){
     if(!r.error){DB=r.data||[];setConn('ok','Connesso');}
   }catch(e){setConn('err','Errore');DB=[];}
   try{const r=await sb.from('formatori_data').select('*');if(!r.error)(r.data||[]).forEach(f=>{FM_DATA[f.nome]=f;});}catch(e){}
+  // Load FI abbonati
+  try{
+    const fiRes=await sb.from('fi_abbonati').select('*').order('scadenza',{ascending:true});
+    if(!fiRes.error)DB_FI=fiRes.data||[];
+  }catch(e){console.warn('fi_abbonati load error:',e);}
   renderAll();
 }
 
@@ -2836,6 +3062,8 @@ function renderAll(){
   renderFormatori();
   renderKPI();
   renderCommerciale();
+  renderFIHome();
+  if(document.getElementById('page-fi')?.classList.contains('active'))renderFI();
   renderNotifiche();
   renderCalendario();
   populateTemaFilter();
@@ -2893,7 +3121,7 @@ function filterCustomRange(data,from,to){
   return data.filter(e=>e.data&&e.data>=from&&e.data<=to);
 }
 
-function progBar(val,max,grad,label,unit){
+function progBar(val,max,grad,label,unit,onclick){
   const pct=max>0?Math.min(130,Math.round(val/max*100)):0;
   const dispW=Math.min(100,pct);
   const gradMap={g:'var(--grad1)',b:'var(--grad2)',y:'var(--grad3)',p:'var(--grad4)'};
@@ -2901,8 +3129,10 @@ function progBar(val,max,grad,label,unit){
   const color=pct>=100?'var(--green)':pct>=60?'var(--blue)':pct>=30?'var(--yellow)':'var(--red)';
   const fVal=typeof val==='number'?fmtNum(val,1):val;
   const fMax=typeof max==='number'?fmtNum(max,1):max;
-  return`<div class="pw">
-    <div class="pl"><span>${label}</span><span class="pval" style="color:${color}">${fVal}${unit?' '+unit:''} <span style="color:var(--text3);">(${pct}%)</span> / ${fMax}${unit?' '+unit:''}</span></div>
+  const clickable=onclick?`style="cursor:pointer" onclick="${onclick}"`:'' ;
+  const hint=onclick?`<span style="font-size:9px;color:var(--text3);margin-left:6px;opacity:.6">↗ dettaglio</span>`:'' ;
+  return`<div class="pw" ${clickable}>
+    <div class="pl"><span>${label}${hint}</span><span class="pval" style="color:${color}">${fVal}${unit?' '+unit:''} <span style="color:var(--text3);">(${pct}%)</span> / ${fMax}${unit?' '+unit:''}</span></div>
     <div class="pbg"><div class="pf" style="width:${dispW}%;background:${bg}"></div></div>
   </div>`;}
 
@@ -3230,7 +3460,7 @@ function renderDashboard(){
   const cfpC=(()=>{const _seen=new Set();return svolti.filter(e=>e.tipologia==='corso_4h'||e.tipologia==='corso_6h').reduce((s,e)=>{if(e.corso_padre_id){if(_seen.has(e.corso_padre_id))return s;_seen.add(e.corso_padre_id);return s+(e.tipologia==='corso_4h'?4:6);}return s+cfpEv(e);},0);})();
   const cfpD=svolti.filter(e=>e.tipologia==='corso_deontologico').reduce((s,e)=>s+cfpEv(e),0);
   const cfpEl=document.getElementById('cfp-prog-dash');
-  if(cfpEl)cfpEl.innerHTML=progBar(cfpS,CFP_OBJ.sem,'b','CFP Seminari','CFP')+progBar(cfpC,CFP_OBJ.corsi,'g','CFP Corsi','CFP')+progBar(cfpD,CFP_OBJ.deo,'y','CFP Deontologia','CFP');
+  if(cfpEl)cfpEl.innerHTML=progBar(cfpS,CFP_OBJ.sem,'b','CFP Seminari','CFP',"openCfpDetail('seminario')")+progBar(cfpC,CFP_OBJ.corsi,'g','CFP Corsi','CFP',"openCfpDetail('corsi')")+progBar(cfpD,CFP_OBJ.deo,'y','CFP Deontologia','CFP',"openCfpDetail('deontologico')");
   const pross=DB.filter(e=>['pianificato','pubblicato'].includes(e.stato)).sort((a,b)=>a.data>b.data?1:-1).slice(0,6);
   const prossList=document.getElementById('prossimi-list');
   if(prossList){
@@ -3574,9 +3804,9 @@ function renderKPI(){
 
   // CFP progress bars
   document.getElementById('cfp-bars').innerHTML=
-    progBar(cfpS,CFP_OBJ.sem,'b','Seminari','CFP')+
-    progBar(cfpC,CFP_OBJ.corsi,'g','Corsi tecnici','CFP')+
-    progBar(cfpD,CFP_OBJ.deo,'y','Deontologia','CFP');
+    progBar(cfpS,CFP_OBJ.sem,'b','Seminari','CFP',"openCfpDetail('seminario')")+
+    progBar(cfpC,CFP_OBJ.corsi,'g','Corsi tecnici','CFP',"openCfpDetail('corsi')")+
+    progBar(cfpD,CFP_OBJ.deo,'y','Deontologia','CFP',"openCfpDetail('deontologico')");
 
   // Ops bars
   document.getElementById('ops-bars').innerHTML=
@@ -3827,10 +4057,10 @@ function setEvSort(field){
 }
 
 function evSortArrow(field){
-  if(evSortField !== field) return '<span style="opacity:.3;font-size:9px;margin-left:3px">↕</span>';
+  if(evSortField !== field) return '<span style="font-size:10px;margin-left:4px;color:var(--text3);opacity:.5">⇅</span>';
   return evSortDir === 'asc'
-    ? '<span style="font-size:9px;margin-left:3px;color:var(--accent)">↑</span>'
-    : '<span style="font-size:9px;margin-left:3px;color:var(--accent)">↓</span>';
+    ? '<span style="font-size:11px;margin-left:4px;color:var(--accent);font-weight:700">↑</span>'
+    : '<span style="font-size:11px;margin-left:4px;color:var(--accent);font-weight:700">↓</span>';
 }
 
 // ── BULK SELEZIONE EVENTI ──
@@ -4163,7 +4393,7 @@ function showPage(id,el){
   const pg=document.getElementById('page-'+id);if(pg){pg.classList.add('active');pg.style.display='';}
   if(el)el.classList.add('active');
   // Re-render page-specific
-  const map={'home':renderDashboard,'kpi':renderKPI,'commerciale':renderCommerciale,'formatori':()=>renderFormatori(),'calendario':renderCalendario,'notifiche':()=>{notifPage=0;markAllRead();},'impostazioni':()=>{
+  const map={'home':renderDashboard,'kpi':renderKPI,'commerciale':renderCommerciale,'fi':renderFI,'formatori':()=>renderFormatori(),'calendario':renderCalendario,'notifiche':()=>{notifPage=0;markAllRead();},'impostazioni':()=>{
       document.getElementById('set-dark').checked=currentMode==='dark';
       buildThemeGrid();
       // Night Shift UI
@@ -5453,8 +5683,392 @@ function globalSearchHandler(val){
   }
 }
 
+
+// ── CFP DETAIL MODAL ──
+function openCfpDetail(tipo){
+  const tipoLabels={seminario:'Seminari (2h)',corsi:'Corsi tecnici (4h/6h)',deontologico:'Deontologia (2h)'};
+  const label=tipoLabels[tipo]||tipo;
+  let evs;
+  if(tipo==='seminario'){
+    evs=getSvolti().filter(e=>e.tipologia==='seminario');
+  } else if(tipo==='corsi'){
+    // dedup corsi multi-sessione: mostra solo il padre
+    const seen=new Set();
+    evs=getSvolti().filter(e=>['corso_4h','corso_6h'].includes(e.tipologia)).filter(e=>{
+      const uid=e.corso_padre_id||e.id;
+      if(seen.has(uid))return false;
+      seen.add(uid);return true;
+    });
+  } else {
+    evs=getSvolti().filter(e=>e.tipologia==='corso_deontologico');
+  }
+  evs=evs.slice().sort((a,b)=>(a.data||'')>(b.data||'')?-1:1);
+
+  const rows=evs.length===0
+    ?'<div style="color:var(--text3);font-size:13px;padding:20px 0;text-align:center">Nessun evento ancora svolto</div>'
+    :evs.map(e=>{
+      const cfp=cfpEv(e);
+      const docente=e.docenti_nomi?.join(', ')||e.docente||'—';
+      const totI=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e)+(parseInt(e.iscritti_illimitati)||0);
+      const totP=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
+      return`<tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:10px 12px;font-size:12px;color:var(--text3);white-space:nowrap">${fmtDate(e.data)}</td>
+        <td style="padding:10px 12px;font-size:13px;font-weight:600;color:var(--text)">${e.titolo||'—'}</td>
+        <td style="padding:10px 12px;font-size:12px;color:var(--text2)">${docente}</td>
+        <td style="padding:10px 12px;font-size:12px;color:var(--text2);text-align:center">${e.tema||'—'}</td>
+        <td style="padding:10px 12px;font-size:13px;font-weight:700;color:var(--accent);text-align:center">${cfp}h</td>
+        <td style="padding:10px 12px;font-size:12px;color:var(--text2);text-align:center">${totP}/${totI}</td>
+      </tr>`;
+    }).join('');
+
+  const totalCfp=evs.reduce((s,e)=>s+cfpEv(e),0);
+
+  document.getElementById('cfp-detail-title').textContent=label;
+  document.getElementById('cfp-detail-count').textContent=`${evs.length} eventi · ${totalCfp} CFP erogati`;
+  document.getElementById('cfp-detail-body').innerHTML=rows;
+  document.getElementById('cfp-detail-modal').style.display='flex';
+}
+
+function closeCfpDetail(){
+  document.getElementById('cfp-detail-modal').style.display='none';
+}
+
+// ══════════════════════════════════════════════════════
+// FORMAZIONE ILLIMITATA
+// ══════════════════════════════════════════════════════
+
+let fiSortField='scadenza', fiSortDir='asc', editFiId=null;
+let chFiAndamento=null, chFiTipi=null, chFiFormula=null, chFiVal=null;
+
+// Status logic
+function getFiStatus(scadenza){
+  if(!scadenza)return'regola';
+  const d=new Date(scadenza+'T00:00:00');
+  const now=new Date(); now.setHours(0,0,0,0);
+  const diff=Math.round((d-now)/(1000*60*60*24));
+  if(diff<0)return'scaduto';
+  if(diff<=30)return'scadenza';
+  return'regola';
+}
+function getFiStatusLabel(s){return{regola:'In regola',scadenza:'In scadenza',scaduto:'Scaduto'}[s]||s;}
+function getFiStatusColors(s){
+  if(s==='regola')   return{color:'var(--green)',bg:'var(--green-bg)',border:'var(--green)'};
+  if(s==='scadenza') return{color:'var(--yellow)',bg:'var(--orange-bg)',border:'var(--orange)'};
+  return                     {color:'var(--red)',  bg:'var(--red-bg)',  border:'var(--red)'};
+}
+function getFiTipoLabel(t){return{singolo:'Singolo',duo:'Duo',studio:'Studio'}[t]||t||'—';}
+function getFiFormulaLabel(f){return{annuale:'Annuale',semestrale:'Semestrale'}[f]||f||'—';}
+
+// Compute FI stats from DB_FI
+function getFiStats(){
+  const today=new Date(); today.setHours(0,0,0,0);
+  const attivi=DB_FI.filter(a=>getFiStatus(a.scadenza)!=='scaduto');
+  const tot=DB_FI.length;
+  const totAttivi=attivi.length;
+  const inScadenza=DB_FI.filter(a=>getFiStatus(a.scadenza)==='scadenza').length;
+  const scaduti=DB_FI.filter(a=>getFiStatus(a.scadenza)==='scaduto').length;
+  const valTot=DB_FI.reduce((s,a)=>s+(parseFloat(a.importo)||0),0);
+  const valAttivi=attivi.reduce((s,a)=>s+(parseFloat(a.importo)||0),0);
+  return{tot,totAttivi,inScadenza,scaduti,valTot,valAttivi};
+}
+
+// ── Render home widget ──
+function renderFIHome(){
+  const s=getFiStats();
+  const ids=['h-fi-tot','h-fi-val','h-fi-exp','h-fi-scad'];
+  const vals=[s.tot, fmtEuro(s.valTot,0), s.inScadenza, s.scaduti];
+  ids.forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=vals[i];});
+  // color h-fi-exp and h-fi-scad
+  const expEl=document.getElementById('h-fi-exp');
+  if(expEl)expEl.style.color=s.inScadenza>0?'var(--yellow)':'var(--text)';
+  const scEl=document.getElementById('h-fi-scad');
+  if(scEl)scEl.style.color=s.scaduti>0?'var(--red)':'var(--text)';
+}
+
+// ── Render FI page ──
+function renderFI(){
+  const s=getFiStats();
+  // KPI cards
+  [['fi-k-tot',s.tot],['fi-k-val',fmtEuro(s.valTot,0)],['fi-k-exp',s.inScadenza],['fi-k-scad',s.scaduti]]
+    .forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=v;});
+  const expEl=document.getElementById('fi-k-exp');
+  if(expEl)expEl.style.color=s.inScadenza>0?'var(--yellow)':'var(--text)';
+  const scEl=document.getElementById('fi-k-scad');
+  if(scEl)scEl.style.color=s.scaduti>0?'var(--red)':'var(--text)';
+  // Comm page KPI
+  ['comm-fi-tot','comm-fi-val','comm-fi-exp','comm-fi-scad'].forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(el)el.textContent=[s.tot,fmtEuro(s.valTot,0),s.inScadenza,s.scaduti][i];
+  });
+  renderFiTabella();
+  renderFiCharts();
+}
+
+// ── Render tabella abbonati ──
+function renderFiTabella(){
+  const search=(document.getElementById('fi-search')?.value||'').toLowerCase();
+  const fTipo=document.getElementById('fi-filter-tipo')?.value||'';
+  const fFormula=document.getElementById('fi-filter-formula')?.value||'';
+  const fStato=document.getElementById('fi-filter-stato')?.value||'';
+
+  let rows=[...DB_FI].filter(a=>{
+    if(search&&!`${a.nome||''} ${a.cognome||''}`.toLowerCase().includes(search))return false;
+    if(fTipo&&a.tipo!==fTipo)return false;
+    if(fFormula&&a.formula!==fFormula)return false;
+    if(fStato&&getFiStatus(a.scadenza)!==fStato)return false;
+    return true;
+  });
+
+  // Sort
+  rows.sort((a,b)=>{
+    let va,vb;
+    switch(fiSortField){
+      case'nome':    va=(a.nome+' '+a.cognome).toLowerCase();vb=(b.nome+' '+b.cognome).toLowerCase();break;
+      case'tipo':    va=a.tipo||'';vb=b.tipo||'';break;
+      case'formula': va=a.formula||'';vb=b.formula||'';break;
+      case'scadenza':va=a.scadenza||'';vb=b.scadenza||'';break;
+      case'importo': va=parseFloat(a.importo)||0;vb=parseFloat(b.importo)||0;break;
+      case'stato':   va=getFiStatus(a.scadenza);vb=getFiStatus(b.scadenza);break;
+      default:       va=a.scadenza||'';vb=b.scadenza||'';
+    }
+    if(va<vb)return fiSortDir==='asc'?-1:1;
+    if(va>vb)return fiSortDir==='asc'?1:-1;
+    return 0;
+  });
+
+  function fiArrow(f){
+    if(fiSortField!==f)return'<span style="font-size:10px;margin-left:4px;color:var(--text3);opacity:.5">⇅</span>';
+    return fiSortDir==='asc'?'<span style="font-size:11px;margin-left:4px;color:var(--accent);font-weight:700">↑</span>':'<span style="font-size:11px;margin-left:4px;color:var(--accent);font-weight:700">↓</span>';
+  }
+  function setFiSort(f){
+    if(fiSortField===f)fiSortDir=fiSortDir==='asc'?'desc':'asc';
+    else{fiSortField=f;fiSortDir='asc';}
+    renderFiTabella();
+  }
+
+  const wrap=document.getElementById('fi-tbl-wrap');
+  if(!wrap)return;
+
+  if(!rows.length){
+    wrap.innerHTML='<div class="empty"><div class="ei">♾️</div><div class="et">Nessun abbonato trovato</div></div>';
+    return;
+  }
+
+  wrap.innerHTML=`<table class="stitch-table"><thead><tr>
+    <th onclick="setFiSort('nome')" style="cursor:pointer;white-space:nowrap;user-select:none">Nome Cognome${fiArrow('nome')}</th>
+    <th onclick="setFiSort('tipo')" style="cursor:pointer;user-select:none">Tipo${fiArrow('tipo')}</th>
+    <th onclick="setFiSort('formula')" style="cursor:pointer;user-select:none">Formula${fiArrow('formula')}</th>
+    <th onclick="setFiSort('scadenza')" style="cursor:pointer;white-space:nowrap;user-select:none">Scadenza${fiArrow('scadenza')}</th>
+    <th onclick="setFiSort('importo')" style="cursor:pointer;user-select:none">Importo${fiArrow('importo')}</th>
+    <th onclick="setFiSort('stato')" style="cursor:pointer;user-select:none">Status${fiArrow('stato')}</th>
+    <th>Azioni</th>
+  </tr></thead><tbody>${rows.map(a=>{
+    const st=getFiStatus(a.scadenza);
+    const sc=getFiStatusColors(st);
+    const lbl=getFiStatusLabel(st);
+    const scadStr=a.scadenza?new Date(a.scadenza+'T00:00:00').toLocaleDateString('it-IT',{day:'2-digit',month:'short',year:'numeric'}):'—';
+    const impStr=a.importo?fmtEuro(parseFloat(a.importo),2):'—';
+    const rowBg=st==='scaduto'?'background:var(--red-bg)':st==='scadenza'?'background:var(--orange-bg)':'';
+    return`<tr style="${rowBg}">
+      <td style="padding:10px 12px;font-weight:600;color:var(--text)">${a.nome||''} ${a.cognome||''}</td>
+      <td style="padding:10px 12px"><span class="badge" style="background:var(--accent-bg);color:var(--accent)">${getFiTipoLabel(a.tipo)}</span></td>
+      <td style="padding:10px 12px;font-size:12px;color:var(--text2)">${getFiFormulaLabel(a.formula)}</td>
+      <td style="padding:10px 12px;font-size:12px;color:${sc.color};font-weight:600">${scadStr}</td>
+      <td style="padding:10px 12px;font-size:13px;font-weight:700;color:var(--text)">${impStr}</td>
+      <td style="padding:10px 12px"><span style="display:inline-block;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:700;font-family:Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;background:${sc.bg};color:${sc.color};border:1px solid ${sc.border}">${lbl}</span></td>
+      <td style="padding:10px 12px"><button class="btn btn-s btn-sm" onclick="openFiModal('${a.id}')"><span class="material-symbols-outlined" style="font-size:14px">edit</span>Modifica</button></td>
+    </tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+// ── Render FI charts ──
+function renderFiCharts(){
+  const isDark=document.body.classList.contains('dark');
+  const tc=isDark?'#5a6a84':'#9ca3af';
+  const gc=isDark?'rgba(255,255,255,.04)':'rgba(0,0,0,.04)';
+
+  // Chart 1: Andamento nuovi vs persi per mese
+  const now=new Date();
+  const months=[];
+  const nuovi=[], persi=[];
+  for(let i=5;i>=0;i--){
+    const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+    const y=d.getFullYear(), m=d.getMonth();
+    const label=['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'][m]+' '+String(y).slice(2);
+    months.push(label);
+    const mmStr=String(m+1).padStart(2,'0');
+    const yStr=String(y);
+    nuovi.push(DB_FI.filter(a=>a.data_inizio&&a.data_inizio.startsWith(`${yStr}-${mmStr}`)).length);
+    persi.push(DB_FI.filter(a=>a.scadenza&&a.scadenza.startsWith(`${yStr}-${mmStr}`)&&getFiStatus(a.scadenza)==='scaduto').length);
+  }
+  const ctx1=document.getElementById('ch-fi-andamento');
+  if(ctx1){
+    if(chFiAndamento)chFiAndamento.destroy();
+    chFiAndamento=new Chart(ctx1,{type:'bar',data:{labels:months,datasets:[
+      {label:'Nuovi',data:nuovi,backgroundColor:'rgba(var(--accent-rgb),.7)',borderRadius:4},
+      {label:'Scaduti',data:persi,backgroundColor:'rgba(239,68,68,.5)',borderRadius:4}
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}}}},scales:{x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}},y:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}}}});
+  }
+
+  // Chart 2: Distribuzione tipologie donut
+  const tipi=['singolo','duo','studio'];
+  const tipiLabels=['Singolo','Duo','Studio'];
+  const tipiCounts=tipi.map(t=>DB_FI.filter(a=>a.tipo===t).length);
+  const ctx2=document.getElementById('ch-fi-tipi');
+  if(ctx2){
+    if(chFiTipi)chFiTipi.destroy();
+    chFiTipi=new Chart(ctx2,{type:'doughnut',data:{labels:tipiLabels,datasets:[{data:tipiCounts,backgroundColor:['rgba(99,102,241,.8)','rgba(0,218,243,.7)','rgba(16,185,129,.7)'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}}}}}});
+  }
+
+  // Chart 3: Formula annuale vs semestrale
+  const formule=['annuale','semestrale'];
+  const formuleLabels=['Annuale','Semestrale'];
+  const formuleCounts=formule.map(f=>DB_FI.filter(a=>a.formula===f).length);
+  const ctx3=document.getElementById('ch-fi-formula');
+  if(ctx3){
+    if(chFiFormula)chFiFormula.destroy();
+    chFiFormula=new Chart(ctx3,{type:'pie',data:{labels:formuleLabels,datasets:[{data:formuleCounts,backgroundColor:['rgba(99,102,241,.8)','rgba(0,218,243,.7)'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}}}}}});
+  }
+
+  // Chart 4: Valore per tipologia
+  const valPerTipo=tipi.map(t=>DB_FI.filter(a=>a.tipo===t).reduce((s,a)=>s+(parseFloat(a.importo)||0),0));
+  const ctx4=document.getElementById('ch-fi-val');
+  if(ctx4){
+    if(chFiVal)chFiVal.destroy();
+    chFiVal=new Chart(ctx4,{type:'bar',data:{labels:tipiLabels,datasets:[{label:'Valore (€)',data:valPerTipo,backgroundColor:['rgba(99,102,241,.7)','rgba(0,218,243,.6)','rgba(16,185,129,.6)'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,font:{size:10}},grid:{display:false}},y:{ticks:{color:tc,font:{size:9},callback:v=>'€'+v.toLocaleString('it')},grid:{color:gc}}}}});
+  }
+}
+
+// ── CRUD FI ──
+function openFiModal(id){
+  editFiId=id||null;
+  const isEdit=!!id;
+  document.getElementById('fi-modal-title').textContent=isEdit?'Modifica abbonato':'Nuovo abbonato';
+  document.getElementById('fi-modal-breadcrumb').textContent=isEdit?'Modifica':'Nuovo abbonato';
+  document.getElementById('fi-del-btn').style.display=isEdit?'flex':'none';
+  if(isEdit){
+    const a=DB_FI.find(x=>x.id===id);
+    if(!a)return;
+    document.getElementById('fi-nome').value=a.nome||'';
+    document.getElementById('fi-cognome').value=a.cognome||'';
+    document.getElementById('fi-email').value=a.email||'';
+    document.getElementById('fi-tipo').value=a.tipo||'';
+    document.getElementById('fi-formula').value=a.formula||'';
+    document.getElementById('fi-inizio').value=a.data_inizio||'';
+    document.getElementById('fi-scadenza').value=a.scadenza||'';
+    document.getElementById('fi-importo').value=a.importo||'';
+    document.getElementById('fi-note').value=a.note||'';
+  } else {
+    ['fi-nome','fi-cognome','fi-email','fi-note'].forEach(id=>document.getElementById(id).value='');
+    ['fi-tipo','fi-formula'].forEach(id=>document.getElementById(id).value='');
+    ['fi-inizio','fi-scadenza','fi-importo'].forEach(id=>document.getElementById(id).value='');
+  }
+  document.getElementById('fi-modal').style.display='flex';
+}
+
+function closeFiModal(){
+  document.getElementById('fi-modal').style.display='none';
+}
+
+async function saveFiAbbonato(){
+  const nome=document.getElementById('fi-nome').value.trim();
+  const cognome=document.getElementById('fi-cognome').value.trim();
+  const tipo=document.getElementById('fi-tipo').value;
+  const formula=document.getElementById('fi-formula').value;
+  const scadenza=document.getElementById('fi-scadenza').value;
+  if(!nome||!cognome||!tipo||!formula||!scadenza){showToast('Compila i campi obbligatori','err');return;}
+  const payload={
+    nome, cognome,
+    email:document.getElementById('fi-email').value||null,
+    tipo, formula,
+    data_inizio:document.getElementById('fi-inizio').value||null,
+    scadenza,
+    importo:parseFloat(document.getElementById('fi-importo').value)||0,
+    note:document.getElementById('fi-note').value||null,
+    updated_at:new Date().toISOString()
+  };
+  try{
+    let error;
+    if(editFiId){({error}=await sb.from('fi_abbonati').update(payload).eq('id',editFiId));}
+    else{({error}=await sb.from('fi_abbonati').insert(payload));}
+    if(error)throw error;
+    showToast(editFiId?'Abbonato aggiornato':'Abbonato aggiunto','ok');
+    closeFiModal();
+    const res=await sb.from('fi_abbonati').select('*').order('scadenza',{ascending:true});
+    if(!res.error)DB_FI=res.data||[];
+    renderFI();renderFIHome();
+  }catch(e){showToast('Errore: '+e.message,'err');}
+}
+
+async function deleteFiAbbonato(){
+  if(!editFiId)return;
+  const a=DB_FI.find(x=>x.id===editFiId);
+  if(!confirm(`Eliminare l'abbonato ${a?.nome||''} ${a?.cognome||''}?`))return;
+  try{
+    const{error}=await sb.from('fi_abbonati').delete().eq('id',editFiId);
+    if(error)throw error;
+    showToast('Abbonato eliminato','ok');
+    closeFiModal();
+    DB_FI=DB_FI.filter(x=>x.id!==editFiId);
+    editFiId=null;
+    renderFI();renderFIHome();
+  }catch(e){showToast('Errore: '+e.message,'err');}
+}
+
+function exportFiCSV(){
+  const headers=['Nome','Cognome','Email','Tipo','Formula','Data inizio','Scadenza','Importo','Status','Note'];
+  const rows=DB_FI.map(a=>[
+    a.nome||'',a.cognome||'',a.email||'',
+    getFiTipoLabel(a.tipo),getFiFormulaLabel(a.formula),
+    a.data_inizio||'',a.scadenza||'',
+    a.importo||0,getFiStatusLabel(getFiStatus(a.scadenza)),a.note||''
+  ]);
+  const csv=[headers,...rows].map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='fi_abbonati.csv';a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSV esportato','ok');
+}
+
 // ── START ──
 init();
 </script>
+
+<!-- CFP DETAIL MODAL -->
+<div id="cfp-detail-modal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)closeCfpDetail()">
+  <div style="background:var(--bg2);border-radius:var(--r2);width:100%;max-width:780px;max-height:82vh;display:flex;flex-direction:column;box-shadow:var(--shadow2)">
+    <!-- header -->
+    <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+      <div>
+        <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px">Dettaglio avanzamento CFP</div>
+        <div class="font-headline" style="font-size:17px;font-weight:800;color:var(--text)" id="cfp-detail-title">—</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px" id="cfp-detail-count"></div>
+      </div>
+      <button class="mclose" onclick="closeCfpDetail()">✕</button>
+    </div>
+    <!-- table -->
+    <div style="overflow-y:auto;flex:1">
+      <table style="width:100%;border-collapse:collapse;font-size:12px">
+        <thead>
+          <tr style="background:var(--bg3);position:sticky;top:0;z-index:1">
+            <th style="padding:10px 12px;text-align:left;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap">Data</th>
+            <th style="padding:10px 12px;text-align:left;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Titolo</th>
+            <th style="padding:10px 12px;text-align:left;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Docente</th>
+            <th style="padding:10px 12px;text-align:center;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Tema</th>
+            <th style="padding:10px 12px;text-align:center;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">CFP</th>
+            <th style="padding:10px 12px;text-align:center;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Pres./Iscr.</th>
+          </tr>
+        </thead>
+        <tbody id="cfp-detail-body"></tbody>
+      </table>
+    </div>
+    <!-- footer -->
+    <div style="padding:12px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;flex-shrink:0">
+      <button class="btn btn-s" onclick="closeCfpDetail()">Chiudi</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
