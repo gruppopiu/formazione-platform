@@ -5900,6 +5900,18 @@ async function confirmFiImport(){
 
 
 // ── START ──
+window.onerror=function(msg,src,line,col,err){
+  var div=document.createElement('div');
+  div.style.cssText='position:fixed;top:0;left:0;right:0;background:#f00;color:#fff;padding:10px;z-index:99999;font:12px monospace';
+  div.textContent='JS ERROR line '+line+': '+msg;
+  document.body.appendChild(div);
+};
+window.addEventListener('unhandledrejection',function(e){
+  var div=document.createElement('div');
+  div.style.cssText='position:fixed;top:40px;left:0;right:0;background:#900;color:#fff;padding:10px;z-index:99999;font:12px monospace';
+  div.textContent='PROMISE ERROR: '+(e.reason&&e.reason.message||e.reason);
+  document.body.appendChild(div);
+});
 init();
 </script>
 </body>
