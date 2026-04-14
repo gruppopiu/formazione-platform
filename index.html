@@ -1052,7 +1052,7 @@ textarea.finp{min-height:72px;resize:vertical}
           <div class="kcard-stitch-label">Scaduti</div>
           <div class="kcard-stitch-val" id="fi-k-scad">—</div>
         </div>
-      
+      </div>
 
       <!-- FILTRI TABELLA -->
       <div class="filters" style="margin-bottom:12px">
@@ -2922,11 +2922,12 @@ async function loadAll(){
       pruneNotifiche();
     }
   }catch(e){}
-  // Load FI abbonati
+  // Load FI abbonati (non-blocking — table may not exist yet)
   try{
     const fiRes=await sb.from('fi_abbonati').select('*').order('scadenza',{ascending:true});
-    if(!fiRes.error)DB_FI=fiRes.data||[];
-  }catch(e){console.warn('fi_abbonati load error:',e);}
+    if(fiRes&&!fiRes.error)DB_FI=fiRes.data||[];
+    else DB_FI=[];
+  }catch(e){DB_FI=[];console.warn('fi_abbonati not available:',e.message);}
   renderAll();
 }
 
@@ -5800,6 +5801,12 @@ function renderFI(){
 }
 
 // ── Render tabella abbonati ──
+function setFiSort(f){
+  if(fiSortField===f)fiSortDir=fiSortDir==='asc'?'desc':'asc';
+  else{fiSortField=f;fiSortDir='asc';}
+  renderFiTabella();
+}
+
 function renderFiTabella(){
   const search=(document.getElementById('fi-search')?.value||'').toLowerCase();
   const fTipo=document.getElementById('fi-filter-tipo')?.value||'';
@@ -5834,11 +5841,6 @@ function renderFiTabella(){
   function fiArrow(f){
     if(fiSortField!==f)return'<span style="font-size:10px;margin-left:4px;color:var(--text3);opacity:.5">⇅</span>';
     return fiSortDir==='asc'?'<span style="font-size:11px;margin-left:4px;color:var(--accent);font-weight:700">↑</span>':'<span style="font-size:11px;margin-left:4px;color:var(--accent);font-weight:700">↓</span>';
-  }
-  function setFiSort(f){
-    if(fiSortField===f)fiSortDir=fiSortDir==='asc'?'desc':'asc';
-    else{fiSortField=f;fiSortDir='asc';}
-    renderFiTabella();
   }
 
   const wrap=document.getElementById('fi-tbl-wrap');
@@ -6307,6 +6309,62 @@ init();
     <div style="padding:14px 24px;border-top:1px solid var(--border);background:var(--bg2);display:flex;justify-content:space-between;align-items:center">
       <button class="btn btn-s" onclick="closeFiImport()">Annulla</button>
       <button class="btn btn-p" id="fi-import-btn" onclick="confirmFiImport()" style="display:none"><span class="material-symbols-outlined" style="font-size:14px">check</span>Importa <span id="fi-import-count">0</span> abbonati</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ABBONATO FI -->
+<div class="mover" id="fi-modal" style="display:none" onclick="if(event.target===this)closeFiModal()">
+  <div class="modal" style="max-width:520px;padding:0;overflow:hidden">
+    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px">Form. Illimitata › <span style="color:var(--accent)" id="fi-modal-breadcrumb">Nuovo abbonato</span></div>
+        <div class="font-headline" style="font-size:16px;font-weight:800;color:var(--text)" id="fi-modal-title">Nuovo abbonato</div>
+      </div>
+      <button class="mclose" onclick="closeFiModal()">✕</button>
+    </div>
+    <div style="padding:20px 24px;max-height:calc(92vh - 70px);overflow-y:auto;display:flex;flex-direction:column;gap:14px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="fg"><label class="flbl">Nome *</label><input type="text" class="finp" id="fi-nome" placeholder="Mario"></div>
+        <div class="fg"><label class="flbl">Cognome *</label><input type="text" class="finp" id="fi-cognome" placeholder="Rossi"></div>
+      </div>
+      <div class="fg"><label class="flbl">Email</label><input type="email" class="finp" id="fi-email" placeholder="mario.rossi@esempio.it"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="fg">
+          <label class="flbl">Tipo abbonamento *</label>
+          <select class="finp" id="fi-tipo" onchange="document.getElementById('fi-motivazione-row').style.display=this.value==='non_rinnovo'?'block':'none'">
+            <option value="">— seleziona —</option>
+            <option value="singolo">Singolo</option>
+            <option value="duo">Duo</option>
+            <option value="studio">Studio</option>
+            <option value="non_rinnovo">Non rinnovo</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="flbl">Formula *</label>
+          <select class="finp" id="fi-formula">
+            <option value="">— seleziona —</option>
+            <option value="annuale">Annuale</option>
+            <option value="semestrale">Semestrale</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="fg"><label class="flbl">Data inizio</label><input type="date" class="finp" id="fi-inizio"></div>
+        <div class="fg"><label class="flbl">Data scadenza *</label><input type="date" class="finp" id="fi-scadenza"></div>
+      </div>
+      <div class="fg"><label class="flbl">Importo pagato (€)</label><input type="number" class="finp" id="fi-importo" placeholder="0.00" min="0" step="0.01"></div>
+      <div class="fg"><label class="flbl">Note</label><textarea class="finp" id="fi-note" placeholder="Note aggiuntive..." style="min-height:60px"></textarea></div>
+      <div id="fi-motivazione-row" style="display:none">
+        <div class="fg"><label class="flbl" style="color:var(--orange)">Motivazione non rinnovo</label><textarea class="finp" id="fi-motivazione" placeholder="Specifica il motivo..." style="min-height:60px;border-color:var(--orange)"></textarea></div>
+      </div>
+    </div>
+    <div style="padding:14px 24px;border-top:1px solid var(--border);background:var(--bg2);display:flex;justify-content:space-between;align-items:center">
+      <button class="btn btn-d btn-sm" id="fi-del-btn" onclick="deleteFiAbbonato()" style="display:none"><span class="material-symbols-outlined" style="font-size:14px">delete</span>Elimina</button>
+      <div style="display:flex;gap:8px;margin-left:auto">
+        <button class="btn btn-s" onclick="closeFiModal()">Annulla</button>
+        <button class="btn btn-p" onclick="saveFiAbbonato()"><span class="material-symbols-outlined" style="font-size:14px">save</span>Salva</button>
+      </div>
     </div>
   </div>
 </div>
