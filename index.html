@@ -864,7 +864,7 @@ textarea.finp{min-height:72px;resize:vertical}
         <div style="display:flex;gap:8px">
           <button class="btn btn-s btn-sm" onclick="exportFiCSV()"><span class="material-symbols-outlined" style="font-size:14px">download</span>Esporta CSV</button>
           <button class="btn btn-s btn-sm" onclick="openFiImport()"><span class="material-symbols-outlined" style="font-size:14px">upload_file</span>Importa CSV</button>
-          <button class="btn btn-p" onclick="openFiModal(null)"><span class="material-symbols-outlined" style="font-size:15px">add_circle</span>Nuovo abbonato</button>
+          <button class="btn btn-p" onclick="console.log('NUOVO CLICKED');alert('test');openFiModal(null)"><span class="material-symbols-outlined" style="font-size:15px">add_circle</span>Nuovo abbonato</button>
         </div>
       </div>
       <div class="kgrid" style="margin-bottom:20px">
@@ -1581,6 +1581,18 @@ textarea.finp{min-height:72px;resize:vertical}
 
 
 <script>
+window.onerror=function(msg,src,line,col,err){
+  var div=document.createElement('div');
+  div.style.cssText='position:fixed;top:0;left:0;right:0;background:#f00;color:#fff;padding:10px;z-index:99999;font:12px monospace;white-space:pre-wrap';
+  div.textContent='JS ERROR line '+line+': '+msg+'\n'+(err&&err.stack?err.stack:'');
+  document.body.appendChild(div);
+};
+window.addEventListener('unhandledrejection',function(e){
+  var div=document.createElement('div');
+  div.style.cssText='position:fixed;top:50px;left:0;right:0;background:#900;color:#fff;padding:10px;z-index:99999;font:12px monospace';
+  div.textContent='PROMISE ERROR: '+(e.reason&&e.reason.message||String(e.reason));
+  document.body.appendChild(div);
+});
 const SB_URL='https://bubevkjpvwioudohnkng.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ1YmV2a2pwdndpb3Vkb2hua25nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MjY0MTMsImV4cCI6MjA4OTQwMjQxM30.7DKQDh35nej0cL1bRM_jvR8i1AhzaYZYvEdcCQjxePk';
 const sb=supabase.createClient(SB_URL,SB_KEY);
@@ -5740,9 +5752,11 @@ function setFiChartType(chartId,type,btn){
 }
 
 function openFiModal(id){
+  console.log('openFiModal called with id:', id);
   try{
     editFiId=id||null;
     var isEdit=!!id;
+    console.log('fi-modal el:', document.getElementById('fi-modal'));
     document.getElementById('fi-modal-title').textContent=isEdit?'Modifica abbonato':'Nuovo abbonato';
     document.getElementById('fi-del-btn').style.display=isEdit?'flex':'none';
     var a=isEdit?DB_FI.find(function(x){return x.id===id;}):null;
@@ -5763,7 +5777,7 @@ function openFiModal(id){
       ['fi-inizio','fi-scadenza','fi-importo'].forEach(function(i){var el=document.getElementById(i);if(el)el.value='';});
       document.getElementById('fi-motivazione-row').style.display='none';
     }
-    document.getElementById('fi-modal').style.display='flex';
+    var modal=document.getElementById('fi-modal');console.log('Setting modal display, el:',modal);if(modal)modal.style.display='flex';
   }catch(err){alert('openFiModal Error: '+err.message);console.error(err);}
 }
 function closeFiModal(){document.getElementById('fi-modal').style.display='none';}
@@ -5900,17 +5914,15 @@ async function confirmFiImport(){
 
 
 // ── START ──
-window.onerror=function(msg,src,line,col,err){
-  var div=document.createElement('div');
-  div.style.cssText='position:fixed;top:0;left:0;right:0;background:#f00;color:#fff;padding:10px;z-index:99999;font:12px monospace';
-  div.textContent='JS ERROR line '+line+': '+msg;
-  document.body.appendChild(div);
-};
-window.addEventListener('unhandledrejection',function(e){
-  var div=document.createElement('div');
-  div.style.cssText='position:fixed;top:40px;left:0;right:0;background:#900;color:#fff;padding:10px;z-index:99999;font:12px monospace';
-  div.textContent='PROMISE ERROR: '+(e.reason&&e.reason.message||e.reason);
-  document.body.appendChild(div);
+document.addEventListener('DOMContentLoaded', function(){
+  // Direct event listeners for FI buttons as fallback
+  var newBtn = document.querySelector('#page-fi .btn-p[onclick*="openFiModal"]');
+  if(newBtn){
+    newBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      openFiModal(null);
+    });
+  }
 });
 init();
 </script>
