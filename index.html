@@ -169,7 +169,7 @@ td.mono{font-family:'SF Mono',monospace;font-size:11px;color:var(--text)}
 .pbg{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
 .pf{height:6px;border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1)}
 /* ── MODAL ── */
-.mover{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.mover{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
 .modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);width:100%;max-width:700px;max-height:92vh;overflow-y:auto;box-shadow:var(--shadow2)}
 .mhdr{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg2);z-index:1}
 .mtitle{font-size:15px;font-weight:700}
@@ -864,7 +864,7 @@ textarea.finp{min-height:72px;resize:vertical}
         <div style="display:flex;gap:8px">
           <button class="btn btn-s btn-sm" onclick="exportFiCSV()"><span class="material-symbols-outlined" style="font-size:14px">download</span>Esporta CSV</button>
           <button class="btn btn-s btn-sm" onclick="openFiImport()"><span class="material-symbols-outlined" style="font-size:14px">upload_file</span>Importa CSV</button>
-          <button class="btn btn-p" onclick="console.log('NUOVO CLICKED');alert('test');openFiModal(null)"><span class="material-symbols-outlined" style="font-size:15px">add_circle</span>Nuovo abbonato</button>
+          <button class="btn btn-p" onclick="openFiModal(null)"><span class="material-symbols-outlined" style="font-size:15px">add_circle</span>Nuovo abbonato</button>
         </div>
       </div>
       <div class="kgrid" style="margin-bottom:20px">
@@ -1452,7 +1452,7 @@ textarea.finp{min-height:72px;resize:vertical}
 
 
 <!-- FI ABBONATO MODAL -->
-<div class="mover" id="fi-modal" style="display:none" onclick="if(event.target===this)closeFiModal()">
+<div class="mover" id="fi-modal" style="display:none;z-index:500" onclick="if(event.target===this)closeFiModal()">
   <div class="modal" style="max-width:520px;padding:0;overflow:hidden">
     <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
       <div class="font-headline" style="font-size:16px;font-weight:800;color:var(--text)" id="fi-modal-title">Nuovo abbonato</div>
@@ -1505,7 +1505,7 @@ textarea.finp{min-height:72px;resize:vertical}
 </div>
 
 <!-- FI IMPORT MODAL -->
-<div class="mover" id="fi-import-modal" style="display:none" onclick="if(event.target===this)closeFiImport()">
+<div class="mover" id="fi-import-modal" style="display:none;z-index:500" onclick="if(event.target===this)closeFiImport()">
   <div class="modal" style="max-width:640px;padding:0;overflow:hidden">
     <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
       <div class="font-headline" style="font-size:16px;font-weight:800;color:var(--text)">Importa abbonati da CSV</div>
@@ -5752,11 +5752,9 @@ function setFiChartType(chartId,type,btn){
 }
 
 function openFiModal(id){
-  console.log('openFiModal called with id:', id);
   try{
     editFiId=id||null;
     var isEdit=!!id;
-    console.log('fi-modal el:', document.getElementById('fi-modal'));
     document.getElementById('fi-modal-title').textContent=isEdit?'Modifica abbonato':'Nuovo abbonato';
     document.getElementById('fi-del-btn').style.display=isEdit?'flex':'none';
     var a=isEdit?DB_FI.find(function(x){return x.id===id;}):null;
@@ -5777,7 +5775,7 @@ function openFiModal(id){
       ['fi-inizio','fi-scadenza','fi-importo'].forEach(function(i){var el=document.getElementById(i);if(el)el.value='';});
       document.getElementById('fi-motivazione-row').style.display='none';
     }
-    var modal=document.getElementById('fi-modal');console.log('Setting modal display, el:',modal);if(modal)modal.style.display='flex';
+    document.getElementById('fi-modal').style.display='flex';
   }catch(err){alert('openFiModal Error: '+err.message);console.error(err);}
 }
 function closeFiModal(){document.getElementById('fi-modal').style.display='none';}
@@ -5914,16 +5912,7 @@ async function confirmFiImport(){
 
 
 // ── START ──
-document.addEventListener('DOMContentLoaded', function(){
-  // Direct event listeners for FI buttons as fallback
-  var newBtn = document.querySelector('#page-fi .btn-p[onclick*="openFiModal"]');
-  if(newBtn){
-    newBtn.addEventListener('click', function(e){
-      e.stopPropagation();
-      openFiModal(null);
-    });
-  }
-});
+
 init();
 </script>
 </body>
