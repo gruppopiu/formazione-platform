@@ -1017,6 +1017,7 @@ textarea.finp{min-height:72px;resize:vertical}
         </div>
         <div style="display:flex;gap:8px">
           <button class="btn btn-s btn-sm" onclick="exportFiCSV()"><span class="material-symbols-outlined" style="font-size:14px">download</span>Esporta CSV</button>
+          <button class="btn btn-s btn-sm" onclick="openFiImport()"><span class="material-symbols-outlined" style="font-size:14px">upload_file</span>Importa CSV</button>
           <button class="btn btn-p" onclick="openFiModal(null)"><span class="material-symbols-outlined" style="font-size:15px">add_circle</span>Nuovo abbonato</button>
         </div>
       </div>
@@ -1051,29 +1052,7 @@ textarea.finp{min-height:72px;resize:vertical}
           <div class="kcard-stitch-label">Scaduti</div>
           <div class="kcard-stitch-val" id="fi-k-scad">—</div>
         </div>
-      </div>
-
-      <!-- GRAFICI -->
-      <div class="grid2" style="margin-bottom:16px">
-        <div class="card">
-          <div class="ctitle">Andamento abbonamenti <span class="ctitle-sub">nuovi vs persi per mese</span></div>
-          <div class="chw"><canvas id="ch-fi-andamento"></canvas></div>
-        </div>
-        <div class="card">
-          <div class="ctitle">Distribuzione tipologie <span class="ctitle-sub">singolo · duo · studio</span></div>
-          <div class="chw"><canvas id="ch-fi-tipi"></canvas></div>
-        </div>
-      </div>
-      <div class="grid2" style="margin-bottom:20px">
-        <div class="card">
-          <div class="ctitle">Formula abbonamento <span class="ctitle-sub">annuale vs semestrale</span></div>
-          <div class="chw"><canvas id="ch-fi-formula"></canvas></div>
-        </div>
-        <div class="card">
-          <div class="ctitle">Valore per tipologia <span class="ctitle-sub">ricavi suddivisi per tipo</span></div>
-          <div class="chw"><canvas id="ch-fi-val"></canvas></div>
-        </div>
-      </div>
+      
 
       <!-- FILTRI TABELLA -->
       <div class="filters" style="margin-bottom:12px">
@@ -1103,60 +1082,58 @@ textarea.finp{min-height:72px;resize:vertical}
           <div class="empty"><div class="ei">♾️</div><div class="et">Caricamento abbonati...</div></div>
         </div>
       </div>
-    </div>
 
-    <!-- MODAL ABBONATO FI -->
-    <div class="mover" id="fi-modal" style="display:none" onclick="if(event.target===this)closeFiModal()">
-      <div class="modal" style="max-width:520px;padding:0;overflow:hidden">
-        <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
-          <div>
-            <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px">Form. Illimitata › <span style="color:var(--accent)" id="fi-modal-breadcrumb">Nuovo abbonato</span></div>
-            <div class="font-headline" style="font-size:16px;font-weight:800;color:var(--text)" id="fi-modal-title">Nuovo abbonato</div>
-          </div>
-          <button class="mclose" onclick="closeFiModal()">✕</button>
-        </div>
-        <div style="padding:20px 24px;max-height:calc(92vh - 70px);overflow-y:auto;display:flex;flex-direction:column;gap:14px">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div class="fg"><label class="flbl">Nome *</label><input type="text" class="finp" id="fi-nome" placeholder="Mario"></div>
-            <div class="fg"><label class="flbl">Cognome *</label><input type="text" class="finp" id="fi-cognome" placeholder="Rossi"></div>
-          </div>
-          <div class="fg"><label class="flbl">Email</label><input type="email" class="finp" id="fi-email" placeholder="mario.rossi@esempio.it"></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div class="fg">
-              <label class="flbl">Tipo abbonamento *</label>
-              <select class="finp" id="fi-tipo">
-                <option value="">— seleziona —</option>
-                <option value="singolo">Singolo</option>
-                <option value="duo">Duo</option>
-                <option value="studio">Studio</option>
-              </select>
-            </div>
-            <div class="fg">
-              <label class="flbl">Formula *</label>
-              <select class="finp" id="fi-formula">
-                <option value="">— seleziona —</option>
-                <option value="annuale">Annuale</option>
-                <option value="semestrale">Semestrale</option>
-              </select>
+      <!-- GRAFICI -->
+      <div class="grid2" style="margin-bottom:16px">
+        <div class="card">
+          <div class="chart-toolbar">
+            <div class="ctitle" style="margin:0">Andamento abbonamenti <span class="ctitle-sub">nuovi vs persi per mese</span></div>
+            <div class="chart-type-btns" id="ctype-fi-and">
+              <button class="ct-btn on" onclick="setFiChartType('ch-fi-andamento','bar',this)">Bar</button>
+              <button class="ct-btn" onclick="setFiChartType('ch-fi-andamento','line',this)">Line</button>
             </div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div class="fg"><label class="flbl">Data inizio *</label><input type="date" class="finp" id="fi-inizio"></div>
-            <div class="fg"><label class="flbl">Data scadenza *</label><input type="date" class="finp" id="fi-scadenza"></div>
-          </div>
-          <div class="fg"><label class="flbl">Importo pagato (€) *</label><input type="number" class="finp" id="fi-importo" placeholder="0.00" min="0" step="0.01"></div>
-          <div class="fg"><label class="flbl">Note</label><textarea class="finp" id="fi-note" placeholder="Note aggiuntive..." style="min-height:60px"></textarea></div>
+          <div class="chw"><canvas id="ch-fi-andamento"></canvas></div>
         </div>
-        <div style="padding:14px 24px;border-top:1px solid var(--border);background:var(--bg2);display:flex;justify-content:space-between;align-items:center">
-          <button class="btn btn-d btn-sm" id="fi-del-btn" onclick="deleteFiAbbonato()" style="display:none"><span class="material-symbols-outlined" style="font-size:14px">delete</span>Elimina</button>
-          <div style="display:flex;gap:8px;margin-left:auto">
-            <button class="btn btn-s" onclick="closeFiModal()">Annulla</button>
-            <button class="btn btn-p" onclick="saveFiAbbonato()"><span class="material-symbols-outlined" style="font-size:14px">save</span>Salva</button>
+        <div class="card">
+          <div class="chart-toolbar">
+            <div class="ctitle" style="margin:0">Distribuzione tipologie <span class="ctitle-sub">singolo · duo · studio</span></div>
+            <div class="chart-type-btns" id="ctype-fi-tipi">
+              <button class="ct-btn on" onclick="setFiChartType('ch-fi-tipi','doughnut',this)">Donut</button>
+              <button class="ct-btn" onclick="setFiChartType('ch-fi-tipi','pie',this)">Pie</button>
+              <button class="ct-btn" onclick="setFiChartType('ch-fi-tipi','bar',this)">Bar</button>
+            </div>
           </div>
+          <div class="chw"><canvas id="ch-fi-tipi"></canvas></div>
         </div>
       </div>
-    </div>
+      <div class="grid2" style="margin-bottom:20px">
+        <div class="card">
+          <div class="chart-toolbar">
+            <div class="ctitle" style="margin:0">Formula abbonamento <span class="ctitle-sub">annuale vs semestrale</span></div>
+            <div class="chart-type-btns" id="ctype-fi-formula">
+              <button class="ct-btn on" onclick="setFiChartType('ch-fi-formula','pie',this)">Pie</button>
+              <button class="ct-btn" onclick="setFiChartType('ch-fi-formula','doughnut',this)">Donut</button>
+              <button class="ct-btn" onclick="setFiChartType('ch-fi-formula','bar',this)">Bar</button>
+            </div>
+          </div>
+          <div class="chw"><canvas id="ch-fi-formula"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="chart-toolbar">
+            <div class="ctitle" style="margin:0">Valore per tipologia <span class="ctitle-sub">ricavi suddivisi per tipo</span></div>
+            <div class="chart-type-btns" id="ctype-fi-val">
+              <button class="ct-btn on" onclick="setFiChartType('ch-fi-val','bar',this)">Bar</button>
+              <button class="ct-btn" onclick="setFiChartType('ch-fi-val','line',this)">Line</button>
+              <button class="ct-btn" onclick="setFiChartType('ch-fi-val','pie',this)">Pie</button>
+            </div>
+          </div>
+          <div class="chw"><canvas id="ch-fi-val"></canvas></div>
+        </div>
+      </div>
 
+      
+    </div>
     <!-- IMPORTA -->
     <div class="page" id="page-importa">
       <div class="ph"><div><div class="pt">Importa CSV</div><div class="ps">Carica dati storici</div></div></div>
@@ -2898,11 +2875,6 @@ async function loadEventsOnly(){
     if(!r.error){DB=r.data||[];setConn('ok','Connesso');}
   }catch(e){setConn('err','Errore');DB=[];}
   try{const r=await sb.from('formatori_data').select('*');if(!r.error)(r.data||[]).forEach(f=>{FM_DATA[f.nome]=f;});}catch(e){}
-  // Load FI abbonati
-  try{
-    const fiRes=await sb.from('fi_abbonati').select('*').order('scadenza',{ascending:true});
-    if(!fiRes.error)DB_FI=fiRes.data||[];
-  }catch(e){console.warn('fi_abbonati load error:',e);}
   renderAll();
 }
 
@@ -2950,6 +2922,11 @@ async function loadAll(){
       pruneNotifiche();
     }
   }catch(e){}
+  // Load FI abbonati
+  try{
+    const fiRes=await sb.from('fi_abbonati').select('*').order('scadenza',{ascending:true});
+    if(!fiRes.error)DB_FI=fiRes.data||[];
+  }catch(e){console.warn('fi_abbonati load error:',e);}
   renderAll();
 }
 
@@ -3913,7 +3890,9 @@ function renderCommerciale(){
   document.getElementById('c-pag').textContent=ip;
   document.getElementById('c-pres').textContent=pp;
   document.getElementById('c-tasso').textContent=ta+'%';
-  document.getElementById('c-ric').textContent=fmtEuro(ric,2);
+  const ricFI=DB_FI.filter(a=>a.tipo!=='non_rinnovo').reduce((s,a)=>s+(parseFloat(a.importo)||0),0);
+  const ricTot=ric+ricFI;
+  document.getElementById('c-ric').textContent=fmtEuro(ricTot,2);
   // FI section
   const fi_isc=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
   const fi_pres=kpi.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
@@ -3985,26 +3964,37 @@ function renderChartRicavi(id,range,offset){
   const type=chartTypes[id]||'bar';
   const cRic=getThemeChartColors();
   const colRic=cRic[2];
-  let labels,mR;
+  const colFI=cRic[1];
+  let labels,mR,mFI;
   if(!range||range==='all'||range==='1y'||range==='6m'){
     mR=Array(12).fill(0);
+    mFI=Array(12).fill(0);
     kpi.forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mR[m]+=(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0);}});
+    // Add FI monthly revenues (based on data_inizio)
+    DB_FI.filter(a=>a.tipo!=='non_rinnovo').forEach(a=>{
+      const d=a.data_inizio||a.scadenza;
+      if(d){const m=parseInt(d.split('-')[1])-1;mFI[m]+=(parseFloat(a.importo)||0);}
+    });
     labels=MESI;
   } else {
-    // Daily grouping
     const nDays=range==='7d'?7:30;
-    const buckets={};
+    const buckets={},bucketsFI={};
     kpi.forEach(e=>{if(!e.data)return;const d=e.data;buckets[d]=(buckets[d]||0)+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0);});
+    DB_FI.filter(a=>a.tipo!=='non_rinnovo').forEach(a=>{const d=a.data_inizio||a.scadenza;if(d)bucketsFI[d]=(bucketsFI[d]||0)+(parseFloat(a.importo)||0);});
     const pts=[];
     for(let i=nDays-1;i>=0;i--){
       const d=new Date();d.setDate(d.getDate()-i+(offset*nDays));
       const key=d.toISOString().slice(0,10);
       const lbl=range==='7d'?['Dom','Lun','Mar','Mer','Gio','Ven','Sab'][d.getDay()]+' '+d.getDate():d.getDate()+'/'+String(d.getMonth()+1).padStart(2,'0');
-      pts.push({lbl,val:buckets[key]||0});
+      pts.push({lbl,ev:buckets[key]||0,fi:bucketsFI[key]||0});
     }
-    labels=pts.map(p=>p.lbl);mR=pts.map(p=>p.val);
+    labels=pts.map(p=>p.lbl);mR=pts.map(p=>p.ev);mFI=pts.map(p=>p.fi);
   }
-  renderChartGrad(id,type,labels,[{label:'Ricavi €',data:mR,backgroundColor:type==='line'?colRic+'22':colRic+'88',borderColor:colRic,borderWidth:2,borderRadius:type==='line'?0:4,fill:type==='line',tension:.4,pointRadius:type==='line'?3:0,pointBackgroundColor:colRic}]);
+  const mk=(col)=>({backgroundColor:type==='line'?col+'22':col+'88',borderColor:col,borderWidth:2,borderRadius:type==='line'?0:4,fill:type==='line',tension:.4,pointRadius:type==='line'?3:0,pointBackgroundColor:col});
+  renderChartGrad(id,type,labels,[
+    {label:'Ricavi eventi €',data:mR,...mk(colRic)},
+    {label:'Ricavi FI €',data:mFI,...mk(colFI)}
+  ],{stacked:type==='bar'});
 }
 
 // ── CALENDARIO ──
@@ -5741,7 +5731,11 @@ let fiSortField='scadenza', fiSortDir='asc', editFiId=null;
 let chFiAndamento=null, chFiTipi=null, chFiFormula=null, chFiVal=null;
 
 // Status logic
-function getFiStatus(scadenza){
+function getFiStatus(abbonato){
+  // accept either scadenza string or full abbonato object
+  const scadenza=typeof abbonato==='string'?abbonato:abbonato?.scadenza;
+  const tipo=typeof abbonato==='object'?abbonato?.tipo:null;
+  if(tipo==='non_rinnovo')return'non_rinnovo';
   if(!scadenza)return'regola';
   const d=new Date(scadenza+'T00:00:00');
   const now=new Date(); now.setHours(0,0,0,0);
@@ -5750,26 +5744,27 @@ function getFiStatus(scadenza){
   if(diff<=30)return'scadenza';
   return'regola';
 }
-function getFiStatusLabel(s){return{regola:'In regola',scadenza:'In scadenza',scaduto:'Scaduto'}[s]||s;}
+function getFiStatusLabel(s){return{regola:'In regola',scadenza:'In scadenza',scaduto:'Scaduto',non_rinnovo:'Non rinnovo'}[s]||s;}
 function getFiStatusColors(s){
-  if(s==='regola')   return{color:'var(--green)',bg:'var(--green-bg)',border:'var(--green)'};
-  if(s==='scadenza') return{color:'var(--yellow)',bg:'var(--orange-bg)',border:'var(--orange)'};
-  return                     {color:'var(--red)',  bg:'var(--red-bg)',  border:'var(--red)'};
+  if(s==='regola')     return{color:'var(--green)', bg:'var(--green-bg)', border:'var(--green)'};
+  if(s==='scadenza')   return{color:'var(--yellow)',bg:'var(--orange-bg)',border:'var(--orange)'};
+  if(s==='non_rinnovo')return{color:'var(--text3)', bg:'var(--bg3)',      border:'var(--border2)'};
+  return                      {color:'var(--red)',  bg:'var(--red-bg)',   border:'var(--red)'};
 }
 function getFiTipoLabel(t){return{singolo:'Singolo',duo:'Duo',studio:'Studio'}[t]||t||'—';}
 function getFiFormulaLabel(f){return{annuale:'Annuale',semestrale:'Semestrale'}[f]||f||'—';}
 
 // Compute FI stats from DB_FI
 function getFiStats(){
-  const today=new Date(); today.setHours(0,0,0,0);
-  const attivi=DB_FI.filter(a=>getFiStatus(a.scadenza)!=='scaduto');
+  const attivi=DB_FI.filter(a=>!['scaduto','non_rinnovo'].includes(getFiStatus(a)));
   const tot=DB_FI.length;
   const totAttivi=attivi.length;
-  const inScadenza=DB_FI.filter(a=>getFiStatus(a.scadenza)==='scadenza').length;
-  const scaduti=DB_FI.filter(a=>getFiStatus(a.scadenza)==='scaduto').length;
-  const valTot=DB_FI.reduce((s,a)=>s+(parseFloat(a.importo)||0),0);
-  const valAttivi=attivi.reduce((s,a)=>s+(parseFloat(a.importo)||0),0);
-  return{tot,totAttivi,inScadenza,scaduti,valTot,valAttivi};
+  const inScadenza=DB_FI.filter(a=>getFiStatus(a)==='scadenza').length;
+  const scaduti=DB_FI.filter(a=>getFiStatus(a)==='scaduto').length;
+  const nonRinnovo=DB_FI.filter(a=>getFiStatus(a)==='non_rinnovo').length;
+  const valTot=attivi.reduce((s,a)=>s+(parseFloat(a.importo)||0),0); // solo attivi
+  const valAttivi=valTot;
+  return{tot,totAttivi,inScadenza,scaduti,nonRinnovo,valTot,valAttivi};
 }
 
 // ── Render home widget ──
@@ -5815,7 +5810,7 @@ function renderFiTabella(){
     if(search&&!`${a.nome||''} ${a.cognome||''}`.toLowerCase().includes(search))return false;
     if(fTipo&&a.tipo!==fTipo)return false;
     if(fFormula&&a.formula!==fFormula)return false;
-    if(fStato&&getFiStatus(a.scadenza)!==fStato)return false;
+    if(fStato&&getFiStatus(a)!==fStato)return false;
     return true;
   });
 
@@ -5828,7 +5823,7 @@ function renderFiTabella(){
       case'formula': va=a.formula||'';vb=b.formula||'';break;
       case'scadenza':va=a.scadenza||'';vb=b.scadenza||'';break;
       case'importo': va=parseFloat(a.importo)||0;vb=parseFloat(b.importo)||0;break;
-      case'stato':   va=getFiStatus(a.scadenza);vb=getFiStatus(b.scadenza);break;
+      case'stato':   va=getFiStatus(a);vb=getFiStatus(b.scadenza);break;
       default:       va=a.scadenza||'';vb=b.scadenza||'';
     }
     if(va<vb)return fiSortDir==='asc'?-1:1;
@@ -5863,14 +5858,17 @@ function renderFiTabella(){
     <th onclick="setFiSort('stato')" style="cursor:pointer;user-select:none">Status${fiArrow('stato')}</th>
     <th>Azioni</th>
   </tr></thead><tbody>${rows.map(a=>{
-    const st=getFiStatus(a.scadenza);
+    const st=getFiStatus(a);
     const sc=getFiStatusColors(st);
     const lbl=getFiStatusLabel(st);
     const scadStr=a.scadenza?new Date(a.scadenza+'T00:00:00').toLocaleDateString('it-IT',{day:'2-digit',month:'short',year:'numeric'}):'—';
     const impStr=a.importo?fmtEuro(parseFloat(a.importo),2):'—';
     const rowBg=st==='scaduto'?'background:var(--red-bg)':st==='scadenza'?'background:var(--orange-bg)':'';
     return`<tr style="${rowBg}">
-      <td style="padding:10px 12px;font-weight:600;color:var(--text)">${a.nome||''} ${a.cognome||''}</td>
+      <td style="padding:10px 12px">
+        <div style="font-weight:600;color:var(--text)">${a.nome||''} ${a.cognome||''}</div>
+        ${a.tipo==='non_rinnovo'&&a.motivazione_non_rinnovo?`<div style="font-size:10px;color:var(--text3);margin-top:2px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${a.motivazione_non_rinnovo}">💬 ${a.motivazione_non_rinnovo}</div>`:''}
+      </td>
       <td style="padding:10px 12px"><span class="badge" style="background:var(--accent-bg);color:var(--accent)">${getFiTipoLabel(a.tipo)}</span></td>
       <td style="padding:10px 12px;font-size:12px;color:var(--text2)">${getFiFormulaLabel(a.formula)}</td>
       <td style="padding:10px 12px;font-size:12px;color:${sc.color};font-weight:600">${scadStr}</td>
@@ -5899,12 +5897,13 @@ function renderFiCharts(){
     const mmStr=String(m+1).padStart(2,'0');
     const yStr=String(y);
     nuovi.push(DB_FI.filter(a=>a.data_inizio&&a.data_inizio.startsWith(`${yStr}-${mmStr}`)).length);
-    persi.push(DB_FI.filter(a=>a.scadenza&&a.scadenza.startsWith(`${yStr}-${mmStr}`)&&getFiStatus(a.scadenza)==='scaduto').length);
+    persi.push(DB_FI.filter(a=>a.scadenza&&a.scadenza.startsWith(`${yStr}-${mmStr}`)&&getFiStatus(a)==='scaduto').length);
   }
   const ctx1=document.getElementById('ch-fi-andamento');
   if(ctx1){
     if(chFiAndamento)chFiAndamento.destroy();
-    chFiAndamento=new Chart(ctx1,{type:'bar',data:{labels:months,datasets:[
+    const fiAndType=document.querySelector('#ctype-fi-and .ct-btn.on')?.textContent?.toLowerCase()==='line'?'line':'bar';
+    chFiAndamento=new Chart(ctx1,{type:fiAndType,data:{labels:months,datasets:[
       {label:'Nuovi',data:nuovi,backgroundColor:'rgba(var(--accent-rgb),.7)',borderRadius:4},
       {label:'Scaduti',data:persi,backgroundColor:'rgba(239,68,68,.5)',borderRadius:4}
     ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}}}},scales:{x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}},y:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}}}});
@@ -5917,7 +5916,8 @@ function renderFiCharts(){
   const ctx2=document.getElementById('ch-fi-tipi');
   if(ctx2){
     if(chFiTipi)chFiTipi.destroy();
-    chFiTipi=new Chart(ctx2,{type:'doughnut',data:{labels:tipiLabels,datasets:[{data:tipiCounts,backgroundColor:['rgba(99,102,241,.8)','rgba(0,218,243,.7)','rgba(16,185,129,.7)'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}}}}}});
+    const fiTipiType=document.querySelector('#ctype-fi-tipi .ct-btn.on')?.textContent?.toLowerCase()||'doughnut';
+    chFiTipi=new Chart(ctx2,{type:fiTipiType==='pie'?'pie':fiTipiType==='bar'?'bar':'doughnut',data:{labels:tipiLabels,datasets:[{data:tipiCounts,backgroundColor:['rgba(99,102,241,.8)','rgba(0,218,243,.7)','rgba(16,185,129,.7)'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}}}}}});
   }
 
   // Chart 3: Formula annuale vs semestrale
@@ -5927,7 +5927,8 @@ function renderFiCharts(){
   const ctx3=document.getElementById('ch-fi-formula');
   if(ctx3){
     if(chFiFormula)chFiFormula.destroy();
-    chFiFormula=new Chart(ctx3,{type:'pie',data:{labels:formuleLabels,datasets:[{data:formuleCounts,backgroundColor:['rgba(99,102,241,.8)','rgba(0,218,243,.7)'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}}}}}});
+    const fiFormulaType=document.querySelector('#ctype-fi-formula .ct-btn.on')?.textContent?.toLowerCase()||'pie';
+    chFiFormula=new Chart(ctx3,{type:fiFormulaType==='doughnut'?'doughnut':fiFormulaType==='bar'?'bar':'pie',data:{labels:formuleLabels,datasets:[{data:formuleCounts,backgroundColor:['rgba(99,102,241,.8)','rgba(0,218,243,.7)'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}}}}}});
   }
 
   // Chart 4: Valore per tipologia
@@ -5935,7 +5936,8 @@ function renderFiCharts(){
   const ctx4=document.getElementById('ch-fi-val');
   if(ctx4){
     if(chFiVal)chFiVal.destroy();
-    chFiVal=new Chart(ctx4,{type:'bar',data:{labels:tipiLabels,datasets:[{label:'Valore (€)',data:valPerTipo,backgroundColor:['rgba(99,102,241,.7)','rgba(0,218,243,.6)','rgba(16,185,129,.6)'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,font:{size:10}},grid:{display:false}},y:{ticks:{color:tc,font:{size:9},callback:v=>'€'+v.toLocaleString('it')},grid:{color:gc}}}}});
+    const fiValType=document.querySelector('#ctype-fi-val .ct-btn.on')?.textContent?.toLowerCase()||'bar';
+    chFiVal=new Chart(ctx4,{type:fiValType==='line'?'line':fiValType==='pie'?'pie':'bar',data:{labels:tipiLabels,datasets:[{label:'Valore (€)',data:valPerTipo,backgroundColor:['rgba(99,102,241,.7)','rgba(0,218,243,.6)','rgba(16,185,129,.6)'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,font:{size:10}},grid:{display:false}},y:{ticks:{color:tc,font:{size:9},callback:v=>'€'+v.toLocaleString('it')},grid:{color:gc}}}}});
   }
 }
 
@@ -5958,8 +5960,11 @@ function openFiModal(id){
     document.getElementById('fi-scadenza').value=a.scadenza||'';
     document.getElementById('fi-importo').value=a.importo||'';
     document.getElementById('fi-note').value=a.note||'';
+    document.getElementById('fi-motivazione').value=a.motivazione_non_rinnovo||'';
+    document.getElementById('fi-motivazione-row').style.display=a.tipo==='non_rinnovo'?'block':'none';
   } else {
-    ['fi-nome','fi-cognome','fi-email','fi-note'].forEach(id=>document.getElementById(id).value='');
+    ['fi-nome','fi-cognome','fi-email','fi-note','fi-motivazione'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('fi-motivazione-row').style.display='none';
     ['fi-tipo','fi-formula'].forEach(id=>document.getElementById(id).value='');
     ['fi-inizio','fi-scadenza','fi-importo'].forEach(id=>document.getElementById(id).value='');
   }
@@ -5985,6 +5990,7 @@ async function saveFiAbbonato(){
     scadenza,
     importo:parseFloat(document.getElementById('fi-importo').value)||0,
     note:document.getElementById('fi-note').value||null,
+    motivazione_non_rinnovo:document.getElementById('fi-motivazione').value||null,
     updated_at:new Date().toISOString()
   };
   try{
@@ -6021,7 +6027,7 @@ function exportFiCSV(){
     a.nome||'',a.cognome||'',a.email||'',
     getFiTipoLabel(a.tipo),getFiFormulaLabel(a.formula),
     a.data_inizio||'',a.scadenza||'',
-    a.importo||0,getFiStatusLabel(getFiStatus(a.scadenza)),a.note||''
+    a.importo||0,getFiStatusLabel(getFiStatus(a)),a.note||''
   ]);
   const csv=[headers,...rows].map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
   const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
@@ -6029,6 +6035,181 @@ function exportFiCSV(){
   const a=document.createElement('a');a.href=url;a.download='fi_abbonati.csv';a.click();
   URL.revokeObjectURL(url);
   showToast('CSV esportato','ok');
+}
+
+
+// ── FI CSV IMPORT ──
+let fiImportRows = [];
+
+function openFiImport(){
+  fiImportRows=[];
+  document.getElementById('fi-import-preview').style.display='none';
+  document.getElementById('fi-import-btn').style.display='none';
+  document.getElementById('fi-csv-input').value='';
+  document.getElementById('fi-import-modal').style.display='flex';
+}
+function closeFiImport(){
+  document.getElementById('fi-import-modal').style.display='none';
+}
+function handleFiDrop(e){
+  const file=e.dataTransfer.files[0];
+  if(file)handleFiFile(file);
+}
+function handleFiFile(file){
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>parseFiCSV(ev.target.result);
+  reader.readAsText(file,'UTF-8');
+}
+
+function parseFiCSV(text){
+  // Normalize line endings, split rows
+  const lines=text.replace(/
+/g,'
+').replace(/
+/g,'
+').trim().split('
+');
+  if(lines.length<2){showToast('File vuoto o senza dati','err');return;}
+
+  // Parse header
+  const header=lines[0].split(',').map(h=>h.trim().toLowerCase().replace(/['"]/g,''));
+  const requiredCols=['nome','cognome','tipo','formula','scadenza'];
+  const missing=requiredCols.filter(c=>!header.includes(c));
+  if(missing.length){showToast('Colonne mancanti: '+missing.join(', '),'err');return;}
+
+  const idxOf=col=>header.indexOf(col);
+
+  const rows=[];
+  const errors=[];
+  for(let i=1;i<lines.length;i++){
+    const line=lines[i].trim();
+    if(!line)continue;
+    // Handle quoted fields with commas inside
+    const cols=line.match(/(".*?"|[^,]+)(?=,|$)/g)||line.split(',');
+    const clean=col=>(cols[idxOf(col)]||'').replace(/^"|"$/g,'').trim();
+
+    const nome=clean('nome');
+    const cognome=clean('cognome');
+    const tipo=clean('tipo').toLowerCase();
+    const formula=clean('formula').toLowerCase();
+    const scadenza=clean('scadenza');
+
+    const rowErrors=[];
+    if(!nome||!cognome)rowErrors.push('nome/cognome mancante');
+    if(!['singolo','duo','studio'].includes(tipo))rowErrors.push('tipo non valido: '+tipo);
+    if(!['annuale','semestrale'].includes(formula))rowErrors.push('formula non valida: '+formula);
+    if(!scadenza||!/^\d{4}-\d{2}-\d{2}$/.test(scadenza))rowErrors.push('scadenza non valida (usa YYYY-MM-DD)');
+
+    rows.push({
+      nome, cognome,
+      email:clean('email')||null,
+      tipo, formula, scadenza,
+      data_inizio:clean('data_inizio')||null,
+      importo:parseFloat(clean('importo').replace(',','.'))||0,
+      note:clean('note')||null,
+      _errors:rowErrors,
+      _row:i+1
+    });
+  }
+
+  fiImportRows=rows;
+  renderFiImportPreview(rows);
+}
+
+function renderFiImportPreview(rows){
+  const ok=rows.filter(r=>r._errors.length===0);
+  const err=rows.filter(r=>r._errors.length>0);
+  const summary=document.getElementById('fi-import-summary');
+  summary.innerHTML=`<span style="color:var(--green)">${ok.length} pronti per l'importazione</span>`
+    +(err.length?` · <span style="color:var(--red)">${err.length} con errori (verranno saltati)</span>`:'');
+
+  const tbl=document.getElementById('fi-import-table');
+  tbl.innerHTML=`<thead><tr style="background:var(--bg3)">
+    <th style="padding:7px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">#</th>
+    <th style="padding:7px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Nome</th>
+    <th style="padding:7px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Tipo</th>
+    <th style="padding:7px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Formula</th>
+    <th style="padding:7px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Scadenza</th>
+    <th style="padding:7px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Importo</th>
+    <th style="padding:7px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Esito</th>
+  </tr></thead><tbody>${rows.map(r=>{
+    const hasErr=r._errors.length>0;
+    const rowBg=hasErr?'background:var(--red-bg)':'';
+    return`<tr style="${rowBg}">
+      <td style="padding:7px 10px;font-size:11px;color:var(--text3)">${r._row}</td>
+      <td style="padding:7px 10px;font-size:12px;font-weight:600;color:var(--text)">${r.nome} ${r.cognome}</td>
+      <td style="padding:7px 10px;font-size:11px;color:var(--text2)">${r.tipo}</td>
+      <td style="padding:7px 10px;font-size:11px;color:var(--text2)">${r.formula}</td>
+      <td style="padding:7px 10px;font-size:11px;color:var(--text2)">${r.scadenza}</td>
+      <td style="padding:7px 10px;font-size:11px;color:var(--text2)">${r.importo?'€'+r.importo.toFixed(2):'—'}</td>
+      <td style="padding:7px 10px;font-size:10px">${hasErr
+        ?'<span style="color:var(--red)">⚠ '+r._errors.join('; ')+'</span>'
+        :'<span style="color:var(--green)">✓ OK</span>'}</td>
+    </tr>`;
+  }).join('')}</tbody>`;
+
+  document.getElementById('fi-import-preview').style.display='block';
+  const btn=document.getElementById('fi-import-btn');
+  btn.style.display=ok.length>0?'flex':'none';
+  document.getElementById('fi-import-count').textContent=ok.length;
+}
+
+async function confirmFiImport(){
+  const ok=fiImportRows.filter(r=>r._errors.length===0);
+  if(!ok.length)return;
+  const conflict=document.getElementById('fi-import-conflict').value;
+  const btn=document.getElementById('fi-import-btn');
+  btn.disabled=true;btn.textContent='Importazione in corso...';
+
+  let inserted=0, updated=0, skipped=0;
+  for(const row of ok){
+    const payload={
+      nome:row.nome, cognome:row.cognome, email:row.email,
+      tipo:row.tipo, formula:row.formula,
+      data_inizio:row.data_inizio, scadenza:row.scadenza,
+      importo:row.importo, note:row.note,
+      updated_at:new Date().toISOString()
+    };
+    // Check if exists (same nome+cognome, case-insensitive)
+    const existing=DB_FI.find(a=>
+      a.nome.trim().toLowerCase()===row.nome.toLowerCase()&&
+      a.cognome.trim().toLowerCase()===row.cognome.toLowerCase()
+    );
+    if(existing){
+      if(conflict==='update'){
+        const{error}=await sb.from('fi_abbonati').update(payload).eq('id',existing.id);
+        if(!error)updated++;
+      } else {
+        skipped++;
+      }
+    } else {
+      const{error}=await sb.from('fi_abbonati').insert(payload);
+      if(!error)inserted++;
+    }
+  }
+
+  // Reload
+  const res=await sb.from('fi_abbonati').select('*').order('scadenza',{ascending:true});
+  if(!res.error)DB_FI=res.data||[];
+  renderFI();renderFIHome();
+  closeFiImport();
+  showToast(`Importati ${inserted}, aggiornati ${updated}, saltati ${skipped}`,'ok');
+  btn.disabled=false;
+}
+
+
+function setFiChartType(chartId,type,btn){
+  const parent=btn.closest('.chart-type-btns');
+  parent.querySelectorAll('.ct-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  // Store type and re-render
+  if(chartId==='ch-fi-andamento'){
+    if(chFiAndamento)chFiAndamento.destroy();
+    renderFiCharts();
+  } else if(chartId==='ch-fi-tipi'||chartId==='ch-fi-formula'||chartId==='ch-fi-val'){
+    renderFiCharts();
+  }
 }
 
 // ── START ──
@@ -6066,6 +6247,66 @@ init();
     <!-- footer -->
     <div style="padding:12px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;flex-shrink:0">
       <button class="btn btn-s" onclick="closeCfpDetail()">Chiudi</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- FI IMPORT CSV MODAL -->
+<div class="mover" id="fi-import-modal" style="display:none" onclick="if(event.target===this)closeFiImport()">
+  <div class="modal" style="max-width:640px;padding:0;overflow:hidden">
+    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px">Form. Illimitata › Importa</div>
+        <div class="font-headline" style="font-size:16px;font-weight:800;color:var(--text)">Importa abbonati da CSV</div>
+      </div>
+      <button class="mclose" onclick="closeFiImport()">✕</button>
+    </div>
+    <div style="padding:20px 24px;max-height:calc(92vh - 140px);overflow-y:auto;display:flex;flex-direction:column;gap:16px">
+
+      <!-- FORMAT HINT -->
+      <div style="background:var(--accent-bg);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r);padding:12px 14px;font-size:11px;color:var(--text2);line-height:1.6">
+        <div style="font-weight:700;color:var(--accent);margin-bottom:4px;font-size:10px;text-transform:uppercase;letter-spacing:.08em">Formato atteso (intestazioni obbligatorie)</div>
+        <code style="display:block;background:var(--bg3);border-radius:6px;padding:8px 10px;font-size:10px;color:var(--text);margin-top:6px;line-height:1.8">nome, cognome, email, tipo, formula, data_inizio, scadenza, importo, note</code>
+        <div style="margin-top:8px;font-size:10px;color:var(--text3)">
+          <b>tipo:</b> singolo · duo · studio &nbsp;|&nbsp; <b>formula:</b> annuale · semestrale &nbsp;|&nbsp;
+          <b>date:</b> YYYY-MM-DD &nbsp;|&nbsp; <b>importo:</b> numero decimale (es. 199.00)
+        </div>
+      </div>
+
+      <!-- CONFLICT OPTION -->
+      <div style="display:flex;align-items:center;gap:10px">
+        <label style="font-size:12px;font-weight:600;color:var(--text2)">Se abbonato già presente (stesso nome+cognome):</label>
+        <select class="finp" id="fi-import-conflict" style="max-width:180px">
+          <option value="skip">Salta (mantieni esistente)</option>
+          <option value="update">Aggiorna con nuovo dato</option>
+        </select>
+      </div>
+
+      <!-- DROP ZONE -->
+      <div id="fi-drop-zone" onclick="document.getElementById('fi-csv-input').click()"
+        style="border:2px dashed var(--border2);border-radius:var(--r2);padding:32px;text-align:center;cursor:pointer;transition:all .2s"
+        ondragover="event.preventDefault();this.style.borderColor='var(--accent)';this.style.background='var(--accent-bg)'"
+        ondragleave="this.style.borderColor='';this.style.background=''"
+        ondrop="event.preventDefault();this.style.borderColor='';this.style.background='';handleFiDrop(event)">
+        <span class="material-symbols-outlined" style="font-size:36px;color:var(--text3);display:block;margin-bottom:8px">upload_file</span>
+        <div style="font-size:13px;font-weight:600;color:var(--text2)">Trascina il file CSV qui</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px">oppure clicca per selezionare</div>
+        <input type="file" id="fi-csv-input" accept=".csv" style="display:none" onchange="handleFiFile(this.files[0])">
+      </div>
+
+      <!-- PREVIEW -->
+      <div id="fi-import-preview" style="display:none">
+        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px" id="fi-import-summary"></div>
+        <div style="max-height:260px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+          <table style="width:100%;border-collapse:collapse;font-size:11px" id="fi-import-table"></table>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:14px 24px;border-top:1px solid var(--border);background:var(--bg2);display:flex;justify-content:space-between;align-items:center">
+      <button class="btn btn-s" onclick="closeFiImport()">Annulla</button>
+      <button class="btn btn-p" id="fi-import-btn" onclick="confirmFiImport()" style="display:none"><span class="material-symbols-outlined" style="font-size:14px">check</span>Importa <span id="fi-import-count">0</span> abbonati</button>
     </div>
   </div>
 </div>
