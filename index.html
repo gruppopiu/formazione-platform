@@ -5461,6 +5461,7 @@ function renderFI(){
   renderFiCharts();
 }
 
+function fiCsvClick(){var i=document.getElementById('fi-csv-input');if(i)i.click();}
 function fiToggleMotiv(val){
   var r=document.getElementById('fi-motivazione-row');
   if(r)r.style.display=val==='non_rinnovo'?'block':'none';
@@ -5789,12 +5790,48 @@ function exportFiCSV(){
 
 function openFiImport(){
   fiImportRows=[];
-  document.getElementById('fi-import-preview').style.display='none';
-  document.getElementById('fi-import-btn').style.display='none';
-  document.getElementById('fi-csv-input').value='';
-
+  var old2=document.getElementById('fi-import-overlay');
+  if(old2)old2.parentNode.removeChild(old2);
+  var overlay2=document.createElement('div');
+  overlay2.id='fi-import-overlay';
+  overlay2.style.cssText='position:absolute;top:0;left:0;width:100%;min-height:100%;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;box-sizing:border-box;';
+  overlay2.onclick=function(e){if(e.target===overlay2)closeFiImport();};
+  overlay2.innerHTML='<div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;width:100%;max-width:640px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3)">'
+    +'<div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">'
+    +'<div style="font-size:16px;font-weight:800;color:var(--text)">Importa abbonati da CSV</div>'
+    +'<button onclick="closeFiImport()" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--text3);padding:4px 8px">&#x2715;</button>'
+    +'</div>'
+    +'<div style="padding:20px 24px;display:flex;flex-direction:column;gap:14px">'
+    +'<div style="background:var(--accent-bg);border:1px solid rgba(var(--accent-rgb),.2);border-radius:8px;padding:12px;font-size:11px;color:var(--text2)">'
+    +'<strong style="color:var(--accent)">Formato CSV:</strong><br>'
+    +'<code style="display:block;background:var(--bg3);border-radius:4px;padding:6px;margin-top:4px;font-size:10px">nome, cognome, email, tipo, formula, data_inizio, scadenza, importo, note</code>'
+    +'<div style="margin-top:6px;font-size:10px;color:var(--text3)">tipo: singolo/duo/studio/non_rinnovo | formula: annuale/semestrale | date: YYYY-MM-DD</div>'
+    +'</div>'
+    +'<div style="display:flex;align-items:center;gap:10px">'
+    +'<label style="font-size:12px;color:var(--text2)">Se gi&#224; presente:</label>'
+    +'<select id="fi-import-conflict" class="finp" style="max-width:180px"><option value="skip">Salta</option><option value="update">Aggiorna</option></select>'
+    +'</div>'
+    +'<div onclick="fiCsvClick()" style="border:2px dashed var(--border2);border-radius:10px;padding:28px;text-align:center;cursor:pointer">'
+    +'<div style="font-size:32px;margin-bottom:6px">&#x1F4C2;</div>'
+    +'<div style="font-size:13px;font-weight:600;color:var(--text2)">Trascina il CSV qui oppure clicca</div>'
+    +'<input type="file" id="fi-csv-input" accept=".csv" style="display:none" onchange="handleFiFile(this.files[0])">'
+    +'</div>'
+    +'<div id="fi-import-preview" style="display:none">'
+    +'<div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px" id="fi-import-summary"></div>'
+    +'<div style="max-height:240px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;overflow:hidden">'
+    +'<table style="width:100%;border-collapse:collapse;font-size:11px" id="fi-import-table"></table>'
+    +'</div></div>'
+    +'</div>'
+    +'<div style="padding:14px 24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">'
+    +'<button onclick="closeFiImport()" class="btn btn-s">Annulla</button>'
+    +'<button id="fi-import-btn" onclick="confirmFiImport()" class="btn btn-p" style="display:none">Importa <span id="fi-import-count">0</span></button>'
+    +'</div></div>';
+  document.body.appendChild(overlay2);
 }
-function closeFiImport(){document.getElementById('fi-import-modal').style.display='none';}
+function closeFiImport(){
+  var m=document.getElementById('fi-import-overlay');
+  if(m)m.parentNode.removeChild(m);
+}
 function handleFiDrop(e){var file=e.dataTransfer.files[0];if(file)handleFiFile(file);}
 function handleFiFile(file){
   if(!file)return;
@@ -5827,13 +5864,13 @@ function parseFiCSV(text){
   fiImportRows=rows;
   var ok=rows.filter(function(r){return r._errors.length===0;});
   var err=rows.filter(function(r){return r._errors.length>0;});
-  document.getElementById('fi-import-summary').innerHTML='<span style="color:var(--green)">'+ok.length+' pronti</span>'+(err.length?' · <span style="color:var(--red)">'+err.length+' con errori</span>':'');
-  document.getElementById('fi-import-table').innerHTML='<thead><tr style="background:var(--bg3)"><th style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase">#</th><th style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase">Nome</th><th style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase">Tipo</th><th style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase">Scadenza</th><th style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase">Esito</th></tr></thead><tbody>'
+  var sumEl=document.getElementById('fi-import-summary');if(sumEl)sumEl.innerHTML='<span style="color:var(--green)">'+ok.length+' pronti</span>'+(err.length?' · <span style="color:var(--red)">'+err.length+' con errori</span>':'');
+  var tblEl=document.getElementById('fi-import-table');if(tblEl)tblEl.innerHTML='<thead><tr style="background:var(--bg3)"><th style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase">#</th><th style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase">Nome</th><th style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase">Tipo</th><th style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase">Scadenza</th><th style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase">Esito</th></tr></thead><tbody>'
     +rows.map(function(r){var hasErr=r._errors.length>0;return '<tr style="'+(hasErr?'background:var(--red-bg)':'')+'"><td style="padding:6px 10px;font-size:11px;color:var(--text3)">'+r._row+'</td><td style="padding:6px 10px;font-size:12px;font-weight:600;color:var(--text)">'+r.nome+' '+r.cognome+'</td><td style="padding:6px 10px;font-size:11px">'+r.tipo+'</td><td style="padding:6px 10px;font-size:11px">'+r.scadenza+'</td><td style="padding:6px 10px;font-size:10px">'+(hasErr?'<span style="color:var(--red)">⚠ '+r._errors.join('; ')+'</span>':'<span style="color:var(--green)">✓</span>')+'</td></tr>';}).join('')+'</tbody>';
-  document.getElementById('fi-import-preview').style.display='block';
+  var prevEl=document.getElementById('fi-import-preview');if(prevEl)prevEl.style.display='block';
   var btn=document.getElementById('fi-import-btn');
-  btn.style.display=ok.length>0?'inline-flex':'none';
-  document.getElementById('fi-import-count').textContent=ok.length;
+  if(btn)btn.style.display=ok.length>0?'inline-flex':'none';
+  var cntEl=document.getElementById('fi-import-count');if(cntEl)cntEl.textContent=ok.length;
 }
 
 async function confirmFiImport(){
@@ -5841,6 +5878,7 @@ async function confirmFiImport(){
   if(!ok.length)return;
   var conflict=(document.getElementById('fi-import-conflict')||{}).value||'skip';
   var btn=document.getElementById('fi-import-btn');
+  if(!btn)return;
   btn.disabled=true;btn.textContent='Importazione...';
   var inserted=0,updated=0,skipped=0;
   for(var ri=0;ri<ok.length;ri++){
