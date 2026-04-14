@@ -1451,103 +1451,6 @@ textarea.finp{min-height:72px;resize:vertical}
 
 
 
-<!-- FI ABBONATO MODAL -->
-<div class="mover" id="fi-modal" style="display:none;z-index:500" onclick="if(event.target===this)closeFiModal()">
-  <div class="modal" style="max-width:520px;padding:0;overflow:hidden">
-    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
-      <div class="font-headline" style="font-size:16px;font-weight:800;color:var(--text)" id="fi-modal-title">Nuovo abbonato</div>
-      <button class="mclose" onclick="closeFiModal()">✕</button>
-    </div>
-    <div style="padding:20px 24px;max-height:calc(92vh - 70px);overflow-y:auto;display:flex;flex-direction:column;gap:12px">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="fg"><label class="flbl">Nome *</label><input type="text" class="finp" id="fi-nome" placeholder="Mario"></div>
-        <div class="fg"><label class="flbl">Cognome *</label><input type="text" class="finp" id="fi-cognome" placeholder="Rossi"></div>
-      </div>
-      <div class="fg"><label class="flbl">Email</label><input type="email" class="finp" id="fi-email" placeholder="mario.rossi@esempio.it"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="fg">
-          <label class="flbl">Tipo *</label>
-          <select class="finp" id="fi-tipo" onchange="document.getElementById('fi-motivazione-row').style.display=this.value==='non_rinnovo'?'block':'none'">
-            <option value="">— seleziona —</option>
-            <option value="singolo">Singolo</option>
-            <option value="duo">Duo</option>
-            <option value="studio">Studio</option>
-            <option value="non_rinnovo">Non rinnovo</option>
-          </select>
-        </div>
-        <div class="fg">
-          <label class="flbl">Formula *</label>
-          <select class="finp" id="fi-formula">
-            <option value="">— seleziona —</option>
-            <option value="annuale">Annuale</option>
-            <option value="semestrale">Semestrale</option>
-          </select>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="fg"><label class="flbl">Data inizio</label><input type="date" class="finp" id="fi-inizio"></div>
-        <div class="fg"><label class="flbl">Scadenza *</label><input type="date" class="finp" id="fi-scadenza"></div>
-      </div>
-      <div class="fg"><label class="flbl">Importo pagato (€)</label><input type="number" class="finp" id="fi-importo" placeholder="0.00" min="0" step="0.01"></div>
-      <div class="fg"><label class="flbl">Note</label><textarea class="finp" id="fi-note" placeholder="Note aggiuntive..." style="min-height:60px"></textarea></div>
-      <div id="fi-motivazione-row" style="display:none">
-        <div class="fg"><label class="flbl" style="color:var(--yellow)">Motivazione non rinnovo</label><textarea class="finp" id="fi-motivazione" placeholder="Motivo della mancata rinnovazione..." style="min-height:60px;border-color:var(--yellow)"></textarea></div>
-      </div>
-    </div>
-    <div style="padding:14px 24px;border-top:1px solid var(--border);background:var(--bg2);display:flex;justify-content:space-between;align-items:center">
-      <button class="btn btn-d btn-sm" id="fi-del-btn" onclick="deleteFiAbbonato()" style="display:none"><span class="material-symbols-outlined" style="font-size:14px">delete</span>Elimina</button>
-      <div style="display:flex;gap:8px;margin-left:auto">
-        <button class="btn btn-s" onclick="closeFiModal()">Annulla</button>
-        <button class="btn btn-p" onclick="saveFiAbbonato()">Salva</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- FI IMPORT MODAL -->
-<div class="mover" id="fi-import-modal" style="display:none;z-index:500" onclick="if(event.target===this)closeFiImport()">
-  <div class="modal" style="max-width:640px;padding:0;overflow:hidden">
-    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
-      <div class="font-headline" style="font-size:16px;font-weight:800;color:var(--text)">Importa abbonati da CSV</div>
-      <button class="mclose" onclick="closeFiImport()">✕</button>
-    </div>
-    <div style="padding:20px 24px;max-height:calc(92vh - 140px);overflow-y:auto;display:flex;flex-direction:column;gap:14px">
-      <div style="background:var(--accent-bg);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r);padding:12px;font-size:11px;color:var(--text2)">
-        <strong style="color:var(--accent)">Formato CSV:</strong><br>
-        <code style="display:block;background:var(--bg3);border-radius:4px;padding:6px;margin-top:4px;font-size:10px">nome, cognome, email, tipo, formula, data_inizio, scadenza, importo, note</code>
-        <div style="margin-top:6px;font-size:10px;color:var(--text3)">tipo: singolo · duo · studio · non_rinnovo &nbsp;|&nbsp; formula: annuale · semestrale &nbsp;|&nbsp; date: YYYY-MM-DD</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <label style="font-size:12px;color:var(--text2)">Se già presente:</label>
-        <select class="finp" id="fi-import-conflict" style="max-width:180px">
-          <option value="skip">Salta</option>
-          <option value="update">Aggiorna</option>
-        </select>
-      </div>
-      <div id="fi-drop-zone" onclick="document.getElementById('fi-csv-input').click()"
-        style="border:2px dashed var(--border2);border-radius:var(--r2);padding:28px;text-align:center;cursor:pointer;transition:all .2s"
-        ondragover="event.preventDefault();this.style.borderColor='var(--accent)'"
-        ondragleave="this.style.borderColor=''"
-        ondrop="event.preventDefault();this.style.borderColor='';handleFiDrop(event)">
-        <span class="material-symbols-outlined" style="font-size:32px;color:var(--text3);display:block;margin-bottom:6px">upload_file</span>
-        <div style="font-size:13px;font-weight:600;color:var(--text2)">Trascina il CSV qui</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:3px">oppure clicca per selezionare</div>
-        <input type="file" id="fi-csv-input" accept=".csv" style="display:none" onchange="handleFiFile(this.files[0])">
-      </div>
-      <div id="fi-import-preview" style="display:none">
-        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px" id="fi-import-summary"></div>
-        <div style="max-height:240px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
-          <table style="width:100%;border-collapse:collapse;font-size:11px" id="fi-import-table"></table>
-        </div>
-      </div>
-    </div>
-    <div style="padding:14px 24px;border-top:1px solid var(--border);background:var(--bg2);display:flex;justify-content:space-between;align-items:center">
-      <button class="btn btn-s" onclick="closeFiImport()">Annulla</button>
-      <button class="btn btn-p" id="fi-import-btn" onclick="confirmFiImport()" style="display:none">Importa <span id="fi-import-count">0</span> abbonati</button>
-    </div>
-  </div>
-</div>
-
 <!-- CFP DETAIL MODAL -->
 <div class="mover" id="cfp-detail-modal" style="display:none" onclick="if(event.target===this)closeCfpDetail()">
   <div class="modal" style="max-width:780px;padding:0;overflow:hidden">
@@ -5558,6 +5461,11 @@ function renderFI(){
   renderFiCharts();
 }
 
+function fiToggleMotiv(val){
+  var r=document.getElementById('fi-motivazione-row');
+  if(r)r.style.display=val==='non_rinnovo'?'block':'none';
+}
+
 function setFiSort(f){
   if(fiSortField===f)fiSortDir=fiSortDir==='asc'?'desc':'asc';
   else{fiSortField=f;fiSortDir='asc';}
@@ -5752,33 +5660,75 @@ function setFiChartType(chartId,type,btn){
 }
 
 function openFiModal(id){
-  try{
-    editFiId=id||null;
-    var isEdit=!!id;
-    document.getElementById('fi-modal-title').textContent=isEdit?'Modifica abbonato':'Nuovo abbonato';
-    document.getElementById('fi-del-btn').style.display=isEdit?'flex':'none';
-    var a=isEdit?DB_FI.find(function(x){return x.id===id;}):null;
-    if(a){
-      document.getElementById('fi-nome').value=a.nome||'';
-      document.getElementById('fi-cognome').value=a.cognome||'';
-      document.getElementById('fi-email').value=a.email||'';
-      document.getElementById('fi-tipo').value=a.tipo||'';
-      document.getElementById('fi-formula').value=a.formula||'';
-      document.getElementById('fi-inizio').value=a.data_inizio||'';
-      document.getElementById('fi-scadenza').value=a.scadenza||'';
-      document.getElementById('fi-importo').value=a.importo||'';
-      document.getElementById('fi-note').value=a.note||'';
-      document.getElementById('fi-motivazione').value=a.motivazione_non_rinnovo||'';
-      document.getElementById('fi-motivazione-row').style.display=a.tipo==='non_rinnovo'?'block':'none';
-    }else{
-      ['fi-nome','fi-cognome','fi-email','fi-tipo','fi-formula','fi-note','fi-motivazione'].forEach(function(i){var el=document.getElementById(i);if(el)el.value='';});
-      ['fi-inizio','fi-scadenza','fi-importo'].forEach(function(i){var el=document.getElementById(i);if(el)el.value='';});
-      document.getElementById('fi-motivazione-row').style.display='none';
-    }
-    document.getElementById('fi-modal').style.display='flex';
-  }catch(err){alert('openFiModal Error: '+err.message);console.error(err);}
+  editFiId=id||null;
+  var isEdit=!!id;
+  var a=isEdit?DB_FI.find(function(x){return x.id===id;}):null;
+
+  // Remove any existing fi-modal
+  var old=document.getElementById('fi-modal-overlay');
+  if(old)old.parentNode.removeChild(old);
+
+  // Build modal HTML
+  var overlay=document.createElement('div');
+  overlay.id='fi-modal-overlay';
+  overlay.style.cssText='position:absolute;top:0;left:0;width:100%;min-height:100%;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;box-sizing:border-box;';
+  overlay.onclick=function(e){if(e.target===overlay)closeFiModal();};
+
+  overlay.innerHTML='<div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;width:100%;max-width:520px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3)">'
+    +'<div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">'
+    +'<div style="font-size:16px;font-weight:800;color:var(--text)" id="fi-modal-title">'+(isEdit?'Modifica abbonato':'Nuovo abbonato')+'</div>'
+    +'<button onclick="closeFiModal()" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--text3);padding:4px 8px">✕</button>'
+    +'</div>'
+    +'<div style="padding:20px 24px;display:flex;flex-direction:column;gap:12px">'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">'
+    +'<div><label style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px">Nome *</label><input type="text" id="fi-nome" class="finp" placeholder="Mario" style="width:100%;box-sizing:border-box" value="'+(a?a.nome||'':'')+'"></div>'
+    +'<div><label style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px">Cognome *</label><input type="text" id="fi-cognome" class="finp" placeholder="Rossi" style="width:100%;box-sizing:border-box" value="'+(a?a.cognome||'':'')+'"></div>'
+    +'</div>'
+    +'<div><label style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px">Email</label><input type="email" id="fi-email" class="finp" placeholder="mario@esempio.it" style="width:100%;box-sizing:border-box" value="'+(a?a.email||'':'')+'"></div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">'
+    +'<div><label style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px">Tipo *</label>'
+    +'<select id="fi-tipo" class="finp" style="width:100%;box-sizing:border-box" onchange="fiToggleMotiv(this.value)">'
+    +'<option value="">— seleziona —</option>'
+    +'<option value="singolo"'+(a&&a.tipo==='singolo'?' selected':'')+'">Singolo</option>'
+    +'<option value="duo"'+(a&&a.tipo==='duo'?' selected':'')+'">Duo</option>'
+    +'<option value="studio"'+(a&&a.tipo==='studio'?' selected':'')+'">Studio</option>'
+    +'<option value="non_rinnovo"'+(a&&a.tipo==='non_rinnovo'?' selected':'')+'">Non rinnovo</option>'
+    +'</select></div>'
+    +'<div><label style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px">Formula *</label>'
+    +'<select id="fi-formula" class="finp" style="width:100%;box-sizing:border-box">'
+    +'<option value="">— seleziona —</option>'
+    +'<option value="annuale"'+(a&&a.formula==='annuale'?' selected':'')+'">Annuale</option>'
+    +'<option value="semestrale"'+(a&&a.formula==='semestrale'?' selected':'')+'">Semestrale</option>'
+    +'</select></div>'
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">'
+    +'<div><label style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px">Data inizio</label><input type="date" id="fi-inizio" class="finp" style="width:100%;box-sizing:border-box" value="'+(a?a.data_inizio||'':'')+'"></div>'
+    +'<div><label style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px">Scadenza *</label><input type="date" id="fi-scadenza" class="finp" style="width:100%;box-sizing:border-box" value="'+(a?a.scadenza||'':'')+'"></div>'
+    +'</div>'
+    +'<div><label style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px">Importo (€)</label><input type="number" id="fi-importo" class="finp" placeholder="0.00" min="0" step="0.01" style="width:100%;box-sizing:border-box" value="'+(a?a.importo||'':'')+'"></div>'
+    +'<div><label style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px">Note</label><textarea id="fi-note" class="finp" style="width:100%;box-sizing:border-box;min-height:60px">'+(a?a.note||'':'')+'</textarea></div>'
+    +'<div id="fi-motivazione-row" style="display:'+(a&&a.tipo==='non_rinnovo'?'block':'none')+'">'
+    +'<label style="font-size:10px;font-weight:700;color:var(--yellow);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px">Motivazione non rinnovo</label>'
+    +'<textarea id="fi-motivazione" class="finp" style="width:100%;box-sizing:border-box;min-height:60px">'+(a?a.motivazione_non_rinnovo||'':'')+'</textarea>'
+    +'</div>'
+    +'</div>'
+    +'<div style="padding:14px 24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">'
+    +(isEdit?'<button onclick="deleteFiAbbonato()" style="background:var(--red-bg);color:var(--red);border:1px solid var(--red);padding:7px 14px;border-radius:var(--r);font-size:12px;font-weight:600;cursor:pointer">Elimina</button>':'<span></span>')
+    +'<div style="display:flex;gap:8px">'
+    +'<button onclick="closeFiModal()" class="btn btn-s">Annulla</button>'
+    +'<button onclick="saveFiAbbonato()" class="btn btn-p">Salva</button>'
+    +'</div></div>'
+    +'</div>';
+
+  // Append to body so it's outside any stacking context
+  document.body.appendChild(overlay);
 }
-function closeFiModal(){document.getElementById('fi-modal').style.display='none';}
+
+
+function closeFiModal(){
+  var m=document.getElementById('fi-modal-overlay');
+  if(m)m.parentNode.removeChild(m);
+}
 
 async function saveFiAbbonato(){
   var nome=document.getElementById('fi-nome').value.trim();
@@ -5842,7 +5792,7 @@ function openFiImport(){
   document.getElementById('fi-import-preview').style.display='none';
   document.getElementById('fi-import-btn').style.display='none';
   document.getElementById('fi-csv-input').value='';
-  document.getElementById('fi-import-modal').style.display='flex';
+
 }
 function closeFiImport(){document.getElementById('fi-import-modal').style.display='none';}
 function handleFiDrop(e){var file=e.dataTransfer.files[0];if(file)handleFiFile(file);}
