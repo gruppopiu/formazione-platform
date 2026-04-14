@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;600;700;800;900&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@700;800;900&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
 <title>Formazione Platform — GruppoPiù</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -30,7 +29,7 @@
   --shadow:0 2px 12px rgba(var(--accent-rgb),.08),0 1px 3px rgba(0,0,0,.07);
   --shadow2:0 4px 16px rgba(0,0,0,.1);
 }
-.dark{--logo-filter:brightness(1.2);
+.dark{
   --bg:#000;--bg2:#0a0a0a;--bg3:#141414;--bg4:#1c1c1c;
   --border:#1f1f1f;--border2:#2e2e2e;
   --text:#e8eaf0;--text2:#8b9bb4;--text3:#5a6a84;
@@ -43,11 +42,11 @@
   --shadow2:0 4px 16px rgba(0,0,0,.5);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:var(--bg-gradient,var(--bg));color:var(--text);min-height:100vh;transition:background .25s,color .25s;overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:var(--bg-gradient,var(--bg));color:var(--text);min-height:100vh;transition:background .25s,color .25s;overflow-x:hidden}
 /* ── LAYOUT ── */
 .shell{display:grid;grid-template-columns:228px 1fr;min-height:100vh}
-.sidebar{background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
-.main{padding:24px 32px 32px;overflow-x:hidden;min-width:0;position:relative;background:var(--bg-gradient,var(--bg))}
+.sidebar{background:var(--bg2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.main{padding:28px 32px;overflow-x:hidden;min-width:0;position:relative}
 /* ── ABSTRACT BG SHAPES ── */
 .shape{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;opacity:.35}
 .shape1{width:400px;height:400px;background:radial-gradient(circle,rgba(18,183,106,.15),transparent);top:-100px;right:-80px}
@@ -56,13 +55,13 @@ body{font-family:'Inter',sans-serif;background:var(--bg-gradient,var(--bg));colo
 .dark .shape2{background:radial-gradient(circle,rgba(91,141,238,.06),transparent)}
 .main-content{position:relative;z-index:1}
 /* ── SIDEBAR ── */
-.sb-logo{padding:16px 18px 14px;border-bottom:1px solid var(--border)}
-.sb-logo-t{font-size:16px;font-weight:700;font-family:"Manrope",sans-serif;letter-spacing:-.3px;color:var(--accent);display:flex;align-items:center;gap:8px}
+.sb-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border)}
+.sb-logo-t{font-size:14px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px}
 .sb-logo-dot{width:8px;height:8px;border-radius:50%;background:var(--grad1)}
-.sb-logo-s{font-size:9px;color:#475569;font-family:"Inter",sans-serif;font-weight:500;letter-spacing:.2em;text-transform:uppercase;margin-top:4px}
+.sb-logo-s{font-size:10px;color:var(--text3);font-family:'SF Mono',monospace;margin-top:3px}
 .sb-nav{padding:10px 8px;flex:1}
-.sb-sec{font-size:9px;font-weight:700;font-family:"Inter",sans-serif;color:#334155;letter-spacing:.15em;text-transform:uppercase;padding:16px 16px 4px}
-.sbi{display:flex;align-items:center;gap:12px;padding:10px 16px;border-radius:12px;cursor:pointer;font-size:12px;font-family:'Inter',sans-serif;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:#94a3b8;transition:all .2s;margin-bottom:2px;position:relative;user-select:none}
+.sb-sec{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;padding:14px 10px 5px}
+.sbi{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r);cursor:pointer;font-size:12px;color:var(--text2);transition:all .15s;margin-bottom:1px;position:relative;user-select:none}
 .sbi:hover{background:var(--bg3);color:var(--text)}
 .sbi.active{background:var(--green-bg);color:var(--green);font-weight:500}
 .sbi svg{width:14px;height:14px;flex-shrink:0}
@@ -73,7 +72,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg-gradient,var(--bg));colo
 .av{width:30px;height:30px;border-radius:50%;background:var(--grad1);padding:2px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent);flex-shrink:0;overflow:hidden}
 .av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
 .av span{width:100%;height:100%;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent)}
-.sb-uname{font-size:12px;font-weight:600;font-family:"Inter",sans-serif;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-uname{font-size:12px;font-weight:500;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sb-urole{font-size:10px;color:var(--text3)}
 .conn-row{display:flex;align-items:center;gap:6px;padding:5px 10px;font-size:10px;color:var(--text);margin-bottom:2px;font-weight:500}
 .cdot{width:8px;height:8px;border-radius:50%;background:var(--text3);flex-shrink:0;transition:all .3s}
@@ -84,13 +83,13 @@ body{font-family:'Inter',sans-serif;background:var(--bg-gradient,var(--bg));colo
 /* ── PAGES ── */
 .page{display:none}.page.active{display:block}
 .ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:12px}
-.pt{font-size:32px;font-weight:800;letter-spacing:-.5px;font-family:"Manrope",sans-serif;color:var(--text)}
-.ps{font-size:12px;color:#8f909e;margin-top:6px;font-family:"Inter",sans-serif}
-.greeting{font-size:28px;font-weight:800;letter-spacing:-.5px;font-family:"Manrope",sans-serif;margin-bottom:4px;color:var(--text)}
+.pt{font-size:20px;font-weight:700;letter-spacing:-.5px}
+.ps{font-size:12px;color:var(--text3);margin-top:3px}
+.greeting{font-size:22px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px}
 .greeting-sub{font-size:13px;color:var(--text3)}
 /* ── BUTTONS ── */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:'Inter',sans-serif}
-.btn-p{background:linear-gradient(135deg,#bac3ff 0%,#4453a7 100%);color:#00105b;font-weight:700;box-shadow:0 4px 16px rgba(186,195,255,.2)}.btn-p:hover{filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 6px 20px rgba(186,195,255,.3)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--r);font-size:12px;font-weight:500;cursor:pointer;border:none;transition:all .15s;font-family:inherit}
+.btn-p{background:var(--accent);color:var(--btn-text,#fff);box-shadow:0 2px 8px rgba(var(--accent-rgb),.3)}.btn-p:hover{filter:brightness(1.1);transform:translateY(-1px)}
 .dark .btn-p{background:var(--accent);color:var(--btn-text,#fff);box-shadow:0 2px 8px rgba(var(--accent-rgb),.2)}
 .btn-s{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}.btn-s:hover{border-color:var(--border2);color:var(--text)}
 .btn-d{background:var(--red-bg);color:var(--red);border:1px solid rgba(224,82,82,.2)}
@@ -106,16 +105,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg-gradient,var(--bg));colo
 .kcard.c2 .kcard-grad{background:var(--grad2)}
 .kcard.c3 .kcard-grad{background:var(--grad3)}
 .kcard.c4 .kcard-grad{background:var(--grad4)}
-.klbl{font-size:9px;font-weight:700;font-family:"Inter",sans-serif;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;margin-top:4px}
-.kval{font-size:26px;font-weight:900;font-family:'Manrope',sans-serif;letter-spacing:-1px;background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.klbl{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;margin-top:4px}
+.kval{font-size:26px;font-weight:800;font-family:'SF Mono','Fira Code',monospace;letter-spacing:-1px;background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .kcard.c2 .kval{background:var(--grad2);-webkit-background-clip:text;background-clip:text}
 .kcard.c3 .kval{background:var(--grad3);-webkit-background-clip:text;background-clip:text}
 .kcard.c4 .kval{background:var(--grad4);-webkit-background-clip:text;background-clip:text}
 .ksub{font-size:11px;color:var(--text3);margin-top:4px}
 /* ── CARDS ── */
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
-.card:hover{border-color:var(--border2);box-shadow:var(--shadow2);transition:all .2s}
-.ctitle{font-size:13px;font-weight:600;font-family:"Inter",sans-serif;color:var(--text);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.card{background:var(--bg2);border:1px solid rgba(var(--accent-rgb),.18);border-radius:var(--r2);padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
+.card:hover{border-color:rgba(var(--accent-rgb),.35);box-shadow:0 4px 20px rgba(var(--accent-rgb),.12),0 1px 4px rgba(0,0,0,.08);transition:border-color .2s,box-shadow .2s}
+.ctitle{font-size:13px;font-weight:600;color:var(--text);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .ctitle-sub{font-size:11px;color:var(--text3);font-weight:400}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
@@ -125,8 +124,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg-gradient,var(--bg));colo
 .twrap table th[onclick]:hover{background:rgba(var(--accent-rgb),.08);color:var(--accent)}
 .twrap table th[onclick]{cursor:pointer;user-select:none;transition:color .1s,background .1s}
 .twrap table th[onclick]:hover{background:rgba(var(--accent-rgb),.08);color:var(--accent)}
-table{width:100%;border-collapse:collapse;font-size:12px;font-family:'Inter',sans-serif}
-thead th{font-family:"Inter",sans-serif;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;padding:9px 12px;border-bottom:1px solid var(--border);text-align:left;background:var(--bg3);white-space:nowrap}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.07em;text-transform:uppercase;padding:9px 12px;border-bottom:1px solid var(--border);text-align:left;background:var(--bg3);white-space:nowrap}
 tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
 tbody tr:hover{background:var(--bg3)}
 tbody tr:last-child{border-bottom:none}
@@ -134,7 +133,7 @@ td{padding:10px 12px;color:var(--text2);vertical-align:middle}
 td.mono{font-family:'SF Mono',monospace;font-size:11px;color:var(--text)}
 .tda{display:flex;gap:5px}
 /* ── BADGES ── */
-.badge{display:inline-flex;align-items:center;font-size:9px;font-weight:700;font-family:"Inter",sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:4px}
+.badge{display:inline-block;font-size:9px;font-weight:600;padding:2px 8px;border-radius:20px}
 .b-sem{background:var(--blue-bg);color:var(--blue)}
 .b-c4{background:var(--green-bg);color:var(--green)}
 .b-c6{background:var(--purple-bg);color:var(--purple)}
@@ -183,10 +182,10 @@ td.mono{font-family:'SF Mono',monospace;font-size:11px;color:var(--text)}
 .fg{display:flex;flex-direction:column;gap:5px}
 .fg.full{grid-column:1/-1}
 .flbl{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.05em;text-transform:uppercase}
-.finp{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:10px 14px;font-size:12px;color:var(--text);outline:none;transition:border .15s,box-shadow .15s;font-family:'Inter',sans-serif;width:100%}
+.finp{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:8px 11px;font-size:12px;color:var(--text);outline:none;transition:border .15s,box-shadow .15s;font-family:inherit;width:100%}
 .finp:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(18,183,106,.1)}
 .dark .finp:focus{box-shadow:0 0 0 3px rgba(62,207,142,.08)}
-.finp::placeholder{color:#475569}
+.finp::placeholder{color:var(--text3)}
 select.finp{cursor:pointer}
 textarea.finp{min-height:72px;resize:vertical}
 /* ── TOAST ── */
@@ -322,7 +321,7 @@ textarea.finp{min-height:72px;resize:vertical}
 .dark .btn-p{background:var(--accent);color:#fff}
 .kval{background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .cdot.ok{background:var(--accent);box-shadow:0 0 6px var(--accent)}
-.finp:focus{border-color:rgba(186,195,255,.3);box-shadow:0 0 0 2px rgba(186,195,255,.08)}
+.finp:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.1)}
 .toggle input:checked+.toggle-slider{background:var(--accent)}
 .tb.on{background:var(--accent);border-color:var(--accent);color:var(--btn-text,#fff)}
 .ct-btn.on{background:rgba(var(--accent-rgb),.12);color:var(--accent);border-color:var(--accent)}
@@ -384,70 +383,35 @@ textarea.finp{min-height:72px;resize:vertical}
   .auth-box{padding:20px 14px;margin:0 6px}
 }
 
-/* ── STITCH ── */
 .font-headline{font-family:'Manrope',sans-serif}
 .material-symbols-outlined{font-family:'Material Symbols Outlined';font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;font-style:normal;display:inline-block;line-height:1;vertical-align:middle}
-.sbi{border-left:2px solid transparent;transition:all .2s}
-.sbi.active{background:rgba(255,255,255,.05);color:#bac3ff;font-weight:700;border-left:2px solid #00daf3;border-radius:0 12px 12px 0}
-.kcard-stitch{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px;display:flex;flex-direction:column;justify-content:space-between;transition:all .3s;overflow:hidden;position:relative;box-shadow:var(--shadow)}
-.kcard-stitch:hover{background:var(--bg3);transform:translateY(-2px);box-shadow:var(--shadow2)}
-.kcard-stitch-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(186,195,255,.1);color:#bac3ff;flex-shrink:0}
-.kcard-stitch-icon .material-symbols-outlined{font-size:22px}
-.kcard-stitch-tag{font-size:9px;font-weight:700;font-family:'Inter',sans-serif;color:#00daf3;background:rgba(0,218,243,.1);padding:3px 8px;border-radius:4px;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
-.kcard-stitch-label{font-size:11px;font-weight:500;font-family:'Inter',sans-serif;color:#94a3b8;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px}
-.kcard-stitch-val{font-size:36px;font-weight:800;font-family:'Manrope',sans-serif;color:var(--text);letter-spacing:-1.5px;line-height:1;margin-bottom:16px}
-.kcard-stitch-progress{width:100%;height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;margin-bottom:6px}
-.kcard-stitch-progress-fill{height:6px;border-radius:3px;background:#bac3ff;transition:width 1s cubic-bezier(.4,0,.2,1)}
-.kcard-stitch-sub{font-size:11px;color:#bac3ff;font-weight:500;font-family:'Inter',sans-serif;margin-top:6px}
-.stitch-table tbody tr{border-bottom:none;border-left:2px solid transparent;transition:all .15s}.stitch-table thead th[onclick]{user-select:none}.stitch-table thead th[onclick]:hover{color:var(--text);background:var(--bg4)}
+.kcard-stitch{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:20px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:var(--shadow);transition:all .25s;overflow:hidden;position:relative}
+.kcard-stitch:hover{transform:translateY(-2px);box-shadow:var(--shadow2)}
+.kcard-stitch-icon{width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;background:rgba(var(--accent-rgb),.12);color:var(--accent);flex-shrink:0}
+.kcard-stitch-icon .material-symbols-outlined{font-size:18px}
+.kcard-stitch-tag{font-size:9px;font-weight:700;color:var(--text3);background:var(--bg3);padding:2px 8px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.kcard-stitch-label{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.kcard-stitch-val{font-size:32px;font-weight:900;font-family:'Manrope',sans-serif;color:var(--text);letter-spacing:-1.5px;line-height:1;margin-bottom:12px}
+.kcard-stitch-progress{width:100%;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-bottom:6px}
+.kcard-stitch-progress-fill{height:4px;border-radius:2px;background:var(--accent);transition:width .8s cubic-bezier(.4,0,.2,1)}
+.kcard-stitch-sub{font-size:10px;color:var(--accent);font-weight:600}
+.stitch-table tbody tr{border-bottom:none;border-left:2px solid transparent;transition:all .15s}
 .stitch-table tbody tr:hover{background:var(--bg3);border-left:2px solid var(--accent)}
-.evd-modal-inner{display:grid;grid-template-columns:1fr 310px;gap:0}
-.evd-left{padding:22px 24px;border-right:1px solid var(--border)}
-.evd-right{padding:22px 20px;display:flex;flex-direction:column;gap:14px;background:var(--bg3)}
-.evd-info-tile{background:var(--bg3);border-radius:var(--r);padding:12px 14px;display:flex;flex-direction:column;gap:3px}
-.evd-info-tile-lbl{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase}
-.evd-info-tile-val{font-size:13px;font-weight:600;color:var(--text)}
-.evd-part-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px}
-.evd-part-card-title{font-size:11px;font-weight:700;color:var(--text);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
-.evd-part-row{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text2);padding:3px 0}
-.evd-part-row-val{font-weight:700;color:var(--text)}
-.evd-part-divider{height:1px;background:rgba(var(--accent-rgb),.1);margin:7px 0}
-.evd-part-tasso{font-size:22px;font-weight:900;font-family:'Manrope',sans-serif}
-.evd-eco-card{background:var(--bg2);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r2);padding:18px;position:relative;overflow:hidden}
-.evd-eco-card::before{content:'';position:absolute;top:-30px;right:-30px;width:80px;height:80px;background:rgba(var(--accent-rgb),.06);border-radius:50%;filter:blur(16px)}
-.evd-eco-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(var(--accent-rgb),.08)}
-.evd-eco-row:last-child{border-bottom:none}
-.evd-eco-label{font-size:11px;color:var(--text3)}
-.evd-eco-value{font-size:13px;font-weight:700;color:var(--text)}
-.evd-total-ric{font-size:26px;font-weight:900;font-family:'Manrope',sans-serif;color:var(--text)}
-.evd-footer{background:var(--bg3);border-top:1px solid var(--border);padding:7px 22px;display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--text3)}
-.evd-timeline{border-left:2px solid rgba(var(--accent-rgb),.2);margin-left:8px;padding-left:14px;display:flex;flex-direction:column;gap:12px}
-.evd-timeline-dot{position:absolute;left:-23px;top:2px;width:12px;height:12px;border-radius:50%;border:3px solid var(--bg2)}
-.evd-timeline-item{position:relative;font-size:11px}
+.stitch-table thead th[onclick]:hover{color:var(--text);background:var(--bg4)}
+.delta-wrap{position:relative;display:inline-flex;align-items:center}
+.delta-tooltip{position:fixed;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;font-size:11px;color:var(--text2);white-space:normal;min-width:190px;z-index:9999;box-shadow:var(--shadow2);pointer-events:none;opacity:0;transition:opacity .2s;line-height:1.7}
+.delta-wrap:hover .delta-tooltip{opacity:1}
+.b-chiu{background:var(--bg3);color:var(--text2);border:1px solid var(--border2)}
 .topbar-search{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:6px 14px 6px 34px;font-size:12px;color:var(--text);outline:none;width:200px;transition:all .2s;font-family:inherit}
-.topbar-search:focus{border-color:rgba(186,195,255,.3);box-shadow:0 0 0 2px rgba(186,195,255,.1);width:280px}
+.topbar-search:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.1);width:260px}
 .topbar-search::placeholder{color:var(--text3)}
 .topbar-search-wrap{position:relative;display:flex;align-items:center}
 .topbar-search-icon{position:absolute;left:9px;font-size:15px;color:var(--text3);pointer-events:none}
-.delta-wrap{position:relative;display:inline-flex;align-items:center}
-.delta-tooltip{position:fixed;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:11px;color:var(--text2);white-space:normal;min-width:200px;z-index:9999;box-shadow:var(--shadow2);pointer-events:none;opacity:0;transition:opacity .2s;line-height:1.7;font-family:"Inter",sans-serif}
-.delta-wrap:hover .delta-tooltip{opacity:1}
-.b-chiu{background:var(--bg3);color:var(--text2);border:1px solid var(--border2)}
-.tema-bar-row{display:flex;align-items:center;gap:10px;padding:5px 0}
-.tema-bar-label{min-width:130px;font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tema-bar-track{flex:1;height:5px;background:var(--bg3);border-radius:3px;overflow:hidden}
-.tema-bar-fill{height:5px;border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1)}
-.tema-bar-val{font-size:11px;font-weight:700;min-width:18px;text-align:right;font-family:'Manrope',sans-serif}
-.fm-modal-inner{display:grid;grid-template-columns:1fr 260px;gap:0;max-height:calc(92vh - 90px);overflow-y:auto}
-.fm-left{padding:20px 22px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:14px;overflow-y:auto}
-.fm-right{padding:20px;background:var(--bg3);display:flex;flex-direction:column;gap:12px}
-@media(max-width:768px){
-  .evd-modal-inner,.fm-modal-inner{grid-template-columns:1fr}
-  .evd-left{border-right:none;border-bottom:1px solid var(--border)}
-  .fm-left{border-right:none;border-bottom:1px solid var(--border)}
-  .topbar-search{width:130px}.topbar-search:focus{width:170px}
-  #ev-modal-body{grid-template-columns:1fr!important}
-}
+/* FI status badges */
+.fi-badge-regola{display:inline-block;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--green-bg);color:var(--green);border:1px solid var(--green)}
+.fi-badge-scadenza{display:inline-block;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow)}
+.fi-badge-scaduto{display:inline-block;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--red-bg);color:var(--red);border:1px solid var(--red)}
+.fi-badge-non_rinnovo{display:inline-block;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--bg3);color:var(--text3);border:1px solid var(--border2)}
 </style>
 
 <script>
@@ -468,7 +432,7 @@ textarea.finp{min-height:72px;resize:vertical}
     <div class="auth-shape auth-shape1"></div>
     <div class="auth-shape auth-shape2"></div>
     <div class="auth-box">
-      <div style="text-align:center;margin-bottom:20px"><img src="https://static.wixstatic.com/media/2abd89_6cc737ba8a5c40a9a031a6006962d333~mv2.png/v1/crop/x_0,y_0,w_1630,h_192/fill/w_646,h_76,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/gp-footer-orig-left_orig.png" alt="GruppoPiù" style="width:180px;height:auto;display:inline-block;object-fit:contain"></div>
+      <div style="text-align:center;margin-bottom:20px"><img src="https://static.wixstatic.com/media/2abd89_6cc737ba8a5c40a9a031a6006962d333~mv2.png/v1/crop/x_0,y_0,w_1630,h_192/fill/w_646,h_76,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/gp-footer-orig-left_orig.png" alt="GruppoPiù" style="width:180px;height:auto;display:inline-block"></div>
       <div class="auth-logo-t">Formazione Platform</div>
       <div class="auth-logo-s">// gruppopiu 2026</div>
       <div class="auth-tabs">
@@ -530,7 +494,8 @@ textarea.finp{min-height:72px;resize:vertical}
 <div class="shell" id="app-shell" style="display:none">
   <aside class="sidebar" id="sidebar">
     <div class="sb-logo">
-      <img src="https://static.wixstatic.com/media/2abd89_6cc737ba8a5c40a9a031a6006962d333~mv2.png/v1/crop/x_0,y_0,w_1630,h_192/fill/w_646,h_76,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/gp-footer-orig-left_orig.png" alt="GruppoPiù" style="width:140px;height:auto;display:block;object-fit:contain;filter:var(--logo-filter,none)">
+      <img src="https://static.wixstatic.com/media/2abd89_6cc737ba8a5c40a9a031a6006962d333~mv2.png/v1/crop/x_0,y_0,w_1630,h_192/fill/w_646,h_76,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/gp-footer-orig-left_orig.png" alt="GruppoPiù" style="width:140px;height:auto;display:block;object-fit:contain">
+      <div class="sb-logo-s">// gruppopiu 2026</div>
     </div>
     <nav class="sb-nav">
       <div class="sb-sec">Monitoraggio</div>
@@ -562,7 +527,7 @@ textarea.finp{min-height:72px;resize:vertical}
   <main class="main">
     <div class="shape shape1"></div>
     <div class="shape shape2"></div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);position:relative;z-index:1"><div class="topbar-search-wrap"><span class="material-symbols-outlined topbar-search-icon">search</span><input class="topbar-search" id="global-search" placeholder="Cerca eventi, formatori..." oninput="globalSearchHandler(this.value)"></div><button class="btn btn-p" onclick="openEventoModal()" id="topbar-new-ev" style="gap:6px;flex-shrink:0"><span class="material-symbols-outlined" style="font-size:15px">add_circle</span>Nuovo evento</button></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);position:relative;z-index:1"><div class="topbar-search-wrap"><span class="material-symbols-outlined topbar-search-icon">search</span><input class="topbar-search" id="global-search" placeholder="Cerca eventi, formatori..." oninput="globalSearchHandler(this.value)"></div><button class="btn btn-p" onclick="openEventoModal()" style="gap:6px;flex-shrink:0"><span class="material-symbols-outlined" style="font-size:15px">add_circle</span>Nuovo evento</button></div>
     <div class="main-content">
 
     <!-- DASHBOARD -->
@@ -575,7 +540,6 @@ textarea.finp{min-height:72px;resize:vertical}
             <div class="greeting-sub" id="greeting-sub">Ecco il riepilogo della tua formazione</div>
           </div>
         </div>
-        
       </div>
       <!-- WIDGET BAR -->
       <div class="widget-bar">
@@ -608,11 +572,11 @@ textarea.finp{min-height:72px;resize:vertical}
             <div class="kcard-stitch-label">Sessioni calendario</div>
             <div class="kcard-stitch-val" id="k-sess">—</div>
             <div id="delta-k-sess" style="min-height:20px;margin-bottom:8px"></div>
-            <div class="kcard-stitch-sub" id="k-sess-sub">sessioni totali</div>
+            <div class="kcard-stitch-sub" id="k-sess-sub">— sessioni totali</div>
           </div>
           <div class="kcard-stitch">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
-              <div class="kcard-stitch-icon" style="background:rgba(var(--yellow),.12);color:var(--yellow)"><span class="material-symbols-outlined">workspace_premium</span></div>
+              <div class="kcard-stitch-icon" style="background:var(--yellow-bg);color:var(--yellow)"><span class="material-symbols-outlined">workspace_premium</span></div>
               <span class="kcard-stitch-tag">target 146</span>
             </div>
             <div class="kcard-stitch-label">CFP totali</div>
@@ -623,7 +587,7 @@ textarea.finp{min-height:72px;resize:vertical}
           </div>
           <div class="kcard-stitch">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
-              <div class="kcard-stitch-icon" style="background:rgba(var(--green),.12);color:var(--green)"><span class="material-symbols-outlined">schedule</span></div>
+              <div class="kcard-stitch-icon" style="background:var(--green-bg);color:var(--green)"><span class="material-symbols-outlined">schedule</span></div>
               <span class="kcard-stitch-tag">target 150+</span>
             </div>
             <div class="kcard-stitch-label">Ore erogate</div>
@@ -634,42 +598,15 @@ textarea.finp{min-height:72px;resize:vertical}
           </div>
         </div>
       </div>
-      <!-- FI HOME WIDGET -->
       <div class="widget-wrap" id="widget-fi-home">
         <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px"><span class="material-symbols-outlined" style="font-size:14px">all_inclusive</span>Formazione Illimitata — panoramica</div>
         <div class="kgrid" style="grid-template-columns:repeat(4,1fr)">
-          <div class="kcard-stitch">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-              <div class="kcard-stitch-icon" style="background:rgba(var(--blue),.12);color:var(--blue)"><span class="material-symbols-outlined">all_inclusive</span></div>
-            </div>
-            <div class="kcard-stitch-label">Abbonati attivi</div>
-            <div class="kcard-stitch-val" id="h-fi-tot">—</div>
-          </div>
-          <div class="kcard-stitch">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-              <div class="kcard-stitch-icon" style="background:rgba(var(--green),.12);color:var(--green)"><span class="material-symbols-outlined">euro</span></div>
-            </div>
-            <div class="kcard-stitch-label">Valore abbonamenti</div>
-            <div class="kcard-stitch-val" id="h-fi-val">—</div>
-          </div>
-          <div class="kcard-stitch">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-              <div class="kcard-stitch-icon" style="background:rgba(var(--yellow),.12);color:var(--yellow)"><span class="material-symbols-outlined">schedule</span></div>
-            </div>
-            <div class="kcard-stitch-label">In scadenza (30 gg)</div>
-            <div class="kcard-stitch-val" id="h-fi-exp">—</div>
-          </div>
-          <div class="kcard-stitch">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-              <div class="kcard-stitch-icon" style="background:rgba(var(--red),.12);color:var(--red)"><span class="material-symbols-outlined">warning</span></div>
-            </div>
-            <div class="kcard-stitch-label">Scaduti</div>
-            <div class="kcard-stitch-val" id="h-fi-scad">—</div>
-          </div>
+          <div class="kcard-stitch"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><div class="kcard-stitch-icon" style="background:var(--blue-bg);color:var(--blue)"><span class="material-symbols-outlined">all_inclusive</span></div></div><div class="kcard-stitch-label">Abbonati attivi</div><div class="kcard-stitch-val" id="h-fi-tot">—</div></div>
+          <div class="kcard-stitch"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><div class="kcard-stitch-icon" style="background:var(--green-bg);color:var(--green)"><span class="material-symbols-outlined">euro</span></div></div><div class="kcard-stitch-label">Valore abbonamenti</div><div class="kcard-stitch-val" id="h-fi-val">—</div></div>
+          <div class="kcard-stitch"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><div class="kcard-stitch-icon" style="background:var(--yellow-bg);color:var(--yellow)"><span class="material-symbols-outlined">schedule</span></div></div><div class="kcard-stitch-label">In scadenza (30 gg)</div><div class="kcard-stitch-val" id="h-fi-exp">—</div></div>
+          <div class="kcard-stitch"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><div class="kcard-stitch-icon" style="background:var(--red-bg);color:var(--red)"><span class="material-symbols-outlined">warning</span></div></div><div class="kcard-stitch-label">Scaduti</div><div class="kcard-stitch-val" id="h-fi-scad">—</div></div>
         </div>
-        <div style="text-align:right;margin-top:10px">
-          <button class="btn btn-s btn-sm" onclick="showPage('fi',document.getElementById('nav-fi'))">Vedi tutti →</button>
-        </div>
+        <div style="text-align:right;margin-top:10px"><button class="btn btn-s btn-sm" onclick="showPage('fi',document.getElementById('nav-fi'))">Vedi tutti →</button></div>
       </div>
       <div class="widget-wrap" id="widget-charts">
         <div class="grid2">
@@ -857,119 +794,28 @@ textarea.finp{min-height:72px;resize:vertical}
       <!-- PAGANTI -->
       <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Iscritti paganti</div>
       <div class="kgrid" style="margin-bottom:20px">
-        <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-            <div class="kcard-stitch-icon"><span class="material-symbols-outlined">person</span></div>
-            <div class="info-btn">ℹ<span class="info-tooltip">Totale iscritti paganti (pieno + EB + buoni sconto). Esclusi FI e gratuiti.</span></div>
-          </div>
-          <div class="kcard-stitch-label">Iscritti paganti</div>
-          <div class="kcard-stitch-val" id="c-pag">—</div>
-          <div id="delta-c-pag" style="min-height:20px"></div>
-          <div style="font-size:10px;color:var(--text3);margin-top:4px">totale periodo</div>
-        </div>
-        <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-            <div class="kcard-stitch-icon" style="background:rgba(var(--blue),.12);color:var(--blue)"><span class="material-symbols-outlined">how_to_reg</span></div>
-            <div class="info-btn">ℹ<span class="info-tooltip">Quanti iscritti paganti hanno effettivamente partecipato.</span></div>
-          </div>
-          <div class="kcard-stitch-label">Presenti paganti</div>
-          <div class="kcard-stitch-val" id="c-pres">—</div>
-          <div id="delta-c-pres" style="min-height:20px"></div>
-        </div>
-        <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-            <div class="kcard-stitch-icon" style="background:rgba(var(--yellow),.12);color:var(--yellow)"><span class="material-symbols-outlined">percent</span></div>
-            <div class="info-btn">ℹ<span class="info-tooltip">Presenti / Iscritti. Benchmark ≥80% ottimo.</span></div>
-          </div>
-          <div class="kcard-stitch-label">Tasso presenza</div>
-          <div class="kcard-stitch-val" id="c-tasso">—</div>
-          <div id="delta-c-tasso" style="min-height:20px"></div>
-        </div>
-        <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-            <div class="kcard-stitch-icon" style="background:rgba(var(--green),.12);color:var(--green)"><span class="material-symbols-outlined">euro</span></div>
-            <div class="info-btn">ℹ<span class="info-tooltip">Ricavi da iscritti paganti × prezzo. Non include FI.</span></div>
-          </div>
-          <div class="kcard-stitch-label">Ricavi</div>
-          <div class="kcard-stitch-val" id="c-ric">—</div>
-          <div id="delta-c-ric" style="min-height:20px"></div>
-        </div>
+        <div class="kcard c1" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Totale iscritti che hanno pagato il biglietto (prezzo pieno o early bird). Esclusi FI e gratuiti/CAF/assicurativi.</span></div><div class="klbl">Iscritti paganti</div><div class="kval" id="c-pag">—</div><div class="ksub">totale periodo</div></div>
+        <div class="kcard c2" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Quanti iscritti paganti hanno effettivamente partecipato. Il gap tra iscritti e presenti è il tasso di no-show pagante.</span></div><div class="klbl">Presenti paganti</div><div class="kval" id="c-pres">—</div></div>
+        <div class="kcard c3" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Presenti paganti / Iscritti paganti. Benchmark: ≥80% ottimo, 60–80% normale, &lt;60% da investigare (comunicazione, tema, giorno).</span></div><div class="klbl">Tasso presenza</div><div class="kval" id="c-tasso">—</div></div>
+        <div class="kcard c4" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Ricavi calcolati su iscritti paganti × prezzo (pieno + early bird). Non include FI. Valore effettivo, non stimato.</span></div><div class="klbl">Ricavi</div><div class="kval" id="c-ric">—</div></div>
       </div>
 
       <!-- FORMAZIONE ILLIMITATA -->
-      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Formazione Illimitata — partecipazione eventi</div>
+      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Formazione Illimitata (abbonati)</div>
       <div class="kgrid" style="margin-bottom:20px">
-        <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-            <div class="kcard-stitch-icon" style="background:rgba(var(--blue),.12);color:var(--blue)"><span class="material-symbols-outlined">all_inclusive</span></div>
-            <div class="info-btn">ℹ<span class="info-tooltip">Totale iscritti con abbonamento FI nel periodo.</span></div>
-          </div>
-          <div class="kcard-stitch-label">Iscritti FI</div>
-          <div class="kcard-stitch-val" id="fi-isc">—</div>
-          <div id="delta-fi-isc" style="min-height:20px"></div>
-        </div>
-        <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-            <div class="kcard-stitch-icon"><span class="material-symbols-outlined">how_to_reg</span></div>
-            <div class="info-btn">ℹ<span class="info-tooltip">Iscritti FI che hanno partecipato.</span></div>
-          </div>
-          <div class="kcard-stitch-label">Presenti FI</div>
-          <div class="kcard-stitch-val" id="fi-pres">—</div>
-          <div id="delta-fi-pres" style="min-height:20px"></div>
-        </div>
-        <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-            <div class="kcard-stitch-icon" style="background:rgba(var(--yellow),.12);color:var(--yellow)"><span class="material-symbols-outlined">percent</span></div>
-            <div class="info-btn">ℹ<span class="info-tooltip">% presenti FI su iscritti FI.</span></div>
-          </div>
-          <div class="kcard-stitch-label">Tasso presenza FI</div>
-          <div class="kcard-stitch-val" id="fi-tasso">—</div>
-          <div id="delta-fi-tasso" style="min-height:20px"></div>
-        </div>
-        <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-            <div class="kcard-stitch-icon" style="background:rgba(var(--green),.12);color:var(--green)"><span class="material-symbols-outlined">avg_pace</span></div>
-            <div class="info-btn">ℹ<span class="info-tooltip">Media FI per evento nel periodo.</span></div>
-          </div>
-          <div class="kcard-stitch-label">Media FI / evento</div>
-          <div class="kcard-stitch-val" id="fi-media">—</div>
-          <div id="delta-fi-media" style="min-height:20px"></div>
-        </div>
+        <div class="kcard c2" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Totale iscritti con abbonamento Formazione Illimitata nel periodo selezionato. Non generano ricavo diretto per evento.</span></div><div class="klbl">Iscritti FI</div><div class="kval" id="fi-isc">—</div><div class="ksub">totale periodo</div></div>
+        <div class="kcard c3" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Quanti degli iscritti FI hanno effettivamente partecipato all'evento. La differenza con gli iscritti indica il tasso di no-show.</span></div><div class="klbl">Presenti FI</div><div class="kval" id="fi-pres">—</div></div>
+        <div class="kcard c1" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Percentuale di presenti FI sul totale iscritti FI. Benchmark indicativo: ≥70% ottimo, 40–70% nella norma, &lt;40% da monitorare.</span></div><div class="klbl">Tasso presenza FI</div><div class="kval" id="fi-tasso">—</div></div>
+        <div class="kcard c4" style="position:relative"><div class="kcard-grad"></div><div class="info-btn" style="position:absolute;top:10px;right:10px">ℹ<span class="info-tooltip">Numero medio di iscritti FI per evento nel periodo. Utile per capire quanto l'abbonamento FI contribuisce al riempimento delle aule.</span></div><div class="klbl">Media FI / evento</div><div class="kval" id="fi-media">—</div></div>
       </div>
 
-      <!-- FI ABBONAMENTI KPI -->
       <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin:20px 0 10px">Formazione Illimitata — abbonamenti</div>
       <div class="kgrid" style="margin-bottom:20px">
-        <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-            <div class="kcard-stitch-icon" style="background:rgba(var(--blue),.12);color:var(--blue)"><span class="material-symbols-outlined">all_inclusive</span></div>
-          </div>
-          <div class="kcard-stitch-label">Abbonati attivi</div>
-          <div class="kcard-stitch-val" id="comm-fi-tot">—</div>
-        </div>
-        <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-            <div class="kcard-stitch-icon" style="background:rgba(var(--green),.12);color:var(--green)"><span class="material-symbols-outlined">euro</span></div>
-          </div>
-          <div class="kcard-stitch-label">Valore totale abbonamenti</div>
-          <div class="kcard-stitch-val" id="comm-fi-val">—</div>
-        </div>
-        <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-            <div class="kcard-stitch-icon" style="background:rgba(var(--yellow),.12);color:var(--yellow)"><span class="material-symbols-outlined">schedule</span></div>
-          </div>
-          <div class="kcard-stitch-label">In scadenza (30 gg)</div>
-          <div class="kcard-stitch-val" id="comm-fi-exp">—</div>
-        </div>
-        <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-            <div class="kcard-stitch-icon" style="background:rgba(var(--red),.12);color:var(--red)"><span class="material-symbols-outlined">warning</span></div>
-          </div>
-          <div class="kcard-stitch-label">Scaduti</div>
-          <div class="kcard-stitch-val" id="comm-fi-scad">—</div>
-        </div>
+        <div class="kcard-stitch"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><div class="kcard-stitch-icon" style="background:var(--blue-bg);color:var(--blue)"><span class="material-symbols-outlined">all_inclusive</span></div></div><div class="kcard-stitch-label">Abbonati attivi</div><div class="kcard-stitch-val" id="comm-fi-tot">—</div></div>
+        <div class="kcard-stitch"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><div class="kcard-stitch-icon" style="background:var(--green-bg);color:var(--green)"><span class="material-symbols-outlined">euro</span></div></div><div class="kcard-stitch-label">Valore abbonamenti</div><div class="kcard-stitch-val" id="comm-fi-val">—</div></div>
+        <div class="kcard-stitch"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><div class="kcard-stitch-icon" style="background:var(--yellow-bg);color:var(--yellow)"><span class="material-symbols-outlined">schedule</span></div></div><div class="kcard-stitch-label">In scadenza (30 gg)</div><div class="kcard-stitch-val" id="comm-fi-exp">—</div></div>
+        <div class="kcard-stitch"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><div class="kcard-stitch-icon" style="background:var(--red-bg);color:var(--red)"><span class="material-symbols-outlined">warning</span></div></div><div class="kcard-stitch-label">Scaduti</div><div class="kcard-stitch-val" id="comm-fi-scad">—</div></div>
       </div>
-
       <div class="grid2">
         <div class="card">
           <div class="chart-toolbar">
@@ -1013,7 +859,7 @@ textarea.finp{min-height:72px;resize:vertical}
       <div class="ph" style="margin-bottom:20px">
         <div>
           <div class="pt font-headline">Formazione Illimitata</div>
-          <div class="ps">Elenco abbonati · status · analisi andamento</div>
+          <div class="ps">Abbonati · status · analisi andamento</div>
         </div>
         <div style="display:flex;gap:8px">
           <button class="btn btn-s btn-sm" onclick="exportFiCSV()"><span class="material-symbols-outlined" style="font-size:14px">download</span>Esporta CSV</button>
@@ -1021,73 +867,36 @@ textarea.finp{min-height:72px;resize:vertical}
           <button class="btn btn-p" onclick="openFiModal(null)"><span class="material-symbols-outlined" style="font-size:15px">add_circle</span>Nuovo abbonato</button>
         </div>
       </div>
-
-      <!-- KPI CARDS FI -->
-      <div class="kgrid" style="margin-bottom:20px" id="fi-kpi-grid">
-        <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-            <div class="kcard-stitch-icon" style="background:rgba(var(--blue),.12);color:var(--blue)"><span class="material-symbols-outlined">all_inclusive</span></div>
-          </div>
-          <div class="kcard-stitch-label">Abbonati attivi</div>
-          <div class="kcard-stitch-val" id="fi-k-tot">—</div>
-        </div>
-        <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-            <div class="kcard-stitch-icon" style="background:rgba(var(--green),.12);color:var(--green)"><span class="material-symbols-outlined">euro</span></div>
-          </div>
-          <div class="kcard-stitch-label">Valore totale abbonamenti</div>
-          <div class="kcard-stitch-val" id="fi-k-val">—</div>
-        </div>
-        <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-            <div class="kcard-stitch-icon" style="background:rgba(var(--yellow),.12);color:var(--yellow)"><span class="material-symbols-outlined">schedule</span></div>
-          </div>
-          <div class="kcard-stitch-label">In scadenza (30 gg)</div>
-          <div class="kcard-stitch-val" id="fi-k-exp">—</div>
-        </div>
-        <div class="kcard-stitch">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
-            <div class="kcard-stitch-icon" style="background:rgba(var(--red),.12);color:var(--red)"><span class="material-symbols-outlined">warning</span></div>
-          </div>
-          <div class="kcard-stitch-label">Scaduti</div>
-          <div class="kcard-stitch-val" id="fi-k-scad">—</div>
-        </div>
+      <div class="kgrid" style="margin-bottom:20px">
+        <div class="kcard-stitch"><div style="display:flex;justify-content:space-between;margin-bottom:12px"><div class="kcard-stitch-icon" style="background:rgba(var(--blue-bg));color:var(--blue)"><span class="material-symbols-outlined">all_inclusive</span></div></div><div class="kcard-stitch-label">Abbonati attivi</div><div class="kcard-stitch-val" id="fi-k-tot">—</div></div>
+        <div class="kcard-stitch"><div style="display:flex;justify-content:space-between;margin-bottom:12px"><div class="kcard-stitch-icon" style="background:var(--green-bg);color:var(--green)"><span class="material-symbols-outlined">euro</span></div></div><div class="kcard-stitch-label">Valore totale</div><div class="kcard-stitch-val" id="fi-k-val">—</div></div>
+        <div class="kcard-stitch"><div style="display:flex;justify-content:space-between;margin-bottom:12px"><div class="kcard-stitch-icon" style="background:var(--yellow-bg);color:var(--yellow)"><span class="material-symbols-outlined">schedule</span></div></div><div class="kcard-stitch-label">In scadenza (30 gg)</div><div class="kcard-stitch-val" id="fi-k-exp">—</div></div>
+        <div class="kcard-stitch"><div style="display:flex;justify-content:space-between;margin-bottom:12px"><div class="kcard-stitch-icon" style="background:var(--red-bg);color:var(--red)"><span class="material-symbols-outlined">warning</span></div></div><div class="kcard-stitch-label">Scaduti</div><div class="kcard-stitch-val" id="fi-k-scad">—</div></div>
       </div>
-
-      <!-- FILTRI TABELLA -->
+      <!-- FILTRI -->
       <div class="filters" style="margin-bottom:12px">
         <input class="finp" id="fi-search" placeholder="Cerca nome..." oninput="renderFiTabella()" style="max-width:220px">
         <select class="finp" id="fi-filter-tipo" onchange="renderFiTabella()" style="max-width:160px">
-          <option value="">Tutti i tipi</option>
-          <option value="singolo">Singolo</option>
-          <option value="duo">Duo</option>
-          <option value="studio">Studio</option>
+          <option value="">Tutti i tipi</option><option value="singolo">Singolo</option><option value="duo">Duo</option><option value="studio">Studio</option><option value="non_rinnovo">Non rinnovo</option>
         </select>
         <select class="finp" id="fi-filter-formula" onchange="renderFiTabella()" style="max-width:160px">
-          <option value="">Tutte le formule</option>
-          <option value="annuale">Annuale</option>
-          <option value="semestrale">Semestrale</option>
+          <option value="">Tutte le formule</option><option value="annuale">Annuale</option><option value="semestrale">Semestrale</option>
         </select>
         <select class="finp" id="fi-filter-stato" onchange="renderFiTabella()" style="max-width:160px">
-          <option value="">Tutti gli stati</option>
-          <option value="regola">In regola</option>
-          <option value="scadenza">In scadenza</option>
-          <option value="scaduto">Scaduto</option>
+          <option value="">Tutti gli stati</option><option value="regola">In regola</option><option value="scadenza">In scadenza</option><option value="scaduto">Scaduto</option>
         </select>
       </div>
-
-      <!-- TABELLA ABBONATI -->
-      <div class="card" style="padding:0;overflow:hidden">
+      <!-- TABELLA -->
+      <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px">
         <div class="twrap" id="fi-tbl-wrap">
-          <div class="empty"><div class="ei">♾️</div><div class="et">Caricamento abbonati...</div></div>
+          <div class="empty"><div class="ei">♾️</div><div class="et">Caricamento...</div></div>
         </div>
       </div>
-
       <!-- GRAFICI -->
       <div class="grid2" style="margin-bottom:16px">
         <div class="card">
           <div class="chart-toolbar">
-            <div class="ctitle" style="margin:0">Andamento abbonamenti <span class="ctitle-sub">nuovi vs persi per mese</span></div>
+            <div class="ctitle" style="margin:0">Andamento <span class="ctitle-sub">nuovi vs scaduti per mese</span></div>
             <div class="chart-type-btns" id="ctype-fi-and">
               <button class="ct-btn on" onclick="setFiChartType('ch-fi-andamento','bar',this)">Bar</button>
               <button class="ct-btn" onclick="setFiChartType('ch-fi-andamento','line',this)">Line</button>
@@ -1097,7 +906,7 @@ textarea.finp{min-height:72px;resize:vertical}
         </div>
         <div class="card">
           <div class="chart-toolbar">
-            <div class="ctitle" style="margin:0">Distribuzione tipologie <span class="ctitle-sub">singolo · duo · studio</span></div>
+            <div class="ctitle" style="margin:0">Tipologie <span class="ctitle-sub">distribuzione abbonati</span></div>
             <div class="chart-type-btns" id="ctype-fi-tipi">
               <button class="ct-btn on" onclick="setFiChartType('ch-fi-tipi','doughnut',this)">Donut</button>
               <button class="ct-btn" onclick="setFiChartType('ch-fi-tipi','pie',this)">Pie</button>
@@ -1107,10 +916,10 @@ textarea.finp{min-height:72px;resize:vertical}
           <div class="chw"><canvas id="ch-fi-tipi"></canvas></div>
         </div>
       </div>
-      <div class="grid2" style="margin-bottom:20px">
+      <div class="grid2">
         <div class="card">
           <div class="chart-toolbar">
-            <div class="ctitle" style="margin:0">Formula abbonamento <span class="ctitle-sub">annuale vs semestrale</span></div>
+            <div class="ctitle" style="margin:0">Formula <span class="ctitle-sub">annuale vs semestrale</span></div>
             <div class="chart-type-btns" id="ctype-fi-formula">
               <button class="ct-btn on" onclick="setFiChartType('ch-fi-formula','pie',this)">Pie</button>
               <button class="ct-btn" onclick="setFiChartType('ch-fi-formula','doughnut',this)">Donut</button>
@@ -1121,7 +930,7 @@ textarea.finp{min-height:72px;resize:vertical}
         </div>
         <div class="card">
           <div class="chart-toolbar">
-            <div class="ctitle" style="margin:0">Valore per tipologia <span class="ctitle-sub">ricavi suddivisi per tipo</span></div>
+            <div class="ctitle" style="margin:0">Valore per tipologia</div>
             <div class="chart-type-btns" id="ctype-fi-val">
               <button class="ct-btn on" onclick="setFiChartType('ch-fi-val','bar',this)">Bar</button>
               <button class="ct-btn" onclick="setFiChartType('ch-fi-val','line',this)">Line</button>
@@ -1131,9 +940,8 @@ textarea.finp{min-height:72px;resize:vertical}
           <div class="chw"><canvas id="ch-fi-val"></canvas></div>
         </div>
       </div>
-
-      
     </div>
+
     <!-- IMPORTA -->
     <div class="page" id="page-importa">
       <div class="ph"><div><div class="pt">Importa CSV</div><div class="ps">Carica dati storici</div></div></div>
@@ -1347,288 +1155,196 @@ textarea.finp{min-height:72px;resize:vertical}
 
 <!-- MODAL EVENTO -->
 <div class="mover" id="ev-modal" style="display:none" onclick="if(event.target===this)closeEventoModal()">
-  <div class="modal" style="max-width:860px;padding:0;overflow:hidden">
-    <!-- STICKY HEADER -->
-    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
-        <div style="flex:1">
-          <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px">
-            <span>Eventi</span> <span style="opacity:.4">›</span> <span style="color:var(--accent)" id="ev-modal-breadcrumb">Nuovo evento</span>
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle" id="ev-modal-title">Nuovo evento</div><button class="mclose" onclick="closeEventoModal()">✕</button></div>
+    <div class="mbody" style="padding:0">
+      <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
+        <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">📋 Informazioni base</div>
+        <div class="fgrid">
+          <div class="fg full"><label class="flbl">Titolo *</label><input type="text" class="finp" id="ef-titolo" placeholder="Es: Urbanistica — novità 2026"></div>
+          <div class="fg"><label class="flbl">Tema *</label><select class="finp" id="ef-tema"><option value="">Seleziona tema</option><option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Successioni</option><option>Bonus Casa</option><option>Locazioni</option><option>Fisco Professionisti</option><option>Professione</option><option>Comunità Energetiche</option><option>CTU</option><option>Agricoltura</option><option>Inglese</option><option>CAF</option><option>Assicurazioni</option></select></div>
+          <div class="fg"><label class="flbl">Tipologia *</label><select class="finp" id="ef-tipo" onchange="onTipoChange()"><option value="">Seleziona</option><option value="seminario">Seminario (2h)</option><option value="corso_4h">Corso tecnico 4h (2 sessioni)</option><option value="corso_6h">Corso tecnico 6h (3 sessioni)</option><option value="corso_deontologico">Corso deontologico (2h)</option></select></div>
+          <div class="fg full">
+            <label class="flbl">Docente/i <span style="font-size:9px;color:var(--text3);text-transform:none;letter-spacing:0">selezione multipla possibile</span></label>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;min-height:28px;margin-bottom:8px" id="docenti-selected"></div>
+            <select class="finp" id="ef-docente-add" onchange="addDocente(this)"><option value="">+ Aggiungi docente</option><option>Basso</option><option>Caputo</option><option>Cocozza</option><option>De Castro</option><option value="Dell'Oste">Dell'Oste</option><option>Di Leo</option><option>Forte</option><option>Frediani</option><option>Groppo</option><option>Masi</option><option>Mion</option><option>Rivetti</option></select>
           </div>
-          <div class="font-headline" style="font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.3px" id="ev-modal-title">Nuovo evento</div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <button class="btn btn-s btn-sm" id="ev-dup-btn" onclick="duplicateEvento()" style="display:none"><span class="material-symbols-outlined" style="font-size:14px">content_copy</span>Duplica</button>
-          <button class="btn btn-p btn-sm" onclick="saveEvento()"><span class="material-symbols-outlined" style="font-size:14px">save</span>Salva</button>
-          <button class="mclose" onclick="closeEventoModal()">✕</button>
+          <input type="hidden" id="ef-docente">
         </div>
       </div>
-    </div>
-    <!-- TWO-COLUMN BODY -->
-    <div style="display:grid;grid-template-columns:1fr 320px;max-height:calc(92vh - 72px);overflow-y:auto" id="ev-modal-body">
-      <!-- LEFT: form sections -->
-      <div style="padding:20px 24px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:16px">
-
-        <!-- SEZIONE: Info base -->
-        <div style="background:var(--bg3);border-radius:var(--r2);padding:16px">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
-            <div class="kcard-stitch-icon" style="width:30px;height:30px"><span class="material-symbols-outlined" style="font-size:16px">info</span></div>
-            <span style="font-size:11px;font-weight:700;color:var(--text)">Informazioni base</span>
-          </div>
+      <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
+        <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">📅 Date e sessioni</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:12px" id="sessioni-hint">Inserisci la data dell'evento</div>
+        <div id="date-single">
           <div class="fgrid">
-            <div class="fg full"><label class="flbl">Titolo *</label><input type="text" class="finp" id="ef-titolo" placeholder="Es: Urbanistica — novità 2026"></div>
-            <div class="fg"><label class="flbl">Tema *</label>
-              <select class="finp" id="ef-tema"><option value="">Seleziona tema</option><option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Successioni</option><option>Bonus Casa</option><option>Locazioni</option><option>Fisco Professionisti</option><option>Professione</option><option>Comunità Energetiche</option><option>CTU</option><option>Agricoltura</option><option>Inglese</option><option>CAF</option><option>Assicurazioni</option></select>
-            </div>
-            <div class="fg"><label class="flbl">Tipologia *</label>
-              <select class="finp" id="ef-tipo" onchange="onTipoChange()"><option value="">Seleziona</option><option value="seminario">Seminario (2h)</option><option value="corso_4h">Corso tecnico 4h</option><option value="corso_6h">Corso tecnico 6h</option><option value="corso_deontologico">Corso deontologico (2h)</option></select>
-            </div>
-            <div class="fg full">
-              <label class="flbl">Docente/i</label>
-              <div style="display:flex;flex-wrap:wrap;gap:6px;min-height:28px;margin-bottom:8px" id="docenti-selected"></div>
-              <select class="finp" id="ef-docente-add" onchange="addDocente(this)"><option value="">+ Aggiungi docente</option></select>
-              <input type="hidden" id="ef-docente">
-            </div>
+            <div class="fg"><label class="flbl">Data *</label><input type="date" class="finp" id="ef-data"></div>
+            <div class="fg"><label class="flbl">Orario</label><input type="text" class="finp" id="ef-orario" placeholder="es. 15:00–17:00"></div>
           </div>
         </div>
-
-        <!-- SEZIONE: Date e sessioni -->
-        <div style="background:var(--bg3);border-radius:var(--r2);padding:16px">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
-            <div class="kcard-stitch-icon" style="width:30px;height:30px;background:rgba(var(--blue),.12);color:var(--blue)"><span class="material-symbols-outlined" style="font-size:16px">schedule</span></div>
-            <span style="font-size:11px;font-weight:700;color:var(--text)">Programmazione</span>
-            <span style="font-size:10px;color:var(--text3);margin-left:4px" id="sessioni-hint">Inserisci la data dell'evento</span>
+        <div id="date-multi" style="display:none"><div id="sessioni-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px"></div></div>
+        <div class="fgrid" style="margin-top:10px">
+          <div class="fg"><label class="flbl">Stato</label><select class="finp" id="ef-stato"><option value="pianificato">Pianificato</option><option value="pubblicato">Pubblicato</option><option value="svolto">Svolto</option><option value="chiuso">Chiuso</option></select></div>
+          <div class="fg"><label class="flbl">Ore / CFP</label><div style="padding:8px 11px;background:var(--bg3);border-radius:var(--r);font-size:13px;font-weight:600;color:var(--accent)" id="ef-ore-display">—</div><input type="hidden" id="ef-ore"></div>
+        </div>
+      </div>
+      <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
+        <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">💶 Prezzi</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Early bird opzionale</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="fg">
+            <label class="flbl">Prezzo pieno (€)</label>
+            <select class="finp" id="ef-prezzo">
+              <option value="">— seleziona —</option>
+              <option value="48.36">€ 48,36</option>
+              <option value="64.75">€ 64,75</option>
+              <option value="89.34">€ 89,34</option>
+              <option value="122.13">€ 122,13</option>
+              <option value="130.33">€ 130,33</option>
+              <option value="154.82">€ 154,82</option>
+              <option value="204.09">€ 204,09</option>
+              <option value="212.30">€ 212,30</option>
+            </select>
           </div>
-          <div id="date-single">
-            <div class="fgrid">
-              <div class="fg"><label class="flbl">Data *</label><input type="date" class="finp" id="ef-data"></div>
-              <div class="fg"><label class="flbl">Orario</label><input type="text" class="finp" id="ef-orario" placeholder="es. 15:00–17:00"></div>
-            </div>
-          </div>
-          <div id="date-multi" style="display:none">
-            <div id="sessioni-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px"></div>
-          </div>
-          <div class="fgrid" style="margin-top:10px">
-            <div class="fg"><label class="flbl">Stato</label>
-              <select class="finp" id="ef-stato"><option value="pianificato">Pianificato</option><option value="pubblicato">Pubblicato</option><option value="svolto">Svolto</option><option value="chiuso">Chiuso</option></select>
-            </div>
+          <div style="background:var(--yellow-bg);border:1.5px dashed var(--yellow);border-radius:var(--r);padding:12px">
+            <div style="font-size:10px;font-weight:700;color:var(--yellow);margin-bottom:8px">⚡ Early Bird</div>
             <div class="fg">
-              <label class="flbl">Ore / CFP</label>
-              <div style="padding:8px 11px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);font-size:14px;font-weight:700;color:var(--accent);font-family:'Manrope',sans-serif" id="ef-ore-display">—</div>
-              <input type="hidden" id="ef-ore">
+              <label class="flbl" style="color:var(--text3)">Prezzo EB (€)</label>
+              <select class="finp" id="ef-eb">
+                <option value="">— nessuno —</option>
+                <option value="36.89">€ 36,89</option>
+                <option value="48.36">€ 48,36</option>
+                <option value="64.75">€ 64,75</option>
+                <option value="89.34">€ 89,34</option>
+                <option value="94.26">€ 94,26</option>
+                <option value="105.74">€ 105,74</option>
+                <option value="146.72">€ 146,72</option>
+                <option value="154.82">€ 154,82</option>
+              </select>
             </div>
           </div>
         </div>
-
-        <!-- SEZIONE: Prezzi -->
-        <div style="background:var(--bg3);border-radius:var(--r2);padding:16px">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
-            <div class="kcard-stitch-icon" style="width:30px;height:30px;background:rgba(var(--green),.12);color:var(--green)"><span class="material-symbols-outlined" style="font-size:16px">euro</span></div>
-            <span style="font-size:11px;font-weight:700;color:var(--text)">Prezzi</span>
+        <!-- BUONI SCONTO -->
+        <div style="margin-top:14px">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;color:var(--text2)">
+            <input type="checkbox" id="ef-has-buoni" onchange="toggleBuoniSconto()" style="accent-color:var(--accent);width:14px;height:14px">
+            <span>🎟 Sono presenti iscritti con buoni sconto</span>
+          </label>
+          <div id="ef-buoni-section" style="display:none;margin-top:12px;background:var(--bg3);border:1.5px dashed var(--accent);border-radius:var(--r);padding:12px">
+            <div style="font-size:10px;font-weight:700;color:var(--accent);margin-bottom:10px">🎟 Buoni sconto</div>
+            <div id="ef-buoni-list"></div>
+            <button type="button" class="btn btn-s btn-sm" onclick="addBuonoSconto()" style="margin-top:8px;font-size:11px">+ Aggiungi fascia sconto</button>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-            <div class="fg"><label class="flbl">Prezzo pieno (€)</label>
-              <select class="finp" id="ef-prezzo"><option value="">— seleziona —</option><option value="48.36">€ 48,36</option><option value="64.75">€ 64,75</option><option value="89.34">€ 89,34</option><option value="122.13">€ 122,13</option><option value="130.33">€ 130,33</option><option value="154.82">€ 154,82</option><option value="204.09">€ 204,09</option><option value="212.30">€ 212,30</option></select>
-            </div>
-            <div style="background:var(--yellow-bg);border:1.5px dashed var(--yellow);border-radius:var(--r);padding:12px">
-              <div style="font-size:9px;font-weight:700;color:var(--yellow);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">⚡ Early Bird</div>
-              <div class="fg"><label class="flbl" style="color:var(--text3)">Prezzo EB (€)</label>
-                <select class="finp" id="ef-eb"><option value="">— nessuno —</option><option value="36.89">€ 36,89</option><option value="48.36">€ 48,36</option><option value="64.75">€ 64,75</option><option value="89.34">€ 89,34</option><option value="94.26">€ 94,26</option><option value="105.74">€ 105,74</option><option value="146.72">€ 146,72</option><option value="154.82">€ 154,82</option></select>
-              </div>
-            </div>
-          </div>
-          <div style="margin-top:12px">
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;color:var(--text2)">
-              <input type="checkbox" id="ef-has-buoni" onchange="toggleBuoniSconto()" style="accent-color:var(--accent);width:14px;height:14px">
-              <span>🎟 Iscritti con buoni sconto</span>
-            </label>
-            <div id="ef-buoni-section" style="display:none;margin-top:10px;background:var(--bg2);border:1.5px dashed var(--accent);border-radius:var(--r);padding:12px">
-              <div style="font-size:9px;font-weight:700;color:var(--accent);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">🎟 Buoni sconto</div>
-              <div id="ef-buoni-list"></div>
-              <button type="button" class="btn btn-s btn-sm" onclick="addBuonoSconto()" style="margin-top:8px">+ Aggiungi fascia</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- SEZIONE: Note -->
-        <div style="background:var(--bg3);border-radius:var(--r2);padding:16px">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
-            <div class="kcard-stitch-icon" style="width:30px;height:30px;background:rgba(var(--text3),.1);color:var(--text3)"><span class="material-symbols-outlined" style="font-size:16px">notes</span></div>
-            <span style="font-size:11px;font-weight:700;color:var(--text)">Note</span>
-          </div>
-          <textarea class="finp" id="ef-note" placeholder="Annotazioni interne, comunicazioni, variazioni..." style="min-height:70px"></textarea>
         </div>
       </div>
-
-      <!-- RIGHT: partecipanti + CFP summary -->
-      <div style="padding:20px 20px;display:flex;flex-direction:column;gap:14px;background:var(--bg3)">
-        <!-- CFP badge -->
-        <div style="background:var(--bg2);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r2);padding:14px;text-align:center">
-          <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">CFP generati</div>
-          <div class="font-headline" style="font-size:32px;font-weight:900;color:var(--accent)" id="ef-ore-display-right">—</div>
-          <div style="font-size:10px;color:var(--text3);margin-top:2px">ore formazione</div>
-        </div>
-
-        <!-- Partecipanti: Paganti -->
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px">
-          <div style="font-size:9px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;align-items:center;gap:5px"><span class="material-symbols-outlined" style="font-size:13px">payments</span>Paganti</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-            <div class="fg"><label class="flbl">Iscr. prezzo pieno</label><input type="number" class="finp" id="ef-ip" placeholder="0" min="0"></div>
-            <div class="fg"><label class="flbl">Iscr. Early Bird</label><input type="number" class="finp" id="ef-ieb" placeholder="0" min="0"></div>
+      <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
+        <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">👥 Partecipanti</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Compila dopo lo svolgimento</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="background:var(--green-bg);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r);padding:12px">
+            <div style="font-size:10px;font-weight:700;color:var(--accent);margin-bottom:10px">Paganti</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+              <div class="fg"><label class="flbl">Iscr. prezzo pieno</label><input type="number" class="finp" id="ef-ip" placeholder="0" min="0"></div>
+              <div class="fg"><label class="flbl">Iscr. Early Bird</label><input type="number" class="finp" id="ef-ieb" placeholder="0" min="0"></div>
+              <div class="fg"><label class="flbl">Presenti totali paganti</label><input type="number" class="finp" id="ef-pp" placeholder="0" min="0" title="Presenti totali: prezzo pieno + Early Bird"></div>
+            </div>
           </div>
-          <div class="fg"><label class="flbl">Presenti paganti</label><input type="number" class="finp" id="ef-pp" placeholder="0" min="0"></div>
-        </div>
-
-        <!-- Partecipanti: FI -->
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px">
-          <div style="font-size:9px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;align-items:center;gap:5px"><span class="material-symbols-outlined" style="font-size:13px">all_inclusive</span>Formazione Illimitata</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            <div class="fg"><label class="flbl">Iscritti FI</label><input type="number" class="finp" id="ef-ii" placeholder="0" min="0"></div>
-            <div class="fg"><label class="flbl">Presenti FI</label><input type="number" class="finp" id="ef-pi" placeholder="0" min="0"></div>
+          <div style="background:var(--blue-bg);border:1px solid rgba(91,141,238,.25);border-radius:var(--r);padding:12px">
+            <div style="font-size:10px;font-weight:700;color:var(--blue);margin-bottom:10px">Formazione Illimitata</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div class="fg"><label class="flbl">Iscritti FI</label><input type="number" class="finp" id="ef-ii" placeholder="0" min="0"></div>
+              <div class="fg"><label class="flbl">Presenti FI</label><input type="number" class="finp" id="ef-pi" placeholder="0" min="0"></div>
+            </div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px">
+            <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:10px">Gratuiti / CAF</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+              <div class="fg"><label class="flbl">Iscritti</label><input type="number" class="finp" id="ef-ig" placeholder="0" min="0"></div>
+              <div class="fg"><label class="flbl">Presenti</label><input type="number" class="finp" id="ef-pg" placeholder="0" min="0"></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="ef-escludi" style="width:15px;height:15px;cursor:pointer;accent-color:var(--accent)"><label for="ef-escludi" style="font-size:11px;color:var(--text2);cursor:pointer">Escludi dai KPI</label></div>
           </div>
         </div>
-
-        <!-- Partecipanti: Gratuiti -->
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px">
-          <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;align-items:center;gap:5px"><span class="material-symbols-outlined" style="font-size:13px">volunteer_activism</span>Gratuiti / CAF</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-            <div class="fg"><label class="flbl">Iscritti</label><input type="number" class="finp" id="ef-ig" placeholder="0" min="0"></div>
-            <div class="fg"><label class="flbl">Presenti</label><input type="number" class="finp" id="ef-pg" placeholder="0" min="0"></div>
-          </div>
-          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;color:var(--text2)">
-            <input type="checkbox" id="ef-escludi" style="width:14px;height:14px;cursor:pointer;accent-color:var(--accent)">
-            <span>Escludi dai KPI</span>
-          </label>
-        </div>
+      </div>
+      <div style="padding:16px 22px">
+        <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">📝 Note</div>
+        <div class="fg"><textarea class="finp" id="ef-note" placeholder="Annotazioni..." style="min-height:60px"></textarea></div>
       </div>
     </div>
+    <div class="mfoot" style="justify-content:space-between"><button class="btn btn-s btn-sm" id="ev-dup-btn" onclick="duplicateEvento()" style="display:none">📋 Duplica</button><div style="display:flex;gap:8px"><button class="btn btn-s" onclick="closeEventoModal()">Annulla</button><button class="btn btn-p" onclick="saveEvento()">Salva evento</button></div></div>
   </div>
 </div>
 
+<!-- MODAL FORMATORE -->
 <div class="mover" id="fm-modal" style="display:none" onclick="if(event.target===this)closeFmModal()">
-  <div class="modal" style="max-width:860px;padding:0;overflow:hidden">
-    <!-- STICKY HEADER -->
-    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
-        <div style="display:flex;align-items:center;gap:14px;flex:1">
-          <label style="cursor:pointer;flex-shrink:0">
-            <div class="av-big" id="fm-av" style="width:56px;height:56px;font-size:18px"><span id="fm-init"></span><div class="av-overlay">Cambia</div></div>
-            <input type="file" accept="image/*" style="display:none" id="fm-photo-inp" onchange="uploadFmPhoto(this)">
-          </label>
-          <div style="flex:1;min-width:0">
-            <input class="finp" id="fm-nome-edit" placeholder="Nome formatore" style="font-size:16px;font-weight:700;border:none;background:transparent;padding:0 0 2px 0;margin-bottom:4px;border-bottom:1px solid var(--border);border-radius:0;width:100%">
-            <div id="fm-temi-ref" style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px"></div>
+  <div class="modal">
+    <div class="mhdr"><div class="mtitle" id="fm-modal-title">Scheda formatore</div><div style="display:flex;gap:8px;align-items:center"><button class="btn btn-s btn-sm" onclick="const n=currentFm;closeFmModal();openNewFormatoreModal(n)">✏️ Modifica</button><button class="mclose" onclick="closeFmModal()">✕</button></div></div>
+    <div class="mbody">
+      <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px">
+        <label style="cursor:pointer">
+          <div class="av-big" id="fm-av"><span id="fm-init"></span><div class="av-overlay">Cambia foto</div></div>
+          <input type="file" accept="image/*" style="display:none" id="fm-photo-inp" onchange="uploadFmPhoto(this)">
+        </label>
+        <div style="flex:1">
+          <div class="fg" style="margin-bottom:8px">
+            <label class="flbl">Nome formatore</label>
+            <input class="finp" id="fm-nome-edit" placeholder="Nome formatore" style="font-size:15px;font-weight:700">
           </div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;flex-shrink:0">
-          <button class="btn btn-s btn-sm" onclick="const n=currentFm;closeFmModal();openNewFormatoreModal(n)"><span class="material-symbols-outlined" style="font-size:14px">edit</span>Modifica</button>
-          <button class="btn btn-p btn-sm" onclick="saveFmData()"><span class="material-symbols-outlined" style="font-size:14px">save</span>Salva</button>
-          <button class="mclose" onclick="closeFmModal()">✕</button>
+          <div id="fm-temi-ref" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px"></div>
+          <div id="fm-stats-top" style="display:flex;gap:16px;flex-wrap:wrap"></div>
         </div>
       </div>
+      <div id="fm-rank-row" style="margin-bottom:14px"></div>
+      <div class="fgrid" style="margin-bottom:16px">
+        <div class="fg full"><label class="flbl">Bio / CV</label><textarea class="finp" id="fm-cv" placeholder="Bio, formazione, specializzazioni..." style="min-height:90px"></textarea></div>
+        <div class="fg"><label class="flbl">Email</label><input class="finp" id="fm-email" placeholder="email@esempio.it"></div>
+        <div class="fg"><label class="flbl">Telefono</label><input class="finp" id="fm-tel" placeholder="+39 ..."></div>
+        <div class="fg full"><label class="flbl">Note interne</label><textarea class="finp" id="fm-note" placeholder="Disponibilità, accordi, note operative..."></textarea></div>
+      </div>
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px">Ultimi eventi</div>
+      <div class="twrap" id="fm-ev-list"></div>
     </div>
-    <!-- TWO-COLUMN BODY -->
-    <div style="display:grid;grid-template-columns:1fr 280px;max-height:calc(92vh - 90px);overflow-y:auto">
-      <!-- LEFT: stats + bio + events -->
-      <div style="padding:20px 24px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:16px">
-        <!-- Stats row -->
-        <div id="fm-stats-top" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px"></div>
-        <!-- Rank -->
-        <div id="fm-rank-row"></div>
-        <!-- Bio/CV -->
-        <div style="background:var(--bg3);border-radius:var(--r2);padding:14px">
-          <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:5px"><span class="material-symbols-outlined" style="font-size:13px">person</span>Bio / CV</div>
-          <textarea class="finp" id="fm-cv" placeholder="Bio, formazione, specializzazioni..." style="min-height:80px;background:var(--bg2)"></textarea>
-        </div>
-        <!-- Note interne -->
-        <div style="background:var(--bg3);border-radius:var(--r2);padding:14px">
-          <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:5px"><span class="material-symbols-outlined" style="font-size:13px">lock</span>Note interne</div>
-          <textarea class="finp" id="fm-note" placeholder="Note riservate, accordi, disponibilità..." style="background:var(--bg2)"></textarea>
-        </div>
-        <!-- Ultimi eventi -->
-        <div>
-          <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;display:flex;align-items:center;gap:5px"><span class="material-symbols-outlined" style="font-size:13px">event</span>Ultimi eventi</div>
-          <div class="twrap" id="fm-ev-list"></div>
-        </div>
-      </div>
-      <!-- RIGHT: contact + actions -->
-      <div style="padding:20px;background:var(--bg3);display:flex;flex-direction:column;gap:14px">
-        <!-- Contact card -->
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px">
-          <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px">Contatti</div>
-          <div class="fg" style="margin-bottom:10px"><label class="flbl">Email</label><input class="finp" id="fm-email" placeholder="email@esempio.it"></div>
-          <div class="fg"><label class="flbl">Telefono</label><input class="finp" id="fm-tel" placeholder="+39 ..."></div>
-        </div>
-        <!-- Performance card populated by JS -->
-        <div style="background:var(--bg2);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r2);padding:14px;position:relative;overflow:hidden">
-          <div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:rgba(var(--accent-rgb),.06);border-radius:50%;filter:blur(20px)"></div>
-          <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Performance periodo</div>
-          <div id="fm-perf-card" style="display:flex;flex-direction:column;gap:8px"></div>
-        </div>
-      </div>
-    </div>
+    <div class="mfoot"><button class="btn btn-s" onclick="closeFmModal()">Chiudi</button><button class="btn btn-p" onclick="saveFmData()">Salva scheda</button></div>
   </div>
 </div>
 
+
+<!-- MODAL DETTAGLIO EVENTO -->
 <div class="mover" id="ev-detail-modal" style="display:none" onclick="if(event.target===this)closeEvDetail()">
-  <div class="modal" style="max-width:900px;padding:0;overflow:hidden">
-    <!-- STICKY HEADER -->
-    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:20px 24px">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
-        <div style="flex:1;min-width:0">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap">
-            <span id="evd-stato-badge"></span>
-            <span style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px"><span class="material-symbols-outlined" style="font-size:14px">calendar_today</span><span id="evd-subtitle"></span></span>
-          </div>
-          <div class="font-headline" style="font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.5px;line-height:1.2" id="evd-title">Dettaglio evento</div>
+  <div class="modal" style="max-width:780px">
+    <div class="mhdr">
+      <div style="flex:1">
+        <div class="mtitle" id="evd-title">Dettaglio evento</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:3px" id="evd-subtitle"></div>
+        <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">
+          <button class="btn btn-p" id="evd-dup-btn" onclick="evdDuplicate()" style="font-size:12px;padding:8px 16px">📋 Duplica</button>
+          <button class="btn btn-s" id="evd-edit-btn" onclick="" style="font-size:12px;padding:8px 16px">✏️ Modifica</button>
+          <button class="btn btn-d" id="evd-del-btn" onclick="" style="font-size:12px;padding:8px 16px">🗑 Elimina</button>
         </div>
-        <button class="mclose" onclick="closeEvDetail()" style="flex-shrink:0;margin-top:4px">✕</button>
       </div>
+      <button class="mclose" onclick="closeEvDetail()">✕</button>
     </div>
-    <!-- TWO-COLUMN BODY -->
-    <div class="evd-modal-inner" style="max-height:calc(92vh - 80px);overflow-y:auto">
-      <!-- LEFT COLUMN -->
-      <div class="evd-left">
-        <!-- Info tiles row -->
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px" id="evd-info-grid"></div>
-        <!-- Docente box -->
-        <div id="evd-formatore-box" style="display:none;margin-bottom:20px"></div>
-        <!-- Partecipazione header -->
-        <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:6px"><span class="material-symbols-outlined" style="font-size:14px">analytics</span>Analisi partecipazione</div>
-        <!-- 3-card participation grid -->
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px" id="evd-part-grid"></div>
-        <!-- Chart -->
-        <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">Iscritti vs presenti</div>
-        <div style="position:relative;height:150px;margin-bottom:20px"><canvas id="evd-chart"></canvas></div>
-        <!-- Note -->
-        <div id="evd-note-section" style="display:none">
-          <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">Note interne</div>
-          <div style="background:var(--bg3);border-left:3px solid rgba(var(--accent-rgb),.3);border-radius:0 var(--r) var(--r) 0;padding:12px 16px;font-size:12px;color:var(--text2);line-height:1.7;font-style:italic" id="evd-note"></div>
-        </div>
+    <div class="mbody">
+      <!-- INFO GRID -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px" id="evd-info-grid"></div>
+      <!-- FORMATORE BOX -->
+      <div id="evd-formatore-box" style="display:none;margin-bottom:18px"></div>
+      <!-- DIVIDER -->
+      <div style="height:.5px;background:var(--border);margin-bottom:18px"></div>
+      <!-- PARTECIPAZIONE -->
+      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">Partecipazione</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px" id="evd-part-grid"></div>
+      <!-- INSIGHT CHART -->
+      <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">Confronto iscritti vs presenti</div>
+      <div style="position:relative;height:160px;margin-bottom:18px"><canvas id="evd-chart"></canvas></div>
+      <!-- DIVIDER -->
+      <div style="height:.5px;background:var(--border);margin-bottom:18px"></div>
+      <!-- ECONOMICS -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px" id="evd-eco-grid"></div>
+      <!-- NOTE -->
+      <div id="evd-note-section" style="display:none">
+        <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">Note</div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;font-size:12px;color:var(--text2);line-height:1.6" id="evd-note"></div>
       </div>
-      <!-- RIGHT COLUMN -->
-      <div class="evd-right">
-        <!-- Economics card -->
-        <div class="evd-eco-card" id="evd-eco-grid"></div>
-        <!-- Action buttons -->
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <button class="btn btn-p" id="evd-edit-btn" style="justify-content:center;padding:12px;font-size:13px;font-weight:700"><span class="material-symbols-outlined" style="font-size:16px">edit</span>Modifica evento</button>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            <button class="btn btn-s" id="evd-dup-btn" onclick="evdDuplicate()" style="justify-content:center;padding:10px;font-size:12px"><span class="material-symbols-outlined" style="font-size:14px">content_copy</span>Duplica</button>
-            <button class="btn btn-d" id="evd-del-btn" style="justify-content:center;padding:10px;font-size:12px"><span class="material-symbols-outlined" style="font-size:14px">delete</span>Elimina</button>
-          </div>
-        </div>
-        <!-- Timeline -->
-        <div>
-          <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px">Cronologia</div>
-          <div class="evd-timeline" id="evd-timeline"></div>
-        </div>
-      </div>
-    </div>
-    <!-- FOOTER -->
-    <div class="evd-footer" id="evd-footer-meta">
-      <span id="evd-footer-id">—</span>
-      <span style="display:flex;align-items:center;gap:4px"><span class="material-symbols-outlined" style="font-size:12px">update</span><span id="evd-footer-mod">—</span></span>
     </div>
   </div>
 </div>
@@ -1689,60 +1405,44 @@ textarea.finp{min-height:72px;resize:vertical}
 
 <!-- MODAL NUOVO FORMATORE -->
 <div class="mover" id="new-fm-modal" style="display:none" onclick="if(event.target===this)closeNewFormatoreModal()">
-  <div class="modal" style="max-width:540px;padding:0;overflow:hidden">
-    <!-- HEADER -->
-    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px">
-      <div style="display:flex;align-items:center;justify-content:space-between">
-        <div>
-          <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px">Formatori › <span style="color:var(--accent)" id="new-fm-breadcrumb">Nuovo docente</span></div>
-          <div class="font-headline" style="font-size:16px;font-weight:800;color:var(--text)" id="new-fm-title">Nuovo docente</div>
-        </div>
-        <button class="mclose" onclick="closeNewFormatoreModal()">✕</button>
-      </div>
+  <div class="modal" style="max-width:500px">
+    <div class="mhdr">
+      <div class="mtitle" id="new-fm-title">Nuovo docente</div>
+      <button class="mclose" onclick="closeNewFormatoreModal()">✕</button>
     </div>
-    <!-- BODY -->
-    <div style="padding:20px 24px;max-height:calc(92vh - 70px);overflow-y:auto;display:flex;flex-direction:column;gap:14px">
-      <!-- Avatar + nome -->
-      <div style="display:flex;align-items:center;gap:16px;background:var(--bg3);border-radius:var(--r2);padding:14px">
-        <div style="cursor:pointer;flex-shrink:0" onclick="document.getElementById('new-fm-av-input').click()">
-          <div class="av-big" id="new-fm-av-preview" style="width:56px;height:56px;font-size:18px"><span id="new-fm-av-init">?</span><div class="av-overlay">Foto</div></div>
-          <input type="file" id="new-fm-av-input" accept="image/*" style="display:none" onchange="previewNewFmAv(this)">
+    <div class="mbody">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+        <div class="av-big" id="new-fm-av-preview" onclick="document.getElementById('new-fm-av-input').click()" style="cursor:pointer">
+          <span id="new-fm-av-init">?</span>
+          <div class="av-overlay">Foto</div>
         </div>
         <div style="flex:1">
-          <div class="fg"><label class="flbl">Nome completo *</label><input type="text" class="finp" id="new-fm-nome" placeholder="Es. Mario Rossi" oninput="updateNewFmInit()"></div>
+          <div style="font-size:11px;color:var(--text3);margin-bottom:6px">Foto profilo (opzionale)</div>
+          <input type="file" id="new-fm-av-input" accept="image/*" style="display:none" onchange="previewNewFmAv(this)">
+          <button class="btn btn-s btn-sm" onclick="document.getElementById('new-fm-av-input').click()">Carica foto</button>
         </div>
       </div>
-      <!-- Temi -->
-      <div style="background:var(--bg3);border-radius:var(--r2);padding:14px">
-        <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;display:flex;align-items:center;gap:5px"><span class="material-symbols-outlined" style="font-size:13px">label</span>Temi di competenza</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px" id="new-fm-temi-sel"></div>
-        <select class="finp" id="new-fm-temi-add" onchange="addNewFmTema(this)">
-          <option value="">+ Aggiungi tema</option>
-          <option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Successioni</option><option>Bonus Casa</option><option>Locazioni</option><option>Fisco Professionisti</option><option>Professione</option><option>Comunità Energetiche</option><option>CTU</option><option>Agricoltura</option><option>Inglese</option><option>CAF</option><option>Assicurazioni</option>
-        </select>
-      </div>
-      <!-- Contatti -->
-      <div style="background:var(--bg3);border-radius:var(--r2);padding:14px">
-        <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;display:flex;align-items:center;gap:5px"><span class="material-symbols-outlined" style="font-size:13px">contact_mail</span>Contatti</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div class="fg"><label class="flbl">Email</label><input type="email" class="finp" id="new-fm-email" placeholder="nome@esempio.it"></div>
-          <div class="fg"><label class="flbl">Telefono</label><input type="text" class="finp" id="new-fm-tel" placeholder="+39 000 0000000"></div>
+      <div class="fgrid">
+        <div class="fg full"><label class="flbl">Nome completo *</label><input type="text" class="finp" id="new-fm-nome" placeholder="Es. Mario Rossi" oninput="updateNewFmInit()"></div>
+        <div class="fg full"><label class="flbl">Temi di competenza <span style="font-size:9px;color:var(--text3);text-transform:none;letter-spacing:0">seleziona uno o più temi</span></label>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px" id="new-fm-temi-sel"></div>
+          <select class="finp" id="new-fm-temi-add" onchange="addNewFmTema(this)">
+            <option value="">+ Aggiungi tema</option>
+            <option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Successioni</option><option>Bonus Casa</option><option>Locazioni</option><option>Fisco Professionisti</option><option>Professione</option><option>Comunità Energetiche</option><option>CTU</option><option>Agricoltura</option><option>Inglese</option><option>CAF</option><option>Assicurazioni</option>
+          </select>
         </div>
-      </div>
-      <!-- CV + Note -->
-      <div style="background:var(--bg3);border-radius:var(--r2);padding:14px">
-        <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;display:flex;align-items:center;gap:5px"><span class="material-symbols-outlined" style="font-size:13px">description</span>Profilo</div>
-        <div class="fg" style="margin-bottom:10px"><label class="flbl">CV / Bio</label><textarea class="finp" id="new-fm-cv" placeholder="Breve presentazione, specializzazioni, esperienze..." style="min-height:70px"></textarea></div>
-        <div class="fg"><label class="flbl">Note interne</label><textarea class="finp" id="new-fm-note" placeholder="Note riservate per uso interno..." style="min-height:50px"></textarea></div>
+        <div class="fg"><label class="flbl">Email</label><input type="email" class="finp" id="new-fm-email" placeholder="nome@esempio.it"></div>
+        <div class="fg"><label class="flbl">Telefono</label><input type="text" class="finp" id="new-fm-tel" placeholder="+39 000 0000000"></div>
+        <div class="fg full"><label class="flbl">CV / Bio</label><textarea class="finp" id="new-fm-cv" placeholder="Breve presentazione, specializzazioni, esperienze..." style="min-height:80px"></textarea></div>
+        <div class="fg full"><label class="flbl">Note interne</label><textarea class="finp" id="new-fm-note" placeholder="Note riservate per uso interno..." style="min-height:50px"></textarea></div>
       </div>
     </div>
-    <!-- FOOTER ACTIONS -->
-    <div style="padding:14px 24px;border-top:1px solid var(--border);background:var(--bg2);display:flex;justify-content:space-between;align-items:center">
-      <button class="btn btn-d btn-sm" id="new-fm-delete-btn" onclick="deleteFormatore()" style="display:none"><span class="material-symbols-outlined" style="font-size:14px">delete</span>Elimina docente</button>
-      <div style="display:flex;gap:8px;margin-left:auto">
-        <button class="btn btn-s" onclick="closeNewFormatoreModal()">Annulla</button>
-        <button class="btn btn-p" id="new-fm-save-btn" onclick="saveNewFormatore()"><span class="material-symbols-outlined" style="font-size:14px">save</span>Salva docente</button>
-      </div>
+    <div class="mfoot">
+      <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
+        <button class="btn btn-d" id="new-fm-delete-btn" onclick="deleteFormatore()" style="display:none">🗑 Elimina docente</button>
+        <div style="display:flex;gap:8px;margin-left:auto">
+          <button class="btn btn-s" onclick="closeNewFormatoreModal()">Annulla</button>
+          <button class="btn btn-p" onclick="saveNewFormatore()">Salva docente</button>
     </div>
   </div>
 </div>
@@ -1775,7 +1475,7 @@ let FORMATORI_DEF=[
 ];
 
 // ── STATE ──
-let DB=[],NOTIFICHE=[],FM_DATA={},DB_FI=[];
+let DB=[],NOTIFICHE=[],FM_DATA={};
 let currentUser=null,userProfile=null,userSettings={};
 let editId=null,currentFm=null;
 let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
@@ -1813,17 +1513,15 @@ async function init(){
     }
   }catch(err){
     console.error('Init error:',err);
-    const authScreen=document.getElementById('auth-screen');
-    if(authScreen)authScreen.style.display='flex';
-    const authErr=document.getElementById('auth-err');
-    if(authErr)authErr.textContent='Errore di connessione. Riprova o controlla la rete.';
+    const as=document.getElementById('auth-screen');
+    if(as)as.style.display='flex';
   }
 }
 
 function applyStoredTheme(){
   const savedMode=localStorage.getItem('fp_theme');
   currentMode=savedMode==='dark'?'dark':'light';
-  document.body.classList.toggle('dark',currentMode==='dark');
+  if(currentMode==='dark')document.body.classList.add('dark');
   // Try to get settings from any saved key
   let savedTheme='galaxy';
   for(const key of Object.keys(localStorage)){
@@ -2913,7 +2611,7 @@ async function loadAll(){
     const nRes=await sb.from('notifiche').select('*').order('created_at',{ascending:false}).limit(20);
     if(!nRes.error){
       const readIds=getLocalReadIds();
-      NOTIFICHE=(nRes.data||[]).slice(0,20).map(n=>{
+      NOTIFICHE=(nRes.data||[]).map(n=>{
         const nid=n.id||(n.text+(n.created_at||''));
         return{...n,read:n.read||readIds.has(nid)};
       });
@@ -2922,12 +2620,10 @@ async function loadAll(){
       pruneNotifiche();
     }
   }catch(e){}
-  // Load FI abbonati (non-blocking — table may not exist yet)
   try{
-    const fiRes=await sb.from('fi_abbonati').select('*').order('scadenza',{ascending:true});
-    if(fiRes&&!fiRes.error)DB_FI=fiRes.data||[];
-    else DB_FI=[];
-  }catch(e){DB_FI=[];console.warn('fi_abbonati not available:',e.message);}
+    var fiRes=await sb.from('fi_abbonati').select('*').order('scadenza',{ascending:true});
+    if(fiRes&&!fiRes.error)DB_FI=fiRes.data||[];else DB_FI=[];
+  }catch(e){DB_FI=[];console.warn('fi_abbonati:',e.message);}
   renderAll();
 }
 
@@ -2965,7 +2661,6 @@ function subscribeRealtime(){
       const isDup=NOTIFICHE.some(x=>x.text===n.text&&Math.abs(new Date(x.time||Date.now())-new Date(n.time||Date.now()))<5000);
       if(!isDup){
         NOTIFICHE.unshift(n);
-        if(NOTIFICHE.length>20)NOTIFICHE=NOTIFICHE.slice(0,20);
         unreadCount++;
         updateNotifBadge();
         renderNotifiche();
@@ -2996,7 +2691,6 @@ function subscribeRealtime(){
       const readIds=getLocalReadIds();
       const nid=n.id||(n.text+(n.created_at||''));
       NOTIFICHE.unshift({...n,read:readIds.has(nid),time:n.created_at});
-      if(NOTIFICHE.length>20)NOTIFICHE=NOTIFICHE.slice(0,20);
       unreadCount++;
       updateNotifBadge();
       renderNotifiche();
@@ -3041,7 +2735,7 @@ function renderAll(){
   renderKPI();
   renderCommerciale();
   renderFIHome();
-  if(document.getElementById('page-fi')?.classList.contains('active'))renderFI();
+  if(document.getElementById('page-fi')&&document.getElementById('page-fi').classList.contains('active'))renderFI();
   renderNotifiche();
   renderCalendario();
   populateTemaFilter();
@@ -3073,8 +2767,8 @@ function cfpEv(e){if(e.tipologia==='seminario')return 2;if(e.tipologia==='corso_
 function sessEv(e){if(e.tipologia==='corso_4h')return 2;if(e.tipologia==='corso_6h')return 3;return 1;}
 function badgeTipo(t){const m={seminario:'b-sem',corso_4h:'b-c4',corso_6h:'b-c6',corso_deontologico:'b-deo'};const l={seminario:'Seminario',corso_4h:'Corso 4h',corso_6h:'Corso 6h',corso_deontologico:'Deontologico'};return`<span class="badge ${m[t]||''}">${l[t]||t}</span>`;}
 function badgeStato(s){
-  const labels={pianificato:'Pianificato',pubblicato:'Pubblicato',svolto:'Svolto',chiuso:'Chiuso',annullato:'Annullato'};
-  const cls={pianificato:'b-pia',pubblicato:'b-pub',svolto:'b-svo',chiuso:'b-chiu',annullato:'b-ann'};
+  const labels={pianificato:'Pianificato',pubblicato:'Pubblicato',svolto:'Svolto',chiuso:'Chiuso'};
+  const cls={pianificato:'b-pia',pubblicato:'b-pub',svolto:'b-svol',chiuso:'b-chiu'};
   return`<span class="badge ${cls[s]||'b-pia'}">${labels[s]||s||'—'}</span>`;
 }
 function fmtDate(d){if(!d)return'—';const p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
@@ -3099,7 +2793,7 @@ function filterCustomRange(data,from,to){
   return data.filter(e=>e.data&&e.data>=from&&e.data<=to);
 }
 
-function progBar(val,max,grad,label,unit,onclick){
+function progBar(val,max,grad,label,unit,oc){
   const pct=max>0?Math.min(130,Math.round(val/max*100)):0;
   const dispW=Math.min(100,pct);
   const gradMap={g:'var(--grad1)',b:'var(--grad2)',y:'var(--grad3)',p:'var(--grad4)'};
@@ -3107,9 +2801,9 @@ function progBar(val,max,grad,label,unit,onclick){
   const color=pct>=100?'var(--green)':pct>=60?'var(--blue)':pct>=30?'var(--yellow)':'var(--red)';
   const fVal=typeof val==='number'?fmtNum(val,1):val;
   const fMax=typeof max==='number'?fmtNum(max,1):max;
-  const clickable=onclick?`style="cursor:pointer" onclick="${onclick}"`:'' ;
-  const hint=onclick?`<span style="font-size:9px;color:var(--text3);margin-left:6px;opacity:.6">↗ dettaglio</span>`:'' ;
-  return`<div class="pw" ${clickable}>
+  const hint=oc?'<span style="font-size:9px;color:var(--text3);margin-left:6px;opacity:.6">↗ dettaglio</span>':'';
+  const attrs=oc?'style="cursor:pointer" onclick="'+oc+'"':'';
+  return`<div class="pw" ${attrs}>
     <div class="pl"><span>${label}${hint}</span><span class="pval" style="color:${color}">${fVal}${unit?' '+unit:''} <span style="color:var(--text3);">(${pct}%)</span> / ${fMax}${unit?' '+unit:''}</span></div>
     <div class="pbg"><div class="pf" style="width:${dispW}%;background:${bg}"></div></div>
   </div>`;}
@@ -3339,49 +3033,22 @@ function setChartType(chartId,type,btn){
 
 // ── DASHBOARD ──
 
-// ── MoM DELTA HELPERS ──
+// ── MoM DELTA ──
 function getCurMonth(){const n=new Date();return{y:n.getFullYear(),m:n.getMonth()};}
 function getPrevMonth(){const n=new Date();let y=n.getFullYear(),m=n.getMonth()-1;if(m<0){m=11;y--;}return{y,m};}
 
 function renderDeltaHtml(delta,pct,isAbsPercent,tooltip){
   if(delta===0&&(pct===0||pct===null))return'';
   const pos=delta>=0;
-  const color=pos?'#3ecf8e':'#ffb4ab';
-  const bg=pos?'rgba(62,207,142,.12)':'rgba(255,180,171,.12)';
+  const color=pos?'var(--green)':'var(--red)';
+  const bg=pos?'var(--green-bg)':'var(--red-bg)';
   const arrow=pos?'↑':'↓';
   let label;
-  if(isAbsPercent){label=`${arrow} ${Math.abs(delta)}pp`;}
-  else if(pct===null){label=`${arrow} ${Math.abs(delta)}`;}
-  else{label=`${arrow} ${Math.abs(pct)}%`;}
-  const tipId='tip-'+Math.random().toString(36).slice(2,7);
-  const tipAttr=tooltip?`onmouseenter="showDeltaTip(this,'${tipId}')" onmouseleave="hideDeltaTip('${tipId}')" data-tip="${tooltip.replace(/"/g,'&quot;')}"`:'' ;
-  return`<span class="delta-wrap" style="display:inline-flex;position:relative"><span ${tipAttr} style="font-size:10px;font-weight:700;color:${color};display:inline-flex;align-items:center;gap:2px;background:${bg};padding:3px 8px;border-radius:6px;margin-top:3px;cursor:default;font-family:Inter,sans-serif">${label}</span></span>`;
-}
-
-function showDeltaTip(el,id){
-  let tip=document.getElementById(id);
-  if(!tip){
-    tip=document.createElement('div');
-    tip.id=id;
-    tip.className='delta-tooltip';
-    tip.innerHTML=el.dataset.tip;
-    document.body.appendChild(tip);
-  }
-  const r=el.getBoundingClientRect();
-  tip.style.opacity='0';
-  tip.style.display='block';
-  const tw=tip.offsetWidth;
-  let left=r.left+r.width/2-tw/2;
-  if(left<8)left=8;
-  if(left+tw>window.innerWidth-8)left=window.innerWidth-8-tw;
-  tip.style.left=left+'px';
-  tip.style.top=(r.top-tip.offsetHeight-10+window.scrollY)+'px';
-  tip.style.opacity='1';
-}
-
-function hideDeltaTip(id){
-  const tip=document.getElementById(id);
-  if(tip){tip.style.opacity='0';setTimeout(()=>tip.remove(),200);}
+  if(isAbsPercent){label=arrow+' '+Math.abs(delta)+'pp';}
+  else if(pct===null){label=arrow+' '+Math.abs(delta);}
+  else{label=arrow+' '+Math.abs(pct)+'%';}
+  const tipHtml=tooltip?'<span class="delta-tooltip">'+tooltip+'</span>':'';
+  return'<span class="delta-wrap"><span style="font-size:10px;font-weight:700;color:'+color+';display:inline-flex;align-items:center;gap:2px;background:'+bg+';padding:3px 8px;border-radius:6px;margin-top:3px;cursor:default">'+label+'</span>'+tipHtml+'</span>';
 }
 
 function setDelta(id,curVal,prevVal,isAbsPercent){
@@ -3389,12 +3056,12 @@ function setDelta(id,curVal,prevVal,isAbsPercent){
   if(prevVal===null||prevVal===undefined){el.innerHTML='';return;}
   const delta=curVal-prevVal;
   const pct=prevVal===0?(delta!==0?null:0):Math.round((delta/prevVal)*100);
-  const MESI_N=['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+  const MN=['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
   const{y:cy,m:cm}=getCurMonth();const{y:py,m:pm}=getPrevMonth();
-  const curM=MESI_N[cm]+' '+cy;const prevM=MESI_N[pm]+(py!==cy?' '+py:'');
-  const fmt=(v)=>isAbsPercent?Math.round(v)+'%':typeof v==='number'&&!Number.isInteger(v)?v.toLocaleString('it',{minimumFractionDigits:1,maximumFractionDigits:1}):String(Math.round(v));
+  const curM=MN[cm]+' '+cy;const prevM=MN[pm]+(py!==cy?' '+py:'');
+  const fmt=function(v){return isAbsPercent?Math.round(v)+'%':typeof v==='number'&&!Number.isInteger(v)?v.toLocaleString('it',{minimumFractionDigits:1,maximumFractionDigits:1}):String(Math.round(v));};
   const pctLabel=pct===null?'nuovo':pct===0?'invariato':(pct>0?'+':'')+pct+'%';
-  const tooltip=`<div style="min-width:190px"><div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px">Variazione mensile</div><div style="display:flex;justify-content:space-between;gap:12px"><span style="color:var(--text3)">${curM}:</span><strong style="color:var(--text)">${fmt(curVal)}</strong></div><div style="display:flex;justify-content:space-between;gap:12px"><span style="color:var(--text3)">${prevM}:</span><strong style="color:var(--text)">${fmt(prevVal)}</strong></div><div style="margin-top:5px;padding-top:5px;border-top:1px solid var(--border);font-size:9px;color:var(--text3)">Δ ${pctLabel} rispetto al mese precedente</div></div>`;
+  const tooltip='<div style="min-width:190px"><div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px">Variazione mensile</div><div style="display:flex;justify-content:space-between;gap:12px"><span style="color:var(--text3)">'+curM+':</span><strong style="color:var(--text)">'+fmt(curVal)+'</strong></div><div style="display:flex;justify-content:space-between;gap:12px"><span style="color:var(--text3)">'+prevM+':</span><strong style="color:var(--text)">'+fmt(prevVal)+'</strong></div><div style="margin-top:5px;padding-top:5px;border-top:1px solid var(--border);font-size:9px;color:var(--text3)">Δ '+pctLabel+' rispetto al mese precedente</div></div>';
   el.innerHTML=renderDeltaHtml(delta,pct,isAbsPercent||false,tooltip);
 }
 
@@ -3409,31 +3076,18 @@ function renderDashboard(){
   document.getElementById('k-cfp').textContent=curCfp;
   document.getElementById('k-ore').textContent=curOre.toLocaleString('it');
   // Progress bars
-  const evPct=Math.min(100,Math.round(curEv/60*100));
-  const cfpPct=Math.min(100,Math.round(curCfp/146*100));
-  const orePct=Math.min(100,Math.round(curOre/150*100));
-  const evBar=document.getElementById('k-ev-bar');if(evBar)evBar.style.width=evPct+'%';
-  const cfpBar=document.getElementById('k-cfp-bar');if(cfpBar)cfpBar.style.width=cfpPct+'%';
-  const oreBar=document.getElementById('k-ore-bar');if(oreBar)oreBar.style.width=orePct+'%';
-  ['k-ev-pct','k-cfp-pct','k-ore-pct'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=[evPct,cfpPct,orePct][i]+'% del target';});
+  const evBar=document.getElementById('k-ev-bar');if(evBar)evBar.style.width=Math.min(100,Math.round(curEv/60*100))+'%';
+  const cfpBar=document.getElementById('k-cfp-bar');if(cfpBar)cfpBar.style.width=Math.min(100,Math.round(curCfp/146*100))+'%';
+  const oreBar=document.getElementById('k-ore-bar');if(oreBar)oreBar.style.width=Math.min(100,Math.round(curOre/150*100))+'%';
   const ksSub=document.getElementById('k-sess-sub');if(ksSub)ksSub.textContent=curSess+' sessioni totali';
-  // MoM deltas — confronto mese corrente vs mese precedente
+  // MoM deltas — mese corrente vs mese precedente
   const{y:cy,m:cm}=getCurMonth();const{y:py,m:pm}=getPrevMonth();
-  const momFilter=(y,mo)=>{const mm=String(mo+1).padStart(2,'0');return DB.filter(e=>!e.escludi_kpi&&['svolto','chiuso'].includes(e.stato)&&e.data&&e.data.startsWith(`${y}-${mm}-`));};
-  const kC=momFilter(cy,cm);const kP=momFilter(py,pm);
-  // Valori del MESE CORRENTE (non annuali) per il confronto
-  const momEv=getUniqueEventi(kC).length;
-  const momSess=getUniqueEventi(kC).reduce((s,e)=>s+sessEv(e),0);
-  const momCfp=kC.reduce((s,e)=>s+cfpEv(e),0);
-  const momOre=kC.reduce((s,e)=>s+parseFloat(e.ore||0),0);
-  const prevEv=getUniqueEventi(kP).length;
-  const prevSess=getUniqueEventi(kP).reduce((s,e)=>s+sessEv(e),0);
-  const prevCfp=kP.reduce((s,e)=>s+cfpEv(e),0);
-  const prevOre=kP.reduce((s,e)=>s+parseFloat(e.ore||0),0);
-  setDelta('k-ev',momEv,prevEv);
-  setDelta('k-sess',momSess,prevSess);
-  setDelta('k-cfp',momCfp,prevCfp);
-  setDelta('k-ore',momOre,prevOre);
+  const momFlt=function(y,mo){const mm=String(mo+1).padStart(2,'0');return DB.filter(function(e){return !e.escludi_kpi&&['svolto','chiuso'].includes(e.stato)&&e.data&&e.data.startsWith(y+'-'+mm+'-');});};
+  const kC=momFlt(cy,cm);const kP=momFlt(py,pm);
+  setDelta('k-ev',getUniqueEventi(kC).length,getUniqueEventi(kP).length);
+  setDelta('k-sess',getUniqueEventi(kC).reduce((s,e)=>s+sessEv(e),0),getUniqueEventi(kP).reduce((s,e)=>s+sessEv(e),0));
+  setDelta('k-cfp',kC.reduce((s,e)=>s+cfpEv(e),0),kP.reduce((s,e)=>s+cfpEv(e),0));
+  setDelta('k-ore',kC.reduce((s,e)=>s+parseFloat(e.ore||0),0),kP.reduce((s,e)=>s+parseFloat(e.ore||0),0));
   const cfpS=svolti.filter(e=>e.tipologia==='seminario').reduce((s,e)=>s+cfpEv(e),0);
   const cfpC=(()=>{const _seen=new Set();return svolti.filter(e=>e.tipologia==='corso_4h'||e.tipologia==='corso_6h').reduce((s,e)=>{if(e.corso_padre_id){if(_seen.has(e.corso_padre_id))return s;_seen.add(e.corso_padre_id);return s+(e.tipologia==='corso_4h'?4:6);}return s+cfpEv(e);},0);})();
   const cfpD=svolti.filter(e=>e.tipologia==='corso_deontologico').reduce((s,e)=>s+cfpEv(e),0);
@@ -3782,9 +3436,9 @@ function renderKPI(){
 
   // CFP progress bars
   document.getElementById('cfp-bars').innerHTML=
-    progBar(cfpS,CFP_OBJ.sem,'b','Seminari','CFP',"openCfpDetail('seminario')")+
-    progBar(cfpC,CFP_OBJ.corsi,'g','Corsi tecnici','CFP',"openCfpDetail('corsi')")+
-    progBar(cfpD,CFP_OBJ.deo,'y','Deontologia','CFP',"openCfpDetail('deontologico')");
+    progBar(cfpS,CFP_OBJ.sem,'b','Seminari','CFP')+
+    progBar(cfpC,CFP_OBJ.corsi,'g','Corsi tecnici','CFP')+
+    progBar(cfpD,CFP_OBJ.deo,'y','Deontologia','CFP');
 
   // Ops bars
   document.getElementById('ops-bars').innerHTML=
@@ -3891,9 +3545,7 @@ function renderCommerciale(){
   document.getElementById('c-pag').textContent=ip;
   document.getElementById('c-pres').textContent=pp;
   document.getElementById('c-tasso').textContent=ta+'%';
-  const ricFI=DB_FI.filter(a=>a.tipo!=='non_rinnovo').reduce((s,a)=>s+(parseFloat(a.importo)||0),0);
-  const ricTot=ric+ricFI;
-  document.getElementById('c-ric').textContent=fmtEuro(ricTot,2);
+  document.getElementById('c-ric').textContent=fmtEuro(ric,2);
   // FI section
   const fi_isc=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
   const fi_pres=kpi.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
@@ -3904,21 +3556,21 @@ function renderCommerciale(){
   document.getElementById('fi-tasso').textContent=fi_ta+'%';
   document.getElementById('fi-media').textContent=fmtNum(fi_media);
   // MoM deltas
-  const{y:ccy,m:ccm}=getCurMonth();const{y:ppy,m:ppm}=getPrevMonth();
-  const kpiF=(y,mo)=>{const mm=String(mo+1).padStart(2,'0');return DB.filter(e=>!e.escludi_kpi&&['svolto','chiuso'].includes(e.stato)&&e.data&&e.data.startsWith(`${y}-${mm}-`));};
-  const kC2=kpiF(ccy,ccm);const kP2=kpiF(ppy,ppm);
-  const calcComm=(arr)=>{
-    const iPag=arr.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e),0);
-    const pPag=arr.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
-    const tPag=iPag>0?Math.round(pPag/iPag*100):0;
-    const ric=arr.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0),0);
-    const iFI=arr.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
-    const pFI=arr.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
-    const tFI=iFI>0?Math.round(pFI/iFI*100):0;
-    const mFI=arr.length>0?iFI/arr.length:0;
-    return{iPag,pPag,tPag,ric,iFI,pFI,tFI,mFI};
+  var{y:ccy,m:ccm}=getCurMonth();var{y:ppy,m:ppm}=getPrevMonth();
+  var momFlt2=function(y,mo){var mm=String(mo+1).padStart(2,'0');return DB.filter(function(e){return !e.escludi_kpi&&['svolto','chiuso'].includes(e.stato)&&e.data&&e.data.startsWith(y+'-'+mm+'-');});};
+  var kC2=momFlt2(ccy,ccm);var kP2=momFlt2(ppy,ppm);
+  var calcComm=function(arr){
+    var iPag=arr.reduce(function(s,e){return s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e);},0);
+    var pPag=arr.reduce(function(s,e){return s+(parseInt(e.presenti_paganti)||0);},0);
+    var tPag=iPag>0?Math.round(pPag/iPag*100):0;
+    var ric=arr.reduce(function(s,e){return s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0);},0);
+    var iFI=arr.reduce(function(s,e){return s+(parseInt(e.iscritti_illimitati)||0);},0);
+    var pFI=arr.reduce(function(s,e){return s+(parseInt(e.presenti_illimitati)||0);},0);
+    var tFI=iFI>0?Math.round(pFI/iFI*100):0;
+    var mFI=arr.length>0?iFI/arr.length:0;
+    return{iPag:iPag,pPag:pPag,tPag:tPag,ric:ric,iFI:iFI,pFI:pFI,tFI:tFI,mFI:mFI};
   };
-  const cC=calcComm(kC2);const pC=calcComm(kP2);
+  var cC=calcComm(kC2);var pC=calcComm(kP2);
   setDelta('c-pag',cC.iPag,pC.iPag);
   setDelta('c-pres',cC.pPag,pC.pPag);
   setDelta('c-tasso',cC.tPag,pC.tPag,true);
@@ -3965,37 +3617,34 @@ function renderChartRicavi(id,range,offset){
   const type=chartTypes[id]||'bar';
   const cRic=getThemeChartColors();
   const colRic=cRic[2];
-  const colFI=cRic[1];
-  let labels,mR,mFI;
+  let labels,mR;
   if(!range||range==='all'||range==='1y'||range==='6m'){
     mR=Array(12).fill(0);
-    mFI=Array(12).fill(0);
+    const mFI=Array(12).fill(0);
     kpi.forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mR[m]+=(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0);}});
-    // Add FI monthly revenues (based on data_inizio)
-    DB_FI.filter(a=>a.tipo!=='non_rinnovo').forEach(a=>{
-      const d=a.data_inizio||a.scadenza;
-      if(d){const m=parseInt(d.split('-')[1])-1;mFI[m]+=(parseFloat(a.importo)||0);}
-    });
+    DB_FI.filter(a=>a.tipo!=='non_rinnovo').forEach(a=>{const d=a.data_inizio||a.scadenza;if(d){const m=parseInt(d.split('-')[1])-1;if(m>=0&&m<12)mFI[m]+=(parseFloat(a.importo)||0);}});
     labels=MESI;
+    // render stacked
+    const cFI=getThemeChartColors()[1];
+    const type2=chartTypes[id]||'bar';
+    const mkFI=col=>({backgroundColor:type2==='line'?col+'22':col+'88',borderColor:col,borderWidth:2,borderRadius:type2==='line'?0:4,fill:type2==='line',tension:.4,pointRadius:type2==='line'?3:0,pointBackgroundColor:col,stack:type2==='bar'?'ric':undefined});
+    renderChartGrad(id,type2,MESI,[{label:'Ricavi eventi €',data:mR,...mkFI(colRic)},{label:'Ricavi FI €',data:mFI,...mkFI(cFI)}]);
+    return;
   } else {
+    // Daily grouping
     const nDays=range==='7d'?7:30;
-    const buckets={},bucketsFI={};
+    const buckets={};
     kpi.forEach(e=>{if(!e.data)return;const d=e.data;buckets[d]=(buckets[d]||0)+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0);});
-    DB_FI.filter(a=>a.tipo!=='non_rinnovo').forEach(a=>{const d=a.data_inizio||a.scadenza;if(d)bucketsFI[d]=(bucketsFI[d]||0)+(parseFloat(a.importo)||0);});
     const pts=[];
     for(let i=nDays-1;i>=0;i--){
       const d=new Date();d.setDate(d.getDate()-i+(offset*nDays));
       const key=d.toISOString().slice(0,10);
       const lbl=range==='7d'?['Dom','Lun','Mar','Mer','Gio','Ven','Sab'][d.getDay()]+' '+d.getDate():d.getDate()+'/'+String(d.getMonth()+1).padStart(2,'0');
-      pts.push({lbl,ev:buckets[key]||0,fi:bucketsFI[key]||0});
+      pts.push({lbl,val:buckets[key]||0});
     }
-    labels=pts.map(p=>p.lbl);mR=pts.map(p=>p.ev);mFI=pts.map(p=>p.fi);
+    labels=pts.map(p=>p.lbl);mR=pts.map(p=>p.val);
   }
-  const mk=(col)=>({backgroundColor:type==='line'?col+'22':col+'88',borderColor:col,borderWidth:2,borderRadius:type==='line'?0:4,fill:type==='line',tension:.4,pointRadius:type==='line'?3:0,pointBackgroundColor:col});
-  renderChartGrad(id,type,labels,[
-    {label:'Ricavi eventi €',data:mR,...mk(colRic)},
-    {label:'Ricavi FI €',data:mFI,...mk(colFI)}
-  ],{stacked:type==='bar'});
+  renderChartGrad(id,type,labels,[{label:'Ricavi €',data:mR,backgroundColor:type==='line'?colRic+'22':colRic+'88',borderColor:colRic,borderWidth:2,borderRadius:type==='line'?0:4,fill:type==='line',tension:.4,pointRadius:type==='line'?3:0,pointBackgroundColor:colRic}]);
 }
 
 // ── CALENDARIO ──
@@ -4179,7 +3828,7 @@ function renderEventi(){
 
 // ── NOTIFICHE ──
 let notifPage=0;
-const NOTIF_PER_PAGE=20;
+const NOTIF_PER_PAGE=10;
 
 function renderNotifiche(){
   const el=document.getElementById('notif-list');
@@ -4833,10 +4482,8 @@ async function saveEvento(){
   }
   const data=document.getElementById('ef-data').value;
   if(!data){showToast('Inserisci la data','err');return;}
-  // Per corsi multi-sessione in modifica, ogni sessione vale 2h (non le ore totali del corso)
-  const orePerRecord=(tipo==='corso_4h'||tipo==='corso_6h')?2:ore;
   const payload={...base,data,giorno:gg[new Date(data+'T00:00:00').getDay()],
-    orario:document.getElementById('ef-orario').value||null,ore:orePerRecord};
+    orario:document.getElementById('ef-orario').value||null,ore};
   try{
     let error;
     if(editId){({error}=await sb.from('eventi').update(payload).eq('id',editId));}
@@ -5651,156 +5298,122 @@ function saveCustomThemeToSettings() {
 // ── PRUNE NOTIFICHE ──
 async function pruneNotifiche(){
   try{
-    const{data,error}=await sb.from('notifiche').select('id').order('created_at',{ascending:false});
+    var{data,error}=await sb.from('notifiche').select('id').order('created_at',{ascending:false});
     if(error||!data||data.length<=20)return;
-    const toDelete=data.slice(20).map(r=>r.id);
-    if(!toDelete.length)return;
-    for(let i=0;i<toDelete.length;i+=50){
-      const batch=toDelete.slice(i,i+50);
-      await sb.from('notifiche').delete().in('id',batch);
+    var toDelete=data.slice(20).map(function(r){return r.id;});
+    for(var i=0;i<toDelete.length;i+=50){
+      await sb.from('notifiche').delete().in('id',toDelete.slice(i,i+50));
     }
-  }catch(e){console.warn('pruneNotifiche error:',e);}
+  }catch(e){console.warn('pruneNotifiche:',e);}
 }
 
 // ── GLOBAL SEARCH ──
 function globalSearchHandler(val){
   if(!val||val.length<2)return;
-  const evPage=document.getElementById('page-eventi');
+  var evPage=document.getElementById('page-eventi');
   if(evPage&&evPage.classList.contains('active')){
-    const s=document.getElementById('fe-search');if(s){s.value=val;renderEventi();}
+    var s=document.getElementById('fe-search');if(s){s.value=val;renderEventi();}
   }else{
     showPage('eventi',document.getElementById('nav-eventi'));
-    setTimeout(()=>{const s=document.getElementById('fe-search');if(s){s.value=val;renderEventi();}},200);
+    setTimeout(function(){var s=document.getElementById('fe-search');if(s){s.value=val;renderEventi();}},200);
   }
 }
 
-
-// ── CFP DETAIL MODAL ──
+// ── CFP DETAIL ──
 function openCfpDetail(tipo){
-  const tipoLabels={seminario:'Seminari (2h)',corsi:'Corsi tecnici (4h/6h)',deontologico:'Deontologia (2h)'};
-  const label=tipoLabels[tipo]||tipo;
-  let evs;
-  if(tipo==='seminario'){
-    evs=getSvolti().filter(e=>e.tipologia==='seminario');
-  } else if(tipo==='corsi'){
-    // dedup corsi multi-sessione: mostra solo il padre
-    const seen=new Set();
-    evs=getSvolti().filter(e=>['corso_4h','corso_6h'].includes(e.tipologia)).filter(e=>{
-      const uid=e.corso_padre_id||e.id;
+  var tipoLabels={seminario:'Seminari (2h)',corsi:'Corsi tecnici',deontologico:'Deontologia'};
+  var evs;
+  if(tipo==='seminario'){evs=getSvolti().filter(function(e){return e.tipologia==='seminario';});}
+  else if(tipo==='corsi'){
+    var seen=new Set();
+    evs=getSvolti().filter(function(e){return ['corso_4h','corso_6h'].includes(e.tipologia);}).filter(function(e){
+      var uid=e.corso_padre_id||e.id;
       if(seen.has(uid))return false;
       seen.add(uid);return true;
     });
-  } else {
-    evs=getSvolti().filter(e=>e.tipologia==='corso_deontologico');
-  }
-  evs=evs.slice().sort((a,b)=>(a.data||'')>(b.data||'')?-1:1);
-
-  const rows=evs.length===0
-    ?'<div style="color:var(--text3);font-size:13px;padding:20px 0;text-align:center">Nessun evento ancora svolto</div>'
-    :evs.map(e=>{
-      const cfp=cfpEv(e);
-      const docente=e.docenti_nomi?.join(', ')||e.docente||'—';
-      const totI=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e)+(parseInt(e.iscritti_illimitati)||0);
-      const totP=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
-      return`<tr style="border-bottom:1px solid var(--border)">
-        <td style="padding:10px 12px;font-size:12px;color:var(--text3);white-space:nowrap">${fmtDate(e.data)}</td>
-        <td style="padding:10px 12px;font-size:13px;font-weight:600;color:var(--text)">${e.titolo||'—'}</td>
-        <td style="padding:10px 12px;font-size:12px;color:var(--text2)">${docente}</td>
-        <td style="padding:10px 12px;font-size:12px;color:var(--text2);text-align:center">${e.tema||'—'}</td>
-        <td style="padding:10px 12px;font-size:13px;font-weight:700;color:var(--accent);text-align:center">${cfp}h</td>
-        <td style="padding:10px 12px;font-size:12px;color:var(--text2);text-align:center">${totP}/${totI}</td>
-      </tr>`;
+  }else{evs=getSvolti().filter(function(e){return e.tipologia==='corso_deontologico';});}
+  evs=evs.slice().sort(function(a,b){return (a.data||'')>(b.data||'')?-1:1;});
+  var totalCfp=evs.reduce(function(s,e){return s+cfpEv(e);},0);
+  document.getElementById('cfp-detail-title').textContent=tipoLabels[tipo]||tipo;
+  document.getElementById('cfp-detail-count').textContent=evs.length+' eventi · '+totalCfp+' CFP erogati';
+  document.getElementById('cfp-detail-body').innerHTML=evs.length===0
+    ?'<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text3)">Nessun evento svolto</td></tr>'
+    :evs.map(function(e){
+      var docente=(e.docenti_nomi&&e.docenti_nomi.join(', '))||e.docente||'—';
+      var totP=(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0);
+      var totI=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e)+(parseInt(e.iscritti_illimitati)||0);
+      return '<tr style="border-bottom:1px solid var(--border)"><td style="padding:9px 12px;font-size:11px;color:var(--text3)">'+fmtDate(e.data)+'</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:var(--text)">'+( e.titolo||'—')+'</td><td style="padding:9px 12px;font-size:11px;color:var(--text2)">'+docente+'</td><td style="padding:9px 12px;font-size:11px;color:var(--text2);text-align:center">'+(e.tema||'—')+'</td><td style="padding:9px 12px;font-size:12px;font-weight:700;color:var(--accent);text-align:center">'+cfpEv(e)+'h</td><td style="padding:9px 12px;font-size:11px;text-align:center">'+totP+'/'+totI+'</td></tr>';
     }).join('');
-
-  const totalCfp=evs.reduce((s,e)=>s+cfpEv(e),0);
-
-  document.getElementById('cfp-detail-title').textContent=label;
-  document.getElementById('cfp-detail-count').textContent=`${evs.length} eventi · ${totalCfp} CFP erogati`;
-  document.getElementById('cfp-detail-body').innerHTML=rows;
   document.getElementById('cfp-detail-modal').style.display='flex';
 }
+function closeCfpDetail(){document.getElementById('cfp-detail-modal').style.display='none';}
 
-function closeCfpDetail(){
-  document.getElementById('cfp-detail-modal').style.display='none';
-}
 
-// ══════════════════════════════════════════════════════
+
+// ════════════════════════════════
 // FORMAZIONE ILLIMITATA
-// ══════════════════════════════════════════════════════
+// ════════════════════════════════
+var DB_FI = [];
+var editFiId = null;
+var chFiAnd=null, chFiTipi=null, chFiFormula=null, chFiVal=null;
+var fiImportRows = [];
+var fiSortField='scadenza', fiSortDir='asc';
 
-let fiSortField='scadenza', fiSortDir='asc', editFiId=null;
-let chFiAndamento=null, chFiTipi=null, chFiFormula=null, chFiVal=null;
-
-// Status logic
-function getFiStatus(abbonato){
-  // accept either scadenza string or full abbonato object
-  const scadenza=typeof abbonato==='string'?abbonato:abbonato?.scadenza;
-  const tipo=typeof abbonato==='object'?abbonato?.tipo:null;
-  if(tipo==='non_rinnovo')return'non_rinnovo';
-  if(!scadenza)return'regola';
-  const d=new Date(scadenza+'T00:00:00');
-  const now=new Date(); now.setHours(0,0,0,0);
-  const diff=Math.round((d-now)/(1000*60*60*24));
-  if(diff<0)return'scaduto';
-  if(diff<=30)return'scadenza';
-  return'regola';
+function getFiStatus(a){
+  var tipo = typeof a==='object' ? a.tipo : null;
+  var scad = typeof a==='string' ? a : (a&&a.scadenza);
+  if(tipo==='non_rinnovo') return 'non_rinnovo';
+  if(!scad) return 'regola';
+  var d=new Date(scad+'T00:00:00'), now=new Date(); now.setHours(0,0,0,0);
+  var diff=Math.round((d-now)/(86400000));
+  if(diff<0) return 'scaduto';
+  if(diff<=30) return 'scadenza';
+  return 'regola';
 }
-function getFiStatusLabel(s){return{regola:'In regola',scadenza:'In scadenza',scaduto:'Scaduto',non_rinnovo:'Non rinnovo'}[s]||s;}
-function getFiStatusColors(s){
-  if(s==='regola')     return{color:'var(--green)', bg:'var(--green-bg)', border:'var(--green)'};
-  if(s==='scadenza')   return{color:'var(--yellow)',bg:'var(--orange-bg)',border:'var(--orange)'};
-  if(s==='non_rinnovo')return{color:'var(--text3)', bg:'var(--bg3)',      border:'var(--border2)'};
-  return                      {color:'var(--red)',  bg:'var(--red-bg)',   border:'var(--red)'};
-}
-function getFiTipoLabel(t){return{singolo:'Singolo',duo:'Duo',studio:'Studio'}[t]||t||'—';}
-function getFiFormulaLabel(f){return{annuale:'Annuale',semestrale:'Semestrale'}[f]||f||'—';}
+function getFiStatusLabel(s){return {regola:'In regola',scadenza:'In scadenza',scaduto:'Scaduto',non_rinnovo:'Non rinnovo'}[s]||s;}
+function getFiStatusClass(s){return 'fi-badge-'+(s||'regola');}
+function getFiTipoLabel(t){return {singolo:'Singolo',duo:'Duo',studio:'Studio',non_rinnovo:'Non rinnovo'}[t]||t||'—';}
+function getFiFormulaLabel(f){return {annuale:'Annuale',semestrale:'Semestrale'}[f]||f||'—';}
 
-// Compute FI stats from DB_FI
 function getFiStats(){
-  const attivi=DB_FI.filter(a=>!['scaduto','non_rinnovo'].includes(getFiStatus(a)));
-  const tot=DB_FI.length;
-  const totAttivi=attivi.length;
-  const inScadenza=DB_FI.filter(a=>getFiStatus(a)==='scadenza').length;
-  const scaduti=DB_FI.filter(a=>getFiStatus(a)==='scaduto').length;
-  const nonRinnovo=DB_FI.filter(a=>getFiStatus(a)==='non_rinnovo').length;
-  const valTot=attivi.reduce((s,a)=>s+(parseFloat(a.importo)||0),0); // solo attivi
-  const valAttivi=valTot;
-  return{tot,totAttivi,inScadenza,scaduti,nonRinnovo,valTot,valAttivi};
+  var attivi=DB_FI.filter(function(a){return getFiStatus(a)!=='scaduto'&&getFiStatus(a)!=='non_rinnovo';});
+  return{
+    tot:DB_FI.length,
+    totAttivi:attivi.length,
+    inScadenza:DB_FI.filter(function(a){return getFiStatus(a)==='scadenza';}).length,
+    scaduti:DB_FI.filter(function(a){return getFiStatus(a)==='scaduto';}).length,
+    valTot:attivi.reduce(function(s,a){return s+(parseFloat(a.importo)||0);},0)
+  };
 }
 
-// ── Render home widget ──
 function renderFIHome(){
-  const s=getFiStats();
-  const ids=['h-fi-tot','h-fi-val','h-fi-exp','h-fi-scad'];
-  const vals=[s.tot, fmtEuro(s.valTot,0), s.inScadenza, s.scaduti];
-  ids.forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=vals[i];});
-  // color h-fi-exp and h-fi-scad
-  const expEl=document.getElementById('h-fi-exp');
+  var s=getFiStats();
+  ['h-fi-tot','h-fi-val','h-fi-exp','h-fi-scad'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(el)el.textContent=[s.tot, fmtEuro(s.valTot,0), s.inScadenza, s.scaduti][i];
+  });
+  var expEl=document.getElementById('h-fi-exp');
   if(expEl)expEl.style.color=s.inScadenza>0?'var(--yellow)':'var(--text)';
-  const scEl=document.getElementById('h-fi-scad');
+  var scEl=document.getElementById('h-fi-scad');
   if(scEl)scEl.style.color=s.scaduti>0?'var(--red)':'var(--text)';
-}
-
-// ── Render FI page ──
-function renderFI(){
-  const s=getFiStats();
-  // KPI cards
-  [['fi-k-tot',s.tot],['fi-k-val',fmtEuro(s.valTot,0)],['fi-k-exp',s.inScadenza],['fi-k-scad',s.scaduti]]
-    .forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.textContent=v;});
-  const expEl=document.getElementById('fi-k-exp');
-  if(expEl)expEl.style.color=s.inScadenza>0?'var(--yellow)':'var(--text)';
-  const scEl=document.getElementById('fi-k-scad');
-  if(scEl)scEl.style.color=s.scaduti>0?'var(--red)':'var(--text)';
-  // Comm page KPI
-  ['comm-fi-tot','comm-fi-val','comm-fi-exp','comm-fi-scad'].forEach((id,i)=>{
-    const el=document.getElementById(id);
+  // comm page
+  ['comm-fi-tot','comm-fi-val','comm-fi-exp','comm-fi-scad'].forEach(function(id,i){
+    var el=document.getElementById(id);
     if(el)el.textContent=[s.tot,fmtEuro(s.valTot,0),s.inScadenza,s.scaduti][i];
   });
+}
+
+function renderFI(){
+  var s=getFiStats();
+  [['fi-k-tot',s.tot],['fi-k-val',fmtEuro(s.valTot,0)],['fi-k-exp',s.inScadenza],['fi-k-scad',s.scaduti]].forEach(function(pair){
+    var el=document.getElementById(pair[0]);if(el)el.textContent=pair[1];
+  });
+  var expEl=document.getElementById('fi-k-exp');if(expEl)expEl.style.color=s.inScadenza>0?'var(--yellow)':'var(--text)';
+  var scEl=document.getElementById('fi-k-scad');if(scEl)scEl.style.color=s.scaduti>0?'var(--red)':'var(--text)';
   renderFiTabella();
   renderFiCharts();
 }
 
-// ── Render tabella abbonati ──
 function setFiSort(f){
   if(fiSortField===f)fiSortDir=fiSortDir==='asc'?'desc':'asc';
   else{fiSortField=f;fiSortDir='asc';}
@@ -5808,42 +5421,39 @@ function setFiSort(f){
 }
 
 function renderFiTabella(){
-  const search=(document.getElementById('fi-search')?.value||'').toLowerCase();
-  const fTipo=document.getElementById('fi-filter-tipo')?.value||'';
-  const fFormula=document.getElementById('fi-filter-formula')?.value||'';
-  const fStato=document.getElementById('fi-filter-stato')?.value||'';
+  var search=(document.getElementById('fi-search')||{}).value||'';
+  search=search.toLowerCase();
+  var fTipo=(document.getElementById('fi-filter-tipo')||{}).value||'';
+  var fFormula=(document.getElementById('fi-filter-formula')||{}).value||'';
+  var fStato=(document.getElementById('fi-filter-stato')||{}).value||'';
 
-  let rows=[...DB_FI].filter(a=>{
-    if(search&&!`${a.nome||''} ${a.cognome||''}`.toLowerCase().includes(search))return false;
+  var rows=DB_FI.filter(function(a){
+    if(search&&!(a.nome+' '+a.cognome).toLowerCase().includes(search))return false;
     if(fTipo&&a.tipo!==fTipo)return false;
     if(fFormula&&a.formula!==fFormula)return false;
     if(fStato&&getFiStatus(a)!==fStato)return false;
     return true;
-  });
+  }).slice();
 
-  // Sort
-  rows.sort((a,b)=>{
-    let va,vb;
-    switch(fiSortField){
-      case'nome':    va=(a.nome+' '+a.cognome).toLowerCase();vb=(b.nome+' '+b.cognome).toLowerCase();break;
-      case'tipo':    va=a.tipo||'';vb=b.tipo||'';break;
-      case'formula': va=a.formula||'';vb=b.formula||'';break;
-      case'scadenza':va=a.scadenza||'';vb=b.scadenza||'';break;
-      case'importo': va=parseFloat(a.importo)||0;vb=parseFloat(b.importo)||0;break;
-      case'stato':   va=getFiStatus(a);vb=getFiStatus(b.scadenza);break;
-      default:       va=a.scadenza||'';vb=b.scadenza||'';
-    }
+  rows.sort(function(a,b){
+    var va,vb;
+    if(fiSortField==='nome'){va=(a.nome+' '+a.cognome).toLowerCase();vb=(b.nome+' '+b.cognome).toLowerCase();}
+    else if(fiSortField==='tipo'){va=a.tipo||'';vb=b.tipo||'';}
+    else if(fiSortField==='formula'){va=a.formula||'';vb=b.formula||'';}
+    else if(fiSortField==='importo'){va=parseFloat(a.importo)||0;vb=parseFloat(b.importo)||0;}
+    else if(fiSortField==='stato'){va=getFiStatus(a);vb=getFiStatus(b);}
+    else{va=a.scadenza||'';vb=b.scadenza||'';}
     if(va<vb)return fiSortDir==='asc'?-1:1;
     if(va>vb)return fiSortDir==='asc'?1:-1;
     return 0;
   });
 
   function fiArrow(f){
-    if(fiSortField!==f)return'<span style="font-size:10px;margin-left:4px;color:var(--text3);opacity:.5">⇅</span>';
-    return fiSortDir==='asc'?'<span style="font-size:11px;margin-left:4px;color:var(--accent);font-weight:700">↑</span>':'<span style="font-size:11px;margin-left:4px;color:var(--accent);font-weight:700">↓</span>';
+    if(fiSortField!==f)return'<span style="font-size:10px;margin-left:3px;color:var(--text3);opacity:.5">⇅</span>';
+    return fiSortDir==='asc'?'<span style="font-size:11px;margin-left:3px;color:var(--accent);font-weight:700">↑</span>':'<span style="font-size:11px;margin-left:3px;color:var(--accent);font-weight:700">↓</span>';
   }
 
-  const wrap=document.getElementById('fi-tbl-wrap');
+  var wrap=document.getElementById('fi-tbl-wrap');
   if(!wrap)return;
 
   if(!rows.length){
@@ -5851,108 +5461,87 @@ function renderFiTabella(){
     return;
   }
 
-  wrap.innerHTML=`<table class="stitch-table"><thead><tr>
-    <th onclick="setFiSort('nome')" style="cursor:pointer;white-space:nowrap;user-select:none">Nome Cognome${fiArrow('nome')}</th>
-    <th onclick="setFiSort('tipo')" style="cursor:pointer;user-select:none">Tipo${fiArrow('tipo')}</th>
-    <th onclick="setFiSort('formula')" style="cursor:pointer;user-select:none">Formula${fiArrow('formula')}</th>
-    <th onclick="setFiSort('scadenza')" style="cursor:pointer;white-space:nowrap;user-select:none">Scadenza${fiArrow('scadenza')}</th>
-    <th onclick="setFiSort('importo')" style="cursor:pointer;user-select:none">Importo${fiArrow('importo')}</th>
-    <th onclick="setFiSort('stato')" style="cursor:pointer;user-select:none">Status${fiArrow('stato')}</th>
-    <th>Azioni</th>
-  </tr></thead><tbody>${rows.map(a=>{
-    const st=getFiStatus(a);
-    const sc=getFiStatusColors(st);
-    const lbl=getFiStatusLabel(st);
-    const scadStr=a.scadenza?new Date(a.scadenza+'T00:00:00').toLocaleDateString('it-IT',{day:'2-digit',month:'short',year:'numeric'}):'—';
-    const impStr=a.importo?fmtEuro(parseFloat(a.importo),2):'—';
-    const rowBg=st==='scaduto'?'background:var(--red-bg)':st==='scadenza'?'background:var(--orange-bg)':'';
-    return`<tr style="${rowBg}">
-      <td style="padding:10px 12px">
-        <div style="font-weight:600;color:var(--text)">${a.nome||''} ${a.cognome||''}</div>
-        ${a.tipo==='non_rinnovo'&&a.motivazione_non_rinnovo?`<div style="font-size:10px;color:var(--text3);margin-top:2px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${a.motivazione_non_rinnovo}">💬 ${a.motivazione_non_rinnovo}</div>`:''}
-      </td>
-      <td style="padding:10px 12px"><span class="badge" style="background:var(--accent-bg);color:var(--accent)">${getFiTipoLabel(a.tipo)}</span></td>
-      <td style="padding:10px 12px;font-size:12px;color:var(--text2)">${getFiFormulaLabel(a.formula)}</td>
-      <td style="padding:10px 12px;font-size:12px;color:${sc.color};font-weight:600">${scadStr}</td>
-      <td style="padding:10px 12px;font-size:13px;font-weight:700;color:var(--text)">${impStr}</td>
-      <td style="padding:10px 12px"><span style="display:inline-block;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:700;font-family:Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;background:${sc.bg};color:${sc.color};border:1px solid ${sc.border}">${lbl}</span></td>
-      <td style="padding:10px 12px"><button class="btn btn-s btn-sm" onclick="openFiModal('${a.id}')"><span class="material-symbols-outlined" style="font-size:14px">edit</span>Modifica</button></td>
-    </tr>`;
-  }).join('')}</tbody></table>`;
+  wrap.innerHTML='<table class="stitch-table"><thead><tr>'
+    +'<th onclick="setFiSort('nome')" style="cursor:pointer;user-select:none">Nome'+fiArrow('nome')+'</th>'
+    +'<th onclick="setFiSort('tipo')" style="cursor:pointer;user-select:none">Tipo'+fiArrow('tipo')+'</th>'
+    +'<th onclick="setFiSort('formula')" style="cursor:pointer;user-select:none">Formula'+fiArrow('formula')+'</th>'
+    +'<th onclick="setFiSort('scadenza')" style="cursor:pointer;white-space:nowrap;user-select:none">Scadenza'+fiArrow('scadenza')+'</th>'
+    +'<th onclick="setFiSort('importo')" style="cursor:pointer;user-select:none">Importo'+fiArrow('importo')+'</th>'
+    +'<th onclick="setFiSort('stato')" style="cursor:pointer;user-select:none">Status'+fiArrow('stato')+'</th>'
+    +'<th>Azioni</th></tr></thead><tbody>'
+    +rows.map(function(a){
+      var st=getFiStatus(a);
+      var scadStr=a.scadenza?new Date(a.scadenza+'T00:00:00').toLocaleDateString('it-IT',{day:'2-digit',month:'short',year:'numeric'}):'—';
+      var impStr=a.importo?fmtEuro(parseFloat(a.importo),2):'—';
+      var rowBg=st==='scaduto'?'background:var(--red-bg)':st==='scadenza'?'background:var(--yellow-bg)':'';
+      var motivLine=a.tipo==='non_rinnovo'&&a.motivazione_non_rinnovo?'<div style="font-size:10px;color:var(--text3);margin-top:2px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+a.motivazione_non_rinnovo+'</div>':'';
+      return '<tr style="'+rowBg+'">'
+        +'<td style="padding:10px 12px"><div style="font-weight:600;color:var(--text)">'+(a.nome||'')+' '+(a.cognome||'')+'</div>'+motivLine+'</td>'
+        +'<td style="padding:10px 12px"><span class="badge" style="background:var(--accent-bg);color:var(--accent)">'+getFiTipoLabel(a.tipo)+'</span></td>'
+        +'<td style="padding:10px 12px;font-size:12px;color:var(--text2)">'+getFiFormulaLabel(a.formula)+'</td>'
+        +'<td style="padding:10px 12px;font-size:12px;font-weight:600"><span class="'+getFiStatusClass(st)+'">'+scadStr+'</span></td>'
+        +'<td style="padding:10px 12px;font-size:13px;font-weight:700;color:var(--text)">'+impStr+'</td>'
+        +'<td style="padding:10px 12px"><span class="'+getFiStatusClass(st)+'">'+getFiStatusLabel(st)+'</span></td>'
+        +'<td style="padding:10px 12px"><button class="btn btn-s btn-sm" onclick="openFiModal(''+a.id+'')">Modifica</button></td>'
+        +'</tr>';
+    }).join('')+'</tbody></table>';
 }
 
-// ── Render FI charts ──
 function renderFiCharts(){
-  const isDark=document.body.classList.contains('dark');
-  const tc=isDark?'#5a6a84':'#9ca3af';
-  const gc=isDark?'rgba(255,255,255,.04)':'rgba(0,0,0,.04)';
+  var isDark=document.body.classList.contains('dark');
+  var tc=isDark?'#5a6a84':'#9ca3af';
+  var gc=isDark?'rgba(255,255,255,.04)':'rgba(0,0,0,.04)';
+  var now=new Date();
+  var months=[],nuovi=[],persi=[];
+  for(var i=5;i>=0;i--){
+    var d=new Date(now.getFullYear(),now.getMonth()-i,1);
+    var y=d.getFullYear(),m=d.getMonth();
+    months.push(['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'][m]+' '+String(y).slice(2));
+    var mm=String(m+1).padStart(2,'0');
+    nuovi.push(DB_FI.filter(function(a){return a.data_inizio&&a.data_inizio.startsWith(y+'-'+mm);}).length);
+    persi.push(DB_FI.filter(function(a){return a.scadenza&&a.scadenza.startsWith(y+'-'+mm)&&getFiStatus(a)==='scaduto';}).length);
+  }
+  var tipi=['singolo','duo','studio','non_rinnovo'];
+  var tipiLabels=['Singolo','Duo','Studio','Non rinnovo'];
+  var tipiCounts=tipi.map(function(t){return DB_FI.filter(function(a){return a.tipo===t;}).length;});
+  var formule=['annuale','semestrale'];
+  var formuleCounts=formule.map(function(f){return DB_FI.filter(function(a){return a.formula===f;}).length;});
+  var valTipi=tipi.map(function(t){return DB_FI.filter(function(a){return a.tipo===t;}).reduce(function(s,a){return s+(parseFloat(a.importo)||0);},0);});
 
-  // Chart 1: Andamento nuovi vs persi per mese
-  const now=new Date();
-  const months=[];
-  const nuovi=[], persi=[];
-  for(let i=5;i>=0;i--){
-    const d=new Date(now.getFullYear(),now.getMonth()-i,1);
-    const y=d.getFullYear(), m=d.getMonth();
-    const label=['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'][m]+' '+String(y).slice(2);
-    months.push(label);
-    const mmStr=String(m+1).padStart(2,'0');
-    const yStr=String(y);
-    nuovi.push(DB_FI.filter(a=>a.data_inizio&&a.data_inizio.startsWith(`${yStr}-${mmStr}`)).length);
-    persi.push(DB_FI.filter(a=>a.scadenza&&a.scadenza.startsWith(`${yStr}-${mmStr}`)&&getFiStatus(a)==='scaduto').length);
-  }
-  const ctx1=document.getElementById('ch-fi-andamento');
-  if(ctx1){
-    if(chFiAndamento)chFiAndamento.destroy();
-    const fiAndType=document.querySelector('#ctype-fi-and .ct-btn.on')?.textContent?.toLowerCase()==='line'?'line':'bar';
-    chFiAndamento=new Chart(ctx1,{type:fiAndType,data:{labels:months,datasets:[
-      {label:'Nuovi',data:nuovi,backgroundColor:'rgba(var(--accent-rgb),.7)',borderRadius:4},
-      {label:'Scaduti',data:persi,backgroundColor:'rgba(239,68,68,.5)',borderRadius:4}
-    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}}}},scales:{x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}},y:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}}}});
-  }
+  var andType=document.querySelector('#ctype-fi-and .ct-btn.on')?document.querySelector('#ctype-fi-and .ct-btn.on').textContent.toLowerCase():'bar';
+  var tipiType=document.querySelector('#ctype-fi-tipi .ct-btn.on')?document.querySelector('#ctype-fi-tipi .ct-btn.on').textContent.toLowerCase():'doughnut';
+  var formulaType=document.querySelector('#ctype-fi-formula .ct-btn.on')?document.querySelector('#ctype-fi-formula .ct-btn.on').textContent.toLowerCase():'pie';
+  var valType=document.querySelector('#ctype-fi-val .ct-btn.on')?document.querySelector('#ctype-fi-val .ct-btn.on').textContent.toLowerCase():'bar';
 
-  // Chart 2: Distribuzione tipologie donut
-  const tipi=['singolo','duo','studio'];
-  const tipiLabels=['Singolo','Duo','Studio'];
-  const tipiCounts=tipi.map(t=>DB_FI.filter(a=>a.tipo===t).length);
-  const ctx2=document.getElementById('ch-fi-tipi');
-  if(ctx2){
-    if(chFiTipi)chFiTipi.destroy();
-    const fiTipiType=document.querySelector('#ctype-fi-tipi .ct-btn.on')?.textContent?.toLowerCase()||'doughnut';
-    chFiTipi=new Chart(ctx2,{type:fiTipiType==='pie'?'pie':fiTipiType==='bar'?'bar':'doughnut',data:{labels:tipiLabels,datasets:[{data:tipiCounts,backgroundColor:['rgba(99,102,241,.8)','rgba(0,218,243,.7)','rgba(16,185,129,.7)'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}}}}}});
-  }
+  var bgColors=['rgba(99,102,241,.8)','rgba(0,218,243,.7)','rgba(16,185,129,.7)','rgba(239,68,68,.6)'];
 
-  // Chart 3: Formula annuale vs semestrale
-  const formule=['annuale','semestrale'];
-  const formuleLabels=['Annuale','Semestrale'];
-  const formuleCounts=formule.map(f=>DB_FI.filter(a=>a.formula===f).length);
-  const ctx3=document.getElementById('ch-fi-formula');
-  if(ctx3){
-    if(chFiFormula)chFiFormula.destroy();
-    const fiFormulaType=document.querySelector('#ctype-fi-formula .ct-btn.on')?.textContent?.toLowerCase()||'pie';
-    chFiFormula=new Chart(ctx3,{type:fiFormulaType==='doughnut'?'doughnut':fiFormulaType==='bar'?'bar':'pie',data:{labels:formuleLabels,datasets:[{data:formuleCounts,backgroundColor:['rgba(99,102,241,.8)','rgba(0,218,243,.7)'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}}}}}});
-  }
-
-  // Chart 4: Valore per tipologia
-  const valPerTipo=tipi.map(t=>DB_FI.filter(a=>a.tipo===t).reduce((s,a)=>s+(parseFloat(a.importo)||0),0));
-  const ctx4=document.getElementById('ch-fi-val');
-  if(ctx4){
-    if(chFiVal)chFiVal.destroy();
-    const fiValType=document.querySelector('#ctype-fi-val .ct-btn.on')?.textContent?.toLowerCase()||'bar';
-    chFiVal=new Chart(ctx4,{type:fiValType==='line'?'line':fiValType==='pie'?'pie':'bar',data:{labels:tipiLabels,datasets:[{label:'Valore (€)',data:valPerTipo,backgroundColor:['rgba(99,102,241,.7)','rgba(0,218,243,.6)','rgba(16,185,129,.6)'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,font:{size:10}},grid:{display:false}},y:{ticks:{color:tc,font:{size:9},callback:v=>'€'+v.toLocaleString('it')},grid:{color:gc}}}}});
-  }
+  var ctx1=document.getElementById('ch-fi-andamento');
+  if(ctx1){if(chFiAnd)chFiAnd.destroy();chFiAnd=new Chart(ctx1,{type:andType==='line'?'line':'bar',data:{labels:months,datasets:[{label:'Nuovi',data:nuovi,backgroundColor:'rgba(99,102,241,.7)',borderRadius:4},{label:'Scaduti',data:persi,backgroundColor:'rgba(239,68,68,.5)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}}}},scales:{x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}},y:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}}}});}
+  var ctx2=document.getElementById('ch-fi-tipi');
+  if(ctx2){if(chFiTipi)chFiTipi.destroy();var t2=tipiType==='bar'?'bar':tipiType==='pie'?'pie':'doughnut';chFiTipi=new Chart(ctx2,{type:t2,data:{labels:tipiLabels,datasets:[{data:tipiCounts,backgroundColor:bgColors,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}}}}}});}
+  var ctx3=document.getElementById('ch-fi-formula');
+  if(ctx3){if(chFiFormula)chFiFormula.destroy();var t3=formulaType==='bar'?'bar':formulaType==='doughnut'?'doughnut':'pie';chFiFormula=new Chart(ctx3,{type:t3,data:{labels:['Annuale','Semestrale'],datasets:[{data:formuleCounts,backgroundColor:['rgba(99,102,241,.8)','rgba(0,218,243,.7)'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}}}}}});}
+  var ctx4=document.getElementById('ch-fi-val');
+  if(ctx4){if(chFiVal)chFiVal.destroy();var t4=valType==='line'?'line':valType==='pie'?'pie':'bar';chFiVal=new Chart(ctx4,{type:t4,data:{labels:tipiLabels,datasets:[{label:'Valore €',data:valTipi,backgroundColor:bgColors,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:t4==='bar'||t4==='line'?{x:{ticks:{color:tc,font:{size:10}},grid:{display:false}},y:{ticks:{color:tc,font:{size:9},callback:function(v){return '€'+v.toLocaleString('it');}},grid:{color:gc}}}:{}}});}
 }
 
-// ── CRUD FI ──
+function setFiChartType(chartId,type,btn){
+  var parent=btn.closest('.chart-type-btns');
+  parent.querySelectorAll('.ct-btn').forEach(function(b){b.classList.remove('on');});
+  btn.classList.add('on');
+  renderFiCharts();
+}
+
 function openFiModal(id){
   editFiId=id||null;
-  const isEdit=!!id;
+  var isEdit=!!id;
   document.getElementById('fi-modal-title').textContent=isEdit?'Modifica abbonato':'Nuovo abbonato';
-  document.getElementById('fi-modal-breadcrumb').textContent=isEdit?'Modifica':'Nuovo abbonato';
   document.getElementById('fi-del-btn').style.display=isEdit?'flex':'none';
-  if(isEdit){
-    const a=DB_FI.find(x=>x.id===id);
-    if(!a)return;
+  var a=isEdit?DB_FI.find(function(x){return x.id===id;}):null;
+  ['fi-nome','fi-cognome','fi-email','fi-note','fi-motivazione'].forEach(function(elId){
+    var el=document.getElementById(elId);if(el)el.value=a?( a[elId.replace('fi-','')] || a[elId.replace('fi-','').replace('-','_')] || ''):'';
+  });
+  if(a){
     document.getElementById('fi-nome').value=a.nome||'';
     document.getElementById('fi-cognome').value=a.cognome||'';
     document.getElementById('fi-email').value=a.email||'';
@@ -5965,44 +5554,41 @@ function openFiModal(id){
     document.getElementById('fi-motivazione').value=a.motivazione_non_rinnovo||'';
     document.getElementById('fi-motivazione-row').style.display=a.tipo==='non_rinnovo'?'block':'none';
   } else {
-    ['fi-nome','fi-cognome','fi-email','fi-note','fi-motivazione'].forEach(id=>document.getElementById(id).value='');
+    ['fi-nome','fi-cognome','fi-email','fi-tipo','fi-formula','fi-note','fi-motivazione'].forEach(function(elId){var el=document.getElementById(elId);if(el)el.value='';});
+    ['fi-inizio','fi-scadenza','fi-importo'].forEach(function(elId){var el=document.getElementById(elId);if(el)el.value='';});
     document.getElementById('fi-motivazione-row').style.display='none';
-    ['fi-tipo','fi-formula'].forEach(id=>document.getElementById(id).value='');
-    ['fi-inizio','fi-scadenza','fi-importo'].forEach(id=>document.getElementById(id).value='');
   }
   document.getElementById('fi-modal').style.display='flex';
 }
 
-function closeFiModal(){
-  document.getElementById('fi-modal').style.display='none';
-}
+function closeFiModal(){document.getElementById('fi-modal').style.display='none';}
 
 async function saveFiAbbonato(){
-  const nome=document.getElementById('fi-nome').value.trim();
-  const cognome=document.getElementById('fi-cognome').value.trim();
-  const tipo=document.getElementById('fi-tipo').value;
-  const formula=document.getElementById('fi-formula').value;
-  const scadenza=document.getElementById('fi-scadenza').value;
+  var nome=document.getElementById('fi-nome').value.trim();
+  var cognome=document.getElementById('fi-cognome').value.trim();
+  var tipo=document.getElementById('fi-tipo').value;
+  var formula=document.getElementById('fi-formula').value;
+  var scadenza=document.getElementById('fi-scadenza').value;
   if(!nome||!cognome||!tipo||!formula||!scadenza){showToast('Compila i campi obbligatori','err');return;}
-  const payload={
-    nome, cognome,
+  var payload={
+    nome:nome, cognome:cognome,
     email:document.getElementById('fi-email').value||null,
-    tipo, formula,
+    tipo:tipo, formula:formula,
     data_inizio:document.getElementById('fi-inizio').value||null,
-    scadenza,
+    scadenza:scadenza,
     importo:parseFloat(document.getElementById('fi-importo').value)||0,
     note:document.getElementById('fi-note').value||null,
     motivazione_non_rinnovo:document.getElementById('fi-motivazione').value||null,
     updated_at:new Date().toISOString()
   };
   try{
-    let error;
-    if(editFiId){({error}=await sb.from('fi_abbonati').update(payload).eq('id',editFiId));}
-    else{({error}=await sb.from('fi_abbonati').insert(payload));}
+    var error;
+    if(editFiId){var r=await sb.from('fi_abbonati').update(payload).eq('id',editFiId);error=r.error;}
+    else{var r2=await sb.from('fi_abbonati').insert(payload);error=r2.error;}
     if(error)throw error;
     showToast(editFiId?'Abbonato aggiornato':'Abbonato aggiunto','ok');
     closeFiModal();
-    const res=await sb.from('fi_abbonati').select('*').order('scadenza',{ascending:true});
+    var res=await sb.from('fi_abbonati').select('*').order('scadenza',{ascending:true});
     if(!res.error)DB_FI=res.data||[];
     renderFI();renderFIHome();
   }catch(e){showToast('Errore: '+e.message,'err');}
@@ -6010,38 +5596,30 @@ async function saveFiAbbonato(){
 
 async function deleteFiAbbonato(){
   if(!editFiId)return;
-  const a=DB_FI.find(x=>x.id===editFiId);
-  if(!confirm(`Eliminare l'abbonato ${a?.nome||''} ${a?.cognome||''}?`))return;
+  var a=DB_FI.find(function(x){return x.id===editFiId;});
+  if(!confirm('Eliminare '+(a?a.nome+' '+a.cognome:'questo abbonato')+'?'))return;
   try{
-    const{error}=await sb.from('fi_abbonati').delete().eq('id',editFiId);
-    if(error)throw error;
+    var r=await sb.from('fi_abbonati').delete().eq('id',editFiId);
+    if(r.error)throw r.error;
     showToast('Abbonato eliminato','ok');
     closeFiModal();
-    DB_FI=DB_FI.filter(x=>x.id!==editFiId);
+    DB_FI=DB_FI.filter(function(x){return x.id!==editFiId;});
     editFiId=null;
     renderFI();renderFIHome();
   }catch(e){showToast('Errore: '+e.message,'err');}
 }
 
 function exportFiCSV(){
-  const headers=['Nome','Cognome','Email','Tipo','Formula','Data inizio','Scadenza','Importo','Status','Note'];
-  const rows=DB_FI.map(a=>[
-    a.nome||'',a.cognome||'',a.email||'',
-    getFiTipoLabel(a.tipo),getFiFormulaLabel(a.formula),
-    a.data_inizio||'',a.scadenza||'',
-    a.importo||0,getFiStatusLabel(getFiStatus(a)),a.note||''
-  ]);
-  const csv=[headers,...rows].map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
-  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download='fi_abbonati.csv';a.click();
+  var headers=['Nome','Cognome','Email','Tipo','Formula','Data inizio','Scadenza','Importo','Status','Note','Motivazione'];
+  var rows=DB_FI.map(function(a){return [a.nome||'',a.cognome||'',a.email||'',getFiTipoLabel(a.tipo),getFiFormulaLabel(a.formula),a.data_inizio||'',a.scadenza||'',a.importo||0,getFiStatusLabel(getFiStatus(a)),a.note||'',a.motivazione_non_rinnovo||''];});
+  var csv=[headers].concat(rows).map(function(r){return r.map(function(v){return '"'+String(v).replace(/"/g,'""')+'"';}).join(',');}).join('
+');
+  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  var url=URL.createObjectURL(blob);
+  var aa=document.createElement('a');aa.href=url;aa.download='fi_abbonati.csv';aa.click();
   URL.revokeObjectURL(url);
   showToast('CSV esportato','ok');
 }
-
-
-// ── FI CSV IMPORT ──
-let fiImportRows = [];
 
 function openFiImport(){
   fiImportRows=[];
@@ -6050,280 +5628,90 @@ function openFiImport(){
   document.getElementById('fi-csv-input').value='';
   document.getElementById('fi-import-modal').style.display='flex';
 }
-function closeFiImport(){
-  document.getElementById('fi-import-modal').style.display='none';
-}
-function handleFiDrop(e){
-  const file=e.dataTransfer.files[0];
-  if(file)handleFiFile(file);
-}
+function closeFiImport(){document.getElementById('fi-import-modal').style.display='none';}
+function handleFiDrop(e){var file=e.dataTransfer.files[0];if(file)handleFiFile(file);}
 function handleFiFile(file){
   if(!file)return;
-  const reader=new FileReader();
-  reader.onload=ev=>parseFiCSV(ev.target.result);
+  var reader=new FileReader();
+  reader.onload=function(ev){parseFiCSV(ev.target.result);};
   reader.readAsText(file,'UTF-8');
 }
 
 function parseFiCSV(text){
-  // Normalize line endings, split rows
-  const lines=text.replace(/
+  var lines=text.replace(/
 /g,'
 ').replace(/
 /g,'
 ').trim().split('
 ');
-  if(lines.length<2){showToast('File vuoto o senza dati','err');return;}
-
-  // Parse header
-  const header=lines[0].split(',').map(h=>h.trim().toLowerCase().replace(/['"]/g,''));
-  const requiredCols=['nome','cognome','tipo','formula','scadenza'];
-  const missing=requiredCols.filter(c=>!header.includes(c));
+  if(lines.length<2){showToast('File vuoto','err');return;}
+  var header=lines[0].split(',').map(function(h){return h.trim().toLowerCase().replace(/['"]/g,'');});
+  var required=['nome','cognome','tipo','formula','scadenza'];
+  var missing=required.filter(function(col){return header.indexOf(col)===-1;});
   if(missing.length){showToast('Colonne mancanti: '+missing.join(', '),'err');return;}
-
-  const idxOf=col=>header.indexOf(col);
-
-  const rows=[];
-  const errors=[];
-  for(let i=1;i<lines.length;i++){
-    const line=lines[i].trim();
-    if(!line)continue;
-    // Handle quoted fields with commas inside
-    const cols=line.match(/(".*?"|[^,]+)(?=,|$)/g)||line.split(',');
-    const clean=col=>(cols[idxOf(col)]||'').replace(/^"|"$/g,'').trim();
-
-    const nome=clean('nome');
-    const cognome=clean('cognome');
-    const tipo=clean('tipo').toLowerCase();
-    const formula=clean('formula').toLowerCase();
-    const scadenza=clean('scadenza');
-
-    const rowErrors=[];
-    if(!nome||!cognome)rowErrors.push('nome/cognome mancante');
-    if(!['singolo','duo','studio'].includes(tipo))rowErrors.push('tipo non valido: '+tipo);
-    if(!['annuale','semestrale'].includes(formula))rowErrors.push('formula non valida: '+formula);
-    if(!scadenza||!/^\d{4}-\d{2}-\d{2}$/.test(scadenza))rowErrors.push('scadenza non valida (usa YYYY-MM-DD)');
-
-    rows.push({
-      nome, cognome,
-      email:clean('email')||null,
-      tipo, formula, scadenza,
-      data_inizio:clean('data_inizio')||null,
-      importo:parseFloat(clean('importo').replace(',','.'))||0,
-      note:clean('note')||null,
-      _errors:rowErrors,
-      _row:i+1
-    });
+  var idxOf=function(col){return header.indexOf(col);};
+  var rows=[];
+  for(var i=1;i<lines.length;i++){
+    var line=lines[i].trim();if(!line)continue;
+    var cols=line.match(/(".*?"|[^,]+)(?=,|$)/g)||line.split(',');
+    var clean=function(col){return (cols[idxOf(col)]||'').replace(/^"|"$/g,'').trim();};
+    var nome=clean('nome'),cognome=clean('cognome'),tipo=clean('tipo').toLowerCase(),formula=clean('formula').toLowerCase(),scadenza=clean('scadenza');
+    var errs=[];
+    if(!nome||!cognome)errs.push('nome/cognome mancante');
+    if(!['singolo','duo','studio','non_rinnovo'].includes(tipo))errs.push('tipo non valido: '+tipo);
+    if(!['annuale','semestrale'].includes(formula)&&tipo!=='non_rinnovo')errs.push('formula non valida: '+formula);
+    if(!scadenza||!/^\d{4}-\d{2}-\d{2}$/.test(scadenza))errs.push('scadenza non valida (YYYY-MM-DD)');
+    rows.push({nome:nome,cognome:cognome,email:clean('email')||null,tipo:tipo,formula:formula,scadenza:scadenza,data_inizio:clean('data_inizio')||null,importo:parseFloat((clean('importo')||'0').replace(',','.'))||0,note:clean('note')||null,_errors:errs,_row:i+1});
   }
-
   fiImportRows=rows;
-  renderFiImportPreview(rows);
-}
-
-function renderFiImportPreview(rows){
-  const ok=rows.filter(r=>r._errors.length===0);
-  const err=rows.filter(r=>r._errors.length>0);
-  const summary=document.getElementById('fi-import-summary');
-  summary.innerHTML=`<span style="color:var(--green)">${ok.length} pronti per l'importazione</span>`
-    +(err.length?` · <span style="color:var(--red)">${err.length} con errori (verranno saltati)</span>`:'');
-
-  const tbl=document.getElementById('fi-import-table');
-  tbl.innerHTML=`<thead><tr style="background:var(--bg3)">
-    <th style="padding:7px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">#</th>
-    <th style="padding:7px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Nome</th>
-    <th style="padding:7px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Tipo</th>
-    <th style="padding:7px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Formula</th>
-    <th style="padding:7px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Scadenza</th>
-    <th style="padding:7px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Importo</th>
-    <th style="padding:7px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Esito</th>
-  </tr></thead><tbody>${rows.map(r=>{
-    const hasErr=r._errors.length>0;
-    const rowBg=hasErr?'background:var(--red-bg)':'';
-    return`<tr style="${rowBg}">
-      <td style="padding:7px 10px;font-size:11px;color:var(--text3)">${r._row}</td>
-      <td style="padding:7px 10px;font-size:12px;font-weight:600;color:var(--text)">${r.nome} ${r.cognome}</td>
-      <td style="padding:7px 10px;font-size:11px;color:var(--text2)">${r.tipo}</td>
-      <td style="padding:7px 10px;font-size:11px;color:var(--text2)">${r.formula}</td>
-      <td style="padding:7px 10px;font-size:11px;color:var(--text2)">${r.scadenza}</td>
-      <td style="padding:7px 10px;font-size:11px;color:var(--text2)">${r.importo?'€'+r.importo.toFixed(2):'—'}</td>
-      <td style="padding:7px 10px;font-size:10px">${hasErr
-        ?'<span style="color:var(--red)">⚠ '+r._errors.join('; ')+'</span>'
-        :'<span style="color:var(--green)">✓ OK</span>'}</td>
-    </tr>`;
-  }).join('')}</tbody>`;
-
+  var ok=rows.filter(function(r){return r._errors.length===0;});
+  var err=rows.filter(function(r){return r._errors.length>0;});
+  document.getElementById('fi-import-summary').innerHTML='<span style="color:var(--green)">'+ok.length+' pronti</span>'+(err.length?' · <span style="color:var(--red)">'+err.length+' con errori</span>':'');
+  document.getElementById('fi-import-table').innerHTML='<thead><tr style="background:var(--bg3)"><th style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase">#</th><th style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase">Nome</th><th style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase">Tipo</th><th style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase">Scadenza</th><th style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase">Esito</th></tr></thead><tbody>'
+    +rows.map(function(r){var hasErr=r._errors.length>0;return '<tr style="'+(hasErr?'background:var(--red-bg)':'')+'"><td style="padding:6px 10px;font-size:11px;color:var(--text3)">'+r._row+'</td><td style="padding:6px 10px;font-size:12px;font-weight:600;color:var(--text)">'+r.nome+' '+r.cognome+'</td><td style="padding:6px 10px;font-size:11px">'+r.tipo+'</td><td style="padding:6px 10px;font-size:11px">'+r.scadenza+'</td><td style="padding:6px 10px;font-size:10px">'+(hasErr?'<span style="color:var(--red)">⚠ '+r._errors.join('; ')+'</span>':'<span style="color:var(--green)">✓</span>')+'</td></tr>';}).join('')+'</tbody>';
   document.getElementById('fi-import-preview').style.display='block';
-  const btn=document.getElementById('fi-import-btn');
-  btn.style.display=ok.length>0?'flex':'none';
+  var btn=document.getElementById('fi-import-btn');
+  btn.style.display=ok.length>0?'inline-flex':'none';
   document.getElementById('fi-import-count').textContent=ok.length;
 }
 
 async function confirmFiImport(){
-  const ok=fiImportRows.filter(r=>r._errors.length===0);
+  var ok=fiImportRows.filter(function(r){return r._errors.length===0;});
   if(!ok.length)return;
-  const conflict=document.getElementById('fi-import-conflict').value;
-  const btn=document.getElementById('fi-import-btn');
-  btn.disabled=true;btn.textContent='Importazione in corso...';
-
-  let inserted=0, updated=0, skipped=0;
-  for(const row of ok){
-    const payload={
-      nome:row.nome, cognome:row.cognome, email:row.email,
-      tipo:row.tipo, formula:row.formula,
-      data_inizio:row.data_inizio, scadenza:row.scadenza,
-      importo:row.importo, note:row.note,
-      updated_at:new Date().toISOString()
-    };
-    // Check if exists (same nome+cognome, case-insensitive)
-    const existing=DB_FI.find(a=>
-      a.nome.trim().toLowerCase()===row.nome.toLowerCase()&&
-      a.cognome.trim().toLowerCase()===row.cognome.toLowerCase()
-    );
+  var conflict=(document.getElementById('fi-import-conflict')||{}).value||'skip';
+  var btn=document.getElementById('fi-import-btn');
+  btn.disabled=true;btn.textContent='Importazione...';
+  var inserted=0,updated=0,skipped=0;
+  for(var ri=0;ri<ok.length;ri++){
+    var row=ok[ri];
+    var payload={nome:row.nome,cognome:row.cognome,email:row.email,tipo:row.tipo,formula:row.formula,data_inizio:row.data_inizio,scadenza:row.scadenza,importo:row.importo,note:row.note,updated_at:new Date().toISOString()};
+    var existing=DB_FI.find(function(a){return a.nome.trim().toLowerCase()===row.nome.toLowerCase()&&a.cognome.trim().toLowerCase()===row.cognome.toLowerCase();});
     if(existing){
-      if(conflict==='update'){
-        const{error}=await sb.from('fi_abbonati').update(payload).eq('id',existing.id);
-        if(!error)updated++;
-      } else {
-        skipped++;
-      }
-    } else {
-      const{error}=await sb.from('fi_abbonati').insert(payload);
-      if(!error)inserted++;
-    }
+      if(conflict==='update'){var r2=await sb.from('fi_abbonati').update(payload).eq('id',existing.id);if(!r2.error)updated++;}
+      else{skipped++;}
+    }else{var r3=await sb.from('fi_abbonati').insert(payload);if(!r3.error)inserted++;}
   }
-
-  // Reload
-  const res=await sb.from('fi_abbonati').select('*').order('scadenza',{ascending:true});
+  var res=await sb.from('fi_abbonati').select('*').order('scadenza',{ascending:true});
   if(!res.error)DB_FI=res.data||[];
   renderFI();renderFIHome();
   closeFiImport();
-  showToast(`Importati ${inserted}, aggiornati ${updated}, saltati ${skipped}`,'ok');
+  showToast('Importati '+inserted+', aggiornati '+updated+', saltati '+skipped,'ok');
   btn.disabled=false;
 }
 
-
-function setFiChartType(chartId,type,btn){
-  const parent=btn.closest('.chart-type-btns');
-  parent.querySelectorAll('.ct-btn').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  // Store type and re-render
-  if(chartId==='ch-fi-andamento'){
-    if(chFiAndamento)chFiAndamento.destroy();
-    renderFiCharts();
-  } else if(chartId==='ch-fi-tipi'||chartId==='ch-fi-formula'||chartId==='ch-fi-val'){
-    renderFiCharts();
-  }
-}
 
 // ── START ──
 init();
 </script>
 
-<!-- CFP DETAIL MODAL -->
-<div id="cfp-detail-modal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)closeCfpDetail()">
-  <div style="background:var(--bg2);border-radius:var(--r2);width:100%;max-width:780px;max-height:82vh;display:flex;flex-direction:column;box-shadow:var(--shadow2)">
-    <!-- header -->
-    <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
-      <div>
-        <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px">Dettaglio avanzamento CFP</div>
-        <div class="font-headline" style="font-size:17px;font-weight:800;color:var(--text)" id="cfp-detail-title">—</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:2px" id="cfp-detail-count"></div>
-      </div>
-      <button class="mclose" onclick="closeCfpDetail()">✕</button>
-    </div>
-    <!-- table -->
-    <div style="overflow-y:auto;flex:1">
-      <table style="width:100%;border-collapse:collapse;font-size:12px">
-        <thead>
-          <tr style="background:var(--bg3);position:sticky;top:0;z-index:1">
-            <th style="padding:10px 12px;text-align:left;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap">Data</th>
-            <th style="padding:10px 12px;text-align:left;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Titolo</th>
-            <th style="padding:10px 12px;text-align:left;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Docente</th>
-            <th style="padding:10px 12px;text-align:center;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Tema</th>
-            <th style="padding:10px 12px;text-align:center;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">CFP</th>
-            <th style="padding:10px 12px;text-align:center;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Pres./Iscr.</th>
-          </tr>
-        </thead>
-        <tbody id="cfp-detail-body"></tbody>
-      </table>
-    </div>
-    <!-- footer -->
-    <div style="padding:12px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;flex-shrink:0">
-      <button class="btn btn-s" onclick="closeCfpDetail()">Chiudi</button>
-    </div>
-  </div>
-</div>
-
-
-<!-- FI IMPORT CSV MODAL -->
-<div class="mover" id="fi-import-modal" style="display:none" onclick="if(event.target===this)closeFiImport()">
-  <div class="modal" style="max-width:640px;padding:0;overflow:hidden">
-    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
-      <div>
-        <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px">Form. Illimitata › Importa</div>
-        <div class="font-headline" style="font-size:16px;font-weight:800;color:var(--text)">Importa abbonati da CSV</div>
-      </div>
-      <button class="mclose" onclick="closeFiImport()">✕</button>
-    </div>
-    <div style="padding:20px 24px;max-height:calc(92vh - 140px);overflow-y:auto;display:flex;flex-direction:column;gap:16px">
-
-      <!-- FORMAT HINT -->
-      <div style="background:var(--accent-bg);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r);padding:12px 14px;font-size:11px;color:var(--text2);line-height:1.6">
-        <div style="font-weight:700;color:var(--accent);margin-bottom:4px;font-size:10px;text-transform:uppercase;letter-spacing:.08em">Formato atteso (intestazioni obbligatorie)</div>
-        <code style="display:block;background:var(--bg3);border-radius:6px;padding:8px 10px;font-size:10px;color:var(--text);margin-top:6px;line-height:1.8">nome, cognome, email, tipo, formula, data_inizio, scadenza, importo, note</code>
-        <div style="margin-top:8px;font-size:10px;color:var(--text3)">
-          <b>tipo:</b> singolo · duo · studio &nbsp;|&nbsp; <b>formula:</b> annuale · semestrale &nbsp;|&nbsp;
-          <b>date:</b> YYYY-MM-DD &nbsp;|&nbsp; <b>importo:</b> numero decimale (es. 199.00)
-        </div>
-      </div>
-
-      <!-- CONFLICT OPTION -->
-      <div style="display:flex;align-items:center;gap:10px">
-        <label style="font-size:12px;font-weight:600;color:var(--text2)">Se abbonato già presente (stesso nome+cognome):</label>
-        <select class="finp" id="fi-import-conflict" style="max-width:180px">
-          <option value="skip">Salta (mantieni esistente)</option>
-          <option value="update">Aggiorna con nuovo dato</option>
-        </select>
-      </div>
-
-      <!-- DROP ZONE -->
-      <div id="fi-drop-zone" onclick="document.getElementById('fi-csv-input').click()"
-        style="border:2px dashed var(--border2);border-radius:var(--r2);padding:32px;text-align:center;cursor:pointer;transition:all .2s"
-        ondragover="event.preventDefault();this.style.borderColor='var(--accent)';this.style.background='var(--accent-bg)'"
-        ondragleave="this.style.borderColor='';this.style.background=''"
-        ondrop="event.preventDefault();this.style.borderColor='';this.style.background='';handleFiDrop(event)">
-        <span class="material-symbols-outlined" style="font-size:36px;color:var(--text3);display:block;margin-bottom:8px">upload_file</span>
-        <div style="font-size:13px;font-weight:600;color:var(--text2)">Trascina il file CSV qui</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px">oppure clicca per selezionare</div>
-        <input type="file" id="fi-csv-input" accept=".csv" style="display:none" onchange="handleFiFile(this.files[0])">
-      </div>
-
-      <!-- PREVIEW -->
-      <div id="fi-import-preview" style="display:none">
-        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px" id="fi-import-summary"></div>
-        <div style="max-height:260px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
-          <table style="width:100%;border-collapse:collapse;font-size:11px" id="fi-import-table"></table>
-        </div>
-      </div>
-    </div>
-
-    <div style="padding:14px 24px;border-top:1px solid var(--border);background:var(--bg2);display:flex;justify-content:space-between;align-items:center">
-      <button class="btn btn-s" onclick="closeFiImport()">Annulla</button>
-      <button class="btn btn-p" id="fi-import-btn" onclick="confirmFiImport()" style="display:none"><span class="material-symbols-outlined" style="font-size:14px">check</span>Importa <span id="fi-import-count">0</span> abbonati</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL ABBONATO FI -->
+<!-- FI ABBONATO MODAL -->
 <div class="mover" id="fi-modal" style="display:none" onclick="if(event.target===this)closeFiModal()">
   <div class="modal" style="max-width:520px;padding:0;overflow:hidden">
     <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
-      <div>
-        <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px">Form. Illimitata › <span style="color:var(--accent)" id="fi-modal-breadcrumb">Nuovo abbonato</span></div>
-        <div class="font-headline" style="font-size:16px;font-weight:800;color:var(--text)" id="fi-modal-title">Nuovo abbonato</div>
-      </div>
+      <div class="font-headline" style="font-size:16px;font-weight:800;color:var(--text)" id="fi-modal-title">Nuovo abbonato</div>
       <button class="mclose" onclick="closeFiModal()">✕</button>
     </div>
-    <div style="padding:20px 24px;max-height:calc(92vh - 70px);overflow-y:auto;display:flex;flex-direction:column;gap:14px">
+    <div style="padding:20px 24px;max-height:calc(92vh - 70px);overflow-y:auto;display:flex;flex-direction:column;gap:12px">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div class="fg"><label class="flbl">Nome *</label><input type="text" class="finp" id="fi-nome" placeholder="Mario"></div>
         <div class="fg"><label class="flbl">Cognome *</label><input type="text" class="finp" id="fi-cognome" placeholder="Rossi"></div>
@@ -6331,7 +5719,7 @@ init();
       <div class="fg"><label class="flbl">Email</label><input type="email" class="finp" id="fi-email" placeholder="mario.rossi@esempio.it"></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div class="fg">
-          <label class="flbl">Tipo abbonamento *</label>
+          <label class="flbl">Tipo *</label>
           <select class="finp" id="fi-tipo" onchange="document.getElementById('fi-motivazione-row').style.display=this.value==='non_rinnovo'?'block':'none'">
             <option value="">— seleziona —</option>
             <option value="singolo">Singolo</option>
@@ -6351,20 +5739,94 @@ init();
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div class="fg"><label class="flbl">Data inizio</label><input type="date" class="finp" id="fi-inizio"></div>
-        <div class="fg"><label class="flbl">Data scadenza *</label><input type="date" class="finp" id="fi-scadenza"></div>
+        <div class="fg"><label class="flbl">Scadenza *</label><input type="date" class="finp" id="fi-scadenza"></div>
       </div>
       <div class="fg"><label class="flbl">Importo pagato (€)</label><input type="number" class="finp" id="fi-importo" placeholder="0.00" min="0" step="0.01"></div>
       <div class="fg"><label class="flbl">Note</label><textarea class="finp" id="fi-note" placeholder="Note aggiuntive..." style="min-height:60px"></textarea></div>
       <div id="fi-motivazione-row" style="display:none">
-        <div class="fg"><label class="flbl" style="color:var(--orange)">Motivazione non rinnovo</label><textarea class="finp" id="fi-motivazione" placeholder="Specifica il motivo..." style="min-height:60px;border-color:var(--orange)"></textarea></div>
+        <div class="fg"><label class="flbl" style="color:var(--yellow)">Motivazione non rinnovo</label><textarea class="finp" id="fi-motivazione" placeholder="Motivo della mancata rinnovazione..." style="min-height:60px;border-color:var(--yellow)"></textarea></div>
       </div>
     </div>
     <div style="padding:14px 24px;border-top:1px solid var(--border);background:var(--bg2);display:flex;justify-content:space-between;align-items:center">
       <button class="btn btn-d btn-sm" id="fi-del-btn" onclick="deleteFiAbbonato()" style="display:none"><span class="material-symbols-outlined" style="font-size:14px">delete</span>Elimina</button>
       <div style="display:flex;gap:8px;margin-left:auto">
         <button class="btn btn-s" onclick="closeFiModal()">Annulla</button>
-        <button class="btn btn-p" onclick="saveFiAbbonato()"><span class="material-symbols-outlined" style="font-size:14px">save</span>Salva</button>
+        <button class="btn btn-p" onclick="saveFiAbbonato()">Salva</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- FI IMPORT MODAL -->
+<div class="mover" id="fi-import-modal" style="display:none" onclick="if(event.target===this)closeFiImport()">
+  <div class="modal" style="max-width:640px;padding:0;overflow:hidden">
+    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
+      <div class="font-headline" style="font-size:16px;font-weight:800;color:var(--text)">Importa abbonati da CSV</div>
+      <button class="mclose" onclick="closeFiImport()">✕</button>
+    </div>
+    <div style="padding:20px 24px;max-height:calc(92vh - 140px);overflow-y:auto;display:flex;flex-direction:column;gap:14px">
+      <div style="background:var(--accent-bg);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r);padding:12px;font-size:11px;color:var(--text2)">
+        <strong style="color:var(--accent)">Formato CSV:</strong><br>
+        <code style="display:block;background:var(--bg3);border-radius:4px;padding:6px;margin-top:4px;font-size:10px">nome, cognome, email, tipo, formula, data_inizio, scadenza, importo, note</code>
+        <div style="margin-top:6px;font-size:10px;color:var(--text3)">tipo: singolo · duo · studio · non_rinnovo &nbsp;|&nbsp; formula: annuale · semestrale &nbsp;|&nbsp; date: YYYY-MM-DD</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <label style="font-size:12px;color:var(--text2)">Se già presente:</label>
+        <select class="finp" id="fi-import-conflict" style="max-width:180px">
+          <option value="skip">Salta</option>
+          <option value="update">Aggiorna</option>
+        </select>
+      </div>
+      <div id="fi-drop-zone" onclick="document.getElementById('fi-csv-input').click()"
+        style="border:2px dashed var(--border2);border-radius:var(--r2);padding:28px;text-align:center;cursor:pointer;transition:all .2s"
+        ondragover="event.preventDefault();this.style.borderColor='var(--accent)'"
+        ondragleave="this.style.borderColor=''"
+        ondrop="event.preventDefault();this.style.borderColor='';handleFiDrop(event)">
+        <span class="material-symbols-outlined" style="font-size:32px;color:var(--text3);display:block;margin-bottom:6px">upload_file</span>
+        <div style="font-size:13px;font-weight:600;color:var(--text2)">Trascina il CSV qui</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:3px">oppure clicca per selezionare</div>
+        <input type="file" id="fi-csv-input" accept=".csv" style="display:none" onchange="handleFiFile(this.files[0])">
+      </div>
+      <div id="fi-import-preview" style="display:none">
+        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px" id="fi-import-summary"></div>
+        <div style="max-height:240px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+          <table style="width:100%;border-collapse:collapse;font-size:11px" id="fi-import-table"></table>
+        </div>
+      </div>
+    </div>
+    <div style="padding:14px 24px;border-top:1px solid var(--border);background:var(--bg2);display:flex;justify-content:space-between;align-items:center">
+      <button class="btn btn-s" onclick="closeFiImport()">Annulla</button>
+      <button class="btn btn-p" id="fi-import-btn" onclick="confirmFiImport()" style="display:none">Importa <span id="fi-import-count">0</span> abbonati</button>
+    </div>
+  </div>
+</div>
+
+<!-- CFP DETAIL MODAL -->
+<div class="mover" id="cfp-detail-modal" style="display:none" onclick="if(event.target===this)closeCfpDetail()">
+  <div class="modal" style="max-width:780px;padding:0;overflow:hidden">
+    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px">Avanzamento CFP</div>
+        <div class="font-headline" style="font-size:17px;font-weight:800;color:var(--text)" id="cfp-detail-title">—</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px" id="cfp-detail-count"></div>
+      </div>
+      <button class="mclose" onclick="closeCfpDetail()">✕</button>
+    </div>
+    <div style="overflow-y:auto;max-height:calc(92vh - 130px)">
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr style="background:var(--bg3);position:sticky;top:0">
+          <th style="padding:9px 12px;text-align:left;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Data</th>
+          <th style="padding:9px 12px;text-align:left;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Titolo</th>
+          <th style="padding:9px 12px;text-align:left;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Docente</th>
+          <th style="padding:9px 12px;text-align:center;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Tema</th>
+          <th style="padding:9px 12px;text-align:center;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">CFP</th>
+          <th style="padding:9px 12px;text-align:center;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Pres./Iscr.</th>
+        </tr></thead>
+        <tbody id="cfp-detail-body"></tbody>
+      </table>
+    </div>
+    <div style="padding:12px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end">
+      <button class="btn btn-s" onclick="closeCfpDetail()">Chiudi</button>
     </div>
   </div>
 </div>
