@@ -1476,6 +1476,11 @@ let FORMATORI_DEF=[
 
 // ── STATE ──
 let DB=[],NOTIFICHE=[],FM_DATA={};
+var DB_FI=[];
+var editFiId=null;
+var chFiAnd=null,chFiTipi=null,chFiFormula=null,chFiVal=null;
+var fiImportRows=[];
+var fiSortField='scadenza',fiSortDir='asc';
 let currentUser=null,userProfile=null,userSettings={};
 let editId=null,currentFm=null;
 let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
@@ -5353,11 +5358,7 @@ function closeCfpDetail(){document.getElementById('cfp-detail-modal').style.disp
 // ════════════════════════════════
 // FORMAZIONE ILLIMITATA
 // ════════════════════════════════
-var DB_FI = [];
-var editFiId = null;
-var chFiAnd=null, chFiTipi=null, chFiFormula=null, chFiVal=null;
-var fiImportRows = [];
-var fiSortField='scadenza', fiSortDir='asc';
+// FI state vars declared at top level
 
 function getFiStatus(a){
   var tipo = typeof a==='object' ? a.tipo : null;
@@ -5481,15 +5482,19 @@ function renderFiTabella(){
         +'<td style="padding:10px 12px;font-size:12px;font-weight:600"><span class="'+getFiStatusClass(st)+'">'+scadStr+'</span></td>'
         +'<td style="padding:10px 12px;font-size:13px;font-weight:700;color:var(--text)">'+impStr+'</td>'
         +'<td style="padding:10px 12px"><span class="'+getFiStatusClass(st)+'">'+getFiStatusLabel(st)+'</span></td>'
-        +'<td style="padding:10px 12px"><button class="btn btn-s btn-sm" onclick="openFiModal(&quot;'+a.id+'&quot;)">Modifica</button></td>'
+        +'<td style="padding:10px 12px"><button class="btn btn-s btn-sm" data-id="'+a.id+'" onclick="openFiModal(this.dataset.id)">Modifica</button></td>'
         +'</tr>';
     }).join('')+'</tbody></table>';
 }
 
 function renderFiCharts(){
   var isDark=document.body.classList.contains('dark');
-  var tc=isDark?'#5a6a84':'#9ca3af';
-  var gc=isDark?'rgba(255,255,255,.04)':'rgba(0,0,0,.04)';
+  var tc=isDark?'#94a3b8':'#64748b';
+  var gc=isDark?'rgba(255,255,255,.06)':'rgba(0,0,0,.06)';
+  // Use theme chart colors
+  var cc=getThemeChartColors();
+  var vivid=[cc[0],cc[1],cc[2],cc[3]];
+
   var now=new Date();
   var months=[],nuovi=[],persi=[];
   for(var i=5;i>=0;i--){
@@ -5507,21 +5512,58 @@ function renderFiCharts(){
   var formuleCounts=formule.map(function(f){return DB_FI.filter(function(a){return a.formula===f;}).length;});
   var valTipi=tipi.map(function(t){return DB_FI.filter(function(a){return a.tipo===t;}).reduce(function(s,a){return s+(parseFloat(a.importo)||0);},0);});
 
-  var andType=document.querySelector('#ctype-fi-and .ct-btn.on')?document.querySelector('#ctype-fi-and .ct-btn.on').textContent.toLowerCase():'bar';
-  var tipiType=document.querySelector('#ctype-fi-tipi .ct-btn.on')?document.querySelector('#ctype-fi-tipi .ct-btn.on').textContent.toLowerCase():'doughnut';
-  var formulaType=document.querySelector('#ctype-fi-formula .ct-btn.on')?document.querySelector('#ctype-fi-formula .ct-btn.on').textContent.toLowerCase():'pie';
-  var valType=document.querySelector('#ctype-fi-val .ct-btn.on')?document.querySelector('#ctype-fi-val .ct-btn.on').textContent.toLowerCase():'bar';
-
-  var bgColors=['rgba(99,102,241,.8)','rgba(0,218,243,.7)','rgba(16,185,129,.7)','rgba(239,68,68,.6)'];
+  var andType=(document.querySelector('#ctype-fi-and .ct-btn.on')||{}).textContent||'bar';
+  andType=andType.toLowerCase();
+  var tipiType=(document.querySelector('#ctype-fi-tipi .ct-btn.on')||{}).textContent||'donut';
+  tipiType=tipiType.toLowerCase();
+  var formulaType=(document.querySelector('#ctype-fi-formula .ct-btn.on')||{}).textContent||'pie';
+  formulaType=formulaType.toLowerCase();
+  var valType=(document.querySelector('#ctype-fi-val .ct-btn.on')||{}).textContent||'bar';
+  valType=valType.toLowerCase();
 
   var ctx1=document.getElementById('ch-fi-andamento');
-  if(ctx1){if(chFiAnd)chFiAnd.destroy();chFiAnd=new Chart(ctx1,{type:andType==='line'?'line':'bar',data:{labels:months,datasets:[{label:'Nuovi',data:nuovi,backgroundColor:'rgba(99,102,241,.7)',borderRadius:4},{label:'Scaduti',data:persi,backgroundColor:'rgba(239,68,68,.5)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}}}},scales:{x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}},y:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}}}});}
+  if(ctx1){
+    if(chFiAnd)chFiAnd.destroy();
+    var t1=andType==='line'?'line':'bar';
+    chFiAnd=new Chart(ctx1,{
+      type:t1,
+      data:{labels:months,datasets:[
+        {label:'Nuovi',data:nuovi,backgroundColor:t1==='line'?vivid[0]+'44':vivid[0],borderColor:vivid[0],borderWidth:2,borderRadius:t1==='bar'?5:0,fill:t1==='line',tension:.4,pointRadius:t1==='line'?4:0,pointBackgroundColor:vivid[0]},
+        {label:'Scaduti',data:persi,backgroundColor:t1==='line'?vivid[3]+'44':vivid[3],borderColor:vivid[3],borderWidth:2,borderRadius:t1==='bar'?5:0,fill:t1==='line',tension:.4,pointRadius:t1==='line'?4:0,pointBackgroundColor:vivid[3]}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:11},boxWidth:12}}},scales:{x:{ticks:{color:tc,font:{size:10}},grid:{color:gc}},y:{ticks:{color:tc,font:{size:10}},grid:{color:gc}}}}
+    });
+  }
   var ctx2=document.getElementById('ch-fi-tipi');
-  if(ctx2){if(chFiTipi)chFiTipi.destroy();var t2=tipiType==='bar'?'bar':tipiType==='pie'?'pie':'doughnut';chFiTipi=new Chart(ctx2,{type:t2,data:{labels:tipiLabels,datasets:[{data:tipiCounts,backgroundColor:bgColors,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}}}}}});}
+  if(ctx2){
+    if(chFiTipi)chFiTipi.destroy();
+    var t2=tipiType==='bar'?'bar':tipiType==='pie'?'pie':'doughnut';
+    chFiTipi=new Chart(ctx2,{
+      type:t2,
+      data:{labels:tipiLabels,datasets:[{data:tipiCounts,backgroundColor:vivid,borderWidth:0,hoverOffset:8}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:11},boxWidth:12}}},scales:t2==='bar'?{x:{ticks:{color:tc},grid:{color:gc}},y:{ticks:{color:tc},grid:{color:gc}}}:{}}
+    });
+  }
   var ctx3=document.getElementById('ch-fi-formula');
-  if(ctx3){if(chFiFormula)chFiFormula.destroy();var t3=formulaType==='bar'?'bar':formulaType==='doughnut'?'doughnut':'pie';chFiFormula=new Chart(ctx3,{type:t3,data:{labels:['Annuale','Semestrale'],datasets:[{data:formuleCounts,backgroundColor:['rgba(99,102,241,.8)','rgba(0,218,243,.7)'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:10}}}}}});}
+  if(ctx3){
+    if(chFiFormula)chFiFormula.destroy();
+    var t3=formulaType==='bar'?'bar':formulaType==='doughnut'?'doughnut':'pie';
+    chFiFormula=new Chart(ctx3,{
+      type:t3,
+      data:{labels:['Annuale','Semestrale'],datasets:[{data:formuleCounts,backgroundColor:[vivid[0],vivid[1]],borderWidth:0,hoverOffset:8}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:11},boxWidth:12}}},scales:t3==='bar'?{x:{ticks:{color:tc},grid:{color:gc}},y:{ticks:{color:tc},grid:{color:gc}}}:{}}
+    });
+  }
   var ctx4=document.getElementById('ch-fi-val');
-  if(ctx4){if(chFiVal)chFiVal.destroy();var t4=valType==='line'?'line':valType==='pie'?'pie':'bar';chFiVal=new Chart(ctx4,{type:t4,data:{labels:tipiLabels,datasets:[{label:'Valore €',data:valTipi,backgroundColor:bgColors,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:t4==='bar'||t4==='line'?{x:{ticks:{color:tc,font:{size:10}},grid:{display:false}},y:{ticks:{color:tc,font:{size:9},callback:function(v){return '€'+v.toLocaleString('it');}},grid:{color:gc}}}:{}}});}
+  if(ctx4){
+    if(chFiVal)chFiVal.destroy();
+    var t4=valType==='line'?'line':valType==='pie'?'pie':'bar';
+    chFiVal=new Chart(ctx4,{
+      type:t4,
+      data:{labels:tipiLabels,datasets:[{label:'Valore (€)',data:valTipi,backgroundColor:t4==='line'?vivid[0]+'44':vivid,borderColor:t4==='line'?vivid[0]:vivid,borderWidth:t4==='line'?2:0,borderRadius:t4==='bar'?5:0,fill:t4==='line',tension:.4,pointRadius:t4==='line'?4:0,pointBackgroundColor:vivid[0]}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:t4!=='pie'?{x:{ticks:{color:tc,font:{size:10}},grid:{display:false}},y:{ticks:{color:tc,font:{size:10},callback:function(v){return '€'+v.toLocaleString('it');}},grid:{color:gc}}}:{}}
+    });
+  }
 }
 
 function setFiChartType(chartId,type,btn){
