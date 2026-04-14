@@ -1449,6 +1449,137 @@ textarea.finp{min-height:72px;resize:vertical}
 
 <div class="toast" id="toast"></div>
 
+
+
+<!-- FI ABBONATO MODAL -->
+<div class="mover" id="fi-modal" style="display:none" onclick="if(event.target===this)closeFiModal()">
+  <div class="modal" style="max-width:520px;padding:0;overflow:hidden">
+    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
+      <div class="font-headline" style="font-size:16px;font-weight:800;color:var(--text)" id="fi-modal-title">Nuovo abbonato</div>
+      <button class="mclose" onclick="closeFiModal()">✕</button>
+    </div>
+    <div style="padding:20px 24px;max-height:calc(92vh - 70px);overflow-y:auto;display:flex;flex-direction:column;gap:12px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="fg"><label class="flbl">Nome *</label><input type="text" class="finp" id="fi-nome" placeholder="Mario"></div>
+        <div class="fg"><label class="flbl">Cognome *</label><input type="text" class="finp" id="fi-cognome" placeholder="Rossi"></div>
+      </div>
+      <div class="fg"><label class="flbl">Email</label><input type="email" class="finp" id="fi-email" placeholder="mario.rossi@esempio.it"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="fg">
+          <label class="flbl">Tipo *</label>
+          <select class="finp" id="fi-tipo" onchange="document.getElementById('fi-motivazione-row').style.display=this.value==='non_rinnovo'?'block':'none'">
+            <option value="">— seleziona —</option>
+            <option value="singolo">Singolo</option>
+            <option value="duo">Duo</option>
+            <option value="studio">Studio</option>
+            <option value="non_rinnovo">Non rinnovo</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="flbl">Formula *</label>
+          <select class="finp" id="fi-formula">
+            <option value="">— seleziona —</option>
+            <option value="annuale">Annuale</option>
+            <option value="semestrale">Semestrale</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="fg"><label class="flbl">Data inizio</label><input type="date" class="finp" id="fi-inizio"></div>
+        <div class="fg"><label class="flbl">Scadenza *</label><input type="date" class="finp" id="fi-scadenza"></div>
+      </div>
+      <div class="fg"><label class="flbl">Importo pagato (€)</label><input type="number" class="finp" id="fi-importo" placeholder="0.00" min="0" step="0.01"></div>
+      <div class="fg"><label class="flbl">Note</label><textarea class="finp" id="fi-note" placeholder="Note aggiuntive..." style="min-height:60px"></textarea></div>
+      <div id="fi-motivazione-row" style="display:none">
+        <div class="fg"><label class="flbl" style="color:var(--yellow)">Motivazione non rinnovo</label><textarea class="finp" id="fi-motivazione" placeholder="Motivo della mancata rinnovazione..." style="min-height:60px;border-color:var(--yellow)"></textarea></div>
+      </div>
+    </div>
+    <div style="padding:14px 24px;border-top:1px solid var(--border);background:var(--bg2);display:flex;justify-content:space-between;align-items:center">
+      <button class="btn btn-d btn-sm" id="fi-del-btn" onclick="deleteFiAbbonato()" style="display:none"><span class="material-symbols-outlined" style="font-size:14px">delete</span>Elimina</button>
+      <div style="display:flex;gap:8px;margin-left:auto">
+        <button class="btn btn-s" onclick="closeFiModal()">Annulla</button>
+        <button class="btn btn-p" onclick="saveFiAbbonato()">Salva</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FI IMPORT MODAL -->
+<div class="mover" id="fi-import-modal" style="display:none" onclick="if(event.target===this)closeFiImport()">
+  <div class="modal" style="max-width:640px;padding:0;overflow:hidden">
+    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
+      <div class="font-headline" style="font-size:16px;font-weight:800;color:var(--text)">Importa abbonati da CSV</div>
+      <button class="mclose" onclick="closeFiImport()">✕</button>
+    </div>
+    <div style="padding:20px 24px;max-height:calc(92vh - 140px);overflow-y:auto;display:flex;flex-direction:column;gap:14px">
+      <div style="background:var(--accent-bg);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r);padding:12px;font-size:11px;color:var(--text2)">
+        <strong style="color:var(--accent)">Formato CSV:</strong><br>
+        <code style="display:block;background:var(--bg3);border-radius:4px;padding:6px;margin-top:4px;font-size:10px">nome, cognome, email, tipo, formula, data_inizio, scadenza, importo, note</code>
+        <div style="margin-top:6px;font-size:10px;color:var(--text3)">tipo: singolo · duo · studio · non_rinnovo &nbsp;|&nbsp; formula: annuale · semestrale &nbsp;|&nbsp; date: YYYY-MM-DD</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <label style="font-size:12px;color:var(--text2)">Se già presente:</label>
+        <select class="finp" id="fi-import-conflict" style="max-width:180px">
+          <option value="skip">Salta</option>
+          <option value="update">Aggiorna</option>
+        </select>
+      </div>
+      <div id="fi-drop-zone" onclick="document.getElementById('fi-csv-input').click()"
+        style="border:2px dashed var(--border2);border-radius:var(--r2);padding:28px;text-align:center;cursor:pointer;transition:all .2s"
+        ondragover="event.preventDefault();this.style.borderColor='var(--accent)'"
+        ondragleave="this.style.borderColor=''"
+        ondrop="event.preventDefault();this.style.borderColor='';handleFiDrop(event)">
+        <span class="material-symbols-outlined" style="font-size:32px;color:var(--text3);display:block;margin-bottom:6px">upload_file</span>
+        <div style="font-size:13px;font-weight:600;color:var(--text2)">Trascina il CSV qui</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:3px">oppure clicca per selezionare</div>
+        <input type="file" id="fi-csv-input" accept=".csv" style="display:none" onchange="handleFiFile(this.files[0])">
+      </div>
+      <div id="fi-import-preview" style="display:none">
+        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px" id="fi-import-summary"></div>
+        <div style="max-height:240px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+          <table style="width:100%;border-collapse:collapse;font-size:11px" id="fi-import-table"></table>
+        </div>
+      </div>
+    </div>
+    <div style="padding:14px 24px;border-top:1px solid var(--border);background:var(--bg2);display:flex;justify-content:space-between;align-items:center">
+      <button class="btn btn-s" onclick="closeFiImport()">Annulla</button>
+      <button class="btn btn-p" id="fi-import-btn" onclick="confirmFiImport()" style="display:none">Importa <span id="fi-import-count">0</span> abbonati</button>
+    </div>
+  </div>
+</div>
+
+<!-- CFP DETAIL MODAL -->
+<div class="mover" id="cfp-detail-modal" style="display:none" onclick="if(event.target===this)closeCfpDetail()">
+  <div class="modal" style="max-width:780px;padding:0;overflow:hidden">
+    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px">Avanzamento CFP</div>
+        <div class="font-headline" style="font-size:17px;font-weight:800;color:var(--text)" id="cfp-detail-title">—</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px" id="cfp-detail-count"></div>
+      </div>
+      <button class="mclose" onclick="closeCfpDetail()">✕</button>
+    </div>
+    <div style="overflow-y:auto;max-height:calc(92vh - 130px)">
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr style="background:var(--bg3);position:sticky;top:0">
+          <th style="padding:9px 12px;text-align:left;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Data</th>
+          <th style="padding:9px 12px;text-align:left;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Titolo</th>
+          <th style="padding:9px 12px;text-align:left;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Docente</th>
+          <th style="padding:9px 12px;text-align:center;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Tema</th>
+          <th style="padding:9px 12px;text-align:center;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">CFP</th>
+          <th style="padding:9px 12px;text-align:center;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Pres./Iscr.</th>
+        </tr></thead>
+        <tbody id="cfp-detail-body"></tbody>
+      </table>
+    </div>
+    <div style="padding:12px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end">
+      <button class="btn btn-s" onclick="closeCfpDetail()">Chiudi</button>
+    </div>
+  </div>
+</div>
+
+
+
 <script>
 const SB_URL='https://bubevkjpvwioudohnkng.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ1YmV2a2pwdndpb3Vkb2hua25nIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4MjY0MTMsImV4cCI6MjA4OTQwMjQxM30.7DKQDh35nej0cL1bRM_jvR8i1AhzaYZYvEdcCQjxePk';
@@ -5570,7 +5701,42 @@ function setFiChartType(chartId,type,btn){
   var parent=btn.closest('.chart-type-btns');
   parent.querySelectorAll('.ct-btn').forEach(function(b){b.classList.remove('on');});
   btn.classList.add('on');
-  renderFiCharts();
+  // Only rebuild the specific chart
+  var isDark=document.body.classList.contains('dark');
+  var tc=isDark?'#94a3b8':'#64748b';
+  var gc=isDark?'rgba(255,255,255,.06)':'rgba(0,0,0,.06)';
+  var cc=getThemeChartColors();
+  var vivid=[cc[0],cc[1],cc[2],cc[3]];
+  var now=new Date();
+  if(chartId==='ch-fi-andamento'){
+    var months=[],nuovi=[],persi=[];
+    for(var i=5;i>=0;i--){
+      var d=new Date(now.getFullYear(),now.getMonth()-i,1);
+      var y=d.getFullYear(),m=d.getMonth();
+      months.push(['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'][m]+' '+String(y).slice(2));
+      var mm=String(m+1).padStart(2,'0');
+      nuovi.push(DB_FI.filter(function(a){return a.data_inizio&&a.data_inizio.startsWith(y+'-'+mm);}).length);
+      persi.push(DB_FI.filter(function(a){return a.scadenza&&a.scadenza.startsWith(y+'-'+mm)&&getFiStatus(a)==='scaduto';}).length);
+    }
+    var ctx=document.getElementById('ch-fi-andamento');
+    if(ctx){if(chFiAnd)chFiAnd.destroy();var t=type==='line'?'line':'bar';chFiAnd=new Chart(ctx,{type:t,data:{labels:months,datasets:[{label:'Nuovi',data:nuovi,backgroundColor:t==='line'?vivid[0]+'44':vivid[0],borderColor:vivid[0],borderWidth:2,borderRadius:t==='bar'?5:0,fill:t==='line',tension:.4,pointRadius:t==='line'?4:0},{label:'Scaduti',data:persi,backgroundColor:t==='line'?vivid[3]+'44':vivid[3],borderColor:vivid[3],borderWidth:2,borderRadius:t==='bar'?5:0,fill:t==='line',tension:.4,pointRadius:t==='line'?4:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:11},boxWidth:12}}},scales:{x:{ticks:{color:tc,font:{size:10}},grid:{color:gc}},y:{ticks:{color:tc,font:{size:10}},grid:{color:gc}}}}});}
+  } else if(chartId==='ch-fi-tipi'){
+    var tipi=['singolo','duo','studio','non_rinnovo'];
+    var tipiLabels=['Singolo','Duo','Studio','Non rinnovo'];
+    var tipiCounts=tipi.map(function(t2){return DB_FI.filter(function(a){return a.tipo===t2;}).length;});
+    var ctx2=document.getElementById('ch-fi-tipi');
+    if(ctx2){if(chFiTipi)chFiTipi.destroy();var tt=type==='bar'?'bar':type==='pie'?'pie':'doughnut';chFiTipi=new Chart(ctx2,{type:tt,data:{labels:tipiLabels,datasets:[{data:tipiCounts,backgroundColor:vivid,borderWidth:0,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:11},boxWidth:12}}},scales:tt==='bar'?{x:{ticks:{color:tc},grid:{color:gc}},y:{ticks:{color:tc},grid:{color:gc}}}:{}}});}
+  } else if(chartId==='ch-fi-formula'){
+    var formuleCounts=['annuale','semestrale'].map(function(f){return DB_FI.filter(function(a){return a.formula===f;}).length;});
+    var ctx3=document.getElementById('ch-fi-formula');
+    if(ctx3){if(chFiFormula)chFiFormula.destroy();var tf=type==='bar'?'bar':type==='doughnut'?'doughnut':'pie';chFiFormula=new Chart(ctx3,{type:tf,data:{labels:['Annuale','Semestrale'],datasets:[{data:formuleCounts,backgroundColor:[vivid[0],vivid[1]],borderWidth:0,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:11},boxWidth:12}}},scales:tf==='bar'?{x:{ticks:{color:tc},grid:{color:gc}},y:{ticks:{color:tc},grid:{color:gc}}}:{}}});}
+  } else if(chartId==='ch-fi-val'){
+    var tipi2=['singolo','duo','studio','non_rinnovo'];
+    var tipiLabels2=['Singolo','Duo','Studio','Non rinnovo'];
+    var valTipi=tipi2.map(function(t3){return DB_FI.filter(function(a){return a.tipo===t3;}).reduce(function(s,a){return s+(parseFloat(a.importo)||0);},0);});
+    var ctx4=document.getElementById('ch-fi-val');
+    if(ctx4){if(chFiVal)chFiVal.destroy();var tv=type==='line'?'line':type==='pie'?'pie':'bar';chFiVal=new Chart(ctx4,{type:tv,data:{labels:tipiLabels2,datasets:[{label:'Valore (€)',data:valTipi,backgroundColor:tv==='line'?vivid[0]+'44':vivid,borderColor:tv==='line'?vivid[0]:vivid,borderWidth:tv==='line'?2:0,borderRadius:tv==='bar'?5:0,fill:tv==='line',tension:.4,pointRadius:tv==='line'?4:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:tv!=='pie'?{x:{ticks:{color:tc,font:{size:10}},grid:{display:false}},y:{ticks:{color:tc,font:{size:10},callback:function(v){return '€'+v.toLocaleString('it');}},grid:{color:gc}}}:{}}});}
+  }
 }
 
 function openFiModal(id){
@@ -5738,133 +5904,5 @@ async function confirmFiImport(){
 // ── START ──
 init();
 </script>
-
-<!-- FI ABBONATO MODAL -->
-<div class="mover" id="fi-modal" style="display:none" onclick="if(event.target===this)closeFiModal()">
-  <div class="modal" style="max-width:520px;padding:0;overflow:hidden">
-    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
-      <div class="font-headline" style="font-size:16px;font-weight:800;color:var(--text)" id="fi-modal-title">Nuovo abbonato</div>
-      <button class="mclose" onclick="closeFiModal()">✕</button>
-    </div>
-    <div style="padding:20px 24px;max-height:calc(92vh - 70px);overflow-y:auto;display:flex;flex-direction:column;gap:12px">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="fg"><label class="flbl">Nome *</label><input type="text" class="finp" id="fi-nome" placeholder="Mario"></div>
-        <div class="fg"><label class="flbl">Cognome *</label><input type="text" class="finp" id="fi-cognome" placeholder="Rossi"></div>
-      </div>
-      <div class="fg"><label class="flbl">Email</label><input type="email" class="finp" id="fi-email" placeholder="mario.rossi@esempio.it"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="fg">
-          <label class="flbl">Tipo *</label>
-          <select class="finp" id="fi-tipo" onchange="document.getElementById('fi-motivazione-row').style.display=this.value==='non_rinnovo'?'block':'none'">
-            <option value="">— seleziona —</option>
-            <option value="singolo">Singolo</option>
-            <option value="duo">Duo</option>
-            <option value="studio">Studio</option>
-            <option value="non_rinnovo">Non rinnovo</option>
-          </select>
-        </div>
-        <div class="fg">
-          <label class="flbl">Formula *</label>
-          <select class="finp" id="fi-formula">
-            <option value="">— seleziona —</option>
-            <option value="annuale">Annuale</option>
-            <option value="semestrale">Semestrale</option>
-          </select>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="fg"><label class="flbl">Data inizio</label><input type="date" class="finp" id="fi-inizio"></div>
-        <div class="fg"><label class="flbl">Scadenza *</label><input type="date" class="finp" id="fi-scadenza"></div>
-      </div>
-      <div class="fg"><label class="flbl">Importo pagato (€)</label><input type="number" class="finp" id="fi-importo" placeholder="0.00" min="0" step="0.01"></div>
-      <div class="fg"><label class="flbl">Note</label><textarea class="finp" id="fi-note" placeholder="Note aggiuntive..." style="min-height:60px"></textarea></div>
-      <div id="fi-motivazione-row" style="display:none">
-        <div class="fg"><label class="flbl" style="color:var(--yellow)">Motivazione non rinnovo</label><textarea class="finp" id="fi-motivazione" placeholder="Motivo della mancata rinnovazione..." style="min-height:60px;border-color:var(--yellow)"></textarea></div>
-      </div>
-    </div>
-    <div style="padding:14px 24px;border-top:1px solid var(--border);background:var(--bg2);display:flex;justify-content:space-between;align-items:center">
-      <button class="btn btn-d btn-sm" id="fi-del-btn" onclick="deleteFiAbbonato()" style="display:none"><span class="material-symbols-outlined" style="font-size:14px">delete</span>Elimina</button>
-      <div style="display:flex;gap:8px;margin-left:auto">
-        <button class="btn btn-s" onclick="closeFiModal()">Annulla</button>
-        <button class="btn btn-p" onclick="saveFiAbbonato()">Salva</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- FI IMPORT MODAL -->
-<div class="mover" id="fi-import-modal" style="display:none" onclick="if(event.target===this)closeFiImport()">
-  <div class="modal" style="max-width:640px;padding:0;overflow:hidden">
-    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
-      <div class="font-headline" style="font-size:16px;font-weight:800;color:var(--text)">Importa abbonati da CSV</div>
-      <button class="mclose" onclick="closeFiImport()">✕</button>
-    </div>
-    <div style="padding:20px 24px;max-height:calc(92vh - 140px);overflow-y:auto;display:flex;flex-direction:column;gap:14px">
-      <div style="background:var(--accent-bg);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r);padding:12px;font-size:11px;color:var(--text2)">
-        <strong style="color:var(--accent)">Formato CSV:</strong><br>
-        <code style="display:block;background:var(--bg3);border-radius:4px;padding:6px;margin-top:4px;font-size:10px">nome, cognome, email, tipo, formula, data_inizio, scadenza, importo, note</code>
-        <div style="margin-top:6px;font-size:10px;color:var(--text3)">tipo: singolo · duo · studio · non_rinnovo &nbsp;|&nbsp; formula: annuale · semestrale &nbsp;|&nbsp; date: YYYY-MM-DD</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <label style="font-size:12px;color:var(--text2)">Se già presente:</label>
-        <select class="finp" id="fi-import-conflict" style="max-width:180px">
-          <option value="skip">Salta</option>
-          <option value="update">Aggiorna</option>
-        </select>
-      </div>
-      <div id="fi-drop-zone" onclick="document.getElementById('fi-csv-input').click()"
-        style="border:2px dashed var(--border2);border-radius:var(--r2);padding:28px;text-align:center;cursor:pointer;transition:all .2s"
-        ondragover="event.preventDefault();this.style.borderColor='var(--accent)'"
-        ondragleave="this.style.borderColor=''"
-        ondrop="event.preventDefault();this.style.borderColor='';handleFiDrop(event)">
-        <span class="material-symbols-outlined" style="font-size:32px;color:var(--text3);display:block;margin-bottom:6px">upload_file</span>
-        <div style="font-size:13px;font-weight:600;color:var(--text2)">Trascina il CSV qui</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:3px">oppure clicca per selezionare</div>
-        <input type="file" id="fi-csv-input" accept=".csv" style="display:none" onchange="handleFiFile(this.files[0])">
-      </div>
-      <div id="fi-import-preview" style="display:none">
-        <div style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px" id="fi-import-summary"></div>
-        <div style="max-height:240px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
-          <table style="width:100%;border-collapse:collapse;font-size:11px" id="fi-import-table"></table>
-        </div>
-      </div>
-    </div>
-    <div style="padding:14px 24px;border-top:1px solid var(--border);background:var(--bg2);display:flex;justify-content:space-between;align-items:center">
-      <button class="btn btn-s" onclick="closeFiImport()">Annulla</button>
-      <button class="btn btn-p" id="fi-import-btn" onclick="confirmFiImport()" style="display:none">Importa <span id="fi-import-count">0</span> abbonati</button>
-    </div>
-  </div>
-</div>
-
-<!-- CFP DETAIL MODAL -->
-<div class="mover" id="cfp-detail-modal" style="display:none" onclick="if(event.target===this)closeCfpDetail()">
-  <div class="modal" style="max-width:780px;padding:0;overflow:hidden">
-    <div style="position:sticky;top:0;z-index:2;background:var(--bg2);border-bottom:1px solid var(--border);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
-      <div>
-        <div style="font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px">Avanzamento CFP</div>
-        <div class="font-headline" style="font-size:17px;font-weight:800;color:var(--text)" id="cfp-detail-title">—</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:2px" id="cfp-detail-count"></div>
-      </div>
-      <button class="mclose" onclick="closeCfpDetail()">✕</button>
-    </div>
-    <div style="overflow-y:auto;max-height:calc(92vh - 130px)">
-      <table style="width:100%;border-collapse:collapse">
-        <thead><tr style="background:var(--bg3);position:sticky;top:0">
-          <th style="padding:9px 12px;text-align:left;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Data</th>
-          <th style="padding:9px 12px;text-align:left;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Titolo</th>
-          <th style="padding:9px 12px;text-align:left;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Docente</th>
-          <th style="padding:9px 12px;text-align:center;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Tema</th>
-          <th style="padding:9px 12px;text-align:center;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">CFP</th>
-          <th style="padding:9px 12px;text-align:center;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.08em;text-transform:uppercase">Pres./Iscr.</th>
-        </tr></thead>
-        <tbody id="cfp-detail-body"></tbody>
-      </table>
-    </div>
-    <div style="padding:12px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end">
-      <button class="btn btn-s" onclick="closeCfpDetail()">Chiudi</button>
-    </div>
-  </div>
-</div>
-
 </body>
 </html>
