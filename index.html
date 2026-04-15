@@ -1195,6 +1195,7 @@ textarea.finp{min-height:72px;resize:vertical}
             <label class="flbl">Prezzo pieno (€)</label>
             <select class="finp" id="ef-prezzo">
               <option value="">— seleziona —</option>
+              <option value="23.77">€ 23,77</option>
               <option value="48.36">€ 48,36</option>
               <option value="64.75">€ 64,75</option>
               <option value="89.34">€ 89,34</option>
@@ -4430,6 +4431,14 @@ function duplicateEvento(){
 function openEventoModal(id=null){
   editId=id;selectedDocenti=[];sessioniCorso=[];
   const isEdit=!!id;
+  // Rebuild docente select from FORMATORI_DEF (includes newly added ones)
+  const docenteSel=document.getElementById('ef-docente-add');
+  if(docenteSel){
+    const cur=docenteSel.value;
+    docenteSel.innerHTML='<option value="">+ Aggiungi docente</option>'
+      +FORMATORI_DEF.map(f=>`<option value="${f.nome}">${f.nome}</option>`).join('');
+    docenteSel.value=cur;
+  }
   document.getElementById('ev-modal-title').textContent=isEdit?'Modifica evento':'Nuovo evento';
   // Reset buoni sconto
   buoniScontoList=[];
