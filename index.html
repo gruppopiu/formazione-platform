@@ -137,7 +137,7 @@ td.mono{font-family:'SF Mono',monospace;font-size:11px;color:var(--text)}
 .b-sem{background:var(--blue-bg);color:var(--blue)}
 .b-c4{background:var(--green-bg);color:var(--green)}
 .b-c6{background:var(--purple-bg);color:var(--purple)}
-.b-deo{background:var(--yellow-bg);color:var(--yellow)}
+.b-deo{background:var(--yellow-bg);color:var(--yellow)}.b-col{background:var(--blue-bg);color:var(--blue)}
 .b-pia{background:var(--blue-bg);color:var(--blue)}
 .b-pub{background:var(--purple-bg);color:var(--purple)}
 .b-svo{background:var(--green-bg);color:var(--green)}
@@ -1163,7 +1163,7 @@ textarea.finp{min-height:72px;resize:vertical}
         <div class="fgrid">
           <div class="fg full"><label class="flbl">Titolo *</label><input type="text" class="finp" id="ef-titolo" placeholder="Es: Urbanistica — novità 2026"></div>
           <div class="fg"><label class="flbl">Tema *</label><select class="finp" id="ef-tema"><option value="">Seleziona tema</option><option>Urbanistica</option><option>Catasto</option><option>Deontologia</option><option>Intelligenza Artificiale</option><option>Fisco Immobiliare</option><option>Successioni</option><option>Bonus Casa</option><option>Locazioni</option><option>Fisco Professionisti</option><option>Professione</option><option>Comunità Energetiche</option><option>CTU</option><option>Agricoltura</option><option>Inglese</option><option>CAF</option><option>Assicurazioni</option></select></div>
-          <div class="fg"><label class="flbl">Tipologia *</label><select class="finp" id="ef-tipo" onchange="onTipoChange()"><option value="">Seleziona</option><option value="seminario">Seminario (2h)</option><option value="corso_4h">Corso tecnico 4h (2 sessioni)</option><option value="corso_6h">Corso tecnico 6h (3 sessioni)</option><option value="corso_deontologico">Corso deontologico (2h)</option></select></div>
+          <div class="fg"><label class="flbl">Tipologia *</label><select class="finp" id="ef-tipo" onchange="onTipoChange()"><option value="">Seleziona</option><option value="seminario">Seminario (2h)</option><option value="corso_4h">Corso tecnico 4h (2 sessioni)</option><option value="corso_6h">Corso tecnico 6h (3 sessioni)</option><option value="corso_deontologico">Corso deontologico (2h)</option><option value="collegio">Evento Collegio (personalizzato)</option></select></div>
           <div class="fg full">
             <label class="flbl">Docente/i <span style="font-size:9px;color:var(--text3);text-transform:none;letter-spacing:0">selezione multipla possibile</span></label>
             <div style="display:flex;flex-wrap:wrap;gap:6px;min-height:28px;margin-bottom:8px" id="docenti-selected"></div>
@@ -1182,6 +1182,17 @@ textarea.finp{min-height:72px;resize:vertical}
           </div>
         </div>
         <div id="date-multi" style="display:none"><div id="sessioni-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px"></div></div>
+        <!-- COLLEGIO FIELDS -->
+        <div id="ef-collegio-section" style="display:none;margin-bottom:10px">
+          <div style="background:var(--accent-bg);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r);padding:12px">
+            <div style="font-size:10px;font-weight:700;color:var(--accent);margin-bottom:10px;text-transform:uppercase;letter-spacing:.08em">Evento Collegio</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div class="fg" style="grid-column:1/-1"><label class="flbl">Nome Collegio *</label><input type="text" class="finp" id="ef-collegio-nome" placeholder="Collegio Geometri di..."></div>
+              <div class="fg"><label class="flbl">Prezzo vendita (€)</label><input type="number" class="finp" id="ef-collegio-prezzo" placeholder="0.00" min="0" step="0.01"></div>
+              <div class="fg"><label class="flbl">N° partecipanti</label><input type="number" class="finp" id="ef-collegio-pax" placeholder="0" min="0"></div>
+            </div>
+          </div>
+        </div>
         <div class="fgrid" style="margin-top:10px">
           <div class="fg"><label class="flbl">Stato</label><select class="finp" id="ef-stato"><option value="pianificato">Pianificato</option><option value="pubblicato">Pubblicato</option><option value="svolto">Svolto</option><option value="chiuso">Chiuso</option></select></div>
           <div class="fg"><label class="flbl">Ore / CFP</label><div style="padding:8px 11px;background:var(--bg3);border-radius:var(--r);font-size:13px;font-weight:600;color:var(--accent)" id="ef-ore-display">—</div><input type="hidden" id="ef-ore"></div>
@@ -1190,6 +1201,7 @@ textarea.finp{min-height:72px;resize:vertical}
       <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
         <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">💶 Prezzi</div>
         <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Early bird opzionale</div>
+        <div id="ef-prezzo-section">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
           <div class="fg">
             <label class="flbl">Prezzo pieno (€)</label>
@@ -1238,7 +1250,7 @@ textarea.finp{min-height:72px;resize:vertical}
         </div>
       </div>
       <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
-        <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">👥 Partecipanti</div>
+        <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px" id="ef-pax-label">👥 Partecipanti</div>
         <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Compila dopo lo svolgimento</div>
         <div style="display:flex;flex-direction:column;gap:10px">
           <div style="background:var(--green-bg);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r);padding:12px">
@@ -2817,7 +2829,7 @@ function getTotOre(evArr){
 }
 function cfpEv(e){if(e.tipologia==='seminario')return 2;if(e.tipologia==='corso_4h')return 4;if(e.tipologia==='corso_6h')return 6;if(e.tipologia==='corso_deontologico')return 2;return parseFloat(e.ore)||0;}
 function sessEv(e){if(e.tipologia==='corso_4h')return 2;if(e.tipologia==='corso_6h')return 3;return 1;}
-function badgeTipo(t){const m={seminario:'b-sem',corso_4h:'b-c4',corso_6h:'b-c6',corso_deontologico:'b-deo'};const l={seminario:'Seminario',corso_4h:'Corso 4h',corso_6h:'Corso 6h',corso_deontologico:'Deontologico'};return`<span class="badge ${m[t]||''}">${l[t]||t}</span>`;}
+function badgeTipo(t){const m={seminario:'b-sem',corso_4h:'b-c4',corso_6h:'b-c6',corso_deontologico:'b-deo',collegio:'b-col'};const l={seminario:'Seminario',corso_4h:'Corso 4h',corso_6h:'Corso 6h',corso_deontologico:'Deontologico',collegio:'Collegio'};return`<span class="badge ${m[t]||''}">${l[t]||t}</span>`;}
 function badgeStato(s){
   const labels={pianificato:'Pianificato',pubblicato:'Pubblicato',svolto:'Svolto',chiuso:'Chiuso'};
   const cls={pianificato:'b-pia',pubblicato:'b-pub',svolto:'b-svol',chiuso:'b-chiu'};
@@ -3597,7 +3609,15 @@ function renderCommerciale(){
   document.getElementById('c-pag').textContent=ip;
   document.getElementById('c-pres').textContent=pp;
   document.getElementById('c-tasso').textContent=ta+'%';
-  document.getElementById('c-ric').textContent=fmtEuro(ric,2);
+  const ricCollegio=kpi.filter(e=>e.tipologia==='collegio').reduce((s,e)=>s+(parseFloat(e.collegio_prezzo)||0),0);
+  const ricFI=DB_FI.filter(a=>a.tipo!=='non_rinnovo').reduce((s,a)=>s+(parseFloat(a.importo)||0),0);
+  const ricTot=ric+ricFI+ricCollegio;
+  document.getElementById('c-ric').textContent=fmtEuro(ricTot,2);
+  // Collegio KPI
+  const coll_ev=kpi.filter(e=>e.tipologia==='collegio');
+  const collTotEl=document.getElementById('c-coll-tot');if(collTotEl)collTotEl.textContent=coll_ev.length;
+  const collPaxEl=document.getElementById('c-coll-pax');if(collPaxEl)collPaxEl.textContent=coll_ev.reduce((s,e)=>s+(parseInt(e.collegio_pax)||0),0);
+  const collRicEl=document.getElementById('c-coll-ric');if(collRicEl)collRicEl.textContent=fmtEuro(ricCollegio,2);
   // FI section
   const fi_isc=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
   const fi_pres=kpi.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
@@ -4365,13 +4385,28 @@ function renderDocentiSelected(){
 let sessioniCorso=[];
 function onTipoChange(){
   const tipo=document.getElementById('ef-tipo')?.value;
-  const oreMap={seminario:2,corso_4h:4,corso_6h:6,corso_deontologico:2};
+  const isCollegio=tipo==='collegio';
+  const oreMap={seminario:2,corso_4h:4,corso_6h:6,corso_deontologico:2,collegio:2};
   const sessMap={corso_4h:2,corso_6h:3};
-  const ore=oreMap[tipo]||2;
+  const ore=tipo==='collegio'?0:(oreMap[tipo]||2);
   const oreDisp=document.getElementById('ef-ore-display');
   const oreInp=document.getElementById('ef-ore');
-  if(oreDisp)oreDisp.textContent=ore+'h ('+ore+' CFP)';
-  if(oreInp)oreInp.value=ore;
+  if(oreDisp)oreDisp.textContent=isCollegio?'—':ore+'h ('+ore+' CFP)';
+  if(oreInp)oreInp.value=isCollegio?0:ore;
+  // Show/hide collegio-specific fields
+  const colSec=document.getElementById('ef-collegio-section');
+  if(colSec)colSec.style.display=isCollegio?'block':'none';
+  // Hide standard pricing/iscritti sections for collegio
+  // Hide/show standard fields for collegio
+  ['ef-prezzo-section'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=isCollegio?'none':'';});
+  // Hide individual pax/fi/eb labels and their containers
+  const paxLabel=document.getElementById('ef-pax-label');
+  const paxWrap=paxLabel?paxLabel.closest('div[style*="flex-direction:column"]'):null;
+  if(paxWrap)paxWrap.style.display=isCollegio?'none':'';
+  // Hide prezzo EB row
+  const ebInp=document.getElementById('ef-eb');
+  const ebWrap=ebInp?ebInp.closest('.fg')?.parentElement:null;
+  if(ebWrap&&ebWrap!==ebInp)ebWrap.style.display=isCollegio?'none':'';
   const single=document.getElementById('date-single');
   const multi=document.getElementById('date-multi');
   const hint=document.getElementById('sessioni-hint');
@@ -4384,7 +4419,7 @@ function onTipoChange(){
   } else {
     if(single)single.style.display='block';
     if(multi)multi.style.display='none';
-    if(hint)hint.textContent="Inserisci la data dell'evento";
+    if(hint)hint.textContent=isCollegio?"Data dell'evento":"Inserisci la data dell'evento";
     sessioniCorso=[];
   }
 }
@@ -4431,6 +4466,9 @@ function duplicateEvento(){
 function openEventoModal(id=null){
   editId=id;selectedDocenti=[];sessioniCorso=[];
   const isEdit=!!id;
+  // Reset collegio section
+  document.getElementById('ef-collegio-section').style.display='none';
+  ['ef-collegio-nome','ef-collegio-prezzo','ef-collegio-pax'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   // Rebuild docente select from FORMATORI_DEF (includes newly added ones)
   const docenteSel=document.getElementById('ef-docente-add');
   if(docenteSel){
@@ -4521,7 +4559,10 @@ async function saveEvento(){
     escludi_kpi:document.getElementById('ef-escludi').checked,
     modified_by:userProfile?.name||'—',
     modified_at:new Date().toISOString(),
-    buoni_sconto:getBuoniScontoData().length>0?JSON.stringify(getBuoniScontoData()):null
+    buoni_sconto:getBuoniScontoData().length>0?JSON.stringify(getBuoniScontoData()):null,
+    collegio_nome:tipo==='collegio'?(document.getElementById('ef-collegio-nome').value.trim()||null):null,
+    collegio_prezzo:tipo==='collegio'?(parseFloat(document.getElementById('ef-collegio-prezzo').value)||0):null,
+    collegio_pax:tipo==='collegio'?(parseInt(document.getElementById('ef-collegio-pax').value)||0):null
   };
   if((tipo==='corso_4h'||tipo==='corso_6h')&&!editId){
     const nSess={corso_4h:2,corso_6h:3}[tipo];
