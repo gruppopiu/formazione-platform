@@ -1218,7 +1218,7 @@ textarea.finp{min-height:72px;resize:vertical}
               <option value="212.30">€ 212,30</option>
             </select>
           </div>
-          <div style="background:var(--yellow-bg);border:1.5px dashed var(--yellow);border-radius:var(--r);padding:12px">
+          <div id="ef-eb-section" style="background:var(--yellow-bg);border:1.5px dashed var(--yellow);border-radius:var(--r);padding:12px">
             <div style="font-size:10px;font-weight:700;color:var(--yellow);margin-bottom:8px">⚡ Early Bird</div>
             <div class="fg">
               <label class="flbl" style="color:var(--text3)">Prezzo EB (€)</label>
@@ -1253,7 +1253,7 @@ textarea.finp{min-height:72px;resize:vertical}
         <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px" id="ef-pax-label">👥 Partecipanti</div>
         <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Compila dopo lo svolgimento</div>
         <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="background:var(--green-bg);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r);padding:12px">
+          <div id="ef-pax-section" style="background:var(--green-bg);border:1px solid rgba(var(--accent-rgb),.2);border-radius:var(--r);padding:12px">
             <div style="font-size:10px;font-weight:700;color:var(--accent);margin-bottom:10px">Paganti</div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
               <div class="fg"><label class="flbl">Iscr. prezzo pieno</label><input type="number" class="finp" id="ef-ip" placeholder="0" min="0"></div>
@@ -1262,7 +1262,7 @@ textarea.finp{min-height:72px;resize:vertical}
             </div>
           </div>
           <div style="background:var(--blue-bg);border:1px solid rgba(91,141,238,.25);border-radius:var(--r);padding:12px">
-            <div style="font-size:10px;font-weight:700;color:var(--blue);margin-bottom:10px">Formazione Illimitata</div>
+            <div id="ef-fi-section" style="font-size:10px;font-weight:700;color:var(--blue);margin-bottom:10px">Formazione Illimitata</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
               <div class="fg"><label class="flbl">Iscritti FI</label><input type="number" class="finp" id="ef-ii" placeholder="0" min="0"></div>
               <div class="fg"><label class="flbl">Presenti FI</label><input type="number" class="finp" id="ef-pi" placeholder="0" min="0"></div>
@@ -4169,6 +4169,7 @@ function evdDuplicate(){
       document.getElementById('ef-titolo').value=(e.titolo||'')+' (copia)';
       document.getElementById('ef-tema').value=e.tema||'';
       document.getElementById('ef-tipo').value=e.tipologia||'';
+      onTipoChange();
       document.getElementById('ef-stato').value='pianificato';
       if(e.prezzo)document.getElementById('ef-prezzo').value=e.prezzo;
       if(e.note)document.getElementById('ef-note').value=e.note;
@@ -4230,7 +4231,7 @@ function openEvDetail(id){
   // Info grid
   const cfp=cfpEv(e);
   document.getElementById('evd-info-grid').innerHTML=`
-    <div class="evd-stat"><div class="evd-stat-lbl">Tema</div><div class="evd-stat-val" style="font-size:14px">${e.tema||'—'}</div></div>
+    <div class="evd-stat"><div id="ef-grat-section" class="evd-stat-lbl">Tema</div><div class="evd-stat-val" style="font-size:14px">${e.tema||'—'}</div></div>
     <div class="evd-stat"><div class="evd-stat-lbl">Stato</div><div style="margin-top:5px">${badgeStato(e.stato)}</div></div>
     <div class="evd-stat"><div class="evd-stat-lbl">CFP generati</div><div class="evd-stat-val">${cfp}</div><div class="evd-stat-sub">ore: ${e.ore}h</div></div>
     <div class="evd-stat"><div class="evd-stat-lbl">Giorno</div><div class="evd-stat-val" style="font-size:14px">${e.giorno||'—'}</div></div>
@@ -4386,27 +4387,25 @@ let sessioniCorso=[];
 function onTipoChange(){
   const tipo=document.getElementById('ef-tipo')?.value;
   const isCollegio=tipo==='collegio';
-  const oreMap={seminario:2,corso_4h:4,corso_6h:6,corso_deontologico:2,collegio:2};
+  const oreMap={seminario:2,corso_4h:4,corso_6h:6,corso_deontologico:2};
   const sessMap={corso_4h:2,corso_6h:3};
-  const ore=tipo==='collegio'?0:(oreMap[tipo]||2);
+  const ore=isCollegio?0:(oreMap[tipo]||2);
   const oreDisp=document.getElementById('ef-ore-display');
   const oreInp=document.getElementById('ef-ore');
-  if(oreDisp)oreDisp.textContent=isCollegio?'—':ore+'h ('+ore+' CFP)';
-  if(oreInp)oreInp.value=isCollegio?0:ore;
-  // Show/hide collegio-specific fields
+  if(oreDisp)oreDisp.textContent=isCollegio?'N/A':ore+'h ('+ore+' CFP)';
+  if(oreInp)oreInp.value=ore;
+  // Show/hide collegio fields
   const colSec=document.getElementById('ef-collegio-section');
   if(colSec)colSec.style.display=isCollegio?'block':'none';
-  // Hide standard pricing/iscritti sections for collegio
-  // Hide/show standard fields for collegio
-  ['ef-prezzo-section'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=isCollegio?'none':'';});
-  // Hide individual pax/fi/eb labels and their containers
-  const paxLabel=document.getElementById('ef-pax-label');
-  const paxWrap=paxLabel?paxLabel.closest('div[style*="flex-direction:column"]'):null;
-  if(paxWrap)paxWrap.style.display=isCollegio?'none':'';
-  // Hide prezzo EB row
-  const ebInp=document.getElementById('ef-eb');
-  const ebWrap=ebInp?ebInp.closest('.fg')?.parentElement:null;
-  if(ebWrap&&ebWrap!==ebInp)ebWrap.style.display=isCollegio?'none':'';
+  // Hide/show standard sections
+  const hide=isCollegio?'none':'';
+  ['ef-prezzo-section','ef-eb-section','ef-pax-section','ef-fi-section','ef-grat-section','ef-buoni-section'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.style.display=hide;
+  });
+  // Also hide tema row for collegio (not relevant)
+  const temaFg=document.getElementById('ef-tema')?.closest('.fg');
+  if(temaFg)temaFg.style.display=isCollegio?'none':'';
+  // Date single/multi
   const single=document.getElementById('date-single');
   const multi=document.getElementById('date-multi');
   const hint=document.getElementById('sessioni-hint');
@@ -4466,8 +4465,7 @@ function duplicateEvento(){
 function openEventoModal(id=null){
   editId=id;selectedDocenti=[];sessioniCorso=[];
   const isEdit=!!id;
-  // Reset collegio section
-  document.getElementById('ef-collegio-section').style.display='none';
+  // Reset to default state (not collegio)
   ['ef-collegio-nome','ef-collegio-prezzo','ef-collegio-pax'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   // Rebuild docente select from FORMATORI_DEF (includes newly added ones)
   const docenteSel=document.getElementById('ef-docente-add');
