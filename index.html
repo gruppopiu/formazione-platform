@@ -4536,7 +4536,8 @@ async function saveEvento(){
   const titolo=document.getElementById('ef-titolo').value.trim();
   const tema=document.getElementById('ef-tema').value;
   const tipo=document.getElementById('ef-tipo').value;
-  if(!titolo||!tema||!tipo){showToast('Compila i campi obbligatori','err');return;}
+  if(!titolo||!tipo){showToast('Compila titolo e tipo evento','err');return;}
+  if(!tema&&tipo!=='collegio'){showToast('Seleziona il tema','err');return;}
   const gg=['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
   const oreMap={seminario:2,corso_4h:4,corso_6h:6,corso_deontologico:2};
   const ore=oreMap[tipo]||2;
@@ -4544,8 +4545,8 @@ async function saveEvento(){
   const docentiNomi=selectedDocenti.length>0?selectedDocenti:null;
   const base={
     titolo,tema,tipologia:tipo,docente,docenti_nomi:docentiNomi,
-    prezzo:parseFloat(document.getElementById('ef-prezzo').value)||0,
-    prezzo_early_bird:parseFloat(document.getElementById('ef-eb').value)||null,
+    prezzo:tipo==='collegio'?0:(parseFloat(document.getElementById('ef-prezzo').value)||0),
+    prezzo_early_bird:tipo==='collegio'?null:(parseFloat(document.getElementById('ef-eb').value)||null),
     stato:document.getElementById('ef-stato').value,
     iscritti_paganti:parseInt(document.getElementById('ef-ip').value)||0,
     presenti_paganti:parseInt(document.getElementById('ef-pp').value)||0,
