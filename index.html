@@ -3432,7 +3432,7 @@ async function saveFmData(){
     await sb.from('formatori_data').upsert(payload,{onConflict:'nome'});
     FM_DATA[currentFm]={...(FM_DATA[currentFm]||{}),...payload};
     showToast('Scheda salvata','ok');closeFmModal();renderFormatori();
-  }catch(e){showToast('Errore: '+e.message,'err');}
+  }catch(e){console.error('saveEvento error:', e);showToast('Errore: '+e.message,'err');}
 }
 
 async function uploadFmPhoto(input){
@@ -4574,9 +4574,11 @@ function closeEventoModal(){
 
 // ── SAVE EVENTO ──
 async function saveEvento(){
+  console.log('saveEvento called');
   const titolo=document.getElementById('ef-titolo').value.trim();
   const tema=document.getElementById('ef-tema').value;
   const tipo=document.getElementById('ef-tipo').value;
+  console.log('titolo:', titolo, 'tipo:', tipo, 'tema:', tema);
   if(!titolo||!tipo){showToast('Compila titolo e tipo evento','err');return;}
   if(!tema&&tipo!=='collegio'){showToast('Seleziona il tema','err');return;}
   const gg=['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
@@ -4624,9 +4626,11 @@ async function saveEvento(){
     return;
   }
   const data=document.getElementById('ef-data').value;
+  console.log('data:', data, 'ore:', ore);
   if(!data){showToast('Inserisci la data','err');return;}
   const payload={...base,data,giorno:gg[new Date(data+'T00:00:00').getDay()],
     orario:document.getElementById('ef-orario').value||null,ore};
+  console.log('payload ready, saving...');
   try{
     let error;
     if(editId){({error}=await sb.from('eventi').update(payload).eq('id',editId));}
