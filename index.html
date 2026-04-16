@@ -1198,7 +1198,7 @@ textarea.finp{min-height:72px;resize:vertical}
           <div class="fg"><label class="flbl">Ore / CFP</label><div style="padding:8px 11px;background:var(--bg3);border-radius:var(--r);font-size:13px;font-weight:600;color:var(--accent)" id="ef-ore-display">—</div><input type="hidden" id="ef-ore"></div>
         </div>
       </div>
-      <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
+      <div id="ef-section-prezzi" style="padding:16px 22px;border-bottom:1px solid var(--border)">
         <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">💶 Prezzi</div>
         <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Early bird opzionale</div>
         <div id="ef-prezzo-section">
@@ -1249,7 +1249,7 @@ textarea.finp{min-height:72px;resize:vertical}
           </div>
         </div>
       </div>
-      <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
+      <div id="ef-section-pax" style="padding:16px 22px;border-bottom:1px solid var(--border)">
         <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px" id="ef-pax-label">👥 Partecipanti</div>
         <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Compila dopo lo svolgimento</div>
         <div style="display:flex;flex-direction:column;gap:10px">
@@ -4385,34 +4385,34 @@ function renderDocentiSelected(){
 // ── MULTI-SESSIONE ──
 let sessioniCorso=[];
 function onTipoChange(){
-  const tipo=document.getElementById('ef-tipo')?.value;
-  const isCollegio=tipo==='collegio';
-  const oreMap={seminario:2,corso_4h:4,corso_6h:6,corso_deontologico:2};
-  const sessMap={corso_4h:2,corso_6h:3};
-  const ore=isCollegio?0:(oreMap[tipo]||2);
-  const oreDisp=document.getElementById('ef-ore-display');
-  const oreInp=document.getElementById('ef-ore');
+  var tipo=document.getElementById('ef-tipo')?document.getElementById('ef-tipo').value:'';
+  var isCollegio=tipo==='collegio';
+  var oreMap={seminario:2,corso_4h:4,corso_6h:6,corso_deontologico:2};
+  var sessMap={corso_4h:2,corso_6h:3};
+  var ore=isCollegio?0:(oreMap[tipo]||2);
+  var oreDisp=document.getElementById('ef-ore-display');
+  var oreInp=document.getElementById('ef-ore');
   if(oreDisp)oreDisp.textContent=isCollegio?'N/A':ore+'h ('+ore+' CFP)';
   if(oreInp)oreInp.value=ore;
-  // Show/hide collegio fields
-  const colSec=document.getElementById('ef-collegio-section');
+
+  // Collegio fields
+  var colSec=document.getElementById('ef-collegio-section');
   if(colSec)colSec.style.display=isCollegio?'block':'none';
-  // Hide/show standard sections
-  const hide=isCollegio?'none':'';
-  ['ef-prezzo-section','ef-eb-section','ef-pax-section','ef-fi-section','ef-grat-section','ef-buoni-section'].forEach(function(id){
-    var el=document.getElementById(id);if(el)el.style.display=hide;
-  });
-  // Also hide tema row for collegio (not relevant)
-  const temaFg=document.getElementById('ef-tema')?.closest('.fg');
-  if(temaFg)temaFg.style.display=isCollegio?'none':'';
+
+  // Hide/show the full Prezzi section and full Partecipanti section
+  var prezziSec=document.getElementById('ef-section-prezzi');
+  var paxSec=document.getElementById('ef-section-pax');
+  if(prezziSec)prezziSec.style.display=isCollegio?'none':'';
+  if(paxSec)paxSec.style.display=isCollegio?'none':'';
+
   // Date single/multi
-  const single=document.getElementById('date-single');
-  const multi=document.getElementById('date-multi');
-  const hint=document.getElementById('sessioni-hint');
+  var single=document.getElementById('date-single');
+  var multi=document.getElementById('date-multi');
+  var hint=document.getElementById('sessioni-hint');
   if(tipo==='corso_4h'||tipo==='corso_6h'){
     if(single)single.style.display='none';
     if(multi)multi.style.display='block';
-    const nSess=sessMap[tipo];
+    var nSess=sessMap[tipo];
     if(hint)hint.textContent='Corso da '+ore+'h = '+nSess+' sessioni da 2h ciascuna';
     buildSessioniInputs(nSess);
   } else {
@@ -4422,6 +4422,7 @@ function onTipoChange(){
     sessioniCorso=[];
   }
 }
+
 function buildSessioniInputs(n){
   sessioniCorso=Array(n).fill(null).map(()=>({data:'',orario:''}));
   const el=document.getElementById('sessioni-list');if(!el)return;
@@ -4490,7 +4491,8 @@ function openEventoModal(id=null){
     const oreMap={seminario:2,corso_4h:4,corso_6h:6,corso_deontologico:2};
     const sv=(eid,val)=>{const el=document.getElementById(eid);if(el)el.value=val!=null?val:'';};
     sv('ef-data',e.data);sv('ef-orario',e.orario);sv('ef-titolo',e.titolo);
-    sv('ef-tema',e.tema);sv('ef-tipo',e.tipologia);// ef-prezzo handled by select loader above
+    sv('ef-tema',e.tema);sv('ef-tipo',e.tipologia);
+    onTipoChange();// ef-prezzo handled by select loader above
     (function(){
       const selP=document.getElementById('ef-prezzo');
       const selEB=document.getElementById('ef-eb');
@@ -4520,6 +4522,7 @@ function openEventoModal(id=null){
     if(oreDisp)oreDisp.textContent='—';
     document.getElementById('date-single').style.display='block';
     document.getElementById('date-multi').style.display='none';
+    onTipoChange();
     renderDocentiSelected();
   }
   document.getElementById('ev-modal').style.display='flex';
