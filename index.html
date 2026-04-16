@@ -1154,7 +1154,7 @@ textarea.finp{min-height:72px;resize:vertical}
 
 
 <!-- MODAL EVENTO -->
-<div class="mover" id="ev-modal" style="display:none" onclick="if(event.target===this)closeEventoModal()">
+<div class="mover" id="ev-modal" style="display:none;position:fixed;top:0;right:0;bottom:0;left:0;z-index:500" onclick="if(event.target===this)closeEventoModal()">
   <div class="modal">
     <div class="mhdr"><div class="mtitle" id="ev-modal-title">Nuovo evento</div><button class="mclose" onclick="closeEventoModal()">✕</button></div>
     <div class="mbody" style="padding:0">
@@ -1268,7 +1268,7 @@ textarea.finp{min-height:72px;resize:vertical}
               <div class="fg"><label class="flbl">Presenti FI</label><input type="number" class="finp" id="ef-pi" placeholder="0" min="0"></div>
             </div>
           </div>
-          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px">
+          <div id="ef-grat-section" style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px">
             <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:10px">Gratuiti / CAF</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
               <div class="fg"><label class="flbl">Iscritti</label><input type="number" class="finp" id="ef-ig" placeholder="0" min="0"></div>
@@ -1322,7 +1322,7 @@ textarea.finp{min-height:72px;resize:vertical}
 
 
 <!-- MODAL DETTAGLIO EVENTO -->
-<div class="mover" id="ev-detail-modal" style="display:none" onclick="if(event.target===this)closeEvDetail()">
+<div class="mover" id="ev-detail-modal" style="display:none;position:fixed;top:0;right:0;bottom:0;left:0;z-index:500" onclick="if(event.target===this)closeEvDetail()">
   <div class="modal" style="max-width:780px">
     <div class="mhdr">
       <div style="flex:1">
@@ -4231,7 +4231,7 @@ function openEvDetail(id){
   // Info grid
   const cfp=cfpEv(e);
   document.getElementById('evd-info-grid').innerHTML=`
-    <div class="evd-stat"><div id="ef-grat-section" class="evd-stat-lbl">Tema</div><div class="evd-stat-val" style="font-size:14px">${e.tema||'—'}</div></div>
+    <div class="evd-stat"><div class="evd-stat-lbl">Tema</div><div class="evd-stat-val" style="font-size:14px">${e.tema||'—'}</div></div>
     <div class="evd-stat"><div class="evd-stat-lbl">Stato</div><div style="margin-top:5px">${badgeStato(e.stato)}</div></div>
     <div class="evd-stat"><div class="evd-stat-lbl">CFP generati</div><div class="evd-stat-val">${cfp}</div><div class="evd-stat-sub">ore: ${e.ore}h</div></div>
     <div class="evd-stat"><div class="evd-stat-lbl">Giorno</div><div class="evd-stat-val" style="font-size:14px">${e.giorno||'—'}</div></div>
@@ -4318,11 +4318,29 @@ function openEvDetail(id){
   if(e.note){noteSection.style.display='block';noteEl.textContent=e.note;}
   else{noteSection.style.display='none';}
 
-  modal.style.display='flex';
+  // Move modal to body to bypass Atlas position:fixed stacking context issues
+  if(modal.parentNode!==document.body){
+    var ph=document.getElementById('ev-detail-modal-placeholder');
+    if(!ph){ph=document.createElement('div');ph.id='ev-detail-modal-placeholder';ph.style.display='none';modal.parentNode.insertBefore(ph,modal);}
+    document.body.appendChild(modal);
+  }
+  modal.style.setProperty('display','flex','important');
+  modal.style.setProperty('position','fixed','important');
+  modal.style.setProperty('top','0','important');
+  modal.style.setProperty('left','0','important');
+  modal.style.setProperty('right','0','important');
+  modal.style.setProperty('bottom','0','important');
+  modal.style.setProperty('z-index','9999','important');
 }
 
 function closeEvDetail(){
-  document.getElementById('ev-detail-modal').style.display='none';
+  var m=document.getElementById('ev-detail-modal');
+  if(m){
+    m.style.display='none';
+    // Move back to original container if it was moved to body
+    var orig=document.getElementById('ev-detail-modal-placeholder');
+    if(orig&&m.parentNode===document.body){orig.appendChild(m);}
+  }
   if(evDetailChart){evDetailChart.destroy();evDetailChart=null;}
 }
 
@@ -4530,10 +4548,27 @@ function openEventoModal(id=null){
     onTipoChange();
     renderDocentiSelected();
   }
-  document.getElementById('ev-modal').style.display='flex';
+  var evModal=document.getElementById('ev-modal');
+  if(evModal.parentNode!==document.body){
+    var eph=document.getElementById('ev-modal-placeholder');
+    if(!eph){eph=document.createElement('div');eph.id='ev-modal-placeholder';eph.style.display='none';evModal.parentNode.insertBefore(eph,evModal);}
+    document.body.appendChild(evModal);
+  }
+  evModal.style.setProperty('display','flex','important');
+  evModal.style.setProperty('position','fixed','important');
+  evModal.style.setProperty('top','0','important');
+  evModal.style.setProperty('left','0','important');
+  evModal.style.setProperty('right','0','important');
+  evModal.style.setProperty('bottom','0','important');
+  evModal.style.setProperty('z-index','9999','important');
 }
 function closeEventoModal(){
-  document.getElementById('ev-modal').style.display='none';
+  var evModal=document.getElementById('ev-modal');
+  if(evModal){
+    evModal.style.display='none';
+    var eph=document.getElementById('ev-modal-placeholder');
+    if(eph&&evModal.parentNode===document.body){eph.appendChild(evModal);}
+  }
   editId=null;selectedDocenti=[];sessioniCorso=[];
 }
 
