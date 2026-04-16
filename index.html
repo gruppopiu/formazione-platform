@@ -1158,7 +1158,7 @@ textarea.finp{min-height:72px;resize:vertical}
   <div class="modal">
     <div class="mhdr"><div class="mtitle" id="ev-modal-title">Nuovo evento</div><button class="mclose" onclick="closeEventoModal()">✕</button></div>
     <div class="mbody" style="padding:0">
-      <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
+      <div id="ef-section-info" style="padding:16px 22px;border-bottom:1px solid var(--border)">
         <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">📋 Informazioni base</div>
         <div class="fgrid">
           <div class="fg full"><label class="flbl">Titolo *</label><input type="text" class="finp" id="ef-titolo" placeholder="Es: Urbanistica — novità 2026"></div>
@@ -4395,15 +4395,20 @@ function onTipoChange(){
   if(oreDisp)oreDisp.textContent=isCollegio?'N/A':ore+'h ('+ore+' CFP)';
   if(oreInp)oreInp.value=ore;
 
-  // Collegio fields
+  // Collegio-specific fields
   var colSec=document.getElementById('ef-collegio-section');
   if(colSec)colSec.style.display=isCollegio?'block':'none';
 
-  // Hide/show the full Prezzi section and full Partecipanti section
+  // Hide entire Prezzi and Partecipanti sections for collegio
   var prezziSec=document.getElementById('ef-section-prezzi');
   var paxSec=document.getElementById('ef-section-pax');
   if(prezziSec)prezziSec.style.display=isCollegio?'none':'';
   if(paxSec)paxSec.style.display=isCollegio?'none':'';
+
+  // Hide tema field for collegio (it's inside ef-section-info)
+  var temaFg=document.getElementById('ef-tema');
+  var temaRow=temaFg?temaFg.closest('.fg'):null;
+  if(temaRow)temaRow.style.display=isCollegio?'none':'';
 
   // Date single/multi
   var single=document.getElementById('date-single');
