@@ -3432,7 +3432,10 @@ async function saveFmData(){
     await sb.from('formatori_data').upsert(payload,{onConflict:'nome'});
     FM_DATA[currentFm]={...(FM_DATA[currentFm]||{}),...payload};
     showToast('Scheda salvata','ok');closeFmModal();renderFormatori();
-  }catch(e){console.error('saveEvento error:', e);showToast('Errore: '+e.message,'err');}
+  }catch(e){
+    console.error('saveEvento error:', e);
+    showToast('Errore: '+e.message,'err');
+  }
 }
 
 async function uploadFmPhoto(input){
@@ -4587,7 +4590,7 @@ async function saveEvento(){
   const docente=selectedDocenti.length===1?selectedDocenti[0]:(selectedDocenti.length>1?selectedDocenti.join(', '):null);
   const docentiNomi=selectedDocenti.length>0?selectedDocenti:null;
   const base={
-    titolo,tema,tipologia:tipo,docente,docenti_nomi:docentiNomi,
+    titolo,tema:tema||null,tipologia:tipo,docente,docenti_nomi:docentiNomi,
     prezzo:tipo==='collegio'?0:(parseFloat(document.getElementById('ef-prezzo').value)||0),
     prezzo_early_bird:tipo==='collegio'?null:(parseFloat(document.getElementById('ef-eb').value)||null),
     stato:document.getElementById('ef-stato').value,
@@ -4631,14 +4634,32 @@ async function saveEvento(){
   const payload={...base,data,giorno:gg[new Date(data+'T00:00:00').getDay()],
     orario:document.getElementById('ef-orario').value||null,ore};
   console.log('payload ready, saving...');
+  // Remove collegio_* columns from payload if they might not exist in DB
+  var payloadToSend = Object.assign({}, payload);
+  if(tipo !== 'collegio'){
+    delete payloadToSend.collegio_nome;
+    delete payloadToSend.collegio_prezzo;
+    delete payloadToSend.collegio_pax;
+  }
   try{
-    let error;
-    if(editId){({error}=await sb.from('eventi').update(payload).eq('id',editId));}
-    else{({error}=await sb.from('eventi').insert(payload));}
-    if(error)throw error;
+    var res;
+    if(editId){ res=await sb.from('eventi').update(payloadToSend).eq('id',editId); }
+    else{ res=await sb.from('eventi').insert(payloadToSend); }
+    if(res.error){
+      var errDetail=JSON.stringify(res.error);
+      console.error('Supabase error full:', errDetail);
+      var errMsg=res.error.message||res.error.details||res.error.hint||errDetail;
+      // Show full error in alert so it's not hidden by toast timeout
+      alert('Errore Supabase:\n'+errMsg+'\n\nDettaglio: '+errDetail);
+      showToast('Errore DB: '+errMsg,'err');
+      return;
+    }
     showToast(editId?'Evento aggiornato':'Evento salvato','ok');
     closeEventoModal();await loadAll();
-  }catch(e){showToast('Errore: '+e.message,'err');}
+  }catch(e){
+    console.error('saveEvento catch:', e);
+    showToast('Errore: '+e.message,'err');
+  }
 }
 
 
