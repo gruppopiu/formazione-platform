@@ -1154,11 +1154,11 @@ textarea.finp{min-height:72px;resize:vertical}
 
 
 <!-- MODAL EVENTO -->
-<div class="mover" id="ev-modal" style="display:none" onclick="if(event.target===this)closeEventoModal()">
+<div class="mover" id="ev-modal" style="display:none;position:fixed;top:0;right:0;bottom:0;left:0;z-index:500" onclick="if(event.target===this)closeEventoModal()">
   <div class="modal">
     <div class="mhdr"><div class="mtitle" id="ev-modal-title">Nuovo evento</div><button class="mclose" onclick="closeEventoModal()">✕</button></div>
     <div class="mbody" style="padding:0">
-      <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
+      <div id="ef-section-info" style="padding:16px 22px;border-bottom:1px solid var(--border)">
         <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">📋 Informazioni base</div>
         <div class="fgrid">
           <div class="fg full"><label class="flbl">Titolo *</label><input type="text" class="finp" id="ef-titolo" placeholder="Es: Urbanistica — novità 2026"></div>
@@ -1198,7 +1198,7 @@ textarea.finp{min-height:72px;resize:vertical}
           <div class="fg"><label class="flbl">Ore / CFP</label><div style="padding:8px 11px;background:var(--bg3);border-radius:var(--r);font-size:13px;font-weight:600;color:var(--accent)" id="ef-ore-display">—</div><input type="hidden" id="ef-ore"></div>
         </div>
       </div>
-      <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
+      <div id="ef-section-prezzi" style="padding:16px 22px;border-bottom:1px solid var(--border)">
         <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">💶 Prezzi</div>
         <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Early bird opzionale</div>
         <div id="ef-prezzo-section">
@@ -1249,7 +1249,7 @@ textarea.finp{min-height:72px;resize:vertical}
           </div>
         </div>
       </div>
-      <div style="padding:16px 22px;border-bottom:1px solid var(--border)">
+      <div id="ef-section-pax" style="padding:16px 22px;border-bottom:1px solid var(--border)">
         <div style="font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px" id="ef-pax-label">👥 Partecipanti</div>
         <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Compila dopo lo svolgimento</div>
         <div style="display:flex;flex-direction:column;gap:10px">
@@ -1268,7 +1268,7 @@ textarea.finp{min-height:72px;resize:vertical}
               <div class="fg"><label class="flbl">Presenti FI</label><input type="number" class="finp" id="ef-pi" placeholder="0" min="0"></div>
             </div>
           </div>
-          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px">
+          <div id="ef-grat-section" style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px">
             <div style="font-size:10px;font-weight:700;color:var(--text3);margin-bottom:10px">Gratuiti / CAF</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
               <div class="fg"><label class="flbl">Iscritti</label><input type="number" class="finp" id="ef-ig" placeholder="0" min="0"></div>
@@ -1322,7 +1322,7 @@ textarea.finp{min-height:72px;resize:vertical}
 
 
 <!-- MODAL DETTAGLIO EVENTO -->
-<div class="mover" id="ev-detail-modal" style="display:none" onclick="if(event.target===this)closeEvDetail()">
+<div class="mover" id="ev-detail-modal" style="display:none;position:fixed;top:0;right:0;bottom:0;left:0;z-index:500" onclick="if(event.target===this)closeEvDetail()">
   <div class="modal" style="max-width:780px">
     <div class="mhdr">
       <div style="flex:1">
@@ -3432,7 +3432,10 @@ async function saveFmData(){
     await sb.from('formatori_data').upsert(payload,{onConflict:'nome'});
     FM_DATA[currentFm]={...(FM_DATA[currentFm]||{}),...payload};
     showToast('Scheda salvata','ok');closeFmModal();renderFormatori();
-  }catch(e){showToast('Errore: '+e.message,'err');}
+  }catch(e){
+    console.error('saveEvento error:', e);
+    showToast('Errore: '+e.message,'err');
+  }
 }
 
 async function uploadFmPhoto(input){
@@ -3611,8 +3614,7 @@ function renderCommerciale(){
   document.getElementById('c-tasso').textContent=ta+'%';
   const ricCollegio=kpi.filter(e=>e.tipologia==='collegio').reduce((s,e)=>s+(parseFloat(e.collegio_prezzo)||0),0);
   const ricFI=DB_FI.filter(a=>a.tipo!=='non_rinnovo').reduce((s,a)=>s+(parseFloat(a.importo)||0),0);
-  const ricTot=ric+ricFI+ricCollegio;
-  document.getElementById('c-ric').textContent=fmtEuro(ricTot,2);
+  document.getElementById('c-ric').textContent=fmtEuro(ric,2);
   // Collegio KPI
   const coll_ev=kpi.filter(e=>e.tipologia==='collegio');
   const collTotEl=document.getElementById('c-coll-tot');if(collTotEl)collTotEl.textContent=coll_ev.length;
@@ -4231,7 +4233,7 @@ function openEvDetail(id){
   // Info grid
   const cfp=cfpEv(e);
   document.getElementById('evd-info-grid').innerHTML=`
-    <div class="evd-stat"><div id="ef-grat-section" class="evd-stat-lbl">Tema</div><div class="evd-stat-val" style="font-size:14px">${e.tema||'—'}</div></div>
+    <div class="evd-stat"><div class="evd-stat-lbl">Tema</div><div class="evd-stat-val" style="font-size:14px">${e.tema||'—'}</div></div>
     <div class="evd-stat"><div class="evd-stat-lbl">Stato</div><div style="margin-top:5px">${badgeStato(e.stato)}</div></div>
     <div class="evd-stat"><div class="evd-stat-lbl">CFP generati</div><div class="evd-stat-val">${cfp}</div><div class="evd-stat-sub">ore: ${e.ore}h</div></div>
     <div class="evd-stat"><div class="evd-stat-lbl">Giorno</div><div class="evd-stat-val" style="font-size:14px">${e.giorno||'—'}</div></div>
@@ -4318,11 +4320,29 @@ function openEvDetail(id){
   if(e.note){noteSection.style.display='block';noteEl.textContent=e.note;}
   else{noteSection.style.display='none';}
 
-  modal.style.display='flex';
+  // Move modal to body to bypass Atlas position:fixed stacking context issues
+  if(modal.parentNode!==document.body){
+    var ph=document.getElementById('ev-detail-modal-placeholder');
+    if(!ph){ph=document.createElement('div');ph.id='ev-detail-modal-placeholder';ph.style.display='none';modal.parentNode.insertBefore(ph,modal);}
+    document.body.appendChild(modal);
+  }
+  modal.style.setProperty('display','flex','important');
+  modal.style.setProperty('position','fixed','important');
+  modal.style.setProperty('top','0','important');
+  modal.style.setProperty('left','0','important');
+  modal.style.setProperty('right','0','important');
+  modal.style.setProperty('bottom','0','important');
+  modal.style.setProperty('z-index','9999','important');
 }
 
 function closeEvDetail(){
-  document.getElementById('ev-detail-modal').style.display='none';
+  var m=document.getElementById('ev-detail-modal');
+  if(m){
+    m.style.display='none';
+    // Move back to original container if it was moved to body
+    var orig=document.getElementById('ev-detail-modal-placeholder');
+    if(orig&&m.parentNode===document.body){orig.appendChild(m);}
+  }
   if(evDetailChart){evDetailChart.destroy();evDetailChart=null;}
 }
 
@@ -4385,34 +4405,39 @@ function renderDocentiSelected(){
 // ── MULTI-SESSIONE ──
 let sessioniCorso=[];
 function onTipoChange(){
-  const tipo=document.getElementById('ef-tipo')?.value;
-  const isCollegio=tipo==='collegio';
-  const oreMap={seminario:2,corso_4h:4,corso_6h:6,corso_deontologico:2};
-  const sessMap={corso_4h:2,corso_6h:3};
-  const ore=isCollegio?0:(oreMap[tipo]||2);
-  const oreDisp=document.getElementById('ef-ore-display');
-  const oreInp=document.getElementById('ef-ore');
+  var tipo=document.getElementById('ef-tipo')?document.getElementById('ef-tipo').value:'';
+  var isCollegio=tipo==='collegio';
+  var oreMap={seminario:2,corso_4h:4,corso_6h:6,corso_deontologico:2};
+  var sessMap={corso_4h:2,corso_6h:3};
+  var ore=isCollegio?0:(oreMap[tipo]||2);
+  var oreDisp=document.getElementById('ef-ore-display');
+  var oreInp=document.getElementById('ef-ore');
   if(oreDisp)oreDisp.textContent=isCollegio?'N/A':ore+'h ('+ore+' CFP)';
   if(oreInp)oreInp.value=ore;
-  // Show/hide collegio fields
-  const colSec=document.getElementById('ef-collegio-section');
+
+  // Collegio-specific fields
+  var colSec=document.getElementById('ef-collegio-section');
   if(colSec)colSec.style.display=isCollegio?'block':'none';
-  // Hide/show standard sections
-  const hide=isCollegio?'none':'';
-  ['ef-prezzo-section','ef-eb-section','ef-pax-section','ef-fi-section','ef-grat-section','ef-buoni-section'].forEach(function(id){
-    var el=document.getElementById(id);if(el)el.style.display=hide;
-  });
-  // Also hide tema row for collegio (not relevant)
-  const temaFg=document.getElementById('ef-tema')?.closest('.fg');
-  if(temaFg)temaFg.style.display=isCollegio?'none':'';
+
+  // Hide entire Prezzi and Partecipanti sections for collegio
+  var prezziSec=document.getElementById('ef-section-prezzi');
+  var paxSec=document.getElementById('ef-section-pax');
+  if(prezziSec)prezziSec.style.display=isCollegio?'none':'';
+  if(paxSec)paxSec.style.display=isCollegio?'none':'';
+
+  // Hide tema field for collegio (it's inside ef-section-info)
+  var temaFg=document.getElementById('ef-tema');
+  var temaRow=temaFg?temaFg.closest('.fg'):null;
+  if(temaRow)temaRow.style.display=isCollegio?'none':'';
+
   // Date single/multi
-  const single=document.getElementById('date-single');
-  const multi=document.getElementById('date-multi');
-  const hint=document.getElementById('sessioni-hint');
+  var single=document.getElementById('date-single');
+  var multi=document.getElementById('date-multi');
+  var hint=document.getElementById('sessioni-hint');
   if(tipo==='corso_4h'||tipo==='corso_6h'){
     if(single)single.style.display='none';
     if(multi)multi.style.display='block';
-    const nSess=sessMap[tipo];
+    var nSess=sessMap[tipo];
     if(hint)hint.textContent='Corso da '+ore+'h = '+nSess+' sessioni da 2h ciascuna';
     buildSessioniInputs(nSess);
   } else {
@@ -4422,6 +4447,7 @@ function onTipoChange(){
     sessioniCorso=[];
   }
 }
+
 function buildSessioniInputs(n){
   sessioniCorso=Array(n).fill(null).map(()=>({data:'',orario:''}));
   const el=document.getElementById('sessioni-list');if(!el)return;
@@ -4490,7 +4516,8 @@ function openEventoModal(id=null){
     const oreMap={seminario:2,corso_4h:4,corso_6h:6,corso_deontologico:2};
     const sv=(eid,val)=>{const el=document.getElementById(eid);if(el)el.value=val!=null?val:'';};
     sv('ef-data',e.data);sv('ef-orario',e.orario);sv('ef-titolo',e.titolo);
-    sv('ef-tema',e.tema);sv('ef-tipo',e.tipologia);// ef-prezzo handled by select loader above
+    sv('ef-tema',e.tema);sv('ef-tipo',e.tipologia);
+    onTipoChange();// ef-prezzo handled by select loader above
     (function(){
       const selP=document.getElementById('ef-prezzo');
       const selEB=document.getElementById('ef-eb');
@@ -4520,20 +4547,40 @@ function openEventoModal(id=null){
     if(oreDisp)oreDisp.textContent='—';
     document.getElementById('date-single').style.display='block';
     document.getElementById('date-multi').style.display='none';
+    onTipoChange();
     renderDocentiSelected();
   }
-  document.getElementById('ev-modal').style.display='flex';
+  var evModal=document.getElementById('ev-modal');
+  if(evModal.parentNode!==document.body){
+    var eph=document.getElementById('ev-modal-placeholder');
+    if(!eph){eph=document.createElement('div');eph.id='ev-modal-placeholder';eph.style.display='none';evModal.parentNode.insertBefore(eph,evModal);}
+    document.body.appendChild(evModal);
+  }
+  evModal.style.setProperty('display','flex','important');
+  evModal.style.setProperty('position','fixed','important');
+  evModal.style.setProperty('top','0','important');
+  evModal.style.setProperty('left','0','important');
+  evModal.style.setProperty('right','0','important');
+  evModal.style.setProperty('bottom','0','important');
+  evModal.style.setProperty('z-index','9999','important');
 }
 function closeEventoModal(){
-  document.getElementById('ev-modal').style.display='none';
+  var evModal=document.getElementById('ev-modal');
+  if(evModal){
+    evModal.style.display='none';
+    var eph=document.getElementById('ev-modal-placeholder');
+    if(eph&&evModal.parentNode===document.body){eph.appendChild(evModal);}
+  }
   editId=null;selectedDocenti=[];sessioniCorso=[];
 }
 
 // ── SAVE EVENTO ──
 async function saveEvento(){
+  console.log('saveEvento called');
   const titolo=document.getElementById('ef-titolo').value.trim();
-  const tema=document.getElementById('ef-tema').value;
   const tipo=document.getElementById('ef-tipo').value;
+  const tema=tipo==='collegio'?'Collegio':(document.getElementById('ef-tema').value);
+  console.log('titolo:', titolo, 'tipo:', tipo, 'tema:', tema);
   if(!titolo||!tipo){showToast('Compila titolo e tipo evento','err');return;}
   if(!tema&&tipo!=='collegio'){showToast('Seleziona il tema','err');return;}
   const gg=['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
@@ -4581,17 +4628,37 @@ async function saveEvento(){
     return;
   }
   const data=document.getElementById('ef-data').value;
+  console.log('data:', data, 'ore:', ore);
   if(!data){showToast('Inserisci la data','err');return;}
   const payload={...base,data,giorno:gg[new Date(data+'T00:00:00').getDay()],
     orario:document.getElementById('ef-orario').value||null,ore};
+  console.log('payload ready, saving...');
+  // Remove collegio_* columns from payload if they might not exist in DB
+  var payloadToSend = Object.assign({}, payload);
+  if(tipo !== 'collegio'){
+    delete payloadToSend.collegio_nome;
+    delete payloadToSend.collegio_prezzo;
+    delete payloadToSend.collegio_pax;
+  }
   try{
-    let error;
-    if(editId){({error}=await sb.from('eventi').update(payload).eq('id',editId));}
-    else{({error}=await sb.from('eventi').insert(payload));}
-    if(error)throw error;
+    var res;
+    if(editId){ res=await sb.from('eventi').update(payloadToSend).eq('id',editId); }
+    else{ res=await sb.from('eventi').insert(payloadToSend); }
+    if(res.error){
+      var errDetail=JSON.stringify(res.error);
+      console.error('SUPABASE_ERROR:', errDetail);
+      // Show in red bar at top
+      var eb=document.getElementById('sb-err-bar');
+      if(!eb){eb=document.createElement('div');eb.id='sb-err-bar';eb.style.cssText='position:fixed;top:0;left:0;right:0;background:#c00;color:#fff;padding:12px 16px;z-index:99999;font:13px monospace;white-space:pre-wrap;word-break:break-all';document.body.appendChild(eb);}
+      eb.textContent='ERRORE SUPABASE: '+errDetail;
+      return;
+    }
     showToast(editId?'Evento aggiornato':'Evento salvato','ok');
     closeEventoModal();await loadAll();
-  }catch(e){showToast('Errore: '+e.message,'err');}
+  }catch(e){
+    console.error('saveEvento catch:', e);
+    showToast('Errore: '+e.message,'err');
+  }
 }
 
 
