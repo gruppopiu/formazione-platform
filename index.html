@@ -4579,8 +4579,8 @@ function closeEventoModal(){
 async function saveEvento(){
   console.log('saveEvento called');
   const titolo=document.getElementById('ef-titolo').value.trim();
-  const tema=document.getElementById('ef-tema').value;
   const tipo=document.getElementById('ef-tipo').value;
+  const tema=tipo==='collegio'?'Collegio':(document.getElementById('ef-tema').value);
   console.log('titolo:', titolo, 'tipo:', tipo, 'tema:', tema);
   if(!titolo||!tipo){showToast('Compila titolo e tipo evento','err');return;}
   if(!tema&&tipo!=='collegio'){showToast('Seleziona il tema','err');return;}
@@ -4590,7 +4590,7 @@ async function saveEvento(){
   const docente=selectedDocenti.length===1?selectedDocenti[0]:(selectedDocenti.length>1?selectedDocenti.join(', '):null);
   const docentiNomi=selectedDocenti.length>0?selectedDocenti:null;
   const base={
-    titolo,tema:tema||null,tipologia:tipo,docente,docenti_nomi:docentiNomi,
+    titolo,tema,tipologia:tipo,docente,docenti_nomi:docentiNomi,
     prezzo:tipo==='collegio'?0:(parseFloat(document.getElementById('ef-prezzo').value)||0),
     prezzo_early_bird:tipo==='collegio'?null:(parseFloat(document.getElementById('ef-eb').value)||null),
     stato:document.getElementById('ef-stato').value,
