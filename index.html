@@ -5540,11 +5540,14 @@ function getFiFormulaLabel(f){return {annuale:'Annuale',semestrale:'Semestrale'}
 
 function getFiStats(){
   var attivi=DB_FI.filter(function(a){return getFiStatus(a)!=='scaduto'&&getFiStatus(a)!=='non_rinnovo';});
+  var inScadenza=DB_FI.filter(function(a){return getFiStatus(a)==='scadenza';});
+  var scaduti=DB_FI.filter(function(a){return getFiStatus(a)==='scaduto';});
   return{
-    tot:DB_FI.length,
+    tot:attivi.length,
+    totAll:DB_FI.length,
     totAttivi:attivi.length,
-    inScadenza:DB_FI.filter(function(a){return getFiStatus(a)==='scadenza';}).length,
-    scaduti:DB_FI.filter(function(a){return getFiStatus(a)==='scaduto';}).length,
+    inScadenza:inScadenza.length,
+    scaduti:scaduti.length,
     valTot:attivi.reduce(function(s,a){return s+(parseFloat(a.importo)||0);},0)
   };
 }
@@ -5853,11 +5856,12 @@ async function saveFiAbbonato(){
   var tipo=document.getElementById('fi-tipo').value;
   var formula=document.getElementById('fi-formula').value;
   var scadenza=document.getElementById('fi-scadenza').value;
-  if(!nome||!cognome||!tipo||!formula||!scadenza){showToast('Compila i campi obbligatori','err');return;}
+  if(!nome||!cognome||!tipo){showToast('Compila nome, cognome e tipo','err');return;}
+  if(tipo!=='non_rinnovo'&&(!formula||!scadenza)){showToast('Compila formula e scadenza','err');return;}
   var payload={
     nome:nome, cognome:cognome,
     email:document.getElementById('fi-email').value||null,
-    tipo:tipo, formula:formula,
+    tipo:tipo, formula:formula||'annuale',
     data_inizio:document.getElementById('fi-inizio').value||null,
     scadenza:scadenza,
     importo:parseFloat(document.getElementById('fi-importo').value)||0,
