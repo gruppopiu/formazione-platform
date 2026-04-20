@@ -5791,7 +5791,7 @@ function openFiModal(id){
   // Build modal HTML
   var overlay=document.createElement('div');
   overlay.id='fi-modal-overlay';
-  overlay.style.cssText='position:absolute;top:0;left:0;width:100%;min-height:100%;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;box-sizing:border-box;';
+  overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;overflow-y:auto;';
   overlay.onclick=function(e){if(e.target===overlay)closeFiModal();};
 
   overlay.innerHTML='<div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;width:100%;max-width:520px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3)">'
@@ -5914,7 +5914,7 @@ function openFiImport(){
   if(old2)old2.parentNode.removeChild(old2);
   var overlay2=document.createElement('div');
   overlay2.id='fi-import-overlay';
-  overlay2.style.cssText='position:absolute;top:0;left:0;width:100%;min-height:100%;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;box-sizing:border-box;';
+  overlay2.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;overflow-y:auto;';
   overlay2.onclick=function(e){if(e.target===overlay2)closeFiImport();};
   overlay2.innerHTML='<div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;width:100%;max-width:640px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3)">'
     +'<div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">'
