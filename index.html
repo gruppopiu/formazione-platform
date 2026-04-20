@@ -4036,8 +4036,16 @@ function goToEvento(id,titolo){
 
 async function delEvento(id){
   if(!confirm('Eliminare questo evento?'))return;
-  try{const{error}=await sb.from('eventi').delete().eq('id',id);if(error)throw error;showToast('Eliminato','ok');await loadAll();}
-  catch(e){showToast('Errore: '+e.message,'err');}
+  try{
+    const{error,data}=await sb.from('eventi').delete().eq('id',id).select();
+    console.log('delete result:', error, data);
+    if(error)throw error;
+    showToast('Eliminato','ok');
+    await loadAll();
+  }catch(e){
+    console.error('delEvento error:',e);
+    showToast('Errore eliminazione: '+e.message,'err');
+  }
 }
 
 // ── CSV ──
