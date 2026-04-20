@@ -3896,7 +3896,7 @@ function renderEventi(){
     const tp=((parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_early_bird)||0))+(parseInt(e.presenti_illimitati)||0);
     const ta=ti>0?Math.round(tp/ti*100):null;
     const tc=ta===null?'var(--text3)':ta>=70?'var(--green)':ta>=40?'var(--yellow)':'var(--red)';
-    return`<tr data-id="${e.id}" class="ev-row" style="transition:background .1s"><td style="text-align:center;vertical-align:middle"><input type="checkbox" class="ev-chk" data-id="${e.id}" onchange="onEvCheck(this);this.closest('tr').style.background=this.checked?'rgba(var(--accent-rgb),.08)':''" style="accent-color:var(--accent);cursor:pointer;width:14px;height:14px"></td><td class="mono">${fmtDate(e.data)}</td><td style="color:var(--text);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.titolo}">${e.titolo}${e.escludi_kpi?'<span style="font-size:8px;color:var(--text3);margin-left:3px">[excl]</span>':''}</td><td>${e.tema||'—'}</td><td>${badgeTipo(e.tipologia)}</td><td><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">${(e.docenti_nomi&&e.docenti_nomi.length>1)?e.docenti_nomi.map(d=>getFmAvatar(d,22)).join('')+'<span style="font-size:10px">'+e.docenti_nomi.join(', ')+'</span>':(e.docente?getFmAvatar(e.docente,22)+'<span>'+e.docente+'</span>':'<span>—</span>')}</div></td><td class="mono">${e.ore}h</td><td class="mono">${ti}</td><td class="mono">${tp}</td><td class="mono" style="color:${tc}">${ta!==null?ta+'%':'—'}</td><td class="mono" style="font-size:11px">${(()=>{const r=((parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0))+((parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0));return r>0?fmtEuro(r,2):'—';})()}</td><td>${badgeStato(e.stato)}</td><td style="font-size:10px;color:var(--text3)">${e.modified_by||'—'}</td><td><button class="btn btn-p btn-sm" onclick="openEvDetail('${e.id}')" style="white-space:nowrap">Apri →</button></td></tr>`;
+    return`<tr data-id="${e.id}" class="ev-row" style="transition:background .1s"><td style="text-align:center;vertical-align:middle"><input type="checkbox" class="ev-chk" data-id="${e.id}" onchange="onEvCheck(this);this.closest('tr').style.background=this.checked?'rgba(var(--accent-rgb),.08)':''" style="accent-color:var(--accent);cursor:pointer;width:14px;height:14px"></td><td class="mono">${fmtDate(e.data)}</td><td style="color:var(--text);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${e.titolo}">${e.titolo}${e.escludi_kpi?'<span style="font-size:8px;color:var(--text3);margin-left:3px">[excl]</span>':''}</td><td>${e.tema||'—'}</td><td>${badgeTipo(e.tipologia)}</td><td><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap">${(e.docenti_nomi&&e.docenti_nomi.length>1)?e.docenti_nomi.map(d=>getFmAvatar(d,22)).join('')+'<span style="font-size:10px">'+e.docenti_nomi.join(', ')+'</span>':(e.docente?getFmAvatar(e.docente,22)+'<span>'+e.docente+'</span>':'<span>—</span>')}</div></td><td class="mono">${e.ore}h</td><td class="mono">${ti}</td><td class="mono">${tp}</td><td class="mono" style="color:${tc}">${ta!==null?ta+'%':'—'}</td><td class="mono" style="font-size:11px">${(()=>{if(e.corso_padre_id&&e.modulo_numero>1)return'—';const r=((parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0))+((parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0));return r>0?fmtEuro(r,2):'—';})()}</td><td>${badgeStato(e.stato)}</td><td style="font-size:10px;color:var(--text3)">${e.modified_by||'—'}</td><td><button class="btn btn-p btn-sm" onclick="openEvDetail('${e.id}')" style="white-space:nowrap">Apri →</button></td></tr>`;
   }).join('')}</tbody></table>`;
 }
 
@@ -5806,16 +5806,16 @@ function openFiModal(id){
     +'<div><label style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px">Tipo *</label>'
     +'<select id="fi-tipo" class="finp" style="width:100%;box-sizing:border-box" onchange="fiToggleMotiv(this.value)">'
     +'<option value="">— seleziona —</option>'
-    +'<option value="singolo"'+(a&&a.tipo==='singolo'?' selected':'')+'">Singolo</option>'
-    +'<option value="duo"'+(a&&a.tipo==='duo'?' selected':'')+'">Duo</option>'
-    +'<option value="studio"'+(a&&a.tipo==='studio'?' selected':'')+'">Studio</option>'
-    +'<option value="non_rinnovo"'+(a&&a.tipo==='non_rinnovo'?' selected':'')+'">Non rinnovo</option>'
+    +'<option value="singolo"'+(a&&a.tipo==='singolo'?' selected':'')+'>Singolo</option>'
+    +'<option value="duo"'+(a&&a.tipo==='duo'?' selected':'')+'>Duo</option>'
+    +'<option value="studio"'+(a&&a.tipo==='studio'?' selected':'')+'>Studio</option>'
+    +'<option value="non_rinnovo"'+(a&&a.tipo==='non_rinnovo'?' selected':'')+'>Non rinnovo</option>'
     +'</select></div>'
     +'<div><label style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:4px">Formula *</label>'
     +'<select id="fi-formula" class="finp" style="width:100%;box-sizing:border-box">'
     +'<option value="">— seleziona —</option>'
-    +'<option value="annuale"'+(a&&a.formula==='annuale'?' selected':'')+'">Annuale</option>'
-    +'<option value="semestrale"'+(a&&a.formula==='semestrale'?' selected':'')+'">Semestrale</option>'
+    +'<option value="annuale"'+(a&&a.formula==='annuale'?' selected':'')+'>Annuale</option>'
+    +'<option value="semestrale"'+(a&&a.formula==='semestrale'?' selected':'')+'>Semestrale</option>'
     +'</select></div>'
     +'</div>'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">'
