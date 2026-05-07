@@ -4571,6 +4571,8 @@ function openEventoModal(id=null){
       +FORMATORI_DEF.map(f=>`<option value="${f.nome}">${f.nome}</option>`).join('');
     docenteSel.value=cur;
   }
+  // Rebuild tema select to include any newly added temi
+  updateTemaDropdowns();
   document.getElementById('ev-modal-title').textContent=isEdit?'Modifica evento':'Nuovo evento';
   // Reset buoni sconto
   buoniScontoList=[];
@@ -5079,7 +5081,7 @@ async function saveNewFormatore(){
   const existing=FM_DATA[editingFormatore||nome]||{};
   const payload={
     ...existing,
-    nome:editingFormatore||nome,
+    nome:nome,
     nome_display:nome,
     email:document.getElementById('new-fm-email')?.value||null,
     telefono:document.getElementById('new-fm-tel')?.value||null,
@@ -5096,18 +5098,23 @@ async function saveNewFormatore(){
       const{error:upErr}=await sb.storage.from('avatars').upload(path,newFmAvatarFile,{upsert:false});
       if(!upErr){const{data}=sb.storage.from('avatars').getPublicUrl(path);payload.avatar_url=data.publicUrl+'?v='+Date.now();}
     }
+    // If renaming: delete old record first (nome is PK)
+    if(editingFormatore && editingFormatore !== nome){
+      await sb.from('formatori_data').delete().eq('nome',editingFormatore);
+      delete FM_DATA[editingFormatore];
+    }
     // Save to DB
     const{error}=await sb.from('formatori_data').upsert(payload,{onConflict:'nome'});
     if(error)throw error;
-    // Add to FORMATORI_DEF if new
+    // Update FORMATORI_DEF
     if(!editingFormatore){
       const exists=FORMATORI_DEF.find(f=>f.nome===nome);
       if(!exists)FORMATORI_DEF.push({nome,temi:newFmTemi});
     } else {
       const fd=FORMATORI_DEF.find(f=>f.nome===editingFormatore);
-      if(fd)fd.temi=newFmTemi;
+      if(fd){fd.nome=nome;fd.temi=newFmTemi;}
     }
-    FM_DATA[editingFormatore||nome]={...payload};
+    FM_DATA[nome]={...payload};
     closeNewFormatoreModal();
     renderFormatori();
     showToast((editingFormatore?'Docente aggiornato':'Nuovo docente aggiunto')+': '+nome,'ok');
