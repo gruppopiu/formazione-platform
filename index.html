@@ -1084,6 +1084,13 @@ textarea.finp{min-height:72px;resize:vertical}
             </div>
           </div>
         </div>
+          <div class="card">
+            <div class="ctitle">🎓 Temi formativi</div>
+            <div class="setting-sub" style="margin-bottom:14px">Gestisci i temi che compaiono nel menu di creazione eventi. Il peso indica la rilevanza percentuale nei KPI.</div>
+            <div id="temi-list-ui" style="margin-bottom:12px"></div>
+            <button class="btn btn-p btn-sm" onclick="openTemaModal(null)">+ Nuovo tema</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1459,6 +1466,26 @@ textarea.finp{min-height:72px;resize:vertical}
     </div>
   </div>
 </div>
+<!-- MODAL TEMA -->
+<div class="mover" id="tema-modal" style="display:none" onclick="if(event.target===this)closeTemaModal()">
+  <div class="modal" style="max-width:420px">
+    <div class="mhdr"><div class="mtitle" id="tema-modal-title">Nuovo tema</div><button class="mclose" onclick="closeTemaModal()">&#x2715;</button></div>
+    <div class="mbody">
+      <div class="fgrid">
+        <div class="fg full"><label class="flbl">Nome tema *</label><input type="text" class="finp" id="tema-nome" placeholder="es. Urbanistica"></div>
+        <div class="fg full"><label class="flbl">Peso KPI (% rilevanza)</label><input type="number" class="finp" id="tema-peso" placeholder="es. 10.5" min="0" step="0.1"><div style="font-size:10px;color:var(--text3);margin-top:4px">Somma dei pesi non deve superare 100. Usato per calcolo progressi KPI temi.</div></div>
+      </div>
+    </div>
+    <div class="mfoot" style="justify-content:space-between">
+      <button class="btn btn-d btn-sm" id="tema-del-btn" onclick="deleteTema()" style="display:none">Elimina</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-s" onclick="closeTemaModal()">Annulla</button>
+        <button class="btn btn-p" onclick="saveTema()">Salva</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <div class="toast" id="toast"></div>
 
@@ -2688,6 +2715,16 @@ async function loadAll(){
     var fiRes=await sb.from('fi_abbonati').select('*').order('scadenza',{ascending:true});
     if(fiRes&&!fiRes.error)DB_FI=fiRes.data||[];else DB_FI=[];
   }catch(e){DB_FI=[];console.warn('fi_abbonati:',e.message);}
+  try{
+    var temiRes=await sb.from('temi_config').select('*').order('nome',{ascending:true});
+    if(temiRes&&!temiRes.error&&temiRes.data&&temiRes.data.length){
+      // Rebuild TEMI_PESI from DB
+      const newPesi={};
+      (temiRes.data||[]).forEach(function(t){newPesi[t.nome]=parseFloat(t.peso)||1;});
+      Object.keys(TEMI_PESI).forEach(function(k){delete TEMI_PESI[k];});
+      Object.assign(TEMI_PESI,newPesi);
+    }
+  }catch(e){console.warn('temi_config:',e.message);}
   renderAll();
 }
 
@@ -3417,7 +3454,20 @@ function openFmModal(nome){
       : '<div class="empty"><div class="et">Nessun evento ancora</div></div>');
 
     const modal=document.getElementById('fm-modal');
-    if(modal)modal.style.display='flex';
+    if(modal){
+      if(modal.parentNode!==document.body){
+        let fmPh=document.getElementById('fm-modal-placeholder');
+        if(!fmPh){fmPh=document.createElement('div');fmPh.id='fm-modal-placeholder';fmPh.style.display='none';modal.parentNode.insertBefore(fmPh,modal);}
+        document.body.appendChild(modal);
+      }
+      modal.style.setProperty('display','flex','important');
+      modal.style.setProperty('position','fixed','important');
+      modal.style.setProperty('top','0','important');
+      modal.style.setProperty('left','0','important');
+      modal.style.setProperty('right','0','important');
+      modal.style.setProperty('bottom','0','important');
+      modal.style.setProperty('z-index','9999','important');
+    }
   }catch(err){
     console.error('openFmModal error:',err);
     showToast('Errore apertura scheda: '+err.message,'err');
@@ -3464,7 +3514,15 @@ async function uploadFmPhoto(input){
   }
 }
 
-function closeFmModal(){document.getElementById('fm-modal').style.display='none';currentFm=null;}
+function closeFmModal(){
+  var fmModal=document.getElementById('fm-modal');
+  if(fmModal){
+    fmModal.style.display='none';
+    var fmPh=document.getElementById('fm-modal-placeholder');
+    if(fmPh&&fmModal.parentNode===document.body){fmPh.appendChild(fmModal);}
+  }
+  currentFm=null;
+}
 
 // ── KPI ──
 function renderKPI(){
@@ -4118,6 +4176,7 @@ function showPage(id,el){
   const map={'home':renderDashboard,'kpi':renderKPI,'commerciale':renderCommerciale,'fi':renderFI,'formatori':()=>renderFormatori(),'calendario':renderCalendario,'notifiche':()=>{notifPage=0;markAllRead();},'impostazioni':()=>{
       document.getElementById('set-dark').checked=currentMode==='dark';
       buildThemeGrid();
+      renderTemiUI();
       // Night Shift UI
       const nsEnabled=userSettings.nightShift||false;
       const nsChk=document.getElementById('set-nightshift');
@@ -4128,8 +4187,9 @@ function showPage(id,el){
 
 function populateTemaFilter(){
   const s=document.getElementById('fe-tema');if(!s)return;
-  if(s.children.length>1)return;
-  Object.keys(TEMI_PESI).forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;s.appendChild(o);});
+  // Always rebuild to include any newly added temi
+  while(s.options.length>1)s.remove(1);
+  Object.keys(TEMI_PESI).sort().forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;s.appendChild(o);});
 }
 
 // ── TOAST ──
@@ -4926,11 +4986,28 @@ function openNewFormatoreModal(nome=null){
   const saveBtn=document.getElementById('new-fm-save-btn');
   if(delBtn) delBtn.style.display=isEdit?'block':'none';
   if(saveBtn) saveBtn.textContent=isEdit?'Salva modifiche':'Crea formatore';
-  document.getElementById('new-fm-modal').style.display='flex';
+  var nfmModal=document.getElementById('new-fm-modal');
+  if(nfmModal.parentNode!==document.body){
+    var nfmPh=document.getElementById('new-fm-modal-placeholder');
+    if(!nfmPh){nfmPh=document.createElement('div');nfmPh.id='new-fm-modal-placeholder';nfmPh.style.display='none';nfmModal.parentNode.insertBefore(nfmPh,nfmModal);}
+    document.body.appendChild(nfmModal);
+  }
+  nfmModal.style.setProperty('display','flex','important');
+  nfmModal.style.setProperty('position','fixed','important');
+  nfmModal.style.setProperty('top','0','important');
+  nfmModal.style.setProperty('left','0','important');
+  nfmModal.style.setProperty('right','0','important');
+  nfmModal.style.setProperty('bottom','0','important');
+  nfmModal.style.setProperty('z-index','9999','important');
 }
 
 function closeNewFormatoreModal(){
-  document.getElementById('new-fm-modal').style.display='none';
+  var nfmModal=document.getElementById('new-fm-modal');
+  if(nfmModal){
+    nfmModal.style.display='none';
+    var nfmPh=document.getElementById('new-fm-modal-placeholder');
+    if(nfmPh&&nfmModal.parentNode===document.body){nfmPh.appendChild(nfmModal);}
+  }
   editingFormatore=null;newFmTemi=[];newFmAvatarFile=null;
 }
 
@@ -5519,9 +5596,30 @@ function openCfpDetail(tipo){
       var totI=(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e)+(parseInt(e.iscritti_illimitati)||0);
       return '<tr style="border-bottom:1px solid var(--border)"><td style="padding:9px 12px;font-size:11px;color:var(--text3)">'+fmtDate(e.data)+'</td><td style="padding:9px 12px;font-size:12px;font-weight:600;color:var(--text)">'+( e.titolo||'—')+'</td><td style="padding:9px 12px;font-size:11px;color:var(--text2)">'+docente+'</td><td style="padding:9px 12px;font-size:11px;color:var(--text2);text-align:center">'+(e.tema||'—')+'</td><td style="padding:9px 12px;font-size:12px;font-weight:700;color:var(--accent);text-align:center">'+cfpEv(e)+'h</td><td style="padding:9px 12px;font-size:11px;text-align:center">'+totP+'/'+totI+'</td></tr>';
     }).join('');
-  document.getElementById('cfp-detail-modal').style.display='flex';
+  var cfpModal=document.getElementById('cfp-detail-modal');
+  if(cfpModal){
+    if(cfpModal.parentNode!==document.body){
+      var cfpPh=document.getElementById('cfp-modal-placeholder');
+      if(!cfpPh){cfpPh=document.createElement('div');cfpPh.id='cfp-modal-placeholder';cfpPh.style.display='none';cfpModal.parentNode.insertBefore(cfpPh,cfpModal);}
+      document.body.appendChild(cfpModal);
+    }
+    cfpModal.style.setProperty('display','flex','important');
+    cfpModal.style.setProperty('position','fixed','important');
+    cfpModal.style.setProperty('top','0','important');
+    cfpModal.style.setProperty('left','0','important');
+    cfpModal.style.setProperty('right','0','important');
+    cfpModal.style.setProperty('bottom','0','important');
+    cfpModal.style.setProperty('z-index','9999','important');
+  }
 }
-function closeCfpDetail(){document.getElementById('cfp-detail-modal').style.display='none';}
+function closeCfpDetail(){
+  var cfpModal=document.getElementById('cfp-detail-modal');
+  if(cfpModal){
+    cfpModal.style.display='none';
+    var cfpPh=document.getElementById('cfp-modal-placeholder');
+    if(cfpPh&&cfpModal.parentNode===document.body){cfpPh.appendChild(cfpModal);}
+  }
+}
 
 
 
@@ -6026,6 +6124,153 @@ async function confirmFiImport(){
   btn.disabled=false;
 }
 
+
+
+// ── TEMI MANAGEMENT ──
+var editingTema = null;
+
+function renderTemiUI(){
+  var el = document.getElementById('temi-list-ui');
+  if(!el) return;
+  var temi = Object.entries(TEMI_PESI).sort(function(a,b){return b[1]-a[1];});
+  if(!temi.length){el.innerHTML='<div style="font-size:12px;color:var(--text3);padding:8px 0">Nessun tema configurato</div>';return;}
+  el.innerHTML = '<table style="width:100%;border-collapse:collapse;font-size:12px">'
+    +'<thead><tr style="background:var(--bg3)">'
+    +'<th style="padding:7px 10px;text-align:left;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Tema</th>'
+    +'<th style="padding:7px 10px;text-align:right;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Peso %</th>'
+    +'<th style="padding:7px 10px;text-align:center;font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Barra</th>'
+    +'<th style="padding:7px 10px;width:60px"></th>'
+    +'</tr></thead><tbody>'
+    + temi.map(function(entry){
+        var nome=entry[0],peso=entry[1];
+        var bar=Math.round(Math.min(100,peso));
+        return '<tr style="border-bottom:.5px solid var(--border)">'
+          +'<td style="padding:8px 10px;font-weight:500;color:var(--text)">'+nome+'</td>'
+          +'<td style="padding:8px 10px;text-align:right;font-family:monospace;color:var(--accent);font-weight:700">'+peso.toFixed(1)+'%</td>'
+          +'<td style="padding:8px 10px">'
+          +'<div style="height:5px;background:var(--bg3);border-radius:3px;overflow:hidden">'
+          +'<div style="height:100%;width:'+bar+'%;background:var(--accent);border-radius:3px"></div>'
+          +'</div></td>'
+          +'<td style="padding:8px 10px;text-align:center">'
+          +'<button class="btn btn-s btn-sm" data-nome="'+nome+'" onclick="openTemaModal(this.dataset.nome)" style="font-size:10px;padding:3px 8px">✏️</button>'
+          +'</td>'
+          +'</tr>';
+      }).join('')
+    +'</tbody></table>';
+  // Total weight
+  var tot = temi.reduce(function(s,e){return s+e[1];},0);
+  var totColor = Math.abs(tot-100)<5?'var(--green)':Math.abs(tot-100)<15?'var(--yellow)':'var(--red)';
+  el.innerHTML += '<div style="margin-top:8px;font-size:11px;color:var(--text3)">Peso totale: <strong style="color:'+totColor+'">'+tot.toFixed(1)+'%</strong>'+(Math.abs(tot-100)<1?' ✓':' (ideale: 100%)')+'</div>';
+}
+
+function openTemaModal(nome){
+  editingTema = nome||null;
+  var isEdit = !!nome;
+  var modal = document.getElementById('tema-modal');
+  document.getElementById('tema-modal-title').textContent = isEdit?'Modifica tema':'Nuovo tema';
+  document.getElementById('tema-nome').value = isEdit?nome:'';
+  document.getElementById('tema-peso').value = isEdit?(TEMI_PESI[nome]||'').toString():'';
+  var delBtn = document.getElementById('tema-del-btn');
+  if(delBtn) delBtn.style.display = isEdit?'inline-flex':'none';
+  if(modal){
+    if(modal.parentNode!==document.body){
+      var tPh=document.getElementById('tema-modal-placeholder');
+      if(!tPh){tPh=document.createElement('div');tPh.id='tema-modal-placeholder';tPh.style.display='none';modal.parentNode.insertBefore(tPh,modal);}
+      document.body.appendChild(modal);
+    }
+    modal.style.setProperty('display','flex','important');
+    modal.style.setProperty('position','fixed','important');
+    modal.style.setProperty('top','0','important');
+    modal.style.setProperty('left','0','important');
+    modal.style.setProperty('right','0','important');
+    modal.style.setProperty('bottom','0','important');
+    modal.style.setProperty('z-index','9999','important');
+  }
+}
+
+function closeTemaModal(){
+  var modal = document.getElementById('tema-modal');
+  if(modal){
+    modal.style.display='none';
+    var tPh=document.getElementById('tema-modal-placeholder');
+    if(tPh&&modal.parentNode===document.body){tPh.appendChild(modal);}
+  }
+  editingTema=null;
+}
+
+async function saveTema(){
+  var nome = document.getElementById('tema-nome').value.trim();
+  var peso = parseFloat(document.getElementById('tema-peso').value)||1;
+  if(!nome){showToast('Inserisci il nome del tema','err');return;}
+  try{
+    var payload = {nome:nome, peso:peso};
+    // If renaming, delete old entry first
+    if(editingTema && editingTema !== nome){
+      await sb.from('temi_config').delete().eq('nome',editingTema);
+      delete TEMI_PESI[editingTema];
+    }
+    var res = await sb.from('temi_config').upsert(payload,{onConflict:'nome'});
+    if(res.error) throw res.error;
+    TEMI_PESI[nome] = peso;
+    // Also update dropdowns
+    populateTemaFilter();
+    updateTemaDropdowns();
+    showToast((editingTema?'Tema aggiornato':'Tema aggiunto')+': '+nome,'ok');
+    closeTemaModal();
+    renderTemiUI();
+    renderKPI();
+  }catch(e){showToast('Errore: '+e.message,'err');}
+}
+
+async function deleteTema(){
+  if(!editingTema) return;
+  var nome = editingTema;
+  if(!confirm('Eliminare il tema "'+nome+'"? Verranno rimossi anche i filtri e i riferimenti KPI.')) return;
+  try{
+    var res = await sb.from('temi_config').delete().eq('nome',nome);
+    if(res.error) throw res.error;
+    delete TEMI_PESI[nome];
+    updateTemaDropdowns();
+    showToast('Tema eliminato: '+nome,'ok');
+    closeTemaModal();
+    renderTemiUI();
+    renderKPI();
+  }catch(e){showToast('Errore: '+e.message,'err');}
+}
+
+function updateTemaDropdowns(){
+  // Rebuild all tema dropdowns in the app
+  var temi = Object.keys(TEMI_PESI).sort();
+  ['ef-tema','fe-tema','rep-tema'].forEach(function(id){
+    var sel = document.getElementById(id);
+    if(!sel) return;
+    var cur = sel.value;
+    // Keep first option, replace rest
+    var firstOpt = sel.options[0];
+    sel.innerHTML = '';
+    sel.appendChild(firstOpt);
+    temi.forEach(function(t){
+      var opt = document.createElement('option');
+      opt.value = t; opt.textContent = t;
+      sel.appendChild(opt);
+    });
+    sel.value = cur;
+  });
+  // Also rebuild new-fm-temi-add select
+  var fmSel = document.getElementById('new-fm-temi-add');
+  if(fmSel){
+    var curFm = fmSel.value;
+    var firstOptFm = fmSel.options[0];
+    fmSel.innerHTML = '';
+    fmSel.appendChild(firstOptFm);
+    temi.forEach(function(t){
+      var opt = document.createElement('option');
+      opt.value = t; opt.textContent = t;
+      fmSel.appendChild(opt);
+    });
+    fmSel.value = curFm;
+  }
+}
 
 // ── START ──
 
