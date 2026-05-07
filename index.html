@@ -3663,10 +3663,11 @@ function renderChartTemi(type){
 // ── COMMERCIALE ──
 function renderCommerciale(){
   const kpi=getKPI();
-  const ip=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e),0);
-  const pp=kpi.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
+  const ip=kpiUniq.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e),0);
+  const pp=kpiUniq.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
   const ta=ip>0?Math.round(pp/ip*100):0;
-  const ric=kpi.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0),0);
+  const kpiUniq=getUniqueEventi(kpi);
+  const ric=kpiUniq.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0),0);
   document.getElementById('c-pag').textContent=ip;
   document.getElementById('c-pres').textContent=pp;
   document.getElementById('c-tasso').textContent=ta+'%';
@@ -3679,10 +3680,10 @@ function renderCommerciale(){
   const collPaxEl=document.getElementById('c-coll-pax');if(collPaxEl)collPaxEl.textContent=coll_ev.reduce((s,e)=>s+(parseInt(e.collegio_pax)||0),0);
   const collRicEl=document.getElementById('c-coll-ric');if(collRicEl)collRicEl.textContent=fmtEuro(ricCollegio,2);
   // FI section
-  const fi_isc=kpi.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
-  const fi_pres=kpi.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
+  const fi_isc=kpiUniq.reduce((s,e)=>s+(parseInt(e.iscritti_illimitati)||0),0);
+  const fi_pres=kpiUniq.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
   const fi_ta=fi_isc>0?Math.round(fi_pres/fi_isc*100):0;
-  const fi_media=kpi.length>0?(fi_isc/kpi.length):0;
+  const fi_media=kpiUniq.length>0?(fi_isc/kpiUniq.length):0;
   document.getElementById('fi-isc').textContent=fi_isc;
   document.getElementById('fi-pres').textContent=fi_pres;
   document.getElementById('fi-tasso').textContent=fi_ta+'%';
@@ -3692,12 +3693,13 @@ function renderCommerciale(){
   var momFlt2=function(y,mo){var mm=String(mo+1).padStart(2,'0');return DB.filter(function(e){return !e.escludi_kpi&&['svolto','chiuso'].includes(e.stato)&&e.data&&e.data.startsWith(y+'-'+mm+'-');});};
   var kC2=momFlt2(ccy,ccm);var kP2=momFlt2(ppy,ppm);
   var calcComm=function(arr){
-    var iPag=arr.reduce(function(s,e){return s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e);},0);
-    var pPag=arr.reduce(function(s,e){return s+(parseInt(e.presenti_paganti)||0);},0);
+    var arrUniq=getUniqueEventi(arr);
+    var iPag=arrUniq.reduce(function(s,e){return s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e);},0);
+    var pPag=arrUniq.reduce(function(s,e){return s+(parseInt(e.presenti_paganti)||0);},0);
     var tPag=iPag>0?Math.round(pPag/iPag*100):0;
-    var ric=arr.reduce(function(s,e){return s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0);},0);
-    var iFI=arr.reduce(function(s,e){return s+(parseInt(e.iscritti_illimitati)||0);},0);
-    var pFI=arr.reduce(function(s,e){return s+(parseInt(e.presenti_illimitati)||0);},0);
+    var ric=arrUniq.reduce(function(s,e){return s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0);},0);
+    var iFI=arrUniq.reduce(function(s,e){return s+(parseInt(e.iscritti_illimitati)||0);},0);
+    var pFI=arrUniq.reduce(function(s,e){return s+(parseInt(e.presenti_illimitati)||0);},0);
     var tFI=iFI>0?Math.round(pFI/iFI*100):0;
     var mFI=arr.length>0?iFI/arr.length:0;
     return{iPag:iPag,pPag:pPag,tPag:tPag,ric:ric,iFI:iFI,pFI:pFI,tFI:tFI,mFI:mFI};
@@ -3715,7 +3717,7 @@ function renderCommerciale(){
   renderChartRicavi('ch-ric',chartTimeFilters['ch-ric']||'all');
   // Paganti vs FI per mese
   const mPag=Array(12).fill(0),mFI=Array(12).fill(0);
-  kpi.forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mPag[m]+=parseInt(e.presenti_paganti)||0;mFI[m]+=parseInt(e.presenti_illimitati)||0;}});
+  kpiUniq.forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mPag[m]+=parseInt(e.presenti_paganti)||0;mFI[m]+=parseInt(e.presenti_illimitati)||0;}});
   // Note: presenti_paganti already includes all paying attendees (pieno + EB combined)
   const c2=getThemeChartColors();
   const pagfiType=chartTypes['ch-pag-fi']||'bar';
@@ -3725,7 +3727,7 @@ function renderCommerciale(){
     {label:'Presenti FI',data:mFI,...mk2(c2[1])}
   ]);
   const byT={};
-  kpi.forEach(e=>{if(!byT[e.tema])byT[e.tema]={p:0,fi:0,c:0};byT[e.tema].p+=parseInt(e.presenti_paganti)||0;byT[e.tema].fi+=parseInt(e.presenti_illimitati)||0;byT[e.tema].c++;});
+  kpiUniq.forEach(e=>{if(!byT[e.tema])byT[e.tema]={p:0,fi:0,c:0};byT[e.tema].p+=parseInt(e.presenti_paganti)||0;byT[e.tema].fi+=parseInt(e.presenti_illimitati)||0;byT[e.tema].c++;});
   const sorted=Object.entries(byT).sort((a,b)=>(b[1].c?b[1].p/b[1].c:0)-(a[1].c?a[1].p/a[1].c:0));
   const mx=sorted[0]?Math.max(sorted[0][1].p/sorted[0][1].c,sorted[0][1].fi/sorted[0][1].c)||1:1;
   document.getElementById('pres-tema').innerHTML=sorted.map(([t,d])=>{
@@ -3753,7 +3755,7 @@ function renderChartRicavi(id,range,offset){
   if(!range||range==='all'||range==='1y'||range==='6m'){
     mR=Array(12).fill(0);
     const mFI=Array(12).fill(0);
-    kpi.forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mR[m]+=(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0);}});
+    getUniqueEventi(kpi).forEach(e=>{if(e.data){const m=parseInt(e.data.split('-')[1])-1;mR[m]+=(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0);}});
     DB_FI.filter(a=>a.tipo!=='non_rinnovo').forEach(a=>{const d=a.data_inizio||a.scadenza;if(d){const m=parseInt(d.split('-')[1])-1;if(m>=0&&m<12)mFI[m]+=(parseFloat(a.importo)||0);}});
     labels=MESI;
     // render stacked
@@ -4823,7 +4825,7 @@ function getRepCommercialeData(){
     const me=ev.filter(e=>e.data&&parseInt(e.data.split('-')[1])-1===i);
     const pag=me.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
     const fi=me.reduce((s,e)=>s+(parseInt(e.presenti_illimitati)||0),0);
-    const ric=me.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0),0);
+    const ric=getUniqueEventi(me).reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0),0);
     const isc=me.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e)+(parseInt(e.iscritti_illimitati)||0),0);
     const pres=me.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0)+(parseInt(e.presenti_illimitati)||0),0);
     return{mese:m,eventi:me.length,paganti_presenti:pag,fi_presenti:fi,tasso:isc>0?Math.round(pres/isc*100)+'%':'—',ricavi:Math.round(ric)};
