@@ -3663,10 +3663,10 @@ function renderChartTemi(type){
 // ── COMMERCIALE ──
 function renderCommerciale(){
   const kpi=getKPI();
+  const kpiUniq=getUniqueEventi(kpi);
   const ip=kpiUniq.reduce((s,e)=>s+(parseInt(e.iscritti_paganti)||0)+(parseInt(e.iscritti_early_bird)||0)+buoniNr(e),0);
   const pp=kpiUniq.reduce((s,e)=>s+(parseInt(e.presenti_paganti)||0),0);
   const ta=ip>0?Math.round(pp/ip*100):0;
-  const kpiUniq=getUniqueEventi(kpi);
   const ric=kpiUniq.reduce((s,e)=>s+(parseFloat(e.prezzo)||0)*(parseInt(e.iscritti_paganti)||0)+(parseFloat(e.prezzo_early_bird)||0)*(parseInt(e.iscritti_early_bird)||0),0);
   document.getElementById('c-pag').textContent=ip;
   document.getElementById('c-pres').textContent=pp;
