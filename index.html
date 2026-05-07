@@ -2718,11 +2718,8 @@ async function loadAll(){
   try{
     var temiRes=await sb.from('temi_config').select('*').order('nome',{ascending:true});
     if(temiRes&&!temiRes.error&&temiRes.data&&temiRes.data.length){
-      // Rebuild TEMI_PESI from DB
-      const newPesi={};
-      (temiRes.data||[]).forEach(function(t){newPesi[t.nome]=parseFloat(t.peso)||1;});
-      Object.keys(TEMI_PESI).forEach(function(k){delete TEMI_PESI[k];});
-      Object.assign(TEMI_PESI,newPesi);
+      // MERGE: add/update temi from DB into TEMI_PESI, never remove existing defaults
+      (temiRes.data||[]).forEach(function(t){TEMI_PESI[t.nome]=parseFloat(t.peso)||1;});
     }
   }catch(e){console.warn('temi_config:',e.message);}
   renderAll();
